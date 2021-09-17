@@ -38,10 +38,10 @@ public class stitchingDataSQL {
             "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_product_core_json where epr_id='%s'";
 
     public static String getStitchingData_stch_product_ext_json_byAvailability=
-            "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_product_ext_json where epr_id='%s'";
+            "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='%s'";
 
     public static String getStitchingData_stch_product_ext_json_byPrices=
-            "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_product_ext_json where epr_id='%s'";
+            "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='%s'";
 
     public static String getStitchingData_stch_work_core_json=
             "select  epr_id , \"json\" from eph%s_extended_data_stitch.stch_work_core_json where epr_id='%s'";

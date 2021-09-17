@@ -25,7 +25,7 @@ public class WorksMatchedApiObject {
 
     public void verifyWorksReturnedCount(int worksInDB){
         //API count could be higher than DB count as it comes from Elastic search
-        Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count less than DB count");}
+        Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" is less than DB count "+worksInDB);}
 
     public void verifyWorkWithIdIsReturned(String workID) {
         int i = 0;

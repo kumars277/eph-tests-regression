@@ -70,7 +70,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
          randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIdsData.stream().map(m -> (String) m.get("epr_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random ids  : " + ids);
-        //ids.clear();ids.add("");
+       // ids.clear();ids.add("EPR-W-102TSH");
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
@@ -117,7 +117,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
     @And("call PF search API for ids and compare with json for (.*)")
     public void callApiForIds(String stich_table) throws AzureOauthTokenFetchingException {
         int bound = randomIdsData.size();
-        try {
+
             for (int i = 0; i < bound; i++) {
                 Log.info(randomIdsData.get(i).get("epr_id").toString());
                 //   Log.info(randomIdsData.get(i).get("json").toString());
@@ -161,15 +161,9 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                         workResponse = apiService.searchForWorkByIDResult(randomIdsData.get(i).get("epr_id").toString());
                         compare_stch_work_core_json(i);
                         break;
-
-
                 }
-
             }
 
-        } catch (Exception e) {
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " " + e.getMessage(), true);
-        }
     }
 
 
@@ -485,11 +479,12 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getLegalOwnership().get("ownershipRollUp"), response.getManifestation().getWork().getWorkCore().getLegalOwnership().get("ownershipRollUp"));
                     printLog("work legalOwnership ownershipRollUp");
                 }
-                Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"), response.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"));
+  /*              Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"), response.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"));
+
                 printLog("work openAccessType code");
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getOpenAccessType().get("name"), response.getManifestation().getWork().getWorkCore().getOpenAccessType().get("name"));
                 printLog("work openAccessType name");
-
+*/
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getPmc().getCode(), response.getManifestation().getWork().getWorkCore().getPmc().getCode());
                 printLog("work pmc code");
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getPmc().getName(), response.getManifestation().getWork().getWorkCore().getPmc().getName());
@@ -743,34 +738,59 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             ArrayList<WorkExtended.WorkExtendedEditorialBoard> workExtendedEditorialBoards_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedEditorialBoard()));
             ArrayList<WorkExtended.WorkExtendedEditorialBoard> workExtendedEditorialBoards_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedEditorialBoard()));
 
+            ignore.clear();
             for (int wb = 0; wb < workExtendedEditorialBoards_api.size(); wb++) {
-
                 boolean extEdBoardMember = false;
                 for(int cnt =0;cnt<workExtendedEditorialBoards_json.size();cnt++) {
+                    if (ignore.contains(cnt)) continue;
+                    if(workExtendedEditorialBoards_json.get(cnt).getExtendedBoardRole().get("code").toString().equalsIgnoreCase(workExtendedEditorialBoards_api.get(wb).getExtendedBoardRole().get("code").toString()))
+                    {
+                        if (workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember() != null)
+                        {
+                            if (workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember().equals
+                                    (workExtendedEditorialBoards_api.get(wb).getExtendedBoardMember()))
+                            {
+                                Log.info("----->verification for workExtendedEditorialBoards " + wb);
+                                printLog("ExtendedBoardRole code");
+                                printLog("ExtendedBoardMember firstName");
+                                printLog("ExtendedBoardMember lastName");
+                                printLog("ExtendedBoardMember notes");
+                                printLog("ExtendedBoardMember affiliation");
+                                printLog("ExtendedBoardMember imageUrl");
 
-                    if(workExtendedEditorialBoards_json.get(cnt).getExtendedBoardRole().get("code").toString().equalsIgnoreCase(workExtendedEditorialBoards_api.get(wb).getExtendedBoardRole().get("code").toString())&
-                            workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember().get("firstName").toString().equalsIgnoreCase(workExtendedEditorialBoards_api.get(wb).getExtendedBoardMember().get("firstName").toString())){
-                        extEdBoardMember = true;
+                                Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember GroupNumber "+wb,
+                                        workExtendedEditorialBoards_json.get(cnt).getGroupNumber(),
+                                        workExtendedEditorialBoards_api.get(wb).getGroupNumber());
+                                printLog("GroupNumber");
 
-                        Log.info("----->verification for workExtendedEditorialBoards " + wb);
-                        printLog("ExtendedBoardRole code");
-                        if (workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember() != null) {
-                            //Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended-> ", workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember().get("firstName"), workExtendedEditorialBoards_api.get(wb).getExtendedBoardMember().get("firstName"));
-                            printLog("ExtendedBoardMember firstName");
-                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember lastName "+wb, workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember().get("lastName"), workExtendedEditorialBoards_api.get(wb).getExtendedBoardMember().get("lastName"));
-                            printLog("ExtendedBoardMember lastName");
-                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember affiliation "+wb, workExtendedEditorialBoards_json.get(cnt).getExtendedBoardMember().get("affiliation"), workExtendedEditorialBoards_api.get(wb).getExtendedBoardMember().get("affiliation"));
-                            printLog("ExtendedBoardMember affiliation");
+                                Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember SequenceNumber "+wb,
+                                        workExtendedEditorialBoards_json.get(cnt).getSequenceNumber(),
+                                        workExtendedEditorialBoards_api.get(wb).getSequenceNumber());
+                                printLog("SequenceNumber");
+                                extEdBoardMember = true;
+                                ignore.add(cnt);
+                                break;
+                            }
                         }
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember GroupNumber "+wb, workExtendedEditorialBoards_json.get(cnt).getGroupNumber(), workExtendedEditorialBoards_api.get(wb).getGroupNumber());
-                        printLog("GroupNumber");
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember SequenceNumber "+wb, workExtendedEditorialBoards_json.get(cnt).getSequenceNumber(), workExtendedEditorialBoards_api.get(wb).getSequenceNumber());
-                        printLog("SequenceNumber");
-                        break;
+                        else{
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember GroupNumber "+wb,
+                                    workExtendedEditorialBoards_json.get(cnt).getGroupNumber(),
+                                    workExtendedEditorialBoards_api.get(wb).getGroupNumber());
+                            printLog("GroupNumber");
+
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkExtended->ExtendedBoardMember SequenceNumber "+wb,
+                                    workExtendedEditorialBoards_json.get(cnt).getSequenceNumber(),
+                                    workExtendedEditorialBoards_api.get(wb).getSequenceNumber());
+                            printLog("SequenceNumber");
+                            extEdBoardMember = true;
+                            ignore.add(cnt);
+                            break;
+                        }
                     }
                 }
 
-                Assert.assertTrue(DataQualityContext.breadcrumbMessage + "stchWorkExtended -> extBoarmember "+wb+" found in stitchingDB",extEdBoardMember);
+
+                Assert.assertTrue(DataQualityContext.breadcrumbMessage + "stchWorkExtended -> extBoardMember "+wb+" not found in stitchingDB",extEdBoardMember);
 
             }
         }
@@ -1058,8 +1078,14 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                         printLog("WorkCore SubjectArea type code");
                         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getSubjectArea().getType().get("name"), workCoreSubjectAreas_api.get(sa).getSubjectArea().getType().get("name"));
                         printLog("WorkCore SubjectArea type name");
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea().get("code"), workCoreSubjectAreas_api.get(sa).getSubjectArea().getParentSubjectArea().get("code"));
-                        printLog("WorkCore parentSubjectArea");
+
+                        if(workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea()!=null |
+                                workCoreSubjectAreas_api.get(sa).getSubjectArea().getParentSubjectArea()!=null)
+                        {
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea().get("code"), workCoreSubjectAreas_api.get(sa).getSubjectArea().getParentSubjectArea().get("code"));
+                            printLog("WorkCore parentSubjectArea");
+                        }
+
                         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getEffectiveStartDate(), workCoreSubjectAreas_api.get(sa).getEffectiveStartDate());
                         printLog("WorkCore SubjectArea EffectiveStartDate");
 

@@ -146,6 +146,12 @@ public class APIDataSQL {
           + "inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gm.manifestation_id =gmi.f_manifestation \n"
           + "order by random() limit %s";
 
+  public static final String SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT=
+          "select f_component as WORK_ID from semarchy_eph_mdm.gd_work_rel_package gwrp order by Random() limit %S";
+
+  public static final String SELECT_GD_RANDOM_WORK_IN_PACKAGE =
+          "select f_package_owner as WORK_ID from semarchy_eph_mdm.gd_work_rel_package gwrp order by Random() limit %S";
+
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_WORK =
       "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product "
           + "where f_wwork is not null order by random() limit 1";
@@ -162,6 +168,7 @@ public class APIDataSQL {
       "select * from semarchy_eph_mdm.gd_product gp \n"
           + "inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gp.f_manifestation =gmi.f_manifestation \n"
           + "order by random() limit %s";
+
 
   public static final String GET_GD_DATA_ACCOUNTABLEPRODUCT_BY_ID =
       "select accountable_product_id as ACCOUNTABLE_PRODUCT_ID, \n"
@@ -285,9 +292,9 @@ public class APIDataSQL {
           + "               f_status AS WORK_STATUS,\n"
           + "               f_accountable_product AS f_accountable_product,\n"
           + "               f_pmc AS PMC,\n"
-          + "               f_oa_type AS OPEN_ACCESS_TYPE,\n"
+          + "             --f_oa_type AS OPEN_ACCESS_TYPE,\n"
           + "               f_imprint AS IMPRINT,\n"
-          + "               f_society_ownership AS SOCIETY_OWNERSHIP,\n"
+          + "             --f_society_ownership AS SOCIETY_OWNERSHIP,\n"
           + "               f_llanguage AS LANGUAGE_CODE,\n"
           + "               f_t_event_type AS F_T_EVENT_TYPE,\n"
           + "               f_subscription_type AS SUBSCRIPTION_TYPE,\n"
@@ -395,6 +402,12 @@ public class APIDataSQL {
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC =
       "SELECT COUNT (f_pmc) FROM semarchy_eph_mdm.gd_wwork where f_pmc='%s'";
+
+  public static final String SELECT_GD_COUNT_WORK_BY_HASWORKCOMPONENTS =
+          "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_component ='%S'";
+
+  public static final String SELECT_GD_COUNT_WORK_BY_ISINPACKAGE =
+      "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_package_owner ='%S'";
 
   public static final String SELECT_GD_PMG_BY_PMC =
       "select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";

@@ -39,7 +39,6 @@ public class ApiProductsSearchSteps {
   private static List<String> ids;
   private static List<String> manifestationIds;
   private static List<WorkDataObject> workIdentifiers;
-
   private static List<ProductDataObject> productDataObjects;
   private static List<ManifestationDataObject> manifestationDataObjects;
 
@@ -110,7 +109,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-      //"ids.clear(); ids.add("EPR-10M7F0"); Log.info("hard coded product ids are : " + ids);"
+     // ids.clear(); ids.add("EPR-12MJKW"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -1051,4 +1050,5 @@ public class ApiProductsSearchSteps {
         DBManager.getDBResultMap(sql, Constants.EPH_URL);
     return ((Long) countByProductStatus.get(0).get(count)).intValue();
   }
+
 }

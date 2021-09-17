@@ -145,6 +145,30 @@ Feature: Customer Search API: Works
     And     We get the work search data from EPH GD
     Then    the work details are retrieved by search with PMG code and compared
 
+  @searchAPI @workSearchAPI
+  Scenario: search work by hasWorkComponents
+    Given   We get 1 random search ids for works HAS_WORK_COMPONENTS
+    And     We get the work search data from EPH GD
+    Then    work details are retrieved by hasWorkComponent and compared
+
+  @searchAPI @workSearchAPI
+  Scenario: search work by isInWorkPackages
+    Given   We get 1 random search ids for works IS_IN_WORK_PACKAGES
+    And     We get the work search data from EPH GD
+    Then    work details are retrieved by isInPackage and compared
+
+  @searchAPI @workSearchAPI
+  Scenario Outline: Search works by excludeNonElsevier
+    Given   verify works retrieved by search <option> for excludeNonElsevier
+    Examples:
+      | option                             |
+      | cell                               |
+      | bio                                |
+      | blood                              |
+      | human                              |
+      | medicine                           |
+
+
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
 
   @searchAPI @workSearchAPI

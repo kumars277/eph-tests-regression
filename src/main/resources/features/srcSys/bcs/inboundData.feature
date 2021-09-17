@@ -31,8 +31,6 @@ Feature:Validate data count for BCS tables in Data Lake
      # |stg_current_originatornotes  |     1            | script missing
 
 
-
-
   @BCSInbound
  Scenario Outline: Verify Count & Data for BCS stg_history tables are transferred from stg_Current_tables
    Given Get total count of BCS Current table <SourceTableName>
