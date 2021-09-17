@@ -1845,7 +1845,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v) where external_reference in ('%s') order by external_reference desc \n";
 
 
