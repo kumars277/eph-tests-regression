@@ -27,10 +27,13 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_responsibilities |       1         |
       |stg_current_sublocation      |       1         |
       |stg_current_text             |       1         |
-      |stg_current_versionfamily    |       1         |
+     |stg_current_versionfamily    |       1         |
+     # |stg_current_originatornotes  |     1            | script missing
 
 
- @BCSInbound
+
+
+  @BCSInbound
  Scenario Outline: Verify Count & Data for BCS stg_history tables are transferred from stg_Current_tables
    Given Get total count of BCS Current table <SourceTableName>
    Then Get the count of BCS stg_history <TargetTableName> for current comparision
@@ -54,6 +57,9 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_sublocation                |stg_history_sublocation_part       |     1           |
       |stg_current_text                       |stg_history_text_part              |     1           |
       |stg_current_versionfamily              |stg_history_versionfamily_part     |     1           |
+     # |stg_current_originatornotes              |stg_history_originatornotes_part |     1           |script missing
+     #|stg_current_originatoraddress   |stg_history_originatoraddress_part |          1             |script missing
+
 
 
 # merged in above scenario

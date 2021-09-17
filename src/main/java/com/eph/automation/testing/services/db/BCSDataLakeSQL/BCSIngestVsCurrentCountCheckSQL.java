@@ -237,5 +237,28 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part ))";
 
 
+    /*
+    We need to add this query for missing originator_notes script
+
+    select
+"uo"."metainfdeleted" "metadeleted"
+, "uo"."metainfmodifiedon" "metamodifiedon"
+, "uo"."contentseriesid" "sourceref"
+, "uo"."businesspartnerid" "businesspartnerid"
+, "ua"."notestype" "notestype"
+, "ua"."notes" "notes"
+, "ua"."companygroup" "companygroup"
+from ((select
+df.metainfdeleted
+, df.metainfmodifiedon
+,df.contentseriesid
+, co.businesspartnerid
+, co.authornotes
+from (initial_ingest df
+CROSS JOIN UNNEST(contactsoriginators) x (co)))uo
+CROSS JOIN UNNEST(authornotes) z (ua));
+
+     */
+
 
 }
