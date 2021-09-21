@@ -56,4 +56,8 @@ public class BCSCurrentVsHistoryCountCheckSQL {
        "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part " +
        "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part)";
 
+    public static String GET_BCS_ORIGINATORNOTES_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION=
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_part)";
+
 }

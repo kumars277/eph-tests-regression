@@ -40,6 +40,7 @@ public class BCSCountCheckSteps {
             case "stg_current_sublocation":       BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_SUBLOCATION_SOURCE_COUNT; break;
             case "stg_current_text":              BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_SOURCE_COUNT; break;
             case "stg_current_versionfamily":     BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_VERSIONFAMILY_SOURCE_COUNT; break;
+            case "stg_current_originatornotes":   BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_SOURCE_COUNT; break;
         }
      //   List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDBResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
@@ -65,6 +66,7 @@ public class BCSCountCheckSteps {
             case "stg_current_sublocation":       BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_SUBLOCATION_CURRENT_COUNT; break;
             case "stg_current_text":              BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_CURRENT_COUNT; break;
             case "stg_current_versionfamily":     BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_VERSIONFAMILY_CURRENT_COUNT; break;
+            case "stg_current_originatornotes":     BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_CURRENT_COUNT; break;
         }
         List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCount_SQL, Constants.AWS_URL);
         BCSCurrentCount = ((Long) BCSCurrentTableCount.get(0).get("Current_Count")).intValue();
@@ -156,6 +158,7 @@ public class BCSCountCheckSteps {
             case "stg_history_sublocation_part":        BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_SUBLOCATION_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_text_part":               BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_TEXT_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_versionfamily_part":      BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_VERSIONFAMILY_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
+            case "stg_history_originatoraddress_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORNOTES_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
         }
 
         List<Map<String, Object>> JRBICurrentHistoryTableCount = DBManager.getDBResultMap(BCSHistoryCount_SQL, Constants.AWS_URL);

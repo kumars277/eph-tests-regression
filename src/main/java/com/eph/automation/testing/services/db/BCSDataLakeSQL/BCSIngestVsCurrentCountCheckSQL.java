@@ -225,8 +225,34 @@ public class BCSIngestVsCurrentCountCheckSQL {
     public static String GET_BCS_VERSIONFAMILY_SOURCE_COUNT=
             "select count(*) as Source_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".\"initial_ingest\" \"df\" CROSS JOIN UNNEST(\"contentversionfamily\") x (\"cj\")";
 
+    public static String GET_BCS_ORIGINATORNOTES_SOURCE_COUNT=
+           "  select count(*) as Source_Count from (\n" +
+                   " select \n" +
+                   "uo.metainfdeleted metadeleted\n" +
+                   ", uo.metainfmodifiedon metamodifiedon\n" +
+                   ", uo.contentseriesid sourceref\n" +
+                   ", uo.businesspartnerid businesspartnerid\n" +
+                   ", ua.notestype notestype\n" +
+                   ", ua.notes notes\n" +
+                   ", ua.companygroup companygroup\n" +
+                   "from ((select\n" +
+                   "df.metainfdeleted\n" +
+                   ", df.metainfmodifiedon\n" +
+                   ",df.contentseriesid\n" +
+                   ", co.businesspartnerid\n" +
+                   ", co.authornotes\n" +
+                   "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                   "CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
+                   "CROSS JOIN UNNEST(authornotes) z (ua))\n" +
+                   ")";
+
+
     public static String GET_BCS_VERSIONFAMILY_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_versionfamily";
+
+    public static String GET_BCS_ORIGINATORNOTES_CURRENT_COUNT=
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatornotes";
+
 
     public static String GET_BCS_VERSIONFAMILY_PREVIOUS_COUNT=
             "select count(*) as Previous_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_previous_versionfamily";

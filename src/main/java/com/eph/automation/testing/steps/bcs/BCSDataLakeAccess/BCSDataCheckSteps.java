@@ -76,11 +76,14 @@ public class BCSDataCheckSteps {
             case "stg_current_versionfamily":
                 sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_versionfamily, countOfRandomIds);
                 break;
+            case "stg_current_originatornotes":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_originatornotes, countOfRandomIds);
+                break;
 
         }
 
         List<Map<?, ?>> randomEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        if (targetTable.equalsIgnoreCase("stg_current_originatoraddress"))
+        if (targetTable.equalsIgnoreCase("stg_current_originatoraddress")||targetTable.equalsIgnoreCase("stg_current_originatornotes"))
             Ids = randomEPRIds.stream().map(m -> (Integer) m.get("businesspartnerid")).map(String::valueOf).collect(Collectors.toList());
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
@@ -183,6 +186,14 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
                 break;
 
+            case "stg_current_originatornotes":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originatornotes,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+
+
         }
 Log.info(sql);
     }
@@ -280,7 +291,14 @@ Log.info(sql);
                         Joiner.on("','").join(Ids));
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
                 break;
+
+            case "stg_current_originatornotes":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatornotes,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
         }
+        Log.info(sql);
     }
 
     @And("Compare the records of initial ingest and current table (.*)")
@@ -336,6 +354,9 @@ Log.info(sql);
                     break;
                 case "stg_current_versionfamily":
                     compareIngestVsCurrentversionfamily();
+                    break;
+                case "stg_current_originatornotes":
+                    compareIngestVsCurrentOriginatorsNotes();
                     break;
             }
         }
@@ -809,6 +830,50 @@ Log.info(sql);
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage+" searchterm mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSearchterm(),
                             (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getSearchterm()));
                     printLog("searchterm");
+
+                    Log.info("------------------------------------------");
+                }
+            }
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage+" businessparternedId missing in current table"
+                    + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid(), Found);
+        }
+        Log.info("total " + bcsDataQualityContext.bcsInitialIngestDataObjectList.size() + " modified entries verified for sourceref "
+                + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(0).getSourceref());
+    }
+
+    public void compareIngestVsCurrentOriginatorsNotes() {//created by Dinesh @ 21 sept 2021
+        for (int i = 0; i < bcsDataQualityContext.bcsInitialIngestDataObjectList.size(); i++) {
+            boolean Found = false;
+            for (int c = 0; c < bcsDataQualityContext.bcsCurrentTableDataObjectList.size(); c++) {
+                if (bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid()
+                        .equalsIgnoreCase(bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getBusinesspartnerid())) {
+                    Log.info("verification for businessPartnerId - " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid());
+                    Found = true;
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" Metadeleted mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getMetadeleted(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getMetadeleted()));
+                    printLog("Metadeleted");
+
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" metamodifiedon mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getMetamodifiedon(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getMetamodifiedon()));
+                    printLog("Metamodified on");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" businesspartnerid mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getBusinesspartnerid()));
+                    printLog("businesspartnerid");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" sourceref mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getSourceref()));
+                    printLog("sourceref");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" notestype mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getNotestype(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getNotestype()));
+                    printLog("notestype");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" Notes mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getNotes(),
+                            (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(c).getNotes()));
+                    printLog("Notes");
 
                     Log.info("------------------------------------------");
                 }
@@ -1598,7 +1663,8 @@ Log.info(sql);
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_extobject,countOfRandomIds);break;
         case "stg_current_fullversionfamily"    :
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_fullversionfamily,countOfRandomIds);break;
-        //case "stg_current_originatoraddress"    :sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originatoraddress);break;
+        case "stg_current_originatoraddress"    :
+            sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originatoraddress,countOfRandomIds);break;
         case "stg_current_originators"          :
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originators,countOfRandomIds);break;
         case "stg_current_pricing"              :
@@ -1630,6 +1696,7 @@ Log.info(sql);
        //  Ids.clear();Ids.add("550805"); //added by Nishant to debug failures
 
         DataQualityContext.breadcrumbMessage += "->" + Ids;
+        Log.info(sql);
 
     }
 
@@ -1664,13 +1731,12 @@ Log.info(sql);
                     Joiner.on("','").join(Ids));
             bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject .class, Constants.AWS_URL);
             bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getProjectno));break;
-/*
+
         case "stg_current_originatoraddress"    :
-            sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originatoraddress,
+            sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatoraddress,
                     Joiner.on("','").join(Ids));
-            bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject .class, Constants.AWS_URL);
-            bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));break;
-*/
+            bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject .class, Constants.AWS_URL);
+            bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));break;
 
         case "stg_current_originators"          :
             sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_current_originators,
@@ -1727,7 +1793,7 @@ Log.info(sql);
             break;
 
         }
-
+        Log.info(sql);
     }
 
 
@@ -1764,6 +1830,12 @@ Log.info(sql);
 
             case "stg_history_originators_part":
                 sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_history_originators_part,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_history_originatoraddress_part":
+                sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_history_originatoraddress_part,
                         Joiner.on("','").join(Ids));
                 bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
                 break;
@@ -1811,6 +1883,7 @@ Log.info(sql);
                 bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
                 break;
         }
+        Log.info(sql);
     }
 
 
@@ -1830,7 +1903,7 @@ Log.info(sql);
                 case "stg_current_content":             compareCurrentVsHistoryContent();           break;
                 case "stg_current_extobject":           compareCurrentVsHistoryExtobject();         break;
                 case "stg_current_fullversionfamily":   compareCurrentVsHistoryFullVersionFamily(); break;
-            //  case "stg_current_originatoraddress":   compareIngestVsCurrentOriginatoraddress();  break;
+                case "stg_current_originatoraddress":   compareCurrentVsHistoryOriginatoraddress();  break;
                 case "stg_current_originators":         compareCurrentVsHistoryOriginators();       break;
                 case "stg_current_pricing":             compareCurrentVsHistoryPricing();           break;
                 case "stg_current_product":             compareCurrentVsHistoryProduct();           break;
@@ -2167,6 +2240,108 @@ Log.info(sql);
         Log.info("total " + bcsDataQualityContext.bcsCurrentTableDataObjectList.size() + "projectno(s) verified for sourceref"
                 + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getSourceref());
     }
+
+    public void compareCurrentVsHistoryOriginatoraddress() {//created by Dinesh @ 21 sept 2021
+        for (int i = 0; i < bcsDataQualityContext.bcsCurrentTableDataObjectList.size(); i++) {
+            boolean Found = false;
+            for (int c = 0; c < bcsDataQualityContext.bcsHistoryTableDataObjectsList.size(); c++) {
+                if (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetamodifiedon()
+                        .equalsIgnoreCase(bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getMetamodifiedon())) {
+                    Log.info("verification for metamodifiedon - " + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetamodifiedon());
+                    Found = true;
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" Metadeleted mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetadeleted(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getMetadeleted()));
+                    printLog("Metadeleted");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" additionaladdress mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getAdditionaladdress(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getAdditionaladdress()));
+                    printLog("additionaladdress");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" addressid mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getAddressid(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getAddressid()));
+                    printLog("addressid");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" addressline1 mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getAddressline1(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getAddressline1()));
+                    printLog("addressline1");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" addressline2 mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getAddressline2(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getAddressline2()));
+                    printLog("addressline2");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" addressline3 mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getAddressline3(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getAddressline3()));
+                    printLog("addressline3");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" businesspartnerid mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getBusinesspartnerid()));
+                    printLog("businesspartnerid");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" city mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getCity(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getCity()));
+                    printLog("city");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" country mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getCountry(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getCountry()));
+                    printLog("country");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" district mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getDistrict(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getDistrict()));
+                    printLog("district");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" email mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getEmail(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getEmail()));
+                    printLog("email");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" fax mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getFax(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getFax()));
+                    printLog("fax");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" houseno mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getHouseno(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getHouseno()));
+                    printLog("houseno");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" internet mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getInternet(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getInternet()));
+                    printLog("internet");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" ismainaddress mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getIsmainaddress(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getIsmainaddress()));
+                    printLog("ismainaddress");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" mobile mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMobile(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getMobile()));
+                    printLog("mobile");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" postalcode mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getPostalcode(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getPostalcode()));
+                    printLog("postalcode");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" street mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getStreet(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getStreet()));
+                    printLog("street");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" telephonemain mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getTelephonemain(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getTelephonemain()));
+                    printLog("telephonemain");
+
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" telephoneother mismatch ", bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getTelephoneother(),
+                            (bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(c).getTelephoneother()));
+                    printLog("telephoneother");
+
+                    Log.info("------------------------------------------");
+                    break;
+                }
+            }
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage+" modifiedon value missing in current table"
+                    + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetamodifiedon(), Found);
+        }
+        Log.info("total " + bcsDataQualityContext.bcsCurrentTableDataObjectList.size() + " modified entries verified for businesspartnerid "
+                + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getBusinesspartnerid());
+
+    }
+
 
     public void compareCurrentVsHistoryOriginators() {//created by Nishant @ 07 Dec 2020
         for (int i = 0; i < bcsDataQualityContext.bcsCurrentTableDataObjectList.size(); i++) {

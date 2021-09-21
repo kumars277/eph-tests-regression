@@ -275,6 +275,16 @@ public class BCSInitialIngestDataObject {
     private String childisbn;
     private String childprojectno;
 
+    //for stg_current_originatornotes
+    private String notestype;
+    private String notes;
+
+
+    public String getNotestype() {return notestype;}
+    public void setNotestype(String notestype) {this.notestype = notestype;}
+
+    public String getNotes() {return notestype;}
+    public void setNotes(String notes) {this.notes = notes;}
 
     public String getClassificationcode() {return classificationcode;}
     public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
