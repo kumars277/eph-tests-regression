@@ -9,7 +9,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_classification=
             "select sourceref from(SELECT cl.value, productprojectno sourceref\n" +
-                    "FROM (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
+                    "FROM (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
                     "where value is not null AND value!='' AND value!='0' order by rand() limit %s";
 
     public static String getInitialIngestDataFor_stg_current_classification=
@@ -22,7 +22,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cl.classificationtype\n" +
                     ", cl.priority\n" +
                     ", cl.businessunit\n" +
-                    "FROM  (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest f\n" +
+                    "FROM  (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product f\n" +
                     "CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,value,classificationcode desc";
@@ -38,7 +38,7 @@ public class BCSDataLakeDataCheckSQL {
     //created by Nishant @ 21 Oct 2020
     public static String randomId_ingestTableFor_stg_current_content=
             "select sourceref from(SELECT df.productprojectno sourceref FROM\n" +
-                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)  order by rand() limit %s";
+                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df)  order by rand() limit %s";
 
 
     public static String getInitialIngestDataFor_stg_current_content=
@@ -81,7 +81,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", df.contentsubtitle\t\"subtitle\"\n" +
                     ", df.contentseriescode\t\"seriescode\"\n" +
                     ", df.contentobjtype\t\"objecttype\"\n" +
-                    "FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df) \n" +
+                    "FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df) \n" +
                     "  where sourceref in ('%s') order by sourceref desc";
 
     public static String getCurrentTableDataFor_stg_current_content=
@@ -95,7 +95,7 @@ public class BCSDataLakeDataCheckSQL {
     //added by Nishant @ 22 Oct 2020
     public static String randomId_ingestTableFor_stg_current_extobject=
             "select sourceref from(select productprojectno sourceref, cj.object, cj.name\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(\"productexternalobjects\") x (cj)))\n" +
                     "where name is not null and name !='' and name!='0'\n" +
                     "order by rand() limit %s";
@@ -110,7 +110,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.name\n" +
                     ", cj.comments\n" +
                     ", cj.source\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(productexternalobjects) x (cj)))\n" +
                     "where sourceref in ('%s') \n" +
                     "order by sourceref,name,object desc";
@@ -123,7 +123,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_fullversionfamily=
             "select sourceref from (select productprojectno sourceref, fv.projectno\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contentfullversionfamily) x (fv)))\n" +
                     "where projectno is not null and projectno!=''\n" +
                     "order by rand() limit %s";
@@ -138,7 +138,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", fv.isbn\n" +
                     ", fv.projectno\n" +
                     ", fv.workmaster\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contentfullversionfamily) x (fv)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,projectno desc";
@@ -158,7 +158,7 @@ public class BCSDataLakeDataCheckSQL {
                     "  --, df.productprojectno sourceref\n" +
                     "  , co.businesspartnerid businesspartnerid\n" +
                     "  , co.authoraddress\n" +
-                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "  CROSS JOIN UNNEST(contactsoriginators) x (co))),\n" +
                     "  address as (\n" +
                     "  select\n" +
@@ -197,7 +197,7 @@ public class BCSDataLakeDataCheckSQL {
                     "  --, df.productprojectno sourceref\n" +
                     "  , co.businesspartnerid businesspartnerid\n" +
                     "  , co.authoraddress\n" +
-                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "  CROSS JOIN UNNEST(contactsoriginators) x (co))),\n" +
                     "  address as (\n" +
                     "  select\n" +
@@ -241,7 +241,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_originators=
             "select sourceref from " +
                     "(select df.productprojectno sourceref, co.businesspartnerid businesspartnerid\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
                     "where businesspartnerid is not null order by rand() limit %s";
 
     public static String getInitialIngestDataFor_stg_current_originators=
@@ -261,7 +261,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", co.department\tdepartment\n" +
                     ", co.lastname\tlastname\n" +
                     ", co.searchterm\tsearchterm\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,copyrightholdertype,businesspartnerid desc";
@@ -278,7 +278,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cp.validupto validto\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(productprice) x (cp)))\n" +
                     "where validto is not null and validto!=''\n" +
                     "order by rand() limit %s";
@@ -293,7 +293,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cp.priceapprox priceapprox\n" +
                     ", cp.price price\n" +
                     ", cp.validupto validto\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(productprice) x (cp)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,type,currency,validto desc";
@@ -306,7 +306,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_product=
             "select sourceref from(select df.productprojectno sourceref\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)) \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df)) \n" +
                     "order by rand() limit %s";
     public static String getInitialIngestDataFor_stg_current_product=
             "select * from(select \n" +
@@ -350,7 +350,7 @@ public class BCSDataLakeDataCheckSQL {
                     "--, df.productexternalimpressionid\texternalimpressionid\n" +
                     ", df.productplannedfirstprint\tplannedfirstprint\n" +
                     ", df.productbinding\tbinding\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df))\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref desc";
     public static String getCurrentTableDataFor_stg_current_product=
@@ -373,7 +373,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_production=
             "select sourceref from(select df.productprojectno sourceref\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)) \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df)) \n" +
                     "order by rand() limit %s";
     public static String getInitialIngestDataFor_stg_current_production=
             "select * from(select \n" +
@@ -441,7 +441,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", df.productionextentstatus\textentstatus\n" +
                     ", df.productionpagesarabic\tpagesarabic\n" +
                     ", df.productiongraphicsbw\tgraphicsbw\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref desc";
     public static String getCurrentTableDataFor_stg_current_production=
@@ -461,7 +461,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_relations=
             "select sourceref from(select df.productprojectno sourceref, cj.projectno projectno\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df      \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df      \n" +
                     "CROSS JOIN UNNEST(productrelation) x (cj))) \n" +
                     "where projectno is not null\n" +
                     "order by rand() limit %s";
@@ -475,7 +475,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.projectno projectno\n" +
                     "--, cj.relimpressionid relimpressionid\n" +
                     ", cj.isbn isbn\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(productrelation) x (cj)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,relationtype,projectno desc";
@@ -490,7 +490,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_responsibilities=
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref, cj.responsibleperson\tresponsibleperson\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
                     "where responsibleperson is not null and responsibleperson!=''\n" +
                     " order by rand() limit %s";
@@ -502,7 +502,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.responsibility responsibility\n" +
                     ", cj.responsibleperson responsibleperson\n" +
                     ", cj.personid personid\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
                     "where sourceref in ('%s')\n" +
                     " order by  sourceref,responsibility,responsibleperson desc";
@@ -517,7 +517,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cj.warehouse\twarehouse\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
                     "where warehouse is not null and warehouse!=''\n" +
                     "order by rand() limit %s";
@@ -532,7 +532,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.refkey refkey\n" +
                     ", cj.status status\n" +
                     ", cj.plannedpubdate plannedpubdate\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref,warehouse desc";
@@ -548,7 +548,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_text=
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref, cj.text\n" +
-                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(distributiontext) x (cj)) \n" +
                     "where text is not null and text!=''\n" +
                     "order by rand() limit %s";
@@ -562,7 +562,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.name\n" +
                     ", cj.text\n" +
                     ", cj.status\n" +
-                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(distributiontext) x (cj))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,texttype,text desc";
@@ -577,7 +577,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cj.childprojectno childprojectno\n" +
-                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
                     "where childprojectno is not null and childprojectno!=''\n" +
                     "order by rand() limit %s";
@@ -598,7 +598,7 @@ public class BCSDataLakeDataCheckSQL {
                     ",df.contentseriesid\n" +
                     ", co.businesspartnerid\n" +
                     ", co.authornotes\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
                     "CROSS JOIN UNNEST(authornotes) z (ua))\n" +
                     ")order by rand() limit %s";
@@ -619,7 +619,7 @@ public class BCSDataLakeDataCheckSQL {
                     ",df.contentseriesid\n" +
                     ", co.businesspartnerid\n" +
                     ", co.authornotes\n" +
-                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
                     "CROSS JOIN UNNEST(authornotes) z (ua))\n" +
                     ")" +
@@ -642,7 +642,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.workmasterprojectno workmasterprojectno\n" +
                     ", cj.childisbn childisbn\n" +
                     ", cj.childprojectno childprojectno\n" +
-                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,childprojectno desc";

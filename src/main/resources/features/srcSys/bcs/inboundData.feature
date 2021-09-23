@@ -28,7 +28,7 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_sublocation      |       1         |
       |stg_current_text             |       1         |
       |stg_current_versionfamily    |       1         |
-      |stg_current_originatornotes  |     1            |
+      |stg_current_originatornotes  |     1           |
 
 
   @BCSInbound

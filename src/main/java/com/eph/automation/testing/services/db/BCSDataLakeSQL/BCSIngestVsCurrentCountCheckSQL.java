@@ -6,7 +6,7 @@ package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 public class BCSIngestVsCurrentCountCheckSQL {
 
     public static String GET_BCS_CLASSIFICATION_SOURCE_COUNT =
-            "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl))";
+            "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product f CROSS JOIN UNNEST(distributionclassification) x (cl))";
 
     public static String GET_BCS_CLASSIFICATION_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification";
@@ -20,7 +20,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
             "where inbound_ts <(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_part))";
 
     public static String GET_BCS_CONTENT_SOURCE_COUNT =
-            "SELECT count(*) as Source_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df";
+            "SELECT count(*) as Source_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df";
 
     public static String GET_BCS_CONTENT_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content";
@@ -35,7 +35,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
 
 
     public static String GET_BCS_EXTOBJECT_SOURCE_COUNT=
-            "select count(*)  as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+            "select count(*)  as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
             "CROSS JOIN UNNEST(\"productexternalobjects\") x (cj))";
 
     public static String GET_BCS_EXTOBJECT_CURRENT_COUNT=
@@ -51,7 +51,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
 
 
     public static String GET_BCS_FULLVERSIONFAMILY_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(\"contentfullversionfamily\") x (fv))";
 
    public static String GET_BCS_FULLVERSIONFAMILY_CURRENT_COUNT=
@@ -73,7 +73,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
                     "  --, \"df\".\"productprojectno\" \"sourceref\"\n" +
                     "  , \"co\".\"businesspartnerid\"         \"businesspartnerid\"\n" +
                     "  , \"co\".\"authoraddress\"\n" +
-                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "  CROSS JOIN UNNEST(\"contactsoriginators\") x (\"co\"))),\n" +
                     "  address as (\n" +
                     "  select\n" +
@@ -110,7 +110,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
     //public static String GET_BCS_ORIGINATORADDRESS_HISTORY_COUNT=
 
     public static String GET_BCS_ORIGINATORS_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
             "CROSS JOIN UNNEST(\"contactsoriginators\") x (\"co\"))";
 
     public static String GET_BCS_ORIGINATORS_CURRENT_COUNT=
@@ -125,7 +125,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_part))";
 
     public static String GET_BCS_PRICING_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(\"productprice\") x (\"cp\"))";
+            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df CROSS JOIN UNNEST(\"productprice\") x (\"cp\"))";
 
     public static String GET_BCS_PRICING_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_pricing";
@@ -139,7 +139,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_pricing_part))";
 
     public static String GET_BCS_PRODUCT_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)";
+            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df)";
 
     public static String GET_BCS_PRODUCT_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product";
@@ -153,7 +153,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_part))";
 
     public static String GET_BCS_PRODUCTION_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)";
+            "select count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df)";
 
     public static String GET_BCS_PRODUCTION_CURRENT_COUNT=
             "select  count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_production";
@@ -167,7 +167,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_production_part))";
 
     public static String GET_BCS_RELATIONS_SOURCE_COUNT=
-            "select  count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(\"productrelation\") x (\"cj\"))";
+            "select  count(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df CROSS JOIN UNNEST(\"productrelation\") x (\"cj\"))";
 
     public static String GET_BCS_RELATIONS_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_relations";
@@ -181,7 +181,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_relations_part ))";
 
     public static String GET_BCS_RESPONSIBILITIES_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(\"contactsresponsibilities\") x (\"cj\"))";
+            "select COUNT(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df CROSS JOIN UNNEST(\"contactsresponsibilities\") x (\"cj\"))";
 
     public static String GET_BCS_RESPONSIBILITIES_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_responsibilities";
@@ -195,7 +195,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_responsibilities_part ))";
 
     public static String GET_BCS_SUBLOCATION_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(\"productsublocation\") x (\"cj\"))";
+            "select COUNT(*) as Source_Count from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df CROSS JOIN UNNEST(\"productsublocation\") x (\"cj\"))";
 
     public static String GET_BCS_SUBLOCATION_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_sublocation";
@@ -209,7 +209,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_sublocation_part ))";
 
     public static String GET_BCS_TEXT_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest \"df\" CROSS JOIN UNNEST(\"distributiontext\") x (\"cj\")";
+            "select COUNT(*) as Source_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product \"df\" CROSS JOIN UNNEST(\"distributiontext\") x (\"cj\")";
 
     public static String GET_BCS_TEXT_CURRENT_COUNT=
             "select COUNT(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text";
@@ -223,7 +223,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_part ))";
 
     public static String GET_BCS_VERSIONFAMILY_SOURCE_COUNT=
-            "select count(*) as Source_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".\"initial_ingest\" \"df\" CROSS JOIN UNNEST(\"contentversionfamily\") x (\"cj\")";
+            "select count(*) as Source_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".\"initial_ingest_product\" \"df\" CROSS JOIN UNNEST(\"contentversionfamily\") x (\"cj\")";
 
     public static String GET_BCS_ORIGINATORNOTES_SOURCE_COUNT=
            "  select count(*) as Source_Count from (\n" +
@@ -241,7 +241,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
                    ",df.contentseriesid\n" +
                    ", co.businesspartnerid\n" +
                    ", co.authornotes\n" +
-                   "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
+                   "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                    "CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
                    "CROSS JOIN UNNEST(authornotes) z (ua))\n" +
                    ")";
@@ -280,7 +280,7 @@ df.metainfdeleted
 ,df.contentseriesid
 , co.businesspartnerid
 , co.authornotes
-from (initial_ingest df
+from (initial_ingest_product df
 CROSS JOIN UNNEST(contactsoriginators) x (co)))uo
 CROSS JOIN UNNEST(authornotes) z (ua));
 
