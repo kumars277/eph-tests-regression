@@ -283,7 +283,7 @@ public class BCSCurrentTableDataObject {
     public String getNotestype() {return notestype;}
     public void setNotestype(String notestype) {this.notestype = notestype;}
 
-    public String getNotes() {return notestype;}
+    public String getNotes() {return notes;}
     public void setNotes(String notes) {this.notes = notes;}
 
 

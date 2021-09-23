@@ -158,7 +158,8 @@ public class BCSCountCheckSteps {
             case "stg_history_sublocation_part":        BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_SUBLOCATION_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_text_part":               BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_TEXT_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_versionfamily_part":      BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_VERSIONFAMILY_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
-            case "stg_history_originatoraddress_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORNOTES_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
+            case "stg_history_originatoraddress_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORADDRESS_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
+            case "stg_history_originatornotes_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORNOTES_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
         }
 
         List<Map<String, Object>> JRBICurrentHistoryTableCount = DBManager.getDBResultMap(BCSHistoryCount_SQL, Constants.AWS_URL);

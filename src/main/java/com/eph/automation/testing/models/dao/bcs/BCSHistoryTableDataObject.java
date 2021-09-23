@@ -269,6 +269,10 @@ public class BCSHistoryTableDataObject {
     private String telephonemain;
     private String telephoneother;
 
+    //for stg_current_originatornotes
+    private String notestype;
+    private String  notes;
+
     public String getAdditionaladdress() {return additionaladdress;}
     public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
 
@@ -522,6 +526,12 @@ public class BCSHistoryTableDataObject {
 
     public String getBusinesspartnerid() {return businesspartnerid;}
     public void setBusinesspartnerid(String businesspartnerid) {this.businesspartnerid = businesspartnerid;}
+
+    public String getNotestype() {return notestype;}
+    public void setNotestype(String notestype) {this.notestype = notestype;}
+
+    public String getNotes() {return notes;}
+    public void setNotes(String notes) {this.notes = notes;}
 
 
     public String getCurrency() {return currency;}

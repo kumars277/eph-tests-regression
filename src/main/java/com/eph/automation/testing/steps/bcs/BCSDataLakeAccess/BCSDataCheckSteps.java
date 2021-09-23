@@ -190,6 +190,9 @@ public class BCSDataCheckSteps {
                 sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originatornotes,
                         Joiner.on("','").join(Ids));
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getNotestype));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                 break;
 
 
@@ -296,6 +299,9 @@ Log.info(sql);
                 sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatornotes,
                         Joiner.on("','").join(Ids));
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getNotestype));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
                 break;
         }
         Log.info(sql);
@@ -1665,6 +1671,8 @@ Log.info(sql);
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_fullversionfamily,countOfRandomIds);break;
         case "stg_current_originatoraddress"    :
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originatoraddress,countOfRandomIds);break;
+        case "stg_current_originatornotes"    :
+            sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originatornotes,countOfRandomIds);break;
         case "stg_current_originators"          :
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_originators,countOfRandomIds);break;
         case "stg_current_pricing"              :
@@ -1685,9 +1693,9 @@ Log.info(sql);
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_versionfamily,countOfRandomIds);break;
 
         }
-
+        Log.info(sql);
         List<Map<?, ?>> randomEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        if (sourceTable.equalsIgnoreCase("stg_current_originatoraddress"))
+        if (sourceTable.equalsIgnoreCase("stg_current_originatoraddress")||sourceTable.equalsIgnoreCase("stg_current_originatornotes"))
             Ids = randomEPRIds.stream().map(m -> (Integer) m.get("businesspartnerid")).map(String::valueOf).collect(Collectors.toList());
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
@@ -1696,7 +1704,7 @@ Log.info(sql);
        //  Ids.clear();Ids.add("550805"); //added by Nishant to debug failures
 
         DataQualityContext.breadcrumbMessage += "->" + Ids;
-        Log.info(sql);
+
 
     }
 
@@ -1738,7 +1746,16 @@ Log.info(sql);
             bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject .class, Constants.AWS_URL);
             bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));break;
 
-        case "stg_current_originators"          :
+            case "stg_current_originatornotes"    :
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatornotes,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject .class, Constants.AWS_URL);
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getNotestype));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+                break;
+
+            case "stg_current_originators"          :
             sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_current_originators,
                     Joiner.on("','").join(Ids));
             bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject .class, Constants.AWS_URL);
@@ -1834,6 +1851,16 @@ Log.info(sql);
                 bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
                 break;
 
+            case "stg_history_originatornotes_part":
+                sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_history_originatornotes_part,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
+                bcsDataQualityContext.bcsHistoryTableDataObjectsList.sort(Comparator.comparing(BCSHistoryTableDataObject::getMetamodifiedon));
+                bcsDataQualityContext.bcsHistoryTableDataObjectsList.sort(Comparator.comparing(BCSHistoryTableDataObject::getNotestype));
+                bcsDataQualityContext.bcsHistoryTableDataObjectsList.sort(Comparator.comparing(BCSHistoryTableDataObject::getSourceref));
+
+                break;
+
             case "stg_history_originatoraddress_part":
                 sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_history_originatoraddress_part,
                         Joiner.on("','").join(Ids));
@@ -1913,6 +1940,7 @@ Log.info(sql);
                 case "stg_current_sublocation":         compareCurrentVsHistorySublocation();       break;
                 case "stg_current_text":                compareCurrentVsHistoryText();              break;
                 case "stg_current_versionfamily":       compareCurrentVsHistoryVersionfamily();      break;
+                case "stg_current_originatornotes":       compareCurrentVsHistoryOriginatorNotes();      break;
 
             }
         }
@@ -2406,6 +2434,49 @@ Log.info(sql);
 
                     Log.info("------------------------------------------");
                 }
+
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage+" businessparternedId missing in current table"
+                    + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid(), Found);
+        }
+        Log.info("total " + bcsDataQualityContext.bcsCurrentTableDataObjectList.size() + " modified entries verified for sourceref "
+                + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getSourceref());
+    }
+
+    public void compareCurrentVsHistoryOriginatorNotes() {//created by Dinesh @ 07 sept 2021
+        for (int i = 0; i < bcsDataQualityContext.bcsCurrentTableDataObjectList.size(); i++) {
+            boolean Found = false;
+
+            if (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid()
+                    .equalsIgnoreCase(bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getBusinesspartnerid())) {
+                Log.info((i+1)+". verification for businessPartnerId - " + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid());
+                Found = true;
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" Metadeleted mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getMetadeleted(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetadeleted()));
+                printLog("Metadeleted");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" metamodifiedon mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getMetamodifiedon(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getMetamodifiedon()));
+                printLog("metamodifiedon");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" sourceref mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getSourceref(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getSourceref()));
+                printLog("sourceref");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" businesspartnerid mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getBusinesspartnerid(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid()));
+                printLog("businesspartnerid");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" notestype mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getNotestype(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getNotestype()));
+                printLog("notestype");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" notes mismatch ", bcsDataQualityContext.bcsHistoryTableDataObjectsList.get(i).getNotes(),
+                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getNotes()));
+                printLog("notes");
+
+                Log.info("------------------------------------------");
+            }
 
             Assert.assertTrue(DataQualityContext.breadcrumbMessage+" businessparternedId missing in current table"
                     + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getBusinesspartnerid(), Found);

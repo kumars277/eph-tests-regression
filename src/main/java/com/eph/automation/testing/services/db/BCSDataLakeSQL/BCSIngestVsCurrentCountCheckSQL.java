@@ -230,7 +230,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
                    " select \n" +
                    "uo.metainfdeleted metadeleted\n" +
                    ", uo.metainfmodifiedon metamodifiedon\n" +
-                   ", uo.contentseriesid sourceref\n" +
+                   ", uo.productprojectno sourceref\n" +
                    ", uo.businesspartnerid businesspartnerid\n" +
                    ", ua.notestype notestype\n" +
                    ", ua.notes notes\n" +
@@ -238,7 +238,7 @@ public class BCSIngestVsCurrentCountCheckSQL {
                    "from ((select\n" +
                    "df.metainfdeleted\n" +
                    ", df.metainfmodifiedon\n" +
-                   ",df.contentseriesid\n" +
+                   ",df.productprojectno\n" +
                    ", co.businesspartnerid\n" +
                    ", co.authornotes\n" +
                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
