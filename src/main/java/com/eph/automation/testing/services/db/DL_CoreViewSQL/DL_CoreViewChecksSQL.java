@@ -65,7 +65,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", sourceref work_source_reference\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_accountable_product_latest_v\n" +
                     " UNION ALL SELECT\n" +
                     "  jm_source_reference external_reference\n" +
@@ -77,7 +77,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_accountable_product_dq)\n";
 
     public static String GET_BCS_JM_CORE_ACC_PROD_RAND_ID =
@@ -92,7 +92,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", sourceref work_source_reference\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_accountable_product_latest_v\n" +
                     " UNION ALL SELECT\n" +
                     "  jm_source_reference external_reference\n" +
@@ -104,7 +104,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_accountable_product_dq) order by rand() limit %s \n";
 
     public static String GET_BCS_JM_CORE_ACC_PROD_REC =
@@ -141,7 +141,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_accountable_product_dq) where work_reference in ('%s')\n" +
                     "order by external_reference,work_reference,last_updated_date,work_source_reference,delete_flag desc \n";
 
@@ -178,7 +178,7 @@ public class DL_CoreViewChecksSQL {
                   ", last_updated_date last_updated_date\n" +
                   ", CAST(null AS varchar) update_type\n" +
                   ", delete_flag delete_flag\n" +
-                  ", 'bcs' source_system\n" +
+                  ", 'BCS' source_system\n" +
                   ", CAST(null AS varchar) scenario_code\n" +
                   ", CAST(null AS varchar) scenario_name\n" +
                   "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_latest_v\n" +
@@ -198,7 +198,7 @@ public class DL_CoreViewChecksSQL {
                   ", m.notified_date last_updated_date\n" +
                   ", m.upsert update_type\n" +
                   ", false delete_flag\n" +
-                  ", 'jm' source_system\n" +
+                  ", 'JM' source_system\n" +
                   ", m.scenario_code scenario_code\n" +
                   ", m.scenario_name scenario_name\n" +
                   " FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq m\n" +
@@ -229,7 +229,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", CAST(null AS varchar) update_type\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_latest_v\n" +
@@ -249,7 +249,7 @@ public class DL_CoreViewChecksSQL {
                     ", m.notified_date last_updated_date\n" +
                     ", m.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", m.scenario_code scenario_code\n" +
                     ", m.scenario_name scenario_name\n" +
                     " FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq m\n" +
@@ -681,7 +681,7 @@ public class DL_CoreViewChecksSQL {
                     ", dq_err dq_err\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     "FROM\n" +
                     "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_person_latest_v\n" +
                     "GROUP BY u_key, peoplehub_id, email_address, dq_err, last_updated_date, delete_flag\n" +
@@ -715,7 +715,7 @@ public class DL_CoreViewChecksSQL {
                     ", dq_err dq_err\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     "FROM\n" +
                     "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_person_latest_v\n" +
                     "GROUP BY u_key, peoplehub_id, email_address, dq_err, last_updated_date, delete_flag\n" +
@@ -826,7 +826,7 @@ public class DL_CoreViewChecksSQL {
                     ", p.upsert update_type\n" +
                     ", 'JOURNAL' work_roll_up_type\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", p.scenario_code scenario_code\n" +
                     ", p.scenario_name scenario_name\n" +
                     "FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
@@ -865,7 +865,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS varchar) update_type\n" +
                     ", 'BOOK' work_roll_up_type\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
                     "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)\n";
@@ -899,7 +899,7 @@ public class DL_CoreViewChecksSQL {
                     ", p.upsert update_type\n" +
                     ", 'JOURNAL' work_roll_up_type\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", p.scenario_code scenario_code\n" +
                     ", p.scenario_name scenario_name\n" +
                     "FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
@@ -938,7 +938,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS varchar) update_type\n" +
                     ", 'BOOK' work_roll_up_type\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
                     "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)order by rand() limit %s \n";
@@ -1798,30 +1798,74 @@ public class DL_CoreViewChecksSQL {
                     "SELECT\n" +
                     "  u_key external_reference\n" +
                     ", parentref parent_work_source_ref\n" +
+                    ", CAST(null AS varchar) parent_epr\n" +
                     ", childref child_work_source_ref\n" +
+                    ", CAST(null AS varchar) child_epr\n" +
                     ", relationtyperef f_relationship_type\n" +
                     ", last_updated_date effective_start_date\n" +
                     ", CAST(null AS date) effective_end_date\n" +
                     ", 'N' dq_err\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v)\n";
+                    ", 'BCS' source_system\n" +
+                    ", 'BCS' scenario_code\n" +
+                    ", 'BCS' scenario_name\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v\n" +
+                    "UNION ALL SELECT\n" +
+                    "  external_reference external_reference\n" +
+                    ", parent_external_work_ref parent_work_source_ref\n" +
+                    ", parent_epr parent_epr\n" +
+                    ", child_external_work_ref child_work_source_ref\n" +
+                    ", child_epr child_epr\n" +
+                    ", relationship_type f_relationship_type\n" +
+                    ", notified_date effective_start_date\n" +
+                    ", CAST(null AS date) effective_end_date\n" +
+                    ", 'N' dq_err\n" +
+                    ", notified_date last_updated_date\n" +
+                    ", false delete_flag\n" +
+                    ", 'JM' source_system\n" +
+                    ", scenario_code scenario_code\n" +
+                    ", scenario_name scenario_name\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_relationship_dq)\n";
 
     public static String GET_BCS_JM_CORE_WORK_RELATION_RAND_ID =
             "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  u_key external_reference\n" +
                     ", parentref parent_work_source_ref\n" +
+                    ", CAST(null AS varchar) parent_epr\n" +
                     ", childref child_work_source_ref\n" +
+                    ", CAST(null AS varchar) child_epr\n" +
                     ", relationtyperef f_relationship_type\n" +
                     ", last_updated_date effective_start_date\n" +
                     ", CAST(null AS date) effective_end_date\n" +
                     ", 'N' dq_err\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v) order by rand() limit %s\n";
+                    ", 'BCS' source_system\n" +
+                    ", 'BCS' scenario_code\n" +
+                    ", 'BCS' scenario_name\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v\n" +
+                    "UNION ALL SELECT\n" +
+                    "  external_reference external_reference\n" +
+                    ", parent_external_work_ref parent_work_source_ref\n" +
+                    ", parent_epr parent_epr\n" +
+                    ", child_external_work_ref child_work_source_ref\n" +
+                    ", child_epr child_epr\n" +
+                    ", relationship_type f_relationship_type\n" +
+                    ", notified_date effective_start_date\n" +
+                    ", CAST(null AS date) effective_end_date\n" +
+                    ", 'N' dq_err\n" +
+                    ", notified_date last_updated_date\n" +
+                    ", false delete_flag\n" +
+                    ", 'JM' source_system\n" +
+                    ", scenario_code scenario_code\n" +
+                    ", scenario_name scenario_name\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_relationship_dq) order by rand() limit %s\n";
 
     public static String GET_BCS_JM_CORE_WORK_RELATION_REC =
                     " select external_reference as EXTERNALREFERENCE" +
@@ -1834,19 +1878,42 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",scenario_name as SCENARIONAME" +
                     " from(\n" +
-                    " SELECT\n" +
-                    "  u_key external_reference\n" +
-                    ", parentref parent_work_source_ref\n" +
-                    ", childref child_work_source_ref\n" +
-                    ", relationtyperef f_relationship_type\n" +
-                    ", last_updated_date effective_start_date\n" +
-                    ", CAST(null AS date) effective_end_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v) where external_reference in ('%s') order by external_reference desc \n";
+                            "SELECT\n" +
+                            "  u_key external_reference\n" +
+                            ", parentref parent_work_source_ref\n" +
+                            ", CAST(null AS varchar) parent_epr\n" +
+                            ", childref child_work_source_ref\n" +
+                            ", CAST(null AS varchar) child_epr\n" +
+                            ", relationtyperef f_relationship_type\n" +
+                            ", last_updated_date effective_start_date\n" +
+                            ", CAST(null AS date) effective_end_date\n" +
+                            ", 'N' dq_err\n" +
+                            ", last_updated_date last_updated_date\n" +
+                            ", delete_flag delete_flag\n" +
+                            ", 'BCS' source_system\n" +
+                            ", 'BCS' scenario_code\n" +
+                            ", 'BCS' scenario_name\n" +
+                            "FROM\n" +
+                            "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v\n" +
+                            "UNION ALL SELECT\n" +
+                            "  external_reference external_reference\n" +
+                            ", parent_external_work_ref parent_work_source_ref\n" +
+                            ", parent_epr parent_epr\n" +
+                            ", child_external_work_ref child_work_source_ref\n" +
+                            ", child_epr child_epr\n" +
+                            ", relationship_type f_relationship_type\n" +
+                            ", notified_date effective_start_date\n" +
+                            ", CAST(null AS date) effective_end_date\n" +
+                            ", 'N' dq_err\n" +
+                            ", notified_date last_updated_date\n" +
+                            ", false delete_flag\n" +
+                            ", 'JM' source_system\n" +
+                            ", scenario_code scenario_code\n" +
+                            ", scenario_name scenario_name\n" +
+                            "FROM\n" +
+                            "  "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_relationship_dq) where external_reference in ('%s') order by external_reference desc \n";
 
 
     public static String GET_DL_CORE_ALL_WRK_RELT_VIEW_REC=
@@ -1860,6 +1927,7 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",scenario_name as SCENARIONAME" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_relationship_v" +
                     " where external_reference in ('%s') \n" +
                     "order by external_reference desc \n";
@@ -1878,7 +1946,7 @@ public class DL_CoreViewChecksSQL {
                    ", dq_err dq_err\n" +
                    ", notified_date last_updated_date\n" +
                    ", false delete_flag \n" +
-                   ", 'jm' source_system \n" +
+                   ", 'JM' source_system \n" +
                    " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_subject_area_dq\n" +
                    " WHERE subject_area_type = 'SD')\n";
 
@@ -1897,7 +1965,7 @@ public class DL_CoreViewChecksSQL {
                     ", dq_err dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag \n" +
-                    ", 'jm' source_system \n" +
+                    ", 'JM' source_system \n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_subject_area_dq\n" +
                     " WHERE subject_area_type = 'SD') order by rand() limit %s \n";
 
@@ -1975,7 +2043,7 @@ public class DL_CoreViewChecksSQL {
                     ", w.notified_date last_updated_date\n" +
                     ", w.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", w.scenario_code scenario_code\n" +
                     ", w.scenario_name scenario_name\n" +
                     " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
@@ -2014,7 +2082,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", CAST(null AS varchar) update_type\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)\n";
@@ -2048,7 +2116,7 @@ public class DL_CoreViewChecksSQL {
                     ", w.notified_date last_updated_date\n" +
                     ", w.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", w.scenario_code scenario_code\n" +
                     ", w.scenario_name scenario_name\n" +
                     " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
@@ -2087,7 +2155,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", CAST(null AS varchar) update_type\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)order by rand() limit %s \n";
@@ -2251,7 +2319,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_legal_owner_dq)\n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_RAND_ID =
@@ -2264,7 +2332,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_legal_owner_dq) order by rand() limit %s\n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_REC =
@@ -2309,7 +2377,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'jm' source_system \n" +
+                    ", 'JM' source_system \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_access_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_RAND_ID =
@@ -2322,7 +2390,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'jm' source_system \n" +
+                    ", 'JM' source_system \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_access_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_REC =
@@ -2367,7 +2435,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'jm' source_system \n" +
+                    ", 'JM' source_system \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_RAND_ID =
@@ -2380,7 +2448,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'jm' source_system \n" +
+                    ", 'JM' source_system \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_REC =

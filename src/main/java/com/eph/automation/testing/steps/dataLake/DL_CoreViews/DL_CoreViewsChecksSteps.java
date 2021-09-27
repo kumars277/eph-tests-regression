@@ -653,7 +653,7 @@ public class DL_CoreViewsChecksSteps {
 
                     String[] all_work_relationship_v = {"getEXTERNALREFERENCE","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getDQ_ERR"
                             ,"getPARENTWORKSOURCEREF","getCHILDWORKSOURCEREF","getF_RELATIONTYPEREF","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE",
-                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM"};
+                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIONAME"};
 
                     for (String strTemp : all_work_relationship_v) {
                         java.lang.reflect.Method method;
