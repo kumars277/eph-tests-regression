@@ -1,6 +1,6 @@
 Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
 
-    #confluence v.88
+    #confluence v.87
     #confluenc link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45483691971/All+Views+Combining+Data+Sources
 
   @DLCoreView
