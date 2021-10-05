@@ -4,7 +4,7 @@
 Feature:Validate data count for BCS tables in Data Lake
 
   @BCSInbound
-  Scenario Outline: Verify Data Count for BCS stg_Current_tables transferred from Source Table initial_ingest
+  Scenario Outline: Verify Data and Count for BCS stg_Current_tables for product series transferred from Source Table initial_ingest
     Given Get the total count of BCS Data from initial_ingest <targetTable>
     Then  Get total count of BCS Current table <targetTable>
     And Compare count of initial ingest with current table <targetTable>
@@ -13,7 +13,7 @@ Feature:Validate data count for BCS tables in Data Lake
     Then Get the records from current tables <targetTable>
     And Compare the records of initial ingest and current table <targetTable>
     Examples:
-      | targetTable                  | countOfRandomIds|
+      | targetTable                 | countOfRandomIds|
       |stg_current_classification   |       1         |
       |stg_current_content          |       2         |
       |stg_current_extobject        |       1         |
@@ -29,6 +29,7 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_text             |       1         |
       |stg_current_versionfamily    |       1         |
       |stg_current_originatornotes  |       1         |
+
 
 
   @BCSInbound
@@ -89,3 +90,37 @@ Feature:Validate data count for BCS tables in Data Lake
  #   And Check count of previous table <SourceTableName> and history <TargetTableName> are identical
  #   Examples:
  #     | SourceTableName                      | TargettableName                   |
+
+
+  @BCSInbound
+  Scenario Outline: Verify Data and count for BCS stg_Current_tables for book series transferred from Source Table initial_ingest
+    Given Get the total count of BCS Book series Data from initial_ingest <targetTable>
+    Then  Get total count of BCS Book series Current table <targetTable>
+    And Compare count of initial ingest series with current book series table <targetTable>
+     Examples:
+      | targetTable                        | countOfRandomIds|
+      |stg_current_classification_series   |       1         |
+      |stg_current_content_series          |       2         |
+      |stg_current_originatoraddress_series|       1         |
+      |stg_current_originatornotes_series  |       1         |
+      |stg_current_originators_series      |       1         |
+      |stg_current_product_series          |       1         |
+      |stg_current_text_series             |       1         |
+
+
+  @BCSInbound
+  Scenario Outline: Verify Count & Data for BCS stg_history series tables are transferred from stg_Current_tables series
+    Given Get total count of BCS Book series Current table <SourceTableName>
+    Then Get the count for the BCS stg_history series <TargetTableName> for current comparision
+    And Check count for the current table <SourceTableName> and history table series <TargetTableName> are identical
+    Examples:
+      | SourceTableName                               | TargetTableName                         |countOfRandomIds |
+      |stg_current_classification_series             |stg_history_classification_series_part    |     1           |
+      |stg_current_content_series                    |stg_history_content_series_part           |     1           |
+      |stg_current_originatoraddress_series          |stg_history_originatoraddress_series_part |     1           |
+      |stg_current_originatornotes_series            |stg_history_originatornotes_series_part   |     1           |
+      |stg_current_originators_series                |stg_history_originators_series_part       |     1           |
+      |stg_current_product_series                    |stg_history_product_series_part           |     1           |
+      |stg_current_text_series                       |stg_history_text_series_part              |     1           |
+
+

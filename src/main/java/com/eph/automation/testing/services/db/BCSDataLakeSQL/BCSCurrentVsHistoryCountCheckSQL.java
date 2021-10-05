@@ -64,4 +64,38 @@ public class BCSCurrentVsHistoryCountCheckSQL {
             "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_part " +
                     "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_part)";
 
+    public static String GET_BCS_CLASSIFICATION_SERIES_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part)";
+
+    public static String GET_BCS_CONTENT_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part)";
+
+    public static String GET_BCS_ORIGINATORADDRESS_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part " +
+            "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part)";
+
+    public static String GET_BCS_ORIGINATORNOTES_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part)";
+
+    public static String GET_BCS_ORIGINATORS_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part)";
+
+    public static String GET_BCS_PRODUCT_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part)";
+
+    public static String GET_BCS_TEXT_SERIES_HISTORY_COUNT =
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part " +
+                    "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part)";
+
+
+
+
+
+
+
 }

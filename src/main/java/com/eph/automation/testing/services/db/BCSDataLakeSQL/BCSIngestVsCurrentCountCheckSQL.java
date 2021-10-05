@@ -262,29 +262,79 @@ public class BCSIngestVsCurrentCountCheckSQL {
              "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part " +
              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part ))";
 
+    public static String GET_BCS_CLASSIFICATION_SERIES_SOURCE_COUNT =
+            "select count(*) as Source_Count from(SELECT metainfdeleted metadeleted, metainfmodifiedon metamodifiedon,\n" +
+                    "contentseriesid sourceref, cl.businessunit, cl.value, cl.classificationtype, cl.priority, cl.classificationcode\n" +
+                    "FROM (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series f\n" +
+                    "CROSS JOIN UNNEST(distributionclassification) x (cl)))";
 
-    /*
-    We need to add this query for missing originator_notes script
+    public static String GET_BCS_CONTENT_SERIES_SOURCE_COUNT =
+           "select count(*) as Source_Count from(SELECT df.metainfdeleted metadeleted,df.metainfmodifiedon metamodifiedon,df.contentseriesid sourceref,df.contentsubgroup subgroup\n" +
+                   ",df.contentseriescode seriescode,df.contentmedium medium,df.contentwmyn wmyn\n" +
+                   ",df.contentsubtitle subtitle,df.contenttitle title,df.contentserialtype serialtype\n" +
+                   ",df.contentdivision division,df.contentobjType objType,df.contentcompanygroup companygroup,df.contentseriesissn seriesissn,df.contentfirstbinding binding\n" +
+                   ",df.contentvolumeno volumeno,df.contentlanguage language\n" +
+                   ",df.contentpublisher publisher,df.contentseriesid seriesid,df.contentshortTitle shorttitle\n" +
+                   ",df.contentpiidack piidack,df.contentownership ownership,df.contentdeltype deltype\n" +
+                   ",df.contentnumbered numbered,df.contentbibliographicserial bibliographicserial\n" +
+                   ",df.contentmainseries mainseries,df.contenteditionid editionid FROM\n" +
+                   " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df)";
 
-    select
-"uo"."metainfdeleted" "metadeleted"
-, "uo"."metainfmodifiedon" "metamodifiedon"
-, "uo"."contentseriesid" "sourceref"
-, "uo"."businesspartnerid" "businesspartnerid"
-, "ua"."notestype" "notestype"
-, "ua"."notes" "notes"
-, "ua"."companygroup" "companygroup"
-from ((select
-df.metainfdeleted
-, df.metainfmodifiedon
-,df.contentseriesid
-, co.businesspartnerid
-, co.authornotes
-from (initial_ingest_product df
-CROSS JOIN UNNEST(contactsoriginators) x (co)))uo
-CROSS JOIN UNNEST(authornotes) z (ua));
+    public static String GET_BCS_ORIGINATORADDRESS_SERIES_SOURCE_COUNT =
+           "select count(*) Source_Count from (select distinct uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon, uo.businesspartnerid\tbusinesspartnerid\n" +
+                   ", ua.country\tcountry, ua.postalcode\tpostalcode, ua.additionaladdress\tadditionaladdress, ua.houseno\thouseno\n" +
+                   ", ua.internet\tinternet, ua.city\tcity, ua.street\tstreet, ua.email\temail, ua.district\tdistrict\n" +
+                   ", ua.mobile\tmobile, ua.fax\tfax, ua.telephoneother\ttelephoneother, ua.telephonemain\ttelephonemain\n" +
+                   "from ((select df.metainfdeleted , df.metainfmodifiedon , co.businesspartnerid , co.authoraddress\n" +
+                   "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
+                   "CROSS JOIN UNNEST(authoraddress) z (ua)))";
 
-     */
+    public static String GET_BCS_ORIGINATORNOTES_SERIES_SOURCE_COUNT =
+            "select count(*) as Source_Count from (select distinct  uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon,\n" +
+                    "uo.contentseriesid sourceref, uo.businesspartnerid businesspartnerid, ua.notes notes,\n" +
+                    "ua.companygroup companygroup from  ((select df.metainfdeleted ,df.metainfmodifiedon ,df.contentseriesid, co.businesspartnerid ,\n" +
+                    "co.authornotes from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df  CROSS JOIN UNNEST(contactsoriginators) x (co)))uo " +
+                    "CROSS JOIN UNNEST(authornotes) z (ua)))";
+
+    public static String GET_BCS_ORIGINATOR_SERIES_SOURCE_COUNT =
+            "select count(*) as Source_Count from(select\n" +
+                    "\"df\".\"metainfdeleted\" \"metadeleted\", \"df\".\"metainfmodifiedon\" \"metamodifiedon\"\n" +
+                    ", \"df\".\"contentseriesid\" \"sourceref\", \"co\".\"firstname\"\t\"firstname\", \"co\".\"businesspartnerid\"\t\"businesspartnerid\", \"co\".\"lastname\"\t\"lastname\", \"co\".\"sequence\"\t\"sequence\"\n" +
+                    ", \"co\".\"prefix\"\t\"prefix\", \"co\".\"copyrightholdertype\"\t\"copyrightholdertype\"\n" +
+                    ", \"co\".\"searchterm\"\t\"searchterm\"  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df\n" +
+                    "CROSS JOIN UNNEST(\"contactsoriginators\") x (\"co\")))";
+
+    public static String GET_BCS_PRODUCT_SERIES_SOURCE_COUNT =
+            "select count(*) as Source_Count from(select df.metainfdeleted metadeleted, \n" +
+                    "df.metainfmodifiedon metamodifiedon, df.contentseriesid sourceref, df.productorderno orderno\n" +
+                    ", df.productversiontype versiontype from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df))";
+
+    public static String GET_BCS_TEXT_SERIES_SOURCE_COUNT =
+            "select count(*) as Source_Count from(select df.metainfdeleted metadeleted, df.metainfmodifiedon metamodifiedon, df.contentseriesid sourceref, cj.tab, cj.texttype, cj.name\n" +
+                    ", cj.text, cj.status from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df\n" +
+                    "CROSS JOIN UNNEST(distributiontext) x (cj))";
+
+    public static String GET_BCS_CLASSIFICATION_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification_series";
+
+    public static String GET_BCS_CONTENT_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series";
+
+    public static String GET_BCS_ORIGINATORADDRESS_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatoraddress_series";
+
+    public static String GET_BCS_ORIGINATORNOTES_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatornotes_series";
+
+    public static String GET_BCS_ORIGINATOR_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators_series";
+
+    public static String GET_BCS_PRODUCT_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product_series";
+
+    public static String GET_BCS_TEXT_SERIES_CURRENT_COUNT =
+            "select count(*) as Current_Count from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text_series";
+
 
 
 }
