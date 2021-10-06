@@ -91,10 +91,6 @@ public class BCSInitialIngestDataObject {
     private String telephoneother;
 
     //for stg_current_originators
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
-    //private String businesspartnerid;
     private String prefix;
     private String sequence;
     private String originatorid;
@@ -108,10 +104,6 @@ public class BCSInitialIngestDataObject {
     private String searchterm;
 
     //for stg_current_pricing
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
-    //private String type;
     private String validfrom;
     private String currency;
     private String priceapprox;
@@ -119,12 +111,6 @@ public class BCSInitialIngestDataObject {
     private String validto;
 
     //for stg_current_product
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String isbn;
-    //private String projectno;
-    //private String sourceref;
-    //private String versiontype;
     private	String	ausavailablestock;
     private	String	binding;
     private	String	budgetpubdate;
@@ -161,9 +147,6 @@ public class BCSInitialIngestDataObject {
     private	String	ustotalstock;
 
     //for stg_current_production
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
     private String addillustration;
     private String approxpages;
     private String authoringsystem;
@@ -227,28 +210,14 @@ public class BCSInitialIngestDataObject {
     private String weight;
 
     //for stg_current_relations
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
-    //private String orderno;
-    //private String projectno;
-    //private String relimpressionid;
-    //private String isbn;
     private String relationtype;
 
     //for stg_current_responsibilities
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
     private String responsibility;
     private String responsibleperson;
     private String personid;
 
     //for stg_current_sublocation
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
-    //private String refkey;
     private String warehouse;
     private String pubdateactual;
     private String stocksplit;
@@ -256,20 +225,11 @@ public class BCSInitialIngestDataObject {
     private String plannedpubdate;
 
     //for stg_current_text
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
-    //private String name;
-    //private String status;
     private String tab;
     private String texttype;
     private String text;
 
-
     // for stg_current_versionfamily
-    //private String metadeleted;
-    //private String metamodifiedon;
-    //private String sourceref;
     private String workmasterisbn;
     private String workmasterprojectno;
     private String childisbn;
@@ -279,11 +239,44 @@ public class BCSInitialIngestDataObject {
     private String notestype;
     private String notes;
 
+    //for stg_current_book_series
+    private String wmyn;
+    private String serialtype;
+    private String objtype;
+    private String shortitle;
+    private String deltype;
+    private String numbered;
+    private String bibliographicserial;
+    private String mainseries;
+
+    public String getWmyn() {return wmyn;}
+    public void setWmyn(String wmyn) {this.wmyn = wmyn;}
+
+    public String getSerialtype() {return serialtype;}
+    public void setSerialtype(String serialtype) {this.serialtype = serialtype;}
+
+    public String getObjtype() {return objtype;}
+    public void setObjtype(String objtype) {this.objtype = objtype;}
+
+    public String getShortitle() {return shortitle;}
+    public void setShortitle(String shortitle) {this.shortitle = shortitle;}
+
+    public String getDeltype() {return deltype;}
+    public void setDeltype(String deltype) {this.deltype = deltype;}
+
+    public String getNumbered() {return numbered;}
+    public void setNumbered(String numbered) {this.numbered = numbered;}
+
+    public String getBibliographicserial() {return bibliographicserial;}
+    public void setBibliographicserial(String bibliographicserial) {this.bibliographicserial = bibliographicserial;}
+
+    public String getMainseries() {return mainseries;}
+    public void setMainseries(String mainseries) {this.mainseries = mainseries;}
 
     public String getNotestype() {return notestype;}
     public void setNotestype(String notestype) {this.notestype = notestype;}
 
-    public String getNotes() {return notestype;}
+    public String getNotes() {return notes;}
     public void setNotes(String notes) {this.notes = notes;}
 
     public String getClassificationcode() {return classificationcode;}

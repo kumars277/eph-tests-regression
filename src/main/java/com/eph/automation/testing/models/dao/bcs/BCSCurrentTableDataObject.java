@@ -279,6 +279,42 @@ public class BCSCurrentTableDataObject {
     private String notestype;
     private String notes;
 
+    //for stg_current_book_series
+    private String wmyn;
+    private String serialtype;
+    private String objtype;
+    private String shortitle;
+    private String deltype;
+    private String numbered;
+    private String bibliographicserial;
+    private String mainseries;
+
+
+
+
+    public String getWmyn() {return wmyn;}
+    public void setWmyn(String wmyn) {this.wmyn = wmyn;}
+
+    public String getSerialtype() {return serialtype;}
+    public void setSerialtype(String serialtype) {this.serialtype = serialtype;}
+
+    public String getObjtype() {return objtype;}
+    public void setObjtype(String objtype) {this.objtype = objtype;}
+
+    public String getShortitle() {return shortitle;}
+    public void setShortitle(String shortitle) {this.shortitle = shortitle;}
+
+    public String getDeltype() {return deltype;}
+    public void setDeltype(String deltype) {this.deltype = deltype;}
+
+    public String getNumbered() {return numbered;}
+    public void setNumbered(String numbered) {this.numbered = numbered;}
+
+    public String getBibliographicserial() {return bibliographicserial;}
+    public void setBibliographicserial(String bibliographicserial) {this.bibliographicserial = bibliographicserial;}
+
+    public String getMainseries() {return mainseries;}
+    public void setMainseries(String mainseries) {this.mainseries = mainseries;}
 
     public String getNotestype() {return notestype;}
     public void setNotestype(String notestype) {this.notestype = notestype;}

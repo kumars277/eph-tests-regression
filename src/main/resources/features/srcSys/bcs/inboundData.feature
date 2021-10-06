@@ -97,15 +97,19 @@ Feature:Validate data count for BCS tables in Data Lake
     Given Get the total count of BCS Book series Data from initial_ingest <targetTable>
     Then  Get total count of BCS Book series Current table <targetTable>
     And Compare count of initial ingest series with current book series table <targetTable>
+    Given We get the <countOfRandomIds> random ids for the initial ingest book series <targetTable>
+    When Get the data records from initial ingest book series for <targetTable>
+    Then Get the records for current tables for the book series <targetTable>
+    And Compare the records for the initial ingest book series and current table book series <targetTable>
      Examples:
       | targetTable                        | countOfRandomIds|
-      |stg_current_classification_series   |       1         |
-      |stg_current_content_series          |       2         |
-      |stg_current_originatoraddress_series|       1         |
-      |stg_current_originatornotes_series  |       1         |
-      |stg_current_originators_series      |       1         |
-      |stg_current_product_series          |       1         |
-      |stg_current_text_series             |       1         |
+      |stg_current_classification_series   |       50         |
+      |stg_current_content_series          |       50         |
+      |stg_current_originatoraddress_series|       50         |
+      |stg_current_originatornotes_series  |       50         |
+      |stg_current_originators_series      |       50         |
+      |stg_current_product_series          |       50         |
+      |stg_current_text_series             |       10         |
 
 
   @BCSInbound

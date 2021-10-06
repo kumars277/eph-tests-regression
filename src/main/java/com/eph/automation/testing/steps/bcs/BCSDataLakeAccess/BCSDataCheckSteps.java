@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.lang.reflect.InvocationTargetException;
 
 public class BCSDataCheckSteps {
 
@@ -3439,5 +3440,371 @@ Log.info(sql);
                 + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getSourceref());
     }
 
+    @Given("^We get the (.*) random ids for the initial ingest book series (.*)$")
+    public void getRandomIdsFromInitialIngestSeries(String countOfRandomIds, String targetTable) {
+        // countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + countOfRandomIds);
+        Log.info("getting random reference ids from initial ingest...");
+        switch (targetTable) {
+            case "stg_current_classification_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_classification_series, countOfRandomIds);
+                break;
+            case "stg_current_content_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_content_series, countOfRandomIds);
+                break;
+            case "stg_current_originatoraddress_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_originatoraddress_series, countOfRandomIds);
+                break;
+            case "stg_current_originatornotes_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_originatornotes_series, countOfRandomIds);
+                break;
+            case "stg_current_originators_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_originator_series, countOfRandomIds);
+                break;
+            case "stg_current_product_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_product_series, countOfRandomIds);
+                break;
+            case "stg_current_text_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.randomId_ingestTableFor_stg_current_text_series, countOfRandomIds);
+                break;
+        }
+
+        List<Map<?, ?>> randomEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        if (targetTable.equalsIgnoreCase("stg_current_originatoraddress_series")||targetTable.equalsIgnoreCase("stg_current_originators_series")||
+                targetTable.equalsIgnoreCase("stg_current_originatornotes_series"))
+            Ids = randomEPRIds.stream().map(m -> (Integer) m.get("businesspartnerid")).map(String::valueOf).collect(Collectors.toList());
+        else
+            Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
+        Log.info("Randomly picked ids..." + Ids);
+        Log.info(sql);
+        //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
+        DataQualityContext.breadcrumbMessage += "->" + Ids;
+    }
+
+    @When("Get the data records from initial ingest book series for (.*)")
+    public void getInitialIngestDataForBookSeries(String targetTable) {
+        Log.info("We get initial ingest records...");
+
+        switch (targetTable) {
+            case "stg_current_classification_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_classification_series_rec,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_content_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_content_series_rec,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originatoraddress_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originatoraddress_series_rec,
+                        Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originatornotes_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originatornotes_series_rec,
+                        Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originators_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_originators_series_rec, Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_product_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_product_series_rec, Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_text_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getInitialIngestDataFor_stg_current_text_series_rec,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
+                break;
+        }
+        Log.info(sql);
+    }
+
+
+    @Then("^Get the records for current tables for the book series (.*)$")
+    public void getCurrentTableDataSeries(String targetTable) {//created by Nishant @ 21 Oct 2020
+        Log.info("We get current table records...");
+        switch (targetTable) {
+            case "stg_current_classification_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_classification_series,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_content_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_content_series,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originatoraddress_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatoraddress_series,
+                        Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originators_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originators_series,
+                        Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_originatornotes_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_originatornotes_series,
+                        Joiner.on(",").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+             case "stg_current_product_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_product_series,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+
+            case "stg_current_text_series":
+                sql = String.format(BCSDataLakeDataCheckSQL.getCurrentTableDataFor_stg_current_text_series,
+                        Joiner.on("','").join(Ids));
+                bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
+                break;
+            }
+        Log.info(sql);
+    }
+
+    @And("Compare the records for the initial ingest book series and current table book series (.*)")
+    public void compareInitialIngestWithCurrentTableSeries(String targetTable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (bcsDataQualityContext.bcsInitialIngestDataObjectList.isEmpty()) {
+            Log.info("No Data Found in the ingest series Tables ....");
+        } else {
+            Log.info("Sorting the Ids to compare the records between ingest book series and current table series...");
+        }
+        for (int i = 0; i < bcsDataQualityContext.bcsInitialIngestDataObjectList.size(); i++) {
+            switch (targetTable) {
+                case "stg_current_classification_series":
+                    Log.info("stg_current_classification_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getClassificationcode));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getClassificationcode));
+
+                    String[] classification_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getBusinessunit", "getClassificationtype", "getPriority", "getClassificationcode", "getValue"};
+                    for (String strTemp : classification_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("SourceRef => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                 " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for Sourceref:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+                case "stg_current_content_series":
+                    Log.info("stg_current_content_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+                    String[] content_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
+                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getSeriesid","getShorttitle",
+                    "getPiidack","getOwnership","getDeltype","getNumbered","getBibliographicserial","getMainseries","getEditionid"};
+
+                    for (String strTemp : content_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("SourceRef => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" for Sourceref:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "stg_current_originatoraddress_series":
+                    Log.info("stg_current_originatoraddress_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                    String[] originatoraddress_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getCountry", "getPostalcode", "getAdditionaladdress", "getHouseno", "getInternet","getCity","getStreet","getEmail","getDistrict","getMobile","getFax","getTelephoneother","getTelephonemain"};
+                    for (String strTemp : originatoraddress_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("Businesspartnerid => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for BusinessPartnerID:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+                case "stg_current_originatornotes_series":
+                    Log.info("stg_current_originatornotes_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getBusinesspartnerid));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getBusinesspartnerid));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+
+                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getSourceref", "getNotes", "getCompanygroup"};
+                    for (String strTemp : originatornotes_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("Businesspartnerid => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for BusinessPartnerID:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+                case "stg_current_originators_series":
+                    Log.info("stg_current_originators_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getBusinesspartnerid));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getBusinesspartnerid));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getMetamodifiedon));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getFirstname));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getFirstname));
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSequence));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSequence));
+
+                    String[] originators_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getFirstname", "getBusinesspartnerid","getLastname","getSequence","getPrefix","getCopyrightholdertype","getSearchterm"};
+                    for (String strTemp : originators_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("Businesspartnerid => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for BusinessPartnerID:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getBusinesspartnerid(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+                case "stg_current_product_series":
+                    Log.info("stg_current_product_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+
+                    String[] product_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getOrderno", "getVersiontype"};
+                    for (String strTemp : product_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("Sourceref => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for SourceRef:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+                case "stg_current_text_series":
+                    Log.info("stg_current_text_series Records:");
+                    bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
+                    bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
+
+                    String[] text_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getTab", "getTexttype","getText","getStatus","getName"};
+                    for (String strTemp : text_series) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCSInitialIngestDataObject objectToCompare1 = bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i);
+                        BCSCurrentTableDataObject objectToCompare2 = bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("Sourceref => " + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref() +
+                                " " + strTemp + " => Ingest series = " + method.invoke(objectToCompare1) +
+                                " "+targetTable+ " = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" table for SourceRef:" + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getSourceref(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+
+
+            }
+        }
+
+
+    }
 
 }
