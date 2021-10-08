@@ -228,7 +228,7 @@ public class WorkRelationshipsAPIObject {
     public void setId(String id) {
       this.id = id;
     }
-
+/*
     private workSummary workSummary;
 
     public WorkRelationshipsAPIObject.workSummary getWorkSummary() {
@@ -238,6 +238,10 @@ public class WorkRelationshipsAPIObject {
     public void setWorkSummary(WorkRelationshipsAPIObject.workSummary workSummary) {
       this.workSummary = workSummary;
     }
+*/
+    private WorkSummary workSummary;
+    public WorkSummary getWorkSummary() {return workSummary;}
+    public void setWorkSummary(WorkSummary workSummary) {this.workSummary = workSummary;}
 
     private String effectiveStartDate;
 
@@ -280,71 +284,47 @@ public class WorkRelationshipsAPIObject {
     public void setId(String id) {
       this.id = id;
     }
-
+/*
     private workSummary workSummary;
-
     public WorkRelationshipsAPIObject.workSummary getWorkSummary() {
       return workSummary;
     }
-
     public void setWorkSummary(WorkRelationshipsAPIObject.workSummary workSummary) {
       this.workSummary = workSummary;
     }
+*/
+    private WorkSummary workSummary;
+    public WorkSummary getWorkSummary() {return workSummary;}
+    public void setWorkSummary(WorkSummary workSummary) {this.workSummary = workSummary;}
 
     private String effectiveStartDate;
-
-    public String getEffectiveStartDate() {
-      return effectiveStartDate;
-    }
-
+    public String getEffectiveStartDate() {return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate) {
       this.effectiveStartDate = effectiveStartDate;
     }
 
     private String effectiveEndDate;
-
     public String getEffectiveEndDate() {
       return effectiveEndDate;
     }
-
     public void setEffectiveEndDate(String effectiveEndDate) {
       this.effectiveEndDate = effectiveEndDate;
     }
   }
-
+/*
   public static class workSummary {
     private String title;
-
-    public void setTitle(String title) {
-      this.title = title;
-    }
-
-    public String getTitle() {
-      return title;
-    }
+    public void setTitle(String title) {this.title = title;}
+    public String getTitle() {return title;}
 
     private HashMap<String, Object> type;
-
-    public HashMap<String, Object> getType() {
-      return type;
-    }
-
-    public void setType(HashMap<String, Object> type) {
-      this.type = type;
-    }
+    public HashMap<String, Object> getType() {return type;}
+    public void setType(HashMap<String, Object> type) {this.type = type;}
 
     private HashMap<String, Object> status;
+    public void setStatus(HashMap<String, Object> status) {this.status = status;}
+    public HashMap<String, Object> getStatus() {return status;}
+  }*/
 
-    public void setStatus(HashMap<String, Object> status) {
-      this.status = status;
-    }
-
-    public HashMap<String, Object> getStatus() {
-      return status;
-    }
-  }
-
-  private void printLog(String verified) {
-    Log.info("verified..." + verified);
-  }
+  private void printLog(String verified) {Log.info("verified..." + verified);}
 }

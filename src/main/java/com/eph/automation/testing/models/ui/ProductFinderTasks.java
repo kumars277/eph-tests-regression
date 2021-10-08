@@ -296,13 +296,25 @@ public class ProductFinderTasks {
         //updated UI changes and locator by Nishant @ 15 Oct 2020 for EPHD-2241
 
         //capture Information values
-        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
+        /*if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
+        {
+
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr");
         for (int i = 0; i < rows_info.size(); i++) {
-            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_info.setProperty(key, value);
         }
-
+       }
+        else
+            {*/
+                List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
+                for (int i = 0; i < rows_info.size()-1; i++) {
+                    String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+                    String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+                    prop_info.setProperty(key, value);
+            }
+            //}
         //capture subject area values
         List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr");
         for (int i = 0; i < rows_subArea.size(); i++) {
