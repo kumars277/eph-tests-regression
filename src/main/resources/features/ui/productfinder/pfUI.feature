@@ -72,7 +72,7 @@ Feature: Product Finder Selenium tests
     |4|
     |5|
 
-  @UI @PFRegressionSuite @PFDMC @JFUI @apiDebug
+  @UI @PFRegressionSuite @PFDMC @JFUI
   Scenario Outline: Search the Journal Finder and verify all 5 tabs
     Given We get 1 random journal ids for search
     And   We get the work search data from EPH GD
@@ -90,7 +90,7 @@ Examples:
     |4|
     |5|
 
-  @UI @PFRegressionSuite @JFUI @apiDebug
+  @UI @PFRegressionSuite @JFUI
   Scenario Outline: Search the Journal by person
     Given We get 5 random search ids for person roles
     And get person data from EPH DB
@@ -103,7 +103,7 @@ Examples:
    #   |personName           |
    #   |personId             |
 
-  @UI @PFRegressionSuite @JFUI @apiDebug
+  @UI @PFRegressionSuite @JFUI
   Scenario Outline: Search the Journal by PMC
     Given We get 5 random journal ids for search
     And   We get the work search data from EPH GD
