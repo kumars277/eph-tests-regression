@@ -1,6 +1,6 @@
 Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
 
-    #confluence v.85
+    #confluence v.87
     #confluenc link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45483691971/All+Views+Combining+Data+Sources
 
   @DLCoreView
@@ -21,7 +21,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_manifestation_v                  |50                 |
       |all_person_v                         |50                 |
       |all_product_v                        |50                 |
-    # |all_product_rel_package_v            |50                 | not required, this is for analysis purpose created in SIT
+    #  |all_product_rel_package_v            |50                 | not required, this is for analysis purpose created in SIT
       |all_work_identifier_v                |50                 |
       |all_work_person_role_v               |50                 |
       |all_work_relationship_v              |50                 |
@@ -32,6 +32,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_work_business_model_v            |50                 |
 
     #EPHD-3362
+  @DLCoreView
     Scenario: Verify the leadIndicator count in the all core view
       Given Get the leadIndicator count from the sourcesystem table
       Then  Get the count of leadIndicator from the all_manifestation_identifiers_v

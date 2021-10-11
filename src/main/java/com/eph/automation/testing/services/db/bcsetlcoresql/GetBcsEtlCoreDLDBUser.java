@@ -24,6 +24,22 @@ public class GetBcsEtlCoreDLDBUser {
         return dbBCS;
     }
 
+    public static String getErmsETLCoreDataBase(){
+        String dbERMS = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbERMS = "erms_staging_sit";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbERMS = "erms_staging_uat";
+            }
+
+        }else{
+            dbERMS = "erms_staging_uat";
+        }
+        return dbERMS;
+    }
+
     public static String getProdDataBase(){
         String dbProdDB = null;
         if (System.getProperty("ENV") != null){
@@ -83,4 +99,21 @@ public class GetBcsEtlCoreDLDBUser {
         }
         return dbProd;
     }
+
+    public static String getProdDataBaseGd(){
+        String dbProdDb = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdDb = "product_database_sit";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbProdDb = "product_database_uat";
+            }
+
+        }else{
+            dbProdDb = "product_database_uat";
+        }
+        return dbProdDb;
+    }
+
 }

@@ -644,13 +644,14 @@ public class BcsEtlCoreDataChecksSql {
                     "   , NULLIF(parent.workmasterprojectno, '') parentref\n"+
                     "   , NULLIF(child.workmasterprojectno, '') childref\n"+
                     "   , NULLIF(code.ephcode, '') relationtyperef\n"+
-                    "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                    "   , date_parse(NULLIF(max(relations.metamodifiedon), ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
                     "   , 'N' dq_err\n"+
                     "   FROM\n"+
                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n"+
+                    "   GROUP BY NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), ''), NULLIF(parent.workmasterprojectno, ''), NULLIF(child.workmasterprojectno, ''), NULLIF(code.ephcode, '')\n" +
                     "UNION ALL    SELECT DISTINCT\n"+
                     "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
                     "   , content.seriesid parentref\n"+
@@ -662,7 +663,7 @@ public class BcsEtlCoreDataChecksSql {
                     "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
                     ")  A\n"+
-                    "WHERE ((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL))order by rand() limit %s";
+                    "WHERE (((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL)) AND (A.parentref <> A.childref))order by rand() limit %s";
 
     public static final String GET_WORK_RELT_INBOUND_DATA =
             "select " +
@@ -676,13 +677,14 @@ public class BcsEtlCoreDataChecksSql {
                     "   , NULLIF(parent.workmasterprojectno, '') parentref\n"+
                     "   , NULLIF(child.workmasterprojectno, '') childref\n"+
                     "   , NULLIF(code.ephcode, '') relationtyperef\n"+
-                    "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                    "   , date_parse(NULLIF(max(relations.metamodifiedon), ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
                     "   , 'N' dq_err\n"+
                     "   FROM\n"+
                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n"+
+                    "   GROUP BY NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), ''), NULLIF(parent.workmasterprojectno, ''), NULLIF(child.workmasterprojectno, ''), NULLIF(code.ephcode, '')\n" +
                     "UNION ALL    SELECT DISTINCT\n"+
                     "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
                     "   , content.seriesid parentref\n"+
@@ -694,7 +696,7 @@ public class BcsEtlCoreDataChecksSql {
                     "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n"+
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
                     ")  A\n"+
-                    "WHERE ((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL))and u_key in ('%s') order by u_key desc";
+                    "WHERE (((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL)) AND (A.parentref <> A.childref))and u_key in ('%s') order by u_key desc";
 
     public static final String GET_RANDOM_ACCPROD_KEY_CURRENT =
             "SELECT u_key as u_key \n" +

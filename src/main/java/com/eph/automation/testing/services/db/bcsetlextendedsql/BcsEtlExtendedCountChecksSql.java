@@ -276,80 +276,82 @@ public final class BcsEtlExtendedCountChecksSql {
             ")";
 
     public static final String GET_WORK_SUBJECT_AREA_INBOUND_CURRENT_COUNT=
-            "select count(*) as Source_Count from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.typecode,A.subjcode,A.subjdesc,coalesce(A.priority,'')) u_key, cr.work_type, A.* FROM ( \n" +
+            "select count(*) Source_Count from (\n" +
                     "SELECT DISTINCT\n" +
-                    "     NULLIF(w.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(w.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +
-                    "   , 'promis' typecode \n" +
-                    "   , 'Promis' typedesc \n" +
-                    "   , substr(split_part(NULLIF(c.classificationcode,''), ' | ', 1), (length(split_part(NULLIF(c.classificationcode,''), ' | ', 1)) - 4)) subjcode \n" +
-                    "   , split_part (NULLIF(c.classificationcode,''), ' | ', 2) subjdesc \n" +
-                    "   , NULLIF(c.priority,'') priority \n" +
-                    "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
+                    "  cr.epr eprId\n" +
+                    ", concat(A.sourceref, A.typecode, A.subjcode, A.subjdesc, COALESCE(A.priority, '')) u_key\n" +
+                    ", cr.work_type\n" +
+                    ", a.*\n" +
+                    "FROM\n" +
+                    "  ((\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(w.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(w.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n" +
+                    "   , 'PROMIS' typecode\n" +
+                    "   , 'Promis' typedesc\n" +
+                    "   , substr(split_part(NULLIF(c.classificationcode, ''), ' | ', 1), (length(split_part(NULLIF(c.classificationcode, ''), ' | ', 1)) - 4)) subjcode\n" +
+                    "   , split_part(NULLIF(c.classificationcode, ''), ' | ', 2) subjdesc\n" +
+                    "   , NULLIF(c.priority, '') priority\n" +
+                    "   , (CASE WHEN (w.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%')))\n" +
+                    "     (("+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))" +
+                    "   INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'PROMIS%')))\n" +
                     "UNION    SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(modifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +
-                    "   , NULLIF(typecode,'') typecode \n" +
-                    "   , NULLIF(typedesc,'') typedesc \n" +
-                    "   , NULLIF(subjcode,'') subjcode \n" +
-                    "   , NULLIF(subjdesc,'') subjdesc \n" +
-                    "   , NULLIF(priority,'') priority \n" +
-                    "   , \"metadeleted\"\n" +
+                    "     NULLIF(sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(modifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n" +
+                    "   , NULLIF(typecode, '') typecode\n" +
+                    "   , NULLIF(typedesc, '') typedesc\n" +
+                    "   , NULLIF(subjcode, '') subjcode\n" +
+                    "   , NULLIF(subjdesc, '') subjdesc\n" +
+                    "   , NULLIF(priority, '') priority\n" +
+                    "   , metadeleted\n" +
                     "   FROM\n" +
                     "     (\n" +
                     "      SELECT DISTINCT\n" +
                     "        w.sourceref\n" +
-                    "      , \"w\".\"metamodifiedon\" \"modifiedon\"\n" +
-                    "      , 'MSC' typecode \n" +
-                    "      , 'Elsevier HS Major Subject Codes' typedesc \n" +
-                    "      , replace(split_part(c.classificationcode, ' | ', 1), 'MSC') subjcode \n" +
-                    "      , split_part(c.classificationcode, ' | ', 2) subjdesc \n" +
-                    "      , c.priority \n" +
-                    "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
+                    "      , w.metamodifiedon modifiedon\n" +
+                    "      , 'MSC' typecode\n" +
+                    "      , 'Elsevier HS Major Subject Codes' typedesc\n" +
+                    "      , replace(split_part(c.classificationcode, ' | ', 1), 'MSC') subjcode\n" +
+                    "      , split_part(c.classificationcode, ' | ', 2) subjdesc\n" +
+                    "      , c.priority\n" +
+                    "      , (CASE WHEN (w.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "      FROM\n" +
-                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%')))\n" +
+                    "        (("+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%')))\n" +
                     "UNION       SELECT DISTINCT\n" +
-                    "        w.sourceref \n" +
-                    "      , w.metamodifiedon modifiedon \n" +
-                    "      , 'MSC' typecode \n" +
-                    "      , 'Elsevier HS Major Subject Codes' typedesc \n" +
-                    "      , substr(split_part(c.classificationcode, ' | ', 1), (strpos(split_part(c.classificationcode, ' | ', 1), 'MSC') + 3), 3) subjcode \n" +
-                    "      , split_part (c.classificationcode, ' | ', 2) subjdesc \n" +
-                    "      , c.priority \n" +
-                    "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted\n" +
+                    "        w.sourceref\n" +
+                    "      , w.metamodifiedon modifiedon\n" +
+                    "      , 'MSC' typecode\n" +
+                    "      , 'Elsevier HS Major Subject Codes' typedesc\n" +
+                    "      , substr(split_part(c.classificationcode, ' | ', 1), (strpos(split_part(c.classificationcode, ' | ', 1), 'MSC') + 3), 3) subjcode\n" +
+                    "      , split_part(c.classificationcode, ' | ', 2) subjdesc\n" +
+                    "      , c.priority\n" +
+                    "      , (CASE WHEN (w.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "      FROM\n" +
-                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%MSC%')))\n" +
-                    "   )\n" +
+                    "        (("+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%MSC%')))\n" +
+                    "   ) \n" +
                     "UNION    SELECT DISTINCT\n" +
-                    "     NULLIF(w.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(w.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
+                    "     NULLIF(w.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(w.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n" +
                     "   , 'BRASESUBDI' typecode\n" +
-                    "   , 'Brazil Segmento, Subposicionamento & Disciplina' typedesc \n" +
-                    "   , replace(split_part(NULLIF(c.classificationcode,''), ' | ', 1), 'BRASESUBDI') subjcode \n" +
-                    "   , split_part(NULLIF(c.classificationcode,''), ' | ', 2) subjdesc \n" +
-                    "   , NULLIF(c.priority,'') priority \n" +
-                    "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
+                    "   , 'Brazil Segmento, Subposicionamento & Disciplina' typedesc\n" +
+                    "   , replace(split_part(NULLIF(c.classificationcode, ''), ' | ', 1), 'BRASESUBDI') subjcode\n" +
+                    "   , split_part(NULLIF(c.classificationcode, ''), ' | ', 2) subjdesc\n" +
+                    "   , NULLIF(c.priority, '') priority\n" +
+                    "   , (CASE WHEN (w.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%')))\n" +
-                    ")A\n" +
-                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Work'\n" +
-                    "WHERE A.metadeleted = FALSE \n" +
-                    ")";
-
+                    "     (("+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "   INNER JOIN "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%')))\n" +
+                    ")  A\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getDL_CoreViewDataBase()+".eph_identifier_cross_reference_v cr ON (((A.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                    "WHERE (A.metadeleted = false)\n" +
+                    ")\n";
 
     public static final String GET_MANIFESTATION_RESTRICTIONS_INBOUND_CURRENT_COUNT=
             "select count(*) as Source_Count from (\n" +
@@ -391,7 +393,7 @@ public final class BcsEtlExtendedCountChecksSql {
              "FROM\n" +
              "  ("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_pricing A\n" +
              "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
-             "WHERE (A.metadeleted = 'N'))";
+             "WHERE (A.metadeleted = 'N')AND ((CAST(date_parse(NULLIF(validto, ''), '%d-%b-%Y') AS date) IS NULL) OR (CAST(date_parse(NULLIF(validto, ''), '%d-%b-%Y') AS date) >= current_date)))";
 
     public static final String GET_WORK_PERSON_ROLE_INBOUND_CURRENT_COUNT=
     "select count(*) as Source_Count from(\n" +

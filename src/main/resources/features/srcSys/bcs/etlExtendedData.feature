@@ -1,7 +1,7 @@
 Feature:Validate data for BCS ETL Extended tables
 
   #confluence link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45477370785/BCS+Extended+Transformed+View+Mappings
-  #confluence version: v78
+  #confluence version: v80
 
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended tables is transferred from Inbound Tables

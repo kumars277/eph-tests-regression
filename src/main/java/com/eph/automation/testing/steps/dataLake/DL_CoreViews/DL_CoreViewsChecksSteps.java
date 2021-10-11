@@ -249,7 +249,7 @@ public class DL_CoreViewsChecksSteps {
 
     @Given("^Get the (.*) from JM and BCS Core Tables (.*)$")
     public void getRandomIdsFromBCSJM(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids from jm and bcs Core Tables....");
 
@@ -653,7 +653,7 @@ public class DL_CoreViewsChecksSteps {
 
                     String[] all_work_relationship_v = {"getEXTERNALREFERENCE","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getDQ_ERR"
                             ,"getPARENTWORKSOURCEREF","getCHILDWORKSOURCEREF","getF_RELATIONTYPEREF","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE",
-                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM"};
+                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIONAME"};
 
                     for (String strTemp : all_work_relationship_v) {
                         java.lang.reflect.Method method;

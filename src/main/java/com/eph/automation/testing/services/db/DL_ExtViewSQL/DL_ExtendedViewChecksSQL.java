@@ -1088,75 +1088,73 @@ public class DL_ExtendedViewChecksSQL {
 
     public static String GET_SOURCE_PROD_PRICING_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
-                    "SELECT \n" +
+                   "SELECT\n" +
                     "  promis.epr_id\n" +
-                    ", 'PROMIS' as source\n" +
+                    ", 'PROMIS' source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", promis.currency          as price_currency\n" +
-                    ", promis.price             as price_amount\n" +
-                    ", promis.start_date        as price_start_date\n" +
-                    ", promis.end_date          as price_end_date\n" +
-                    ", promis.region            as price_region\n" +
-                    ", CAST(null AS varchar)       price_category\n" +
-                    ", promis.customer_category as price_customer_category\n" +
-                    ", promis.quantity          as price_purchase_quantity\n" +
+                    ", promis.currency price_currency\n" +
+                    ", promis.price price_amount\n" +
+                    ", promis.start_date price_start_date\n" +
+                    ", promis.end_date price_end_date\n" +
+                    ", promis.region price_region\n" +
+                    ", CAST(null AS varchar) price_category\n" +
+                    ", promis.customer_category price_customer_category\n" +
+                    ", promis.quantity price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
-                    "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.pricecurrency         as price_currency\n" +
-                    ", bcs.priceamount           as price_amount\n" +
-                    ", bcs.pricestartdate        as price_start_date\n" +
-                    ", bcs.priceenddate          as price_end_date\n" +
-                    ", bcs.priceregion           as price_region\n" +
-                    ", bcs.pricecategory         as price_category\n" +
-                    ", bcs.pricecustomercategory as price_customer_category\n" +
-                    ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
+                    ", bcs.pricecurrency price_currency\n" +
+                    ", bcs.priceamount price_amount\n" +
+                    ", bcs.pricestartdate price_start_date\n" +
+                    ", bcs.priceenddate price_end_date\n" +
+                    ", bcs.priceregion price_region\n" +
+                    ", bcs.pricecategory price_category\n" +
+                    ", bcs.pricecustomercategory price_customer_category\n" +
+                    ", bcs.pricepurchasequantity price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
-                    "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))";
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs)\n";
 
     public static String GET_SOURCE_PROD_PRICING_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
-                    "SELECT \n" +
+                    "SELECT\n" +
                     "  promis.epr_id\n" +
-                    ", 'PROMIS'                 as source\n" +
+                    ", 'PROMIS' source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", promis.currency          as price_currency\n" +
-                    ", promis.price             as price_amount\n" +
-                    ", promis.start_date        as price_start_date\n" +
-                    ", promis.end_date          as price_end_date\n" +
-                    ", promis.region            as price_region\n" +
-                    ", CAST(null AS varchar)       price_category\n" +
-                    ", promis.customer_category as price_customer_category\n" +
-                    ", promis.quantity          as price_purchase_quantity\n" +
+                    ", promis.currency price_currency\n" +
+                    ", promis.price price_amount\n" +
+                    ", promis.start_date price_start_date\n" +
+                    ", promis.end_date price_end_date\n" +
+                    ", promis.region price_region\n" +
+                    ", CAST(null AS varchar) price_category\n" +
+                    ", promis.customer_category price_customer_category\n" +
+                    ", promis.quantity price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
-                    "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.pricecurrency         as price_currency\n" +
-                    ", bcs.priceamount           as price_amount\n" +
-                    ", bcs.pricestartdate        as price_start_date\n" +
-                    ", bcs.priceenddate          as price_end_date\n" +
-                    ", bcs.priceregion           as price_region\n" +
-                    ", bcs.pricecategory         as price_category\n" +
-                    ", bcs.pricecustomercategory as price_customer_category\n" +
-                    ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
+                    ", bcs.pricecurrency price_currency\n" +
+                    ", bcs.priceamount price_amount\n" +
+                    ", bcs.pricestartdate price_start_date\n" +
+                    ", bcs.priceenddate price_end_date\n" +
+                    ", bcs.priceregion price_region\n" +
+                    ", bcs.pricecategory price_category\n" +
+                    ", bcs.pricecustomercategory price_customer_category\n" +
+                    ", bcs.pricepurchasequantity price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
-                    "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))order by rand() limit %s";
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_PROD_PRICING_EXT_REC =
             "select epr_id as epr_id" +
@@ -1173,39 +1171,38 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
                     " from (\n" +
-                    "SELECT \n" +
+                    "SELECT\n" +
                     "  promis.epr_id\n" +
-                    ", 'PROMIS'                 as source\n" +
+                    ", 'PROMIS' source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", promis.currency          as price_currency\n" +
-                    ", promis.price             as price_amount\n" +
-                    ", promis.start_date        as price_start_date\n" +
-                    ", promis.end_date          as price_end_date\n" +
-                    ", promis.region            as price_region\n" +
-                    ", CAST(null AS varchar)       price_category\n" +
-                    ", promis.customer_category as price_customer_category\n" +
-                    ", promis.quantity          as price_purchase_quantity\n" +
+                    ", promis.currency price_currency\n" +
+                    ", promis.price price_amount\n" +
+                    ", promis.start_date price_start_date\n" +
+                    ", promis.end_date price_end_date\n" +
+                    ", promis.region price_region\n" +
+                    ", CAST(null AS varchar) price_category\n" +
+                    ", promis.customer_category price_customer_category\n" +
+                    ", promis.quantity price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
-                    "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.pricecurrency         as price_currency\n" +
-                    ", bcs.priceamount           as price_amount\n" +
-                    ", bcs.pricestartdate        as price_start_date\n" +
-                    ", bcs.priceenddate          as price_end_date\n" +
-                    ", bcs.priceregion           as price_region\n" +
-                    ", bcs.pricecategory         as price_category\n" +
-                    ", bcs.pricecustomercategory as price_customer_category\n" +
-                    ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
+                    ", bcs.pricecurrency price_currency\n" +
+                    ", bcs.priceamount price_amount\n" +
+                    ", bcs.pricestartdate price_start_date\n" +
+                    ", bcs.priceenddate price_end_date\n" +
+                    ", bcs.priceregion price_region\n" +
+                    ", bcs.pricecategory price_category\n" +
+                    ", bcs.pricecustomercategory price_customer_category\n" +
+                    ", bcs.pricepurchasequantity price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
-                    "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))where epr_id in ('%s')" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs)where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount," +
                     "price_category,price_region,price_customer_category,price_purchase_quantity desc";
 
@@ -1500,12 +1497,12 @@ public class DL_ExtendedViewChecksSQL {
 
     public static String GET_SOURCE_WORK_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
-                    "SELECT \n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
+                    "SELECT\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
                     ", jrbi.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
@@ -1523,30 +1520,30 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) internal_els_div\n" +
                     ", CAST(null AS varchar) profit_centre\n" +
                     ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_system else null end as primary_site_system\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_acronym else null end as primary_site_acronym\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_support_level else null end as primary_site_support_level\n" +
-                    ", case when delete_flag=false then jrbi.issue_prod_type_code else null end as issue_prod_type_code\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volumes_qty else null end as catalogue_volumes_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_issues_qty else null end as catalogue_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_from else null end as catalogue_volume_from\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_to else null end as catalogue_volume_to\n" +
-                    ", case when delete_flag=false then jrbi.rf_issues_qty else null end as rf_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_total_pages_qty else null end as rf_total_pages_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_fvi else null end as rf_fvi\n" +
-                    ", case when delete_flag=false then jrbi.rf_lvi else null end as rf_lvi\n" +
-                    ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
-                    ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_system ELSE null END) primary_site_system\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_acronym ELSE null END) primary_site_acronym\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_support_level ELSE null END) primary_site_support_level\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.issue_prod_type_code ELSE null END) issue_prod_type_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volumes_qty ELSE null END) catalogue_volumes_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_issues_qty ELSE null END) catalogue_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_from ELSE null END) catalogue_volume_from\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_to ELSE null END) catalogue_volume_to\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_issues_qty ELSE null END) rf_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_total_pages_qty ELSE null END) rf_total_pages_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_fvi ELSE null END) rf_fvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_lvi ELSE null END) rf_lvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.business_unit_desc ELSE null END) business_unit_desc\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.journal_prod_site_code ELSE null END) journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
-                    "UNION ALL\n" +
-                    "SELECT \n" +
-                    "  promis.epr_id as epr_id\n" +
-                    ", 'PROMIS' as source\n" +
-                    ", promis.work_type as work_type\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  promis.epr_id epr_id\n" +
+                    ", 'PROMIS' source\n" +
+                    ", promis.work_type work_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
-                    ", case when delete_flag=false then promis.journal_aims_scope else null end as journs_aims_scope \n" +
+                    ", (CASE WHEN (delete_flag = false) THEN (CASE WHEN (promis.elsevier_com_ind = 'N') THEN false WHEN (promis.elsevier_com_ind = 'Y') THEN true END) ELSE null END) journal_els_com_ind\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN promis.journal_aims_scope ELSE null END) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
                     ", CAST(null AS varchar) master_isbn\n" +
@@ -1578,31 +1575,31 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", bcs.imagefileref as image_file_ref\n" +
-                    ", bcs.workmasterisbn as master_isbn\n" +
-                    ", bcs.authorbyline as author_by_line_text\n" +
-                    ", bcs.features as key_features\n" +
-                    ", bcs.awards as product_awards\n" +
-                    ", bcs.description as product_long_desc\n" +
+                    ", bcs.imagefileref image_file_ref\n" +
+                    ", bcs.workmasterisbn master_isbn\n" +
+                    ", bcs.authorbyline author_by_line_text\n" +
+                    ", bcs.features key_features\n" +
+                    ", bcs.awards product_awards\n" +
+                    ", bcs.description product_long_desc\n" +
                     ", CAST(null AS varchar) product_short_desc\n" +
-                    ", bcs.review as review_quotes\n" +
+                    ", bcs.review review_quotes\n" +
                     ", bcs.toc_long\n" +
                     ", bcs.toc_short\n" +
-                    ", bcs.audience as audience_text\n" +
-                    ", bcs.sbu as book_sub_business_unit\n" +
-                    ", bcs.companygroup as internal_els_div\n" +
-                    ", bcs.profitcentre as profit_centre\n" +
-                    ", bcs.textreftrade as text_ref_trade\n" +
+                    ", bcs.audience audience_text\n" +
+                    ", bcs.sbu book_sub_business_unit\n" +
+                    ", bcs.companygroup internal_els_div\n" +
+                    ", bcs.profitcentre profit_centre\n" +
+                    ", bcs.textreftrade text_ref_trade\n" +
                     ", CAST(null AS varchar) primary_site_system\n" +
                     ", CAST(null AS varchar) primary_site_acronym\n" +
                     ", CAST(null AS varchar) primary_site_support_level\n" +
@@ -1618,10 +1615,10 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
-                    "  UNION ALL\n" +
-                    "SELECT\n" +
-                    "f_wwork work_epr_id\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    "UNION ALL SELECT\n" +
+                    "  f_wwork work_epr_id\n" +
                     ", 'EPH (Derived)' source\n" +
                     ", gww.f_type work_type\n" +
                     ", gwi.b_upddate last_updated_date\n" +
@@ -1658,19 +1655,61 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))";
+                    "FROM\n" +
+                    "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
+                    "UNION ALL SELECT\n" +
+                    "  cr.epr work_epr_id\n" +
+                    ", 'PMX' source\n" +
+                    ", cr.work_type work_type\n" +
+                    ", TRY(date_parse(wesd.last_updated_date, '%Y-%m-%d %H:%i:%s.%f')) last_updated_date\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS varchar) journs_aims_scope\n" +
+                    ", CAST(null AS varchar) delta_business_unit\n" +
+                    ", CAST(null AS varchar) image_file_ref\n" +
+                    ", CAST(null AS varchar) master_isbn\n" +
+                    ", CAST(null AS varchar) author_by_line_text\n" +
+                    ", CAST(null AS varchar) key_features\n" +
+                    ", CAST(null AS varchar) product_awards\n" +
+                    ", wesd.text_long product_long_desc\n" +
+                    ", CAST(null AS varchar) product_short_desc\n" +
+                    ", CAST(null AS varchar) review_quotes\n" +
+                    ", CAST(null AS varchar) toc_long\n" +
+                    ", CAST(null AS varchar) toc_short\n" +
+                    ", CAST(null AS varchar) audience_text\n" +
+                    ", CAST(null AS varchar) book_sub_business_unit\n" +
+                    ", CAST(null AS varchar) internal_els_div\n" +
+                    ", CAST(null AS varchar) profit_centre\n" +
+                    ", CAST(null AS varchar) text_ref_trade\n" +
+                    ", CAST(null AS varchar) primary_site_system\n" +
+                    ", CAST(null AS varchar) primary_site_acronym\n" +
+                    ", CAST(null AS varchar) primary_site_support_level\n" +
+                    ", CAST(null AS varchar) issue_prod_type_code\n" +
+                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
+                    ", CAST(null AS integer) catalogue_issues_qty\n" +
+                    ", CAST(null AS varchar) catalogue_volume_from\n" +
+                    ", CAST(null AS varchar) catalogue_volume_to\n" +
+                    ", CAST(null AS integer) rf_issues_qty\n" +
+                    ", CAST(null AS integer) rf_total_pages_qty\n" +
+                    ", CAST(null AS varchar) rf_fvi\n" +
+                    ", CAST(null AS varchar) rf_lvi\n" +
+                    ", CAST(null AS varchar) business_unit_desc\n" +
+                    ", CAST(null AS varchar) journal_prod_site_code\n" +
+                    ", false delete_flag\n" +
+                    "FROM\n" +
+                    "  ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))";
 
     public static String GET_SOURCE_WORK_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
-                    "SELECT \n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
+                    "SELECT\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
                     ", jrbi.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
@@ -1688,30 +1727,30 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) internal_els_div\n" +
                     ", CAST(null AS varchar) profit_centre\n" +
                     ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_system else null end as primary_site_system\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_acronym else null end as primary_site_acronym\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_support_level else null end as primary_site_support_level\n" +
-                    ", case when delete_flag=false then jrbi.issue_prod_type_code else null end as issue_prod_type_code\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volumes_qty else null end as catalogue_volumes_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_issues_qty else null end as catalogue_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_from else null end as catalogue_volume_from\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_to else null end as catalogue_volume_to\n" +
-                    ", case when delete_flag=false then jrbi.rf_issues_qty else null end as rf_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_total_pages_qty else null end as rf_total_pages_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_fvi else null end as rf_fvi\n" +
-                    ", case when delete_flag=false then jrbi.rf_lvi else null end as rf_lvi\n" +
-                    ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
-                    ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_system ELSE null END) primary_site_system\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_acronym ELSE null END) primary_site_acronym\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_support_level ELSE null END) primary_site_support_level\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.issue_prod_type_code ELSE null END) issue_prod_type_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volumes_qty ELSE null END) catalogue_volumes_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_issues_qty ELSE null END) catalogue_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_from ELSE null END) catalogue_volume_from\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_to ELSE null END) catalogue_volume_to\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_issues_qty ELSE null END) rf_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_total_pages_qty ELSE null END) rf_total_pages_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_fvi ELSE null END) rf_fvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_lvi ELSE null END) rf_lvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.business_unit_desc ELSE null END) business_unit_desc\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.journal_prod_site_code ELSE null END) journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    "FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
-                    "UNION ALL\n" +
-                    "SELECT \n" +
-                    "  promis.epr_id as epr_id\n" +
-                    ", 'PROMIS' as source\n" +
-                    ", promis.work_type as work_type\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  promis.epr_id epr_id\n" +
+                    ", 'PROMIS' source\n" +
+                    ", promis.work_type work_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
-                    ", case when delete_flag=false then promis.journal_aims_scope else null end as journs_aims_scope \n" +
+                    ", (CASE WHEN (delete_flag = false) THEN (CASE WHEN (promis.elsevier_com_ind = 'N') THEN false WHEN (promis.elsevier_com_ind = 'Y') THEN true END) ELSE null END) journal_els_com_ind\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN promis.journal_aims_scope ELSE null END) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
                     ", CAST(null AS varchar) master_isbn\n" +
@@ -1743,31 +1782,31 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", bcs.imagefileref as image_file_ref\n" +
-                    ", bcs.workmasterisbn as master_isbn\n" +
-                    ", bcs.authorbyline as author_by_line_text\n" +
-                    ", bcs.features as key_features\n" +
-                    ", bcs.awards as product_awards\n" +
-                    ", bcs.description as product_long_desc\n" +
+                    ", bcs.imagefileref image_file_ref\n" +
+                    ", bcs.workmasterisbn master_isbn\n" +
+                    ", bcs.authorbyline author_by_line_text\n" +
+                    ", bcs.features key_features\n" +
+                    ", bcs.awards product_awards\n" +
+                    ", bcs.description product_long_desc\n" +
                     ", CAST(null AS varchar) product_short_desc\n" +
-                    ", bcs.review as review_quotes\n" +
+                    ", bcs.review review_quotes\n" +
                     ", bcs.toc_long\n" +
                     ", bcs.toc_short\n" +
-                    ", bcs.audience as audience_text\n" +
-                    ", bcs.sbu as book_sub_business_unit\n" +
-                    ", bcs.companygroup as internal_els_div\n" +
-                    ", bcs.profitcentre as profit_centre\n" +
-                    ", bcs.textreftrade as text_ref_trade\n" +
+                    ", bcs.audience audience_text\n" +
+                    ", bcs.sbu book_sub_business_unit\n" +
+                    ", bcs.companygroup internal_els_div\n" +
+                    ", bcs.profitcentre profit_centre\n" +
+                    ", bcs.textreftrade text_ref_trade\n" +
                     ", CAST(null AS varchar) primary_site_system\n" +
                     ", CAST(null AS varchar) primary_site_acronym\n" +
                     ", CAST(null AS varchar) primary_site_support_level\n" +
@@ -1783,10 +1822,10 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
-                    "  UNION ALL\n" +
-                    "SELECT\n" +
-                    "f_wwork work_epr_id\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    "UNION ALL SELECT\n" +
+                    "  f_wwork work_epr_id\n" +
                     ", 'EPH (Derived)' source\n" +
                     ", gww.f_type work_type\n" +
                     ", gwi.b_upddate last_updated_date\n" +
@@ -1823,10 +1862,52 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))order by rand() limit %s";
+                    "FROM\n" +
+                    "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
+                    "UNION ALL SELECT\n" +
+                    "  cr.epr work_epr_id\n" +
+                    ", 'PMX' source\n" +
+                    ", cr.work_type work_type\n" +
+                    ", TRY(date_parse(wesd.last_updated_date, '%%Y-%%m-%%d %%H:%%i:%%s.%%f')) last_updated_date\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS varchar) journs_aims_scope\n" +
+                    ", CAST(null AS varchar) delta_business_unit\n" +
+                    ", CAST(null AS varchar) image_file_ref\n" +
+                    ", CAST(null AS varchar) master_isbn\n" +
+                    ", CAST(null AS varchar) author_by_line_text\n" +
+                    ", CAST(null AS varchar) key_features\n" +
+                    ", CAST(null AS varchar) product_awards\n" +
+                    ", wesd.text_long product_long_desc\n" +
+                    ", CAST(null AS varchar) product_short_desc\n" +
+                    ", CAST(null AS varchar) review_quotes\n" +
+                    ", CAST(null AS varchar) toc_long\n" +
+                    ", CAST(null AS varchar) toc_short\n" +
+                    ", CAST(null AS varchar) audience_text\n" +
+                    ", CAST(null AS varchar) book_sub_business_unit\n" +
+                    ", CAST(null AS varchar) internal_els_div\n" +
+                    ", CAST(null AS varchar) profit_centre\n" +
+                    ", CAST(null AS varchar) text_ref_trade\n" +
+                    ", CAST(null AS varchar) primary_site_system\n" +
+                    ", CAST(null AS varchar) primary_site_acronym\n" +
+                    ", CAST(null AS varchar) primary_site_support_level\n" +
+                    ", CAST(null AS varchar) issue_prod_type_code\n" +
+                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
+                    ", CAST(null AS integer) catalogue_issues_qty\n" +
+                    ", CAST(null AS varchar) catalogue_volume_from\n" +
+                    ", CAST(null AS varchar) catalogue_volume_to\n" +
+                    ", CAST(null AS integer) rf_issues_qty\n" +
+                    ", CAST(null AS integer) rf_total_pages_qty\n" +
+                    ", CAST(null AS varchar) rf_fvi\n" +
+                    ", CAST(null AS varchar) rf_lvi\n" +
+                    ", CAST(null AS varchar) business_unit_desc\n" +
+                    ", CAST(null AS varchar) journal_prod_site_code\n" +
+                    ", false delete_flag\n" +
+                    "FROM\n" +
+                    "  ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_EXT_REC =
             "select epr_id as epr_id" +
@@ -1867,12 +1948,12 @@ public class DL_ExtendedViewChecksSQL {
                     ",journal_prod_site_code as journal_prod_site_code\n" +
                     ",delete_flag as delete_flag\n" +
                     " from (\n" +
-                    "SELECT \n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
+                    "SELECT\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
                     ", jrbi.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
@@ -1890,30 +1971,30 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) internal_els_div\n" +
                     ", CAST(null AS varchar) profit_centre\n" +
                     ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_system else null end as primary_site_system\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_acronym else null end as primary_site_acronym\n" +
-                    ", case when delete_flag=false then jrbi.primary_site_support_level else null end as primary_site_support_level\n" +
-                    ", case when delete_flag=false then jrbi.issue_prod_type_code else null end as issue_prod_type_code\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volumes_qty else null end as catalogue_volumes_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_issues_qty else null end as catalogue_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_from else null end as catalogue_volume_from\n" +
-                    ", case when delete_flag=false then jrbi.catalogue_volume_to else null end as catalogue_volume_to\n" +
-                    ", case when delete_flag=false then jrbi.rf_issues_qty else null end as rf_issues_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_total_pages_qty else null end as rf_total_pages_qty\n" +
-                    ", case when delete_flag=false then jrbi.rf_fvi else null end as rf_fvi\n" +
-                    ", case when delete_flag=false then jrbi.rf_lvi else null end as rf_lvi\n" +
-                    ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
-                    ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_system ELSE null END) primary_site_system\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_acronym ELSE null END) primary_site_acronym\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.primary_site_support_level ELSE null END) primary_site_support_level\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.issue_prod_type_code ELSE null END) issue_prod_type_code\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volumes_qty ELSE null END) catalogue_volumes_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_issues_qty ELSE null END) catalogue_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_from ELSE null END) catalogue_volume_from\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.catalogue_volume_to ELSE null END) catalogue_volume_to\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_issues_qty ELSE null END) rf_issues_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_total_pages_qty ELSE null END) rf_total_pages_qty\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_fvi ELSE null END) rf_fvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.rf_lvi ELSE null END) rf_lvi\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.business_unit_desc ELSE null END) business_unit_desc\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN jrbi.journal_prod_site_code ELSE null END) journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    "FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
-                    "UNION ALL\n" +
-                    "SELECT \n" +
-                    "  promis.epr_id as epr_id\n" +
-                    ", 'PROMIS' as source\n" +
-                    ", promis.work_type as work_type\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  promis.epr_id epr_id\n" +
+                    ", 'PROMIS' source\n" +
+                    ", promis.work_type work_type\n" +
                     ", promis.last_updated_date\n" +
-                    ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
-                    ", case when delete_flag=false then promis.journal_aims_scope else null end as journs_aims_scope \n" +
+                    ", (CASE WHEN (delete_flag = false) THEN (CASE WHEN (promis.elsevier_com_ind = 'N') THEN false WHEN (promis.elsevier_com_ind = 'Y') THEN true END) ELSE null END) journal_els_com_ind\n" +
+                    ", (CASE WHEN (delete_flag = false) THEN promis.journal_aims_scope ELSE null END) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
                     ", CAST(null AS varchar) image_file_ref\n" +
                     ", CAST(null AS varchar) master_isbn\n" +
@@ -1945,31 +2026,31 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
-                    "UNION ALL\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
-                    ", CAST(null AS Boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
                     ", CAST(null AS varchar) journs_aims_scope\n" +
                     ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", bcs.imagefileref as image_file_ref\n" +
-                    ", bcs.workmasterisbn as master_isbn\n" +
-                    ", bcs.authorbyline as author_by_line_text\n" +
-                    ", bcs.features as key_features\n" +
-                    ", bcs.awards as product_awards\n" +
-                    ", bcs.description as product_long_desc\n" +
+                    ", bcs.imagefileref image_file_ref\n" +
+                    ", bcs.workmasterisbn master_isbn\n" +
+                    ", bcs.authorbyline author_by_line_text\n" +
+                    ", bcs.features key_features\n" +
+                    ", bcs.awards product_awards\n" +
+                    ", bcs.description product_long_desc\n" +
                     ", CAST(null AS varchar) product_short_desc\n" +
-                    ", bcs.review as review_quotes\n" +
+                    ", bcs.review review_quotes\n" +
                     ", bcs.toc_long\n" +
                     ", bcs.toc_short\n" +
-                    ", bcs.audience as audience_text\n" +
-                    ", bcs.sbu as book_sub_business_unit\n" +
-                    ", bcs.companygroup as internal_els_div\n" +
-                    ", bcs.profitcentre as profit_centre\n" +
-                    ", bcs.textreftrade as text_ref_trade\n" +
+                    ", bcs.audience audience_text\n" +
+                    ", bcs.sbu book_sub_business_unit\n" +
+                    ", bcs.companygroup internal_els_div\n" +
+                    ", bcs.profitcentre profit_centre\n" +
+                    ", bcs.textreftrade text_ref_trade\n" +
                     ", CAST(null AS varchar) primary_site_system\n" +
                     ", CAST(null AS varchar) primary_site_acronym\n" +
                     ", CAST(null AS varchar) primary_site_support_level\n" +
@@ -1985,10 +2066,10 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
-                    "  UNION ALL\n" +
-                    "SELECT\n" +
-                    "f_wwork work_epr_id\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    "UNION ALL SELECT\n" +
+                    "  f_wwork work_epr_id\n" +
                     ", 'EPH (Derived)' source\n" +
                     ", gww.f_type work_type\n" +
                     ", gwi.b_upddate last_updated_date\n" +
@@ -2025,10 +2106,52 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))" +
+                    "FROM\n" +
+                    "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
+                    "UNION ALL SELECT\n" +
+                    "  cr.epr work_epr_id\n" +
+                    ", 'PMX' source\n" +
+                    ", cr.work_type work_type\n" +
+                    ", TRY(date_parse(wesd.last_updated_date, '%%Y-%%m-%%d %%H:%%i:%%s.%%f')) last_updated_date\n" +
+                    ", CAST(null AS boolean) journal_els_com_ind\n" +
+                    ", CAST(null AS varchar) journs_aims_scope\n" +
+                    ", CAST(null AS varchar) delta_business_unit\n" +
+                    ", CAST(null AS varchar) image_file_ref\n" +
+                    ", CAST(null AS varchar) master_isbn\n" +
+                    ", CAST(null AS varchar) author_by_line_text\n" +
+                    ", CAST(null AS varchar) key_features\n" +
+                    ", CAST(null AS varchar) product_awards\n" +
+                    ", wesd.text_long product_long_desc\n" +
+                    ", CAST(null AS varchar) product_short_desc\n" +
+                    ", CAST(null AS varchar) review_quotes\n" +
+                    ", CAST(null AS varchar) toc_long\n" +
+                    ", CAST(null AS varchar) toc_short\n" +
+                    ", CAST(null AS varchar) audience_text\n" +
+                    ", CAST(null AS varchar) book_sub_business_unit\n" +
+                    ", CAST(null AS varchar) internal_els_div\n" +
+                    ", CAST(null AS varchar) profit_centre\n" +
+                    ", CAST(null AS varchar) text_ref_trade\n" +
+                    ", CAST(null AS varchar) primary_site_system\n" +
+                    ", CAST(null AS varchar) primary_site_acronym\n" +
+                    ", CAST(null AS varchar) primary_site_support_level\n" +
+                    ", CAST(null AS varchar) issue_prod_type_code\n" +
+                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
+                    ", CAST(null AS integer) catalogue_issues_qty\n" +
+                    ", CAST(null AS varchar) catalogue_volume_from\n" +
+                    ", CAST(null AS varchar) catalogue_volume_to\n" +
+                    ", CAST(null AS integer) rf_issues_qty\n" +
+                    ", CAST(null AS integer) rf_total_pages_qty\n" +
+                    ", CAST(null AS varchar) rf_fvi\n" +
+                    ", CAST(null AS varchar) rf_lvi\n" +
+                    ", CAST(null AS varchar) business_unit_desc\n" +
+                    ", CAST(null AS varchar) journal_prod_site_code\n" +
+                    ", false delete_flag\n" +
+                    "FROM\n" +
+                    " ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))" +
                     "where epr_id in ('%s') order by epr_id,image_file_ref,source,key_features,author_by_line_text\n" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code,\n" +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty,\n" +
@@ -2153,18 +2276,18 @@ public class DL_ExtendedViewChecksSQL {
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
-                    "SELECT\n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
-                    ", CAST(null AS integer) as core_work_person_role_id\n" +
+             "SELECT\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
+                    ", CAST(null AS integer) core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
                     ", jrbi.role_code\n" +
-                    ", jrbi.role_description as role_name\n" +
+                    ", jrbi.role_description role_name\n" +
                     ", CAST(null AS integer) sequence_number\n" +
                     ", CAST(null AS integer) group_number\n" +
-                    ", jrbi.given_name as first_name\n" +
-                    ", jrbi.family_name as last_name\n" +
+                    ", jrbi.given_name first_name\n" +
+                    ", jrbi.family_name last_name\n" +
                     ", jrbi.peoplehub_id\n" +
                     ", jrbi.email\n" +
                     ", CAST(null AS varchar) title\n" +
@@ -2174,45 +2297,46 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
-                    "union all\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
-                    ", bcs.work_type as work_type\n" +
-                    ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
+                    ", bcs.work_type work_type\n" +
+                    ", CAST(bcs.core_reference AS integer) core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.roletype as role_code\n" +
-                    ", bcs.rolename as role_name\n" +
-                    ", CAST(bcs.sequence AS integer) as sequence_number\n" +
-                    ", bcs.groupnumber as group_number\n" +
-                    ", bcs.person_first_name as first_name\n" +
-                    ", bcs.person_family_name as last_name\n" +
-                    ", CAST(null AS varchar) as peoplehub_id\n" +
-                    ", bcs.email_address as email\n" +
+                    ", bcs.roletype role_code\n" +
+                    ", bcs.rolename role_name\n" +
+                    ", CAST(bcs.sequence AS integer) sequence_number\n" +
+                    ", bcs.groupnumber group_number\n" +
+                    ", bcs.person_first_name first_name\n" +
+                    ", bcs.person_family_name last_name\n" +
+                    ", CAST(null AS varchar) peoplehub_id\n" +
+                    ", bcs.email_address email\n" +
                     ", bcs.title\n" +
                     ", bcs.honours\n" +
                     ", bcs.affiliation\n" +
-                    ", bcs.imageurl as image_url\n" +
-                    ", bcs.footnotetxt as footnote_txt\n" +
-                    ", bcs.notestxt as notes_txt\n" +
+                    ", bcs.imageurl image_url\n" +
+                    ", bcs.footnotetxt footnote_txt\n" +
+                    ", bcs.notestxt notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)";
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)\n";
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
-                    ", CAST(null AS integer) as core_work_person_role_id\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
+                    ", CAST(null AS integer) core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
                     ", jrbi.role_code\n" +
-                    ", jrbi.role_description as role_name\n" +
+                    ", jrbi.role_description role_name\n" +
                     ", CAST(null AS integer) sequence_number\n" +
                     ", CAST(null AS integer) group_number\n" +
-                    ", jrbi.given_name as first_name\n" +
-                    ", jrbi.family_name as last_name\n" +
+                    ", jrbi.given_name first_name\n" +
+                    ", jrbi.family_name last_name\n" +
                     ", jrbi.peoplehub_id\n" +
                     ", jrbi.email\n" +
                     ", CAST(null AS varchar) title\n" +
@@ -2222,30 +2346,31 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
-                    "union all\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
-                    ", bcs.work_type as work_type\n" +
-                    ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
+                    ", bcs.work_type work_type\n" +
+                    ", CAST(bcs.core_reference AS integer) core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.roletype as role_code\n" +
-                    ", bcs.rolename as role_name\n" +
-                    ", CAST(bcs.sequence AS integer) as sequence_number\n" +
-                    ", bcs.groupnumber as group_number\n" +
-                    ", bcs.person_first_name as first_name\n" +
-                    ", bcs.person_family_name as last_name\n" +
-                    ", CAST(null AS varchar) as peoplehub_id\n" +
-                    ", bcs.email_address as email\n" +
+                    ", bcs.roletype role_code\n" +
+                    ", bcs.rolename role_name\n" +
+                    ", CAST(bcs.sequence AS integer) sequence_number\n" +
+                    ", bcs.groupnumber group_number\n" +
+                    ", bcs.person_first_name first_name\n" +
+                    ", bcs.person_family_name last_name\n" +
+                    ", CAST(null AS varchar) peoplehub_id\n" +
+                    ", bcs.email_address email\n" +
                     ", bcs.title\n" +
                     ", bcs.honours\n" +
                     ", bcs.affiliation\n" +
-                    ", bcs.imageurl as image_url\n" +
-                    ", bcs.footnotetxt as footnote_txt\n" +
-                    ", bcs.notestxt as notes_txt\n" +
+                    ", bcs.imageurl image_url\n" +
+                    ", bcs.footnotetxt footnote_txt\n" +
+                    ", bcs.notestxt notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)order by rand() limit %s";
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_REC =
             "select " +
@@ -2271,17 +2396,17 @@ public class DL_ExtendedViewChecksSQL {
                     ",delete_flag as delete_flag\n" +
                     " from (\n" +
                     "SELECT\n" +
-                    "  jrbi.epr as epr_id\n" +
-                    ", 'JRBI' as source\n" +
-                    ", jrbi.work_type as work_type\n" +
-                    ", CAST(null AS integer) as core_work_person_role_id\n" +
+                    "  jrbi.epr epr_id\n" +
+                    ", 'JRBI' source\n" +
+                    ", jrbi.work_type work_type\n" +
+                    ", CAST(null AS integer) core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
                     ", jrbi.role_code\n" +
-                    ", jrbi.role_description as role_name\n" +
+                    ", jrbi.role_description role_name\n" +
                     ", CAST(null AS integer) sequence_number\n" +
                     ", CAST(null AS integer) group_number\n" +
-                    ", jrbi.given_name as first_name\n" +
-                    ", jrbi.family_name as last_name\n" +
+                    ", jrbi.given_name first_name\n" +
+                    ", jrbi.family_name last_name\n" +
                     ", jrbi.peoplehub_id\n" +
                     ", jrbi.email\n" +
                     ", CAST(null AS varchar) title\n" +
@@ -2291,30 +2416,31 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
-                    "union all\n" +
-                    "SELECT\n" +
-                    "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
-                    ", bcs.work_type as work_type\n" +
-                    ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    "UNION ALL SELECT\n" +
+                    "  bcs.eprid epr_id\n" +
+                    ", 'BCS' source\n" +
+                    ", bcs.work_type work_type\n" +
+                    ", CAST(bcs.core_reference AS integer) core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
-                    ", bcs.roletype as role_code\n" +
-                    ", bcs.rolename as role_name\n" +
-                    ", CAST(bcs.sequence AS integer) as sequence_number\n" +
-                    ", bcs.groupnumber as group_number\n" +
-                    ", bcs.person_first_name as first_name\n" +
-                    ", bcs.person_family_name as last_name\n" +
-                    ", CAST(null AS varchar) as peoplehub_id\n" +
-                    ", bcs.email_address as email\n" +
+                    ", bcs.roletype role_code\n" +
+                    ", bcs.rolename role_name\n" +
+                    ", CAST(bcs.sequence AS integer) sequence_number\n" +
+                    ", bcs.groupnumber group_number\n" +
+                    ", bcs.person_first_name first_name\n" +
+                    ", bcs.person_family_name last_name\n" +
+                    ", CAST(null AS varchar) peoplehub_id\n" +
+                    ", bcs.email_address email\n" +
                     ", bcs.title\n" +
                     ", bcs.honours\n" +
                     ", bcs.affiliation\n" +
-                    ", bcs.imageurl as image_url\n" +
-                    ", bcs.footnotetxt as footnote_txt\n" +
-                    ", bcs.notestxt as notes_txt\n" +
+                    ", bcs.imageurl image_url\n" +
+                    ", bcs.footnotetxt footnote_txt\n" +
+                    ", bcs.notestxt notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)" +
                     "where epr_id in ('%s') order by epr_id,role_code,source,work_type,core_work_person_role_id,last_updated_date,role_code,role_name,first_name," +
                     "last_name,peoplehub_id,email,sequence_number,delete_flag,affiliation,image_url desc";
 

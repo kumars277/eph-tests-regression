@@ -40,6 +40,7 @@ public class BCSCountCheckSteps {
             case "stg_current_sublocation":       BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_SUBLOCATION_SOURCE_COUNT; break;
             case "stg_current_text":              BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_SOURCE_COUNT; break;
             case "stg_current_versionfamily":     BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_VERSIONFAMILY_SOURCE_COUNT; break;
+            case "stg_current_originatornotes":   BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_SOURCE_COUNT; break;
         }
      //   List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDBResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
@@ -65,6 +66,7 @@ public class BCSCountCheckSteps {
             case "stg_current_sublocation":       BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_SUBLOCATION_CURRENT_COUNT; break;
             case "stg_current_text":              BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_CURRENT_COUNT; break;
             case "stg_current_versionfamily":     BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_VERSIONFAMILY_CURRENT_COUNT; break;
+            case "stg_current_originatornotes":     BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_CURRENT_COUNT; break;
         }
         List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCount_SQL, Constants.AWS_URL);
         BCSCurrentCount = ((Long) BCSCurrentTableCount.get(0).get("Current_Count")).intValue();
@@ -76,8 +78,6 @@ public class BCSCountCheckSteps {
         Log.info(tableName+ " : initial_ingest count = " + BCSFullSourceCount + " Vs bcs current table count = " + BCSCurrentCount);
         Assert.assertEquals("counts are not equal for initial_ingest and "+tableName+"\n", BCSFullSourceCount, BCSCurrentCount);
     }
-
-
 
 
     @Given("^We know the total count of stg_previous BCS data from (.*)$")
@@ -156,6 +156,8 @@ public class BCSCountCheckSteps {
             case "stg_history_sublocation_part":        BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_SUBLOCATION_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_text_part":               BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_TEXT_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
             case "stg_history_versionfamily_part":      BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_VERSIONFAMILY_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
+            case "stg_history_originatoraddress_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORADDRESS_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
+            case "stg_history_originatornotes_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORNOTES_HISTORY_COUNT_FOR_CURRENT_COUNT_VERIFICATION ;break;
         }
 
         List<Map<String, Object>> JRBICurrentHistoryTableCount = DBManager.getDBResultMap(BCSHistoryCount_SQL, Constants.AWS_URL);
@@ -176,5 +178,78 @@ public class BCSCountCheckSteps {
         Log.info( "Count check : "+SrctableName + " = " + BCSCurrentCount + " Vs "+trgttableName+" = " + BCSHistoryCount);
         Assert.assertEquals("counts are not equal for "+SrctableName+" and "+trgttableName+"\n", BCSCurrentCount, BCSHistoryCount);
     }
+
+    @Given("Get the total count of BCS Book series Data from initial_ingest (.*)")
+    public void getTotalCountFromInitialIngestSeries(String tableName) {
+        Log.info("getting initial_ingest_series full count...");
+        switch (tableName){
+            case "stg_current_classification_series":    BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CLASSIFICATION_SERIES_SOURCE_COUNT; break;
+            case "stg_current_content_series":           BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CONTENT_SERIES_SOURCE_COUNT;break;
+            case "stg_current_originatoraddress_series":         BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORADDRESS_SERIES_SOURCE_COUNT;break;
+            case "stg_current_originatornotes_series": BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_SERIES_SOURCE_COUNT; break;
+            case "stg_current_originators_series": BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATOR_SERIES_SOURCE_COUNT; break;
+            case "stg_current_product_series":       BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_PRODUCT_SERIES_SOURCE_COUNT; break;
+            case "stg_current_text_series":           BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_SERIES_SOURCE_COUNT; break;
+        }
+        //   List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
+        List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDBResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
+        BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
+        Log.info(tableName+" source count :" +BCSFullSourceCount);
+    }
+
+    @Then("^Get total count of BCS Book series Current table (.*)$")
+    public void getTotalCountOfBCSCurrentSeriesTable(String tableName) {
+        Log.info("getting bcs current book series table count...");
+        switch (tableName){
+            case "stg_current_classification_series":    BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CLASSIFICATION_SERIES_CURRENT_COUNT;     break;
+            case "stg_current_content_series":           BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CONTENT_SERIES_CURRENT_COUNT;break;
+            case "stg_current_originatoraddress_series": BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORADDRESS_SERIES_CURRENT_COUNT;break;
+            case "stg_current_originatornotes_series": BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATORNOTES_SERIES_CURRENT_COUNT; break;
+            case "stg_current_originators_series": BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_ORIGINATOR_SERIES_CURRENT_COUNT; break;
+            case "stg_current_product_series":       BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_PRODUCT_SERIES_CURRENT_COUNT; break;
+            case "stg_current_text_series":           BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_SERIES_CURRENT_COUNT; break;
+             }
+        List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCount_SQL, Constants.AWS_URL);
+        BCSCurrentCount = ((Long) BCSCurrentTableCount.get(0).get("Current_Count")).intValue();
+        Log.info(tableName+" current count :" +BCSCurrentCount);
+    }
+
+    @And("^Compare count of initial ingest series with current book series table (.*)$")
+    public void compareCountOfInitialIngestWithCurrentTableSeries(String tableName) {
+        Log.info(tableName+ " : initial_ingest_series count = " + BCSFullSourceCount + " Vs bcs current table book series count = " + BCSCurrentCount);
+        Assert.assertEquals("counts are not equal for initial_ingest_series and "+tableName+"\n", BCSFullSourceCount, BCSCurrentCount);
+    }
+
+    @Then("^Get the count for the BCS stg_history series (.*) for current comparision$")
+    public void getCountFromHistorytableSeriesForCurrentComp(String tableName){
+        Calendar cal = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate= dateFormat.format(cal.getTime());
+        Log.info("Current Date=> "+currentDate);
+
+        Log.info("Getting History Table Count...");
+
+        switch (tableName){
+            case "stg_history_classification_series_part":     BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_CLASSIFICATION_SERIES_HISTORY_COUNT;          break;
+            case "stg_history_content_series_part":            BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_CONTENT_SERIES_HISTORY_COUNT;          break;
+            case "stg_history_originatoraddress_series_part":          BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORADDRESS_SERIES_HISTORY_COUNT;break;
+            case "stg_history_originatornotes_series_part":  BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORNOTES_SERIES_HISTORY_COUNT ;break;
+            case "stg_history_originators_series_part":        BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_ORIGINATORS_SERIES_HISTORY_COUNT ;break;
+            case "stg_history_product_series_part":            BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_PRODUCT_SERIES_HISTORY_COUNT ;break;
+            case "stg_history_text_series_part":            BCSHistoryCount_SQL = BCSCurrentVsHistoryCountCheckSQL.GET_BCS_TEXT_SERIES_HISTORY_COUNT;break;
+        }
+
+        List<Map<String, Object>> JRBICurrentHistoryTableCount = DBManager.getDBResultMap(BCSHistoryCount_SQL, Constants.AWS_URL);
+        BCSHistoryCount = ((Long)JRBICurrentHistoryTableCount.get(0).get("History_Count")).intValue();
+        Log.info("BCSHistoryCount: "+BCSHistoryCount);
+    }
+
+    @And ("^Check count for the current table (.*) and history table series (.*) are identical$")
+    public void compareCountOfHistoryWithCurrentTableSeries(String srctableName, String trgtTable) {
+        Log.info(srctableName+ " : count = " + BCSCurrentCount + " Vs "+trgtTable+ " count = " +BCSHistoryCount );
+        Assert.assertEquals("counts are not equal for "+trgtTable+" and "+srctableName+"\n", BCSCurrentCount, BCSHistoryCount);
+    }
+
+
 
 }

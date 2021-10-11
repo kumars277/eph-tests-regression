@@ -2,8 +2,7 @@ Feature:Validate data of DL Extended Views and Extended Tables
 
 #  Created by Dinesh on 17/05/2021
 
-  #Confluence Link: https://confluence.cbsels.com/display/EPH/Source+To+Extended+Topic+Table+Mappings
-  #version: 28
+  #Confluence Link: https://elsevier.atlassian.net/wiki/spaces/EPH/history/45506168424/Extended+Data+Topic+Mappings
 
   @DLExtViews
   Scenario Outline: Verify Data Count for All Extended views is transferred from Source Ingestion
