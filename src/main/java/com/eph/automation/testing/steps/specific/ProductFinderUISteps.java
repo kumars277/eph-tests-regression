@@ -46,26 +46,12 @@ import javax.net.ssl.SSLHandshakeException;
 public class ProductFinderUISteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
-
-    /**
-     * Created by GVLAYKOV
-     * update by Nishant @ 15 May 2020
-     */
-
     private ProductFinderTasks productFinderTasks;
     private TasksNew tasks;
-
     private String sql;
 
-
     private static List<String> productIdList;
-  //
     private static List<String> workIdList = new ArrayList<>();
-
-
-
-
-
     private static List<String> workTypeCode;
 
     private static String[] Book_Types = {"Book Set","Books Series","Major Ref work", "Non-Elsevier Book", "Other Book", "Reference Book", "Serial", "Text Book"};

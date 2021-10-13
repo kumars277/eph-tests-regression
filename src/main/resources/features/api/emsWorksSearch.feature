@@ -168,6 +168,20 @@ Feature: Customer Search API: Works
       | human                              |
       | medicine                           |
 
+@SearchAPI
+  Scenario Outline: verify search API pagination - work search
+  Given verify pagination duplicate ids retried by search <option>
+  Examples:
+  |option|
+  |physics      |
+
+  @SearchAPI
+  Scenario Outline: verify search API pagination IsInworkpackage
+    Given verify pagination duplicate ids retried for <workPackage> with <scroll>
+    Examples:
+      |workPackage| scroll|
+      |EPR-W-12TB96      | 30s|
+
 
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
 

@@ -72,10 +72,11 @@ Feature: Product Finder production smoke tests
     Then Verify the Work Status is "<workStatus>"
     Examples:
       |ui |keyword        |workStatus          |
-      |PF |math           |Launched            |
-      |PF |clinic         |Planned             |
-      |PF |clinic         |No Longer Published |
       |JF |math           |Launched            |
+      |PF |math           |Launched            |
+      |JF |clinic         |Planned             |
+      |PF |clinic         |No Longer Published |
+
 
   @PFProd @UI @PFRegressionSuite @PFDebug
   Scenario Outline: Search and filter with Product Status or Product Type
@@ -85,8 +86,8 @@ Feature: Product Finder production smoke tests
     Then Verify the Product filter is "<filterType>"
     Examples:
       |ui   |keyword       |filterType        |filterValue    |
-      |PF   |Physics       |Product Status    |               |
-      |PF   |Chemistry     |Product Type      |               |
+      |PF   |Physics       |Product Status    |Available      |
+      |PF   |Chemistry     |Product Type      |Subscription   |
       |JF   |clinic        |Product Type      |Open Access    |
 
   @PFProd @UI @PFRegressionSuite @PFDebug

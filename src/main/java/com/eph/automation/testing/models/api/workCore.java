@@ -21,6 +21,7 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class workCore {
 
+    List<String> ignorePMC = Arrays.asList("CKSPECPKG","FSPKG","CKFLEX","CKFLEXAG","NEJ","NEB");
     private List<WorkDataObject> workDataObjectsFromEPHGD;
     public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {return workDataObjectsFromEPHGD;}
     public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;}
@@ -105,6 +106,7 @@ public class workCore {
     public WorkLegalOwners[] getWorkLegalOwners() {return workLegalOwners;}
     public void setWorkLegalOwners(WorkLegalOwners[] workLegalOwners) {this.workLegalOwners = workLegalOwners;}
 
+
     private WorkAccessModels[] workAccessModels;
     public WorkAccessModels[] getWorkAccessModels() {return workAccessModels;}
     public void setWorkAccessModels(WorkAccessModels[] workAccessModels) {this.workAccessModels = workAccessModels;}
@@ -137,6 +139,11 @@ public class workCore {
     public SubjectAreasApiObject[] getWorkSubjectAreas() {return workSubjectAreas;}
     public void setWorkSubjectAreas(SubjectAreasApiObject[] workSubjectAreas) {this.workSubjectAreas = workSubjectAreas;}
 
+    private WorkPackages workPackages;
+    public WorkPackages getWorkPackages() {return workPackages;}
+    public void setWorkPackages(WorkPackages workPackages) {this.workPackages = workPackages;   }
+
+
     private WorkRelationshipsAPIObject workRelationships;
     public WorkRelationshipsAPIObject getWorkRelationships() {return workRelationships;}
     public void setWorkRelationships(WorkRelationshipsAPIObject workRelationships) {this.workRelationships = workRelationships;}
@@ -148,7 +155,7 @@ public class workCore {
     public void compareWithDB(String workId) {
         Log.info("----- Verifying workCore data... " + workId);
         DataQualityContext.breadcrumbMessage+=" > "+workId;
-        try{
+
         getWorkDataFromEPHGD(workId);
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - title", title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
@@ -255,10 +262,9 @@ public class workCore {
 
         /*by Nishant @ 08 Jul 2021
             //https://elsevier.atlassian.net/wiki/spaces/EPH/pages/89739620223/2021-06-08+-+OA+Type+Decommission+Part+2+DAG+Talend
-        as per above story, openAccessType and societyOwnership should have null value at work level.
-        changing script accordingly.
-        */
-        /*
+       // as per above story, openAccessType and societyOwnership should have null value at work level.
+       // changing script accordingly.
+
             if (societyOwnership != null | this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP());
             printLog("societyOwnership code");
@@ -269,10 +275,9 @@ public class workCore {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("ownershipRollUp"), getSocietyOwnershipRollUp(societyOwnership.get("code").toString()));
             printLog("societyOwnership Rollup");
         }
-            */
-
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ",null,societyOwnership);
-            printLog("societyOwnership");
+            printLog("societyOwnership");*/
+
         if (legalOwnership != null | this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
             printLog("legalOwnership code");
@@ -379,11 +384,15 @@ public class workCore {
       //  Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",null,openAccessType.get("code"));
         //printLog("openAccessType code"); //NA from 9 Jul 2021 after decision made to nullify Open access
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
-        printLog("pmc code");
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
-        printLog("pmg code");
+        if(!ignorePMC.contains(type.get("code").toString()))
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
+            printLog("pmc code");
+
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
+            printLog("pmg code");
+        }
         if (this.workDataObjectsFromEPHGD.get(0).getF_accountable_product() != null) {
             //accountable products varification implemmented by Nishant on 22 Apr 2020
             Log.info("workType - " + type.get("code"));
@@ -415,8 +424,6 @@ public class workCore {
             printLog("workPersons");
         }
 
-//workSubjectAreas, if not null -EPR-W-101055
-
         if(workSubjectAreas!=null)
         {
             Log.info("verifying WorkSubjectAreas...total count "+workSubjectAreas.length);
@@ -437,18 +444,24 @@ public class workCore {
                 Assert.assertTrue(DataQualityContext.breadcrumbMessage+" workSubjectArea found",subAreaFound);
             }
         }
+
+        if(workPackages!=null)
+        {
+
+            Log.info("verifying workPackages...total count "+workPackages.getIsInWorkPackages());
+            boolean subAreaFound = false;
+           // List<Map<String,Object>> workSubjectAreasDB =  getWorkSubjectAreasByWorkId(workId);
+
+         //   Assert.assertEquals(DataQualityContext.breadcrumbMessage+" workSubjectAreas count", workSubjectAreas.length,workSubjectAreasDB.size());
+
+        }
+
         //The data is stored in table semarchy_eph_mdm.gd_work_relationship.  //workRelationships - EPR-11119M
         if (workRelationships != null) {
             workRelationships.compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
             printLog("workRelationships");
         }
-        }
 
-        catch (Exception e)
-        {
-            Log.info(e.getCause().getMessage());
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
-        }
 
         }
 

@@ -513,6 +513,21 @@ public class APIService {
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
+  public static WorksMatchedApiObject searchForWorkByScrollId(String scrollId)
+          throws AzureOauthTokenFetchingException {
+    Response response =
+            given()
+                    .baseUri(searchAPIEndPoint)
+                    .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                    .when()
+                    .get("/product-hub-works/works/scroll/"+scrollId);
+
+    DataQualityContext.api_response = response;
+    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    return response.thenReturn().as(WorksMatchedApiObject.class);
+  }
+
+
   public  void setApiEndpoint() {
     if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
       searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_SIT;

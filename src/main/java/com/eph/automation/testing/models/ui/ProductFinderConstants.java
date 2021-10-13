@@ -52,8 +52,8 @@ public class ProductFinderConstants {
     public static String linkTab="//*[@id='mat-tab-label-0-4']/div|//*[boolean(number(substring-before(substring-after(@id, \"mat-tab-label-\"), \"-4\")))]";
 
                 //String section = "//div[@class='section']"; //parent of - Editorial Information
-               // String section = "//div[@class='section']"; //parent Information
-    public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
+    public static String section = "//div[@class='section']"; //parent Information
+    //public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
     public static String DetailInformation1 = section + "/div[@class='section-detail'][1]";
     public static String DetailInformation2 = section + "/div[@class='section-detail'][2]";
     public static String sectionDetail = section + "/div[@class='section-detail']";
