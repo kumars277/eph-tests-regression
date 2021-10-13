@@ -1277,7 +1277,6 @@ public class BCSDataLakeDataCheckSQL {
                             " from " +
                             "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product_series where sourceref in ('%s') order by sourceref,orderno desc\n";
 
-
             public static String getInitialIngestDataFor_stg_current_text_series_rec  =
                     "select metadeleted as metadeleted" +
                             ",metamodifiedon as metamodifiedon" +
@@ -1305,6 +1304,181 @@ public class BCSDataLakeDataCheckSQL {
                             ",name as name" +
                             " from "    +
                             " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text_series where sourceref in ('%s') order by sourceref,name desc";
+
+
+    public static String randomId_stg_current_classification_series =
+     "select distinct sourceref"+
+             " from" +
+             " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification_series" +
+             " limit %s";
+
+    public static String randomId_stg_current_content_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series" +
+                    " limit %s";
+
+    public static String randomId_stg_current_originatoraddress_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatoraddress_series" +
+                    " limit %s";
+    public static String randomId_stg_current_originatornotes_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatornotes_series" +
+                    " limit %s";
+    public static String randomId_stg_current_originator_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators_series" +
+                    " limit %s";
+    public static String randomId_stg_current_product_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product_series" +
+                    " limit %s";
+    public static String randomId_stg_current_text_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text_series" +
+                    " limit %s";
+
+
+    public static String getCurrentHistoryTableDataFor_stg_current_classification_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",businessunit as businessunit" +
+                    ",classificationtype as classificationtype" +
+                    ",priority as priority" +
+                    ",classificationcode as classificationcode" +
+                    ",value as value" +
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part" +
+                    " where sourceref in ('%s') and \n" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part)\n" +
+                    " order by sourceref,metamodifiedon,classificationtype,classificationcode desc";
+
+    public static String getHistoryTableDataFor_stg_current_content_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",subgroup as subgroup" +
+                    ",seriescode as seriescode" +
+                    ",medium as medium" +
+                    ",wmyn as wmyn" +
+                    ",subtitle as subtitle" +
+                    ",title as title" +
+                    ",serialtype as serialtype" +
+                    ",division as division" +
+                    ",objtype as objtype" +
+                    ",companygroup as companygroup" +
+                    ",seriesissn as seriesissn" +
+                    ",binding as binding" +
+                    ",volumeno as volumeno" +
+                    ",language as language" +
+                    ",publisher as publisher" +
+                    ",seriesid as seriesid" +
+                    ",shorttitle as shorttitle" +
+                    ",piidack as piidack" +
+                    ",ownership as ownership" +
+                    ",deltype as deltype" +
+                    ",numbered as numbered" +
+                    ",bibliographicserial as bibliographicserial" +
+                    ",mainseries as mainseries" +
+                    ",editionid as editionid " +
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part" +
+                    " where sourceref in ('%s') and \n" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part)\n" +
+                    " order by sourceref,seriescode,editionid desc\n";
+
+    public static String getHistoryTableDataFor_stg_current_originatoraddress_series =
+            "select metadeleted as metadeleted\n" +
+                    ",metamodifiedon as metamodifiedon\n" +
+                    ",businesspartnerid as businesspartnerid\n" +
+                    ",country as country\n" +
+                    ",postalcode as postalcode\n" +
+                    ",additionaladdress as additionaladdress\n" +
+                    ",houseno as houseno \n" +
+                    ",internet as internet\n" +
+                    ",city as city\n" +
+                    ",street as street\n" +
+                    ",email as email\n" +
+                    ",district as district\n" +
+                    ",mobile as mobile\n" +
+                    ",fax as fax\n" +
+                    ",telephoneother as telephoneother\n" +
+                    ",telephonemain as telephonemain" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part)\n" +
+                    "order by businesspartnerid desc";
+
+    public static String getHistTableDataFor_stg_current_originators_series=
+            "select metadeleted as metadeleted \n" +
+                    ",metamodifiedon as metamodifiedon\n" +
+                    ",sourceref as sourceref \n" +
+                    ",firstname as firstname\n" +
+                    ",businesspartnerid as businesspartnerid\n" +
+                    ",lastname as lastname\n" +
+                    ",sequence as sequence\n" +
+                    ",prefix as prefix\n" +
+                    ",copyrightholdertype as copyrightholdertype\n" +
+                    ",searchterm as searchterm" +
+                    " from " +
+                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part)\n" +
+                    " order by businesspartnerid,sourceref,metamodifiedon desc";
+
+    public static String getHistoryTableDataFor_stg_current_originatornotes_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",businesspartnerid  as businesspartnerid " +
+                    ",sourceref as sourceref" +
+                    // ",notestype as notestype" +
+                    ",notes as notes" +
+                    ",companygroup as companygroup" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part)\n" +
+                    " order by businesspartnerid,notes desc";
+
+    public static String getHistoryTableDataFor_stg_current_product_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",orderno as orderno" +
+                    ",versiontype as versiontype" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part" +
+                    " where sourceref in ('%s') and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part)\n" +
+                    " order by sourceref,orderno desc\n";
+
+
+    public static String getHistoryTableDataFor_stg_current_text_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",tab as tab" +
+                    ",texttype as texttype" +
+                    ",text as text" +
+                    ",status as status" +
+                    ",name as name" +
+                    " from "    +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part" +
+                    " where sourceref in ('%s') and " +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part)\n" +
+                    " order by sourceref,name desc";
+
+
+
+
 
 
 
