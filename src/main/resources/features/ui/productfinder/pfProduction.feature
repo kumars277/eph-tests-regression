@@ -20,19 +20,19 @@ Feature: Product Finder production smoke tests
     When user is searching for "<keyword>"
     Then capture search suggestion for "<keyword>" and validate with "<ExpSuggestion>"
     Examples:
-      |ui |keyword            |ExpSuggestion    |
-      |JF |Euroopean Joournal |	european journal|
-      |JF|Eropean Joournal   |european journal |
-      |JF|Americaan          |american         |
-      |JF|Aerican            |american         |
-      |JF|Amercan            |american         |
-      |JF|Neveer             |never            |
-      |PF|Actualitées pharmaceutiques|actualites pharmaceutiques|
-      |PF|amrica                    |america                   |
-      |PF|africa                    |africa                    |
-      |PF|america                   |america                   |
-      |PF|anerica                   |america                   |
-      |PF|anrica                    |africa                    |
+      |ui |keyword                    |ExpSuggestion              |
+      |JF |Euroopean Joournal         |european journal           |
+      |JF|Eropean Joournal            |european journal           |
+      |JF|Americaan                   |american                   |
+      |JF|Aerican                     |american                   |
+      |JF|Amercan                     |american                   |
+      |JF|Neveer                      |never                      |
+      |PF|Actualitées pharmaceutiques |actualites pharmaceutiques |
+      |PF|amrica                      |america                    |
+      |PF|africa                      |africa                     |
+      |PF|america                     |america                    |
+      |PF|anerica                     |america                    |
+      |PF|anrica                      |africa                     |
 
   @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Work Types
@@ -47,7 +47,7 @@ Feature: Product Finder production smoke tests
       |Cell      |   Book      |
       |neuro     |   Journal   |
 
-  @PFProd @UI @PFRegressionSuite @PFDebug
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter them with Work Statuses and Types
     Given user is on Product Finder search page
     And Searches for given <keyword>
@@ -62,7 +62,7 @@ Feature: Product Finder production smoke tests
       |clinical       |Launched            |Journal   |
       |surgical       |Planned             |Book      |
 
-  @PFProd @UI @PFRegressionSuite @PFDebug
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Work Status
     Given user is on Product/Journal Finder search page <ui>
     And Searches for given <keyword>
@@ -77,8 +77,7 @@ Feature: Product Finder production smoke tests
       |JF |clinic         |Planned             |
       |PF |clinic         |No Longer Published |
 
-
-  @PFProd @UI @PFRegressionSuite @PFDebug
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Product Status or Product Type
     Given user is on Product/Journal Finder search page <ui>
     When Search for given <keyword> and switch to Products and Packages tab
@@ -90,7 +89,7 @@ Feature: Product Finder production smoke tests
       |PF   |Chemistry     |Product Type      |Subscription   |
       |JF   |clinic        |Product Type      |Open Access    |
 
-  @PFProd @UI @PFRegressionSuite @PFDebug
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Product Status and Product Type
     Given user is on Product/Journal Finder search page <ui>
     When Search for given <keyword> and switch to Products and Packages tab

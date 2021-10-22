@@ -7,6 +7,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
+import com.eph.automation.testing.steps.search_api.ApiWorksSearchSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import net.minidev.json.parser.ParseException;
@@ -20,6 +21,8 @@ import java.util.*;
 * */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class workCore {
+
+    ApiWorksSearchSteps apiWorksSearchSteps;
 
     List<String> ignorePMC = Arrays.asList("CKSPECPKG","FSPKG","CKFLEX","CKFLEXAG","NEJ","NEB");
     private List<WorkDataObject> workDataObjectsFromEPHGD;
@@ -139,6 +142,11 @@ public class workCore {
     public SubjectAreasApiObject[] getWorkSubjectAreas() {return workSubjectAreas;}
     public void setWorkSubjectAreas(SubjectAreasApiObject[] workSubjectAreas) {this.workSubjectAreas = workSubjectAreas;}
 
+    //validation code need to be written EPR-W-12TB82
+    private WorkHierarchies[] workHierarchies;
+    public WorkHierarchies[] getWorkHierarchies() {return workHierarchies;}
+    public void setWorkHierarchies(WorkHierarchies[] workHierarchies) {this.workHierarchies = workHierarchies;}
+
     private WorkPackages workPackages;
     public WorkPackages getWorkPackages() {return workPackages;}
     public void setWorkPackages(WorkPackages workPackages) {this.workPackages = workPackages;   }
@@ -214,6 +222,18 @@ public class workCore {
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workType", type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         printLog("workType code");
+
+        //added by Nishant @ 19 Oct 2021
+        if(type.get("code").toString().equalsIgnoreCase("NEB") || type.get("code").toString().equalsIgnoreCase("NEJ"))
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - nonElsevierInd", type.get("nonElsevierInd"), true);
+            printLog("nonElsevierInd");
+        }
+        else
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - nonElsevierInd", type.get("nonElsevierInd"), false);
+            printLog("nonElsevierInd");
+        }
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workStatus", status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         printLog("workStatus code");
@@ -385,8 +405,7 @@ public class workCore {
         //printLog("openAccessType code"); //NA from 9 Jul 2021 after decision made to nullify Open access
 
 
-        if(!ignorePMC.contains(type.get("code").toString()))
-        {
+        if(!ignorePMC.contains(type.get("code").toString())){
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
             printLog("pmc code");
 
@@ -424,8 +443,7 @@ public class workCore {
             printLog("workPersons");
         }
 
-        if(workSubjectAreas!=null)
-        {
+        if(workSubjectAreas!=null){
             Log.info("verifying WorkSubjectAreas...total count "+workSubjectAreas.length);
             boolean subAreaFound = false;
             List<Map<String,Object>> workSubjectAreasDB =  getWorkSubjectAreasByWorkId(workId);
@@ -445,15 +463,27 @@ public class workCore {
             }
         }
 
-        if(workPackages!=null)
+        if(workPackages!=null){
+            //implemented by Nishant @ 19 Oct 2021
+            if(workPackages.getHasWorkComponents()!=null)
+            {
+                int hasWorkComponents_DB = apiWorksSearchSteps.getNumberOfWorksByIsInPackage(workId);
+                Assert.assertEquals("hasWorkComponent count mismatch", workPackages.getHasWorkComponents().length,hasWorkComponents_DB);
+                printLog(" has work component count");
+            }
+
+            if(workPackages.getIsInWorkPackages()!=null)
+            {
+                int isInPackages_DB = apiWorksSearchSteps.getNumberOfWorksByHasWorkComponents(workId);
+                Assert.assertEquals("isInWorkPackages count mismatch", workPackages.getIsInWorkPackages().length,isInPackages_DB);
+                printLog("IsInWorkPackages count");
+            }
+        }
+
+        if(workHierarchies!=null)
         {
-
-            Log.info("verifying workPackages...total count "+workPackages.getIsInWorkPackages());
-            boolean subAreaFound = false;
-           // List<Map<String,Object>> workSubjectAreasDB =  getWorkSubjectAreasByWorkId(workId);
-
-         //   Assert.assertEquals(DataQualityContext.breadcrumbMessage+" workSubjectAreas count", workSubjectAreas.length,workSubjectAreasDB.size());
-
+            //need to write validation rule
+            Assert.assertFalse(true);
         }
 
         //The data is stored in table semarchy_eph_mdm.gd_work_relationship.  //workRelationships - EPR-11119M

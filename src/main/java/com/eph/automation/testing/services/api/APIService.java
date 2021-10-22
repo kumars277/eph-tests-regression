@@ -493,6 +493,7 @@ public class APIService {
                     .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                     .when()
                     .get("/product-hub-works/works?_alt=1&queryType=hasWorkComponents&queryValue=" + workID);
+    //  response.prettyPrint();
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());

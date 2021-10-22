@@ -73,7 +73,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-    ids.clear();ids.add("EPR-W-12TX7K");Log.info("hard coded work ids are : " + ids);
+    //ids.clear();ids.add("EPR-W-12TB9G");Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -93,7 +93,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-    //"ids.clear();    ids.add("EPR-W-102V8J");  Log.info("hard coded work ids are : " + ids);"
+  //  ids.clear();    ids.add("EPR-W-102NR7");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -1162,40 +1162,32 @@ public class ApiWorksSearchSteps {
 
 
   @When("^verify pagination duplicate ids retried for (.*) with (.*)$")
-  public void verifyPaginationIsInWorkPackage(String workPackageId, String scroll)
-          throws AzureOauthTokenFetchingException {
+  public void verifyPaginationIsInWorkPackage(String workPackageId, String scroll)  throws AzureOauthTokenFetchingException {
 
     WorksMatchedApiObject returnedWorks = null;
     Log.info("searching for workPackage..." + workPackageId);
 
-    int fromCntr = 0;
-    int sizeCntr = 20;
-    String scrollId = "";
+    int fromCntr = 0;    int sizeCntr = 20;    String scrollId = "";
     ArrayList<String> idsToVerify = new ArrayList<>();
 
     do{
-
       //call this API first
       if (fromCntr == 0) {
         returnedWorks =
-                APIService.searchForWorkByIsInPackage(
-                        workPackageId + from + fromCntr + size + sizeCntr + "&scroll=" + scroll);
+                APIService.searchForWorkByIsInPackage(workPackageId + from + fromCntr + size + sizeCntr + "&scroll=" + scroll);
         scrollId = returnedWorks.getWorkEdition(); //get scroll id from response
       }
-
       else //call scroll API for rest of iterations
       {
         returnedWorks = APIService.searchForWorkByScrollId(scrollId+"?scroll=" + scroll);
       }
-
 
       Log.info("Total work found - " + returnedWorks.getTotalMatchCount());
       Log.info("scanning workID from " + (fromCntr) + " to " + (fromCntr+sizeCntr) + " records...");
 
       returnedWorks.verifyWorksAreReturned();
       WorkApiObject[] items = returnedWorks.getItems().clone();
-      Log.info("previous ids...");
-      Log.info(idsToVerify.toString());
+      Log.info("previous ids...");      Log.info(idsToVerify.toString());
 
       for (int i = 0; i < items.length; i++) {
         Assert.assertFalse("duplicate found at index "+i+" "+items[i].getId().toString(),
@@ -1205,7 +1197,6 @@ public class ApiWorksSearchSteps {
       fromCntr += sizeCntr;
     }
     while (fromCntr < returnedWorks.getTotalMatchCount());
-
   }
 
 
@@ -1290,7 +1281,7 @@ public class ApiWorksSearchSteps {
   }
 
 
-  private static int getNumberOfWorksByHasWorkComponents(String WorkId) {
+  public static int getNumberOfWorksByHasWorkComponents(String WorkId) {
     sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_HASWORKCOMPONENTS, WorkId);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -1299,7 +1290,7 @@ public class ApiWorksSearchSteps {
   }
 
 
-  private static int getNumberOfWorksByIsInPackage(String WorkId) {
+  public static int getNumberOfWorksByIsInPackage(String WorkId) {
     sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_ISINPACKAGE, WorkId);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();

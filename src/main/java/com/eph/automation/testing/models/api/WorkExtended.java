@@ -196,6 +196,7 @@ public class WorkExtended {
       if (primarySiteSupportLevel == null) primarySiteSupportLevel = "";
       if (issueProdTypeCode == null) issueProdTypeCode = "";
       if (catalogueVolumesQty == null) catalogueVolumesQty = "";
+      if(imageFileRef==null)imageFileRef="";
 
       List<Integer> ignore = new ArrayList<>();
 
