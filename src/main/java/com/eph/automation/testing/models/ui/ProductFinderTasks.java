@@ -87,9 +87,6 @@ public class ProductFinderTasks {
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
         Log.info("\nhome page loaded...");
-
-
-
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {

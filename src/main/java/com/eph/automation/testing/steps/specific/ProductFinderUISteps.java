@@ -118,7 +118,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-        tasks.waitUntilPageLoad();
+       // tasks.waitUntilPageLoad();
     }
 
     @Then("^Search works by (.*)$")
