@@ -856,23 +856,28 @@ public class PromisETLCountChecksSQL {
             "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmclscodt_current cod on cls.cls_cod = cod.cls_cod\n" +
             "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf on cls.pub_idt = inf.pub_idt)";
 
-    public static String GET_Promis_Pricing_TransformMapping = "select count(*) as Total_Count from(select prc.pub_idt\n" +
-            ", inf.epr_product_id as epr_id\n" +
-            ", inf.product_type\n" +
-            ", cast(prc.pub_idt as varchar)||cast(prc.pub_vol_idt as varchar)||std_cur_cod||prc.prc_typ||prc.prc_geo as u_key\n" +
-            ", case when std_cur_cod = 'YPY' then 'JPY' when std_cur_cod = 'STG' then 'GBP' else std_cur_cod end as currency\n" +
-            ", std_prc as price \n" +
-            ", date(prc_dat) as start_date\n" +
-            ", date(prc_dat + interval '1' year - interval '1' day) as end_date\n" +
-            ", map.region_name as region\n" +
-            ", 1 as quantity\n" +
-            ", map.price_cust_cat_name as customer_category\n" +
-            ", prc.inbound_ts\n" +
-            "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpricest_current prc\n" +
-            "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf on prc.pub_idt = inf.pub_idt\n" +
-            "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_price_mapping map on prc.prc_typ = map.promis_id\n" +
-            "where date(prc_dat) >= date('2010-01-01')\n" +
-            "and inf.epr_product_id is not null)";
+    public static String GET_Promis_Pricing_TransformMapping =
+            "select count(*) as Total_Count from(\n" +
+                    "SELECT\n" +
+                    "  prc.pub_idt\n" +
+                    ", inf.epr_product_id epr_id\n" +
+                    ", inf.product_type\n" +
+                    ", \"concat\"(\"concat\"(\"concat\"(\"concat\"(CAST(prc.pub_idt AS varchar), CAST(prc.pub_vol_idt AS varchar)), std_cur_cod), prc.prc_typ), prc.prc_geo) u_key\n" +
+                    ", (CASE WHEN (std_cur_cod = 'YPY') THEN 'JPY' WHEN (std_cur_cod = 'STG') THEN 'GBP' ELSE std_cur_cod END) currency\n" +
+                    ", std_prc price\n" +
+                    ", \"date\"(prc_dat) start_date\n" +
+                    ", \"date\"(((prc_dat + INTERVAL  '1' YEAR) - INTERVAL  '1' DAY)) end_date\n" +
+                    ", map.region_name region\n" +
+                    ", 1 quantity\n" +
+                    ", map.price_cust_cat_name customer_category\n" +
+                    ", prc.inbound_ts\n" +
+                    "FROM\n" +
+                    "  (("+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpricest_current prc\n" +
+                    "INNER JOIN "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf ON (prc.pub_idt = inf.pub_idt))\n" +
+                    "INNER JOIN "+GetPRMDLDBUser.getPRMDataBase()+".promis_price_mapping map ON (prc.prc_typ = map.promis_id))\n" +
+                    "WHERE (((\"date\"(prc_dat) >= \"date\"('2010-01-01')) AND \n" +
+                    "(\"date\"(((prc_dat + INTERVAL  '1' YEAR) - INTERVAL  '1' DAY)) >= current_date)) AND (inf.epr_product_id IS NOT NULL))\n" +
+                    ")\n";
 
     public static String GET_Promis_Person_Roles_TransformMapping = "select count(*) as Total_Count from (select aut.pub_idt\n" +
             ", inf.epr_id\n" +

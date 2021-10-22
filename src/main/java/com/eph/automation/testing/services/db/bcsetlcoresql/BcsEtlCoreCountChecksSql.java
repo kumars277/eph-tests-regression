@@ -501,33 +501,78 @@ public class BcsEtlCoreCountChecksSql {
                     "WHERE (A.sourceref IS NOT NULL)\n";
 
     public static final String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
-     "SELECT count(*) as Source_Count FROM (\n" +
-            "   SELECT DISTINCT\n"+
-            "     NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), '') u_key\n"+
-            "   , NULLIF(parent.workmasterprojectno, '') parentref\n"+
-            "   , NULLIF(child.workmasterprojectno, '') childref\n"+
-            "   , NULLIF(code.ephcode, '') relationtyperef\n"+
-            "   , date_parse(NULLIF(max(relations.metamodifiedon), ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
-            "   , 'N' dq_err\n"+
-            "   FROM\n"+
-            "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n"+
-            "   GROUP BY NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), ''), NULLIF(parent.workmasterprojectno, ''), NULLIF(child.workmasterprojectno, ''), NULLIF(code.ephcode, '')\n" +
-            "UNION ALL    SELECT DISTINCT\n"+
-            "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
-            "   , content.seriesid parentref\n"+
-            "   , content.sourceref childref\n"+
-            "   , 'CON' relationtyperef\n"+
-            "   , date_parse(NULLIF(content.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
-            "   , 'N' dq_err\n"+
-            "   FROM\n"+
-            "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
-            ")  A\n"+
-            "WHERE (((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL)) AND (A.parentref <> A.childref))";
-
+            "select count(*) as Source_Count FROM (\n" +
+                    "SELECT *\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   WITH\n" +
+                    "     works AS (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        c.sourceref\n" +
+                    "      , c.editionno\n" +
+                    "      FROM\n" +
+                    "        ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content c\n" +
+                    "      INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily f ON ((c.sourceref = f.sourceref) AND (c.sourceref = f.workmasterprojectno)))\n" +
+                    "   ) \n" +
+                    ",    diffed_edition AS (\n" +
+                    "      SELECT\n" +
+                    "        w1.sourceref work_1_sourceref\n" +
+                    "      , w1.editionno work_1_edition\n" +
+                    "      , w2.sourceref work_2_sourceref\n" +
+                    "      , w2.editionno work_2_edition\n" +
+                    "      , (w1.editionno - w2.editionno) editiondiff\n" +
+                    "      , \"abs\"((w1.editionno - w2.editionno)) abs_diff\n" +
+                    "      , f.metamodifiedon\n" +
+                    "      FROM\n" +
+                    "        ((works w1\n" +
+                    "      INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_fullversionfamily f ON (w1.sourceref = f.sourceref))\n" +
+                    "      INNER JOIN works w2 ON (f.projectno = w2.sourceref))\n" +
+                    "      WHERE (f.sourceref <> f.projectno)\n" +
+                    "   ) \n" +
+                    ",    min_diff AS (\n" +
+                    "      SELECT\n" +
+                    "        work_1_sourceref\n" +
+                    "      , \"min\"(abs_diff) min_diff\n" +
+                    "      FROM\n" +
+                    "        diffed_edition\n" +
+                    "      GROUP BY work_1_sourceref\n" +
+                    "   ) \n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(\"concat\"(\"concat\"(CAST(parent.workmasterprojectno AS varchar), \"split_part\"(relations.\"relationtype\", ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), '') \"u_key\"\n" +
+                    "   , NULLIF(parent.workmasterprojectno, '') \"parentref\"\n" +
+                    "   , NULLIF(child.workmasterprojectno, '') \"childref\"\n" +
+                    "   , NULLIF(code.\"ephcode\", '') \"relationtyperef\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"max\"(relations.\"metamodifiedon\"), ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     ((("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (\"split_part\"(relations.\"relationtype\", ' | ', 1) = code.\"ppmcode\"))\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n" +
+                    "   GROUP BY NULLIF(\"concat\"(\"concat\"(CAST(parent.workmasterprojectno AS varchar), \"split_part\"(relations.\"relationtype\", ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), ''), NULLIF(parent.workmasterprojectno, ''), NULLIF(child.workmasterprojectno, ''), NULLIF(code.\"ephcode\", '')\n" +
+                    "UNION ALL    SELECT DISTINCT\n" +
+                    "     \"concat\"(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
+                    "   , content.seriesid parentref\n" +
+                    "   , content.sourceref childref\n" +
+                    "   , 'CON' relationtyperef\n" +
+                    "   , \"date_parse\"(NULLIF(content.\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_1_sourceref AS varchar), 'IRB'), CAST(d.work_2_sourceref AS varchar)), '') \"u_key\"\n" +
+                    "   , d.work_1_sourceref parentref\n" +
+                    "   , d.work_2_sourceref childref\n" +
+                    "   , 'EDI' relationtyperef\n" +
+                    "   , \"date_parse\"(NULLIF(d.\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     (diffed_edition d\n" +
+                    "   INNER JOIN min_diff m ON (((d.work_1_sourceref = m.work_1_sourceref) AND (d.abs_diff = m.min_diff)) AND (editiondiff > 0)))\n" +
+                    ")  A\n" +
+                    "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) AND (\"A\".\"parentref\" <> \"A\".\"childref\"))\n" +
+                    ")\n";
 
     public static final String GET_WRK_PERSON_INBOUND_CURRENT_COUNT =
             "SELECT count(*) as Source_Count\n" +
