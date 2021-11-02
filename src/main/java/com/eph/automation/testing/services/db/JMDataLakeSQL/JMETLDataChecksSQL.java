@@ -660,7 +660,7 @@ public class JMETLDataChecksSQL {
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'TR'\n" +
             "and    w0.notified_date is not null) where jm_source_reference in ('%s')\n" +
-            "order by jm_source_reference desc,scenario_name desc, work_title desc, f_oa_type desc, eph_work_id desc, pmc_old desc, planned_termination_date desc";
+            "order by jm_source_reference, work_title, scenario_name,pmc_old desc";
 
     public static String GET_WORK_IDENTIFIER_DQ_QUERY ="select * from (select cs.chronicle_scenario_name as                                      scenario_name,\n" +
             "       wc.chronicle_scenario_code as                                      scenario_code,\n" +
@@ -2515,7 +2515,7 @@ public class JMETLDataChecksSQL {
             "order by w.elsevier_journal_number) where external_reference in ('%s')";
 
     public static String GET_ACCOUNTABLE_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_accountable_product_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, work_title desc";
-    public static String GET_WWORK_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_wwork_dq where jm_source_reference in ('%s') order by jm_source_reference desc,scenario_name desc, work_title desc, f_oa_type desc, eph_work_id desc, pmc_old desc, planned_termination_date desc";
+    public static String GET_WWORK_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_wwork_dq where jm_source_reference in ('%s') order by jm_source_reference, work_title, scenario_name,pmc_old desc";
     public static String GET_WORK_IDENTIFIER_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_identifier_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, scenario_name desc, effective_start_date desc";
     public static String GET_WORK_PERSON_ROLE_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_person_role_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc";
     public static String GET_WORK_SUBJECT_AREA_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_subject_area_dq_v where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id";
