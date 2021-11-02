@@ -49,6 +49,7 @@ public class TasksNew {
         click("ID", ProductFinderConstants.nextButton);
         Thread.sleep(1000);
         waitUntilPageLoad();
+        Log.info("signed in to "+url);
       } catch (Exception e) {
         Log.error(e.getMessage());
       }

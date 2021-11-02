@@ -86,6 +86,7 @@ public class ProductFinderTasks {
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
+        Log.info(HomePageAddress);
         Log.info("\nhome page loaded...");
     }
 
