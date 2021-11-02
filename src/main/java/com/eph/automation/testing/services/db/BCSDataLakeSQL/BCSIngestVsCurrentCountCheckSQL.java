@@ -290,14 +290,18 @@ public class BCSIngestVsCurrentCountCheckSQL {
                    "CROSS JOIN UNNEST(authoraddress) z (ua)))";
 
     public static String GET_BCS_ORIGINATORNOTES_SERIES_SOURCE_COUNT =
-            "select count(*) as Source_Count from (select distinct  uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon,\n" +
+            "select count(*) as Source_Count" +
+                    " from " +
+                    "(select distinct  uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon,\n" +
                     "uo.contentseriesid sourceref, uo.businesspartnerid businesspartnerid, ua.notes notes,\n" +
-                    "ua.companygroup companygroup from  ((select df.metainfdeleted ,df.metainfmodifiedon ,df.contentseriesid, co.businesspartnerid ,\n" +
+                    "ua.companygroup companygroup from ((select df.metainfdeleted ,df.metainfmodifiedon ,df.contentseriesid, co.businesspartnerid ,\n" +
                     "co.authornotes from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df  CROSS JOIN UNNEST(contactsoriginators) x (co)))uo " +
                     "CROSS JOIN UNNEST(authornotes) z (ua)))";
 
     public static String GET_BCS_ORIGINATOR_SERIES_SOURCE_COUNT =
-            "select count(*) as Source_Count from(select\n" +
+            "select count(*) as Source_Count" +
+                    " from" +
+                    "(select\n" +
                     "\"df\".\"metainfdeleted\" \"metadeleted\", \"df\".\"metainfmodifiedon\" \"metamodifiedon\"\n" +
                     ", \"df\".\"contentseriesid\" \"sourceref\", \"co\".\"firstname\"\t\"firstname\", \"co\".\"businesspartnerid\"\t\"businesspartnerid\", \"co\".\"lastname\"\t\"lastname\", \"co\".\"sequence\"\t\"sequence\"\n" +
                     ", \"co\".\"prefix\"\t\"prefix\", \"co\".\"copyrightholdertype\"\t\"copyrightholdertype\"\n" +

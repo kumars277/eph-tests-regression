@@ -46,26 +46,12 @@ import javax.net.ssl.SSLHandshakeException;
 public class ProductFinderUISteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
-
-    /**
-     * Created by GVLAYKOV
-     * update by Nishant @ 15 May 2020
-     */
-
     private ProductFinderTasks productFinderTasks;
     private TasksNew tasks;
-
     private String sql;
 
-
     private static List<String> productIdList;
-  //
     private static List<String> workIdList = new ArrayList<>();
-
-
-
-
-
     private static List<String> workTypeCode;
 
     private static String[] Book_Types = {"Book Set","Books Series","Major Ref work", "Non-Elsevier Book", "Other Book", "Reference Book", "Serial", "Text Book"};
@@ -97,7 +83,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-       // ids.clear(); ids.add("EPR-W-11R1CW");      Log.info("hard coded work ids are : " + ids);
+       // ids.clear(); ids.add("EPR-W-11FCRH");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -123,7 +109,7 @@ public class ProductFinderUISteps {
         DataQualityContext.uiUnderTest = "JF";
         productFinderTasks.openHomePage();
 
-        tasks.waitUntilPageLoad();
+      //  tasks.waitUntilPageLoad();
 
     }
 
@@ -132,7 +118,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-        tasks.waitUntilPageLoad();
+       // tasks.waitUntilPageLoad();
     }
 
     @Then("^Search works by (.*)$")
@@ -183,6 +169,7 @@ public class ProductFinderUISteps {
 
     @And("^Verify user is forwarded to the searched work page$")
     public void verifyUserIsForwardedToSearchedWorkPage() {
+
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
     }
 
@@ -914,6 +901,7 @@ public class ProductFinderUISteps {
         validate_workOverview_info();
         validateIdentifiers();
         validateSubjectArea();
+
     }
 
     private void verifyWorkFinancialInformation() {//created by Nishant @ 17 Jun 2020
@@ -1262,14 +1250,24 @@ public class ProductFinderUISteps {
     private String lov_personRole(String roleCode) {//created by Nishant @ 15 Jul 2020
         String value_Role = "";
         switch (roleCode) {
-            case "PO":value_Role = "Product Owner";break;
-            case "AU":value_Role = "Author";break;
-            case "ED":value_Role = "Editor";break;
-            case "PD":value_Role = "Publishing Director";break;
-            case "PU":value_Role = "Publisher";break;
-            case "AE":value_Role = "Acquisition Editor";break;
-            case "BC":value_Role = "Business Controller";break;
-            case "SVP":value_Role = "Senior Vice President";break;
+            case "PAECP" : value_Role = "Publishing Assistant ECP" ; break;
+            case "PCS"   : value_Role = "Publishing Content Specialist" ; break;
+            case "PO"    : value_Role = "Product Owner" ; break;
+            case "AU"    : value_Role = "Author" ; break;
+            case "ED"    : value_Role = "Editor" ; break;
+            case "PD"    : value_Role = "Publishing Director" ; break;
+            case "PU"    : value_Role = "Publisher" ; break;
+            case "AE"    : value_Role = "Acquisition Editor" ; break;
+            case "BC"    : value_Role = "Business Controller" ; break;
+            case "SVP"   : value_Role = "Senior Vice President" ; break;
+            case "CO"    : value_Role = "Contributor" ; break;
+            case "EC"    : value_Role = "Editor in Chief" ; break;
+            case "SERE"  : value_Role = "Serial Editor" ; break;
+            case "SESE"  : value_Role = "Series Editor" ; break;
+            case "SESV"  : value_Role = "Series Volume Editor" ; break;
+            case "SVE"   : value_Role = "Serial Volume Editor" ; break;
+            case "PSM"   : value_Role = "Publishing Support Manager" ; break;
+            case "MCM"   : value_Role = "Marketing Communications Manager" ; break;
             default: throw new IllegalArgumentException(roleCode);
         }
         return value_Role;
@@ -1339,11 +1337,13 @@ public class ProductFinderUISteps {
         Log.info("verified...Accountable Product Segment");
     }
 
-    private void validateSubjectArea() {//created by Nishant @ 15 Jun 2020
+    private void validateSubjectArea() {
+        //created by Nishant @ 15 Jun 2020
+        //need to be updated when there are CK specialities  EPR-W-102NR7
         Log.info("verifing......Subject Area");
         List<Map<String, Object>> subArea = getSubjectArea();
 /*
-//below logic fails when there is no parent assigned to subject area and primary and secondary subject area become same.
+    //below logic fails when there is no parent assigned to subject area and primary and secondary subject area become same.
         HashSet hs_uniqueSubParents = new HashSet();//finding unique parents
         for (Map<String, Object> stringObjectMap : subArea) {hs_uniqueSubParents.add(stringObjectMap.get("f_parent_subject_area"));}
         Assert.assertEquals(productFinderTasks.prop_subArea.size(), hs_uniqueSubParents.size());
@@ -1364,17 +1364,32 @@ public class ProductFinderUISteps {
             sql = "select l_description from semarchy_eph_mdm.gd_x_lov_subject_area_type where code ='" + stringObjectMap.get("f_type") + "'";
             List<Map<String, Object>> subAreaType = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-            //get secondary sub area
-            String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + stringObjectMap.get("name");
 
             boolean subAreaMatched = false;
+
+            //specialties validation by Nishant @ 12 Oct 2021
+            if(stringObjectMap.get("f_type").toString().equalsIgnoreCase("CK"))
+            {
+                if (productFinderTasks.prop_specialties.getProperty(ValuePrimarySubArea).contains(stringObjectMap.get("name").toString())) {
+                    subAreaMatched = true;
+                }
+                assertTrue(subAreaMatched);
+                Log.info("verified specialties..." + stringObjectMap.get("name").toString());
+            }
+           else
+               { //get secondary sub area
+            String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + stringObjectMap.get("name");
+
             if (productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea).contains(secondaryArea)) {
                 subAreaMatched = true;
             }
             assertTrue(subAreaMatched);
             Log.info("verified..." + secondaryArea);
+            }
         }
     }
+
+
 
     private List<Map<String, Object>> getSubjectArea() {//created by Nishant @ 16 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_SUBJECT_AREA, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
@@ -1445,7 +1460,7 @@ public class ProductFinderUISteps {
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMG"), PMCDetail[1]);
         Log.info("verified...PMG");
 
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMC"), PMCDetail[0]);
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMC").trim(), PMCDetail[0].trim());
         Log.info("verified...PMC");
 
     }
@@ -1498,7 +1513,11 @@ public class ProductFinderUISteps {
         }
 
         if (productFinderTasks.prop_info.containsKey("Edition Number")) {
-            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+
+                String editionDB = DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER();
+                if(editionDB==null) editionDB="";
+
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), editionDB);
             Log.info("verified...Edition Number");
         }
 

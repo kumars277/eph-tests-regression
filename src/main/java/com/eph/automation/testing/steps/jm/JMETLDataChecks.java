@@ -2578,6 +2578,7 @@ public class JMETLDataChecks {
     public void compareGdandCoreCounts(String srctable, String trgtTable){
         Log.info("The count for All core view "+srctable+" => " + DLAllCoreViewCount + " and in "+trgtTable+"  => " + gdCount);
         Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable,DLAllCoreViewCount, gdCount);
+
     }
 
 

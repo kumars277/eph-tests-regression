@@ -54,7 +54,7 @@ Feature: Product Finder Selenium tests
       |Book     |
       |Journal  |
 
-  @UI @PFRegressionSuite @PFDMC @apiDebug
+  @UI @PFRegressionSuite @PFDMC @PFDebug
   Scenario Outline: Search the Product Finder and verify all 3 tabs
     Given get 1 random work id from DB
     And We get the work search data from EPH GD
@@ -68,11 +68,11 @@ Feature: Product Finder Selenium tests
     |iterator|
     |1|
     |2|
-    |3|
-    |4|
-    |5|
+ #   |3|
+ #   |4|
+ #   |5|
 
-  @UI @PFRegressionSuite @PFDMC @JFUI @apiDebug
+  @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
   Scenario Outline: Search the Journal Finder and verify all 5 tabs
     Given We get 1 random journal ids for search
     And   We get the work search data from EPH GD
@@ -86,11 +86,11 @@ Examples:
     |iterator|
     |1|
     |2|
-    |3|
-    |4|
-    |5|
+  #  |3|
+  #  |4|
+  #  |5|
 
-  @UI @PFRegressionSuite @JFUI @apiDebug
+  @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by person
     Given We get 5 random search ids for person roles
     And get person data from EPH DB
@@ -103,7 +103,7 @@ Examples:
    #   |personName           |
    #   |personId             |
 
-  @UI @PFRegressionSuite @JFUI @apiDebug
+  @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by PMC
     Given We get 5 random journal ids for search
     And   We get the work search data from EPH GD

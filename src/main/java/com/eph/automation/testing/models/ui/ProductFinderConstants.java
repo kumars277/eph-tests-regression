@@ -51,15 +51,28 @@ public class ProductFinderConstants {
     //added by Nishant @ 23Oct 2020
     public static String linkTab="//*[@id='mat-tab-label-0-4']/div|//*[boolean(number(substring-before(substring-after(@id, \"mat-tab-label-\"), \"-4\")))]";
 
-                //String section = "//div[@class='section']"; //parent of - Editorial Information
-               // String section = "//div[@class='section']"; //parent Information
-    public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
-    public static String DetailInformation1 = section + "/div[@class='section-detail'][1]";
-    public static String DetailInformation2 = section + "/div[@class='section-detail'][2]";
-    public static String sectionDetail = section + "/div[@class='section-detail']";
+    //String section = "//div[@class='section']"; //parent of - Editorial Information
+    //public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
 
-    public static String section_identifier = "//div[@class='section identifiers']|//eph-pf-identifier-list"; //parent of - identifier
-    public static String DetailIdentifiers = section_identifier + "//div[@class='section-detail']";
+    public static String section = "//div[@class='section']"; //parent Information
+    public static String sectionDetailDiv = "/div[@class='section-detail']";
+    public static String DetailInformation1 = section + sectionDetailDiv+"[1]";
+    public static String DetailInformation2 = section + sectionDetailDiv+"[2]";
+
+    public static String sectionDetail = section + sectionDetailDiv;
+
+    public static String section_identifier = "//div[@class='section identifiers']";
+    public static String subAreaRow = section_identifier+sectionDetailDiv;
+    public static String identifierRow = section_identifier+"/eph-pf-identifier-list"+sectionDetailDiv;
+    public static String specialtiesRow = section_identifier+"/eph-pf-specialties"+sectionDetailDiv;
+
+
+    public static String sectionDetailJF = section+"[1]"+sectionDetailDiv;
+    public static String subAreaRowJF = section+"[2]"+"/div[@class='section-detail subject-areas']";
+    public static String identifierRowJF = section+"[2]"+"/eph-pf-identifier-list"+sectionDetailDiv;
+    public static String specialtiesRowJF = section+"[2]"+"/eph-pf-specialties"+"//ul[@id='specialties']";
+
+    public static String DetailIdentifiers = section_identifier + sectionDetailDiv;
     //table[@class='mat-table']/parent::div[@class='section-detail']/following-sibling::h2
 
     public static String searchDropdownPerson="//option[@value='personName']|//option[@value='personFullNameCurrent']";

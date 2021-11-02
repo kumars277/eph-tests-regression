@@ -7,6 +7,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.services.security.DecryptionService;
 import net.minidev.json.JSONObject;
@@ -22,7 +23,7 @@ public class SecretsManagerHandler {
 
         String secretName = "";
         String DBconnection = "";
-
+        Log.info("Test Environment... "+TestContext.getValues().environment);
         switch (TestContext.getValues().environment) {
             case "SIT":
                 secretName=getSITSecretName(connectionURL);

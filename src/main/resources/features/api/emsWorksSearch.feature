@@ -145,19 +145,20 @@ Feature: Customer Search API: Works
     And     We get the work search data from EPH GD
     Then    the work details are retrieved by search with PMG code and compared
 
-  @searchAPI @workSearchAPI
+  @searchAPI @workSearchAPI @CkAPI
   Scenario: search work by hasWorkComponents
     Given   We get 1 random search ids for works HAS_WORK_COMPONENTS
     And     We get the work search data from EPH GD
     Then    work details are retrieved by hasWorkComponent and compared
 
-  @searchAPI @workSearchAPI
+  @searchAPI @workSearchAPI @CkAPI
   Scenario: search work by isInWorkPackages
     Given   We get 1 random search ids for works IS_IN_WORK_PACKAGES
     And     We get the work search data from EPH GD
     Then    work details are retrieved by isInPackage and compared
 
-  @searchAPI @workSearchAPI
+
+  @searchAPI @workSearchAPI @CkAPI
   Scenario Outline: Search works by excludeNonElsevier
     Given   verify works retrieved by search <option> for excludeNonElsevier
     Examples:
@@ -167,6 +168,22 @@ Feature: Customer Search API: Works
       | blood                              |
       | human                              |
       | medicine                           |
+
+
+  @SearchAPI
+  Scenario Outline: verify search API pagination - work search
+  Given verify pagination duplicate ids retried by search <option>
+  Examples:
+  |option|
+  |physics      |
+
+
+  @SearchAPI
+  Scenario Outline: verify search API pagination IsInworkpackage
+    Given verify pagination duplicate ids retried for <workPackage> with <scroll>
+    Examples:
+      |workPackage        | scroll  |
+      |EPR-W-12TB96       | 30s     |
 
 
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}

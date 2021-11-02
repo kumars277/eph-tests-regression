@@ -43,44 +43,44 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String getInitialIngestDataFor_stg_current_content=
             "select* from(SELECT\n" +
-                    "  df.metainfdeleted\t\"metadeleted\"\n" +
-                    ", df.metainfmodifiedon\t\"metamodifiedon\"\n" +
-                    ", df.productprojectno\t\"sourceref\"\n" +
-                    ", df.contentoriginimpid\t\"originimpid\"\n" +
-                    ", df.contentsubgroup\t\"subgroup\"\n" +
-                    ", df.contentseries\t\"series\"\n" +
-                    ", df.contentcopyrightyear\t\"copyrightyear\"\n" +
-                    ", df.contenttitle\t\"title\"\n" +
-                    ", df.contentworktitle\t\"worktitle\"\n" +
-                    ", df.contentisset\t\"isset\"\n" +
-                    "--, df.contentimpressionid\t\"impressionid\"\n" +
-                    ", df.contentdoistatus\t\"doistatus\"\n" +
-                    ", df.contentimprint\t\"imprint\"\n" +
-                    ", df.contentdivision\t\"division\"\n" +
-                    ", df.contentlanguage3\t\"language3\"\n" +
-                    ", df.contentregstatus\t\"regstatus\"\n" +
-                    ", df.contentapprovedondate\t\"approvedondate\"\n" +
-                    ", df.contentlanguage2\t\"language2\"\n" +
-                    ", df.contentdoi\t\"doi\"\n" +
-                    ", df.contentvolumeno\t\"volumeno\"\n" +
-                    ", df.contenteditionid\t\"editionid\"\n" +
-                    ", df.contentsynctemplate\t\"synctemplate\"\n" +
-                    ", df.contentvolumename\t\"volumename\"\n" +
-                    ", df.contentseriesissn\t\"seriesissn\"\n" +
-                    ", df.contentseriesid\t\"seriesid\"\n" +
-                    ", df.contentownership\t\"ownership\"\n" +
-                    ", df.contentfirstapproval\t\"firstapproval\"\n" +
-                    ", df.contentcompanygroup\t\"companygroup\"\n" +
-                    ", df.contentshorttitle\t\"shorttitle\"\n" +
-                    ", df.contenteditionno\t\"editionno\"\n" +
-                    ", df.contentwmyn\t\"work_master_flag\"\n" +
-                    ", df.contentlanguage\t\"language\"\n" +
-                    ", df.contentpiidack\t\"piidack\"\n" +
-                    ", df.contentpublisher\t\"publisher\"\n" +
-                    ", df.contenttitleid\t\"titleid\"\n" +
-                    ", df.contentsubtitle\t\"subtitle\"\n" +
-                    ", df.contentseriescode\t\"seriescode\"\n" +
-                    ", df.contentobjtype\t\"objecttype\"\n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", df.contentoriginimpid originimpid\n" +
+                    ", df.contentsubgroup subgroup\n" +
+                    ", df.contentseries series\n" +
+                    ", df.contentcopyrightyear copyrightyear\n" +
+                    ", df.contenttitle title\n" +
+                    ", df.contentworktitle worktitle\n" +
+                    ", df.contentisset isset\n" +
+                    "--, df.contentimpressionid impressionid\n" +
+                    ", df.contentdoistatus doistatus\n" +
+                    ", df.contentimprint imprint\n" +
+                    ", df.contentdivision division\n" +
+                    ", df.contentlanguage3 language3\n" +
+                    ", df.contentregstatus regstatus\n" +
+                    ", df.contentapprovedondate approvedondate\n" +
+                    ", df.contentlanguage2 language2\n" +
+                    ", df.contentdoi doi\n" +
+                    ", df.contentvolumeno volumeno\n" +
+                    ", df.contenteditionid editionid\n" +
+                    ", df.contentsynctemplate synctemplate\n" +
+                    ", df.contentvolumename volumename\n" +
+                    ", df.contentseriesissn seriesissn\n" +
+                    ", df.contentseriesid seriesid\n" +
+                    ", df.contentownership ownership\n" +
+                    ", df.contentfirstapproval firstapproval\n" +
+                    ", df.contentcompanygroup companygroup\n" +
+                    ", df.contentshorttitle shorttitle\n" +
+                    ", df.contenteditionno editionno\n" +
+                    ", df.contentwmyn work_master_flag\n" +
+                    ", df.contentlanguage language\n" +
+                    ", df.contentpiidack piidack\n" +
+                    ", df.contentpublisher publisher\n" +
+                    ", df.contenttitleid titleid\n" +
+                    ", df.contentsubtitle subtitle\n" +
+                    ", df.contentseriescode seriescode\n" +
+                    ", df.contentobjtype objecttype\n" +
                     "FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df) \n" +
                     "  where sourceref in ('%s') order by sourceref desc";
 
@@ -96,7 +96,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_extobject=
             "select sourceref from(select productprojectno sourceref, cj.object, cj.name\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
-                    "CROSS JOIN UNNEST(\"productexternalobjects\") x (cj)))\n" +
+                    "CROSS JOIN UNNEST(productexternalobjects) x (cj)))\n" +
                     "where name is not null and name !='' and name!='0'\n" +
                     "order by rand() limit %s";
 
@@ -250,18 +250,18 @@ public class BCSDataLakeDataCheckSQL {
                     "  df.metainfdeleted metadeleted\n" +
                     ", df.metainfmodifiedon metamodifiedon\n" +
                     ", df.productprojectno sourceref\n" +
-                    ", co.prefix\tprefix\n" +
-                    ", co.sequence\tsequence\n" +
-                    ", co.businesspartnerid\tbusinesspartnerid\n" +
-                    ", co.originatortitle\toriginatorid\n" +
-                    ", co.isperson\tisperson\n" +
-                    ", co.locationid\tlocationid\n" +
-                    ", co.copyrightholdertype\tcopyrightholdertype\n" +
-                    ", co.institution\tinstitution\n" +
-                    ", co.firstname\tfirstname\n" +
-                    ", co.department\tdepartment\n" +
-                    ", co.lastname\tlastname\n" +
-                    ", co.searchterm\tsearchterm\n" +
+                    ", co.prefix prefix\n" +
+                    ", co.sequence sequence\n" +
+                    ", co.businesspartnerid businesspartnerid\n" +
+                    ", co.originatortitle originatorid\n" +
+                    ", co.isperson isperson\n" +
+                    ", co.locationid locationid\n" +
+                    ", co.copyrightholdertype copyrightholdertype\n" +
+                    ", co.institution institution\n" +
+                    ", co.firstname firstname\n" +
+                    ", co.department department\n" +
+                    ", co.lastname lastname\n" +
+                    ", co.searchterm searchterm\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df\n" +
                     "CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
                     "where sourceref in ('%s')\n" +
@@ -314,43 +314,43 @@ public class BCSDataLakeDataCheckSQL {
                     "  df.metainfdeleted metadeleted\n" +
                     ", df.metainfmodifiedon metamodifiedon\n" +
                     ", df.productprojectno sourceref\n" +
-                    ", df.productnoofvolumes\tnoofvolumes\n" +
-                    ", df.productrefkey\trefkey\n" +
-                    ", df.productexternaleditionid\texternaleditionid\n" +
-                    ", df.productisbn13\tisbn13\n" +
-                    ", df.productversiontype\tversiontype\n" +
-                    ", df.productpodsuitable\tpodsuitable\n" +
-                    ", df.productfirstrelease\tfirstrelease\n" +
-                    ", df.productorigtitle\torigtitle\n" +
-                    ", df.productinventoryukavailablestock\tukavailablestock\n" +
-                    ", df.productinventorygertotalstock\tgertotalstock\n" +
-                    ", df.productinventoryfraavailablestock\tfraavailablestock\n" +
-                    ", df.productinventoryausavailablestock\tausavailablestock\n" +
-                    ", df.productinventoryustotalstock\tustotalstock\n" +
-                    ", df.productinventoryuktotalstock\tuktotalstock\n" +
-                    ", df.productinventorygeravailablestock\tgeravailablestock\n" +
-                    ", df.productinventoryfratotalstock\tfratotalstock\n" +
-                    ", df.productinventoryusavailablestock\tusavailablestock\n" +
-                    ", df.productplanned\tplanned\n" +
-                    ", df.productprojectno\tprojectno\n" +
-                    ", df.productisbn\tisbn\n" +
-                    ", df.productcontractpubdate\tcontractpubdate\n" +
-                    ", df.productmodifiedon\tmodifiedon\n" +
-                    ", df.productunitcost\tunitcost\n" +
-                    ", df.productpublishedon\tpublishedon\n" +
-                    ", df.productdeliverystatus\tdeliverystatus\n" +
-                    ", df.productplannededitionsize\tplannededitionsize\n" +
-                    ", df.productlatestpubdate\tlatestpubdate\n" +
-                    ", df.productmedium\tmedium\n" +
-                    ", df.productorderno\torderno\n" +
-                    ", df.productfirstprinting\tfirstprinting\n" +
-                    ", df.productreason\treason\n" +
-                    ", df.productbudgetpubdate\tbudgetpubdate\n" +
-                    ", df.productpubdateplanned\tpubdateplanned\n" +
-                    ", df.productcreatedon\tcreatedon\n" +
-                    "--, df.productexternalimpressionid\texternalimpressionid\n" +
-                    ", df.productplannedfirstprint\tplannedfirstprint\n" +
-                    ", df.productbinding\tbinding\n" +
+                    ", df.productnoofvolumes noofvolumes\n" +
+                    ", df.productrefkey refkey\n" +
+                    ", df.productexternaleditionid externaleditionid\n" +
+                    ", df.productisbn13 isbn13\n" +
+                    ", df.productversiontype versiontype\n" +
+                    ", df.productpodsuitable podsuitable\n" +
+                    ", df.productfirstrelease firstrelease\n" +
+                    ", df.productorigtitle origtitle\n" +
+                    ", df.productinventoryukavailablestock ukavailablestock\n" +
+                    ", df.productinventorygertotalstock gertotalstock\n" +
+                    ", df.productinventoryfraavailablestock fraavailablestock\n" +
+                    ", df.productinventoryausavailablestock ausavailablestock\n" +
+                    ", df.productinventoryustotalstock ustotalstock\n" +
+                    ", df.productinventoryuktotalstock uktotalstock\n" +
+                    ", df.productinventorygeravailablestock geravailablestock\n" +
+                    ", df.productinventoryfratotalstock fratotalstock\n" +
+                    ", df.productinventoryusavailablestock usavailablestock\n" +
+                    ", df.productplanned planned\n" +
+                    ", df.productprojectno projectno\n" +
+                    ", df.productisbn isbn\n" +
+                    ", df.productcontractpubdate contractpubdate\n" +
+                    ", df.productmodifiedon modifiedon\n" +
+                    ", df.productunitcost unitcost\n" +
+                    ", df.productpublishedon publishedon\n" +
+                    ", df.productdeliverystatus deliverystatus\n" +
+                    ", df.productplannededitionsize plannededitionsize\n" +
+                    ", df.productlatestpubdate latestpubdate\n" +
+                    ", df.productmedium medium\n" +
+                    ", df.productorderno orderno\n" +
+                    ", df.productfirstprinting firstprinting\n" +
+                    ", df.productreason reason\n" +
+                    ", df.productbudgetpubdate budgetpubdate\n" +
+                    ", df.productpubdateplanned pubdateplanned\n" +
+                    ", df.productcreatedon createdon\n" +
+                    "--, df.productexternalimpressionid externalimpressionid\n" +
+                    ", df.productplannedfirstprint plannedfirstprint\n" +
+                    ", df.productbinding binding\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df))\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref desc";
@@ -381,67 +381,67 @@ public class BCSDataLakeDataCheckSQL {
                     "  df.metainfdeleted metadeleted\n" +
                     ", df.metainfmodifiedon metamodifiedon\n" +
                     ", df.productprojectno sourceref\n" +
-                    ", df.productionweight\tweight\n" +
-                    ", df.productionlineartbw\tlineartbw\n" +
-                    ", df.coverendpaperfrontpapercolour\tfrontpapercolour\n" +
-                    ", df.coverendpaperbackpapercolour\tbackpapercolour\n" +
-                    ", df.coverendpapergrammage\tgrammage\n" +
-                    ", df.coverendpaperbackcoverpms\tbackcoverpms\n" +
-                    ", df.coverendpaperfrontcoverpms\tfrontcoverpms\n" +
-                    ", df.productionapproxpages\tapproxpages\n" +
-                    "--, df.productionreprintno\treprintno\n" +
-                    ", df.productionlineartcolors\tlineartcolors\n" +
-                    ", df.productionsupplierb\tsupplierb\n" +
-                    ", df.productiontablesbw\ttablesbw\n" +
-                    ", df.productionauthoringsystem\tauthoringsystem\n" +
-                    ", df.productiontagging\ttagging\n" +
-                    ", df.productionsectioncolours\tsectioncolours\n" +
-                    ", df.productionaddillustration\taddillustration\n" +
-                    ", df.productionpagesroman\tpagesroman\n" +
-                    ", df.productionproductionmethod\tproductionmethod\n" +
-                    ", df.productionsupplierashortname\tsupplierashortname\n" +
-                    ", df.productionsupplierafullname\tsupplierafullname\n" +
-                    ", df.productionbindmeth\tbindmeth\n" +
-                    ", df.productionformat\tformat\n" +
-                    ", df.productiontrimsize\ttrimsize\n" +
-                    ", df.productiontrimother\ttrimother\n" +
-                    ", df.productionmstype\tmstype\n" +
-                    ", df.productionmanuscriptpages\tmanuscriptpages\n" +
-                    ", df.productiontablescolors\ttablescolors\n" +
-                    ", df.productionsupplierbfullname\tsupplierbfullname\n" +
-                    ", df.productionproductiondetails\tproductiondetails\n" +
-                    ", df.productionillustrationscolors\tillustrationscolors\n" +
-                    ", df.productiongraphicscolors\tgraphicscolors\n" +
-                    ", df.productionexternalads\texternalads\n" +
-                    ", df.productioninternalads\tinternalads\n" +
-                    ", df.productionhalftonesbw\thalftonesbw\n" +
-                    ", df.productionmapsbw\tmapsbw\n" +
-                    ", df.productionspinestyle\tspinestyle\n" +
-                    ", df.productioneonlypages\teonlypages\n" +
-                    ", df.productionsuppliera\tsuppliera\n" +
-                    ", df.productionsupplierbshortname\tsupplierbshortname\n" +
-                    ", df.productionillustrationsbw\tillustrationsbw\n" +
-                    ", df.productionextentprod\textentprod\n" +
-                    ", df.productionprintform\tprintform\n" +
-                    ", df.productionduotone\tduotone\n" +
-                    ", df.productioncopyedlevel\tcopyedlevel\n" +
-                    ", df.coverbindingexteriorpms\texteriorpms\n" +
-                    ", df.coverbindingfinishing\tfinishing\n" +
-                    ", df.coverbindingmaterial\tmaterial\n" +
-                    ", df.coverbindingpaperquality\tpaperquality\n" +
-                    ", df.coverbindinginteriorpms\tinteriorpms\n" +
-                    "--, df.coverbindinggrammage\tgrammage\n" +
-                    ", df.coverbindinginteriorcolour\tinteriorcolour\n" +
-                    ", df.coverbindingboardthickness\tboardthickness\n" +
-                    ", df.coverbindingspec\tspec\n" +
-                    ", df.productionmapscolor\tmapscolor\n" +
-                    ", df.productiontextdesigntype\ttextdesigntype\n" +
-                    ", df.productionclassification\tclassification\n" +
-                    ", df.productionhalftonescolors\thalftonescolors\n" +
-                    ", df.productionbiblioreference\tbiblioreference\n" +
-                    ", df.productionextentstatus\textentstatus\n" +
-                    ", df.productionpagesarabic\tpagesarabic\n" +
-                    ", df.productiongraphicsbw\tgraphicsbw\n" +
+                    ", df.productionweight weight\n" +
+                    ", df.productionlineartbw lineartbw\n" +
+                    ", df.coverendpaperfrontpapercolour frontpapercolour\n" +
+                    ", df.coverendpaperbackpapercolour backpapercolour\n" +
+                    ", df.coverendpapergrammage grammage\n" +
+                    ", df.coverendpaperbackcoverpms backcoverpms\n" +
+                    ", df.coverendpaperfrontcoverpms frontcoverpms\n" +
+                    ", df.productionapproxpages approxpages\n" +
+                    "--, df.productionreprintno reprintno\n" +
+                    ", df.productionlineartcolors lineartcolors\n" +
+                    ", df.productionsupplierb supplierb\n" +
+                    ", df.productiontablesbw tablesbw\n" +
+                    ", df.productionauthoringsystem authoringsystem\n" +
+                    ", df.productiontagging tagging\n" +
+                    ", df.productionsectioncolours sectioncolours\n" +
+                    ", df.productionaddillustration addillustration\n" +
+                    ", df.productionpagesroman pagesroman\n" +
+                    ", df.productionproductionmethod productionmethod\n" +
+                    ", df.productionsupplierashortname supplierashortname\n" +
+                    ", df.productionsupplierafullname supplierafullname\n" +
+                    ", df.productionbindmeth bindmeth\n" +
+                    ", df.productionformat format\n" +
+                    ", df.productiontrimsize trimsize\n" +
+                    ", df.productiontrimother trimother\n" +
+                    ", df.productionmstype mstype\n" +
+                    ", df.productionmanuscriptpages manuscriptpages\n" +
+                    ", df.productiontablescolors tablescolors\n" +
+                    ", df.productionsupplierbfullname supplierbfullname\n" +
+                    ", df.productionproductiondetails productiondetails\n" +
+                    ", df.productionillustrationscolors illustrationscolors\n" +
+                    ", df.productiongraphicscolors graphicscolors\n" +
+                    ", df.productionexternalads externalads\n" +
+                    ", df.productioninternalads internalads\n" +
+                    ", df.productionhalftonesbw halftonesbw\n" +
+                    ", df.productionmapsbw mapsbw\n" +
+                    ", df.productionspinestyle spinestyle\n" +
+                    ", df.productioneonlypages eonlypages\n" +
+                    ", df.productionsuppliera suppliera\n" +
+                    ", df.productionsupplierbshortname supplierbshortname\n" +
+                    ", df.productionillustrationsbw illustrationsbw\n" +
+                    ", df.productionextentprod extentprod\n" +
+                    ", df.productionprintform printform\n" +
+                    ", df.productionduotone duotone\n" +
+                    ", df.productioncopyedlevel copyedlevel\n" +
+                    ", df.coverbindingexteriorpms exteriorpms\n" +
+                    ", df.coverbindingfinishing finishing\n" +
+                    ", df.coverbindingmaterial material\n" +
+                    ", df.coverbindingpaperquality paperquality\n" +
+                    ", df.coverbindinginteriorpms interiorpms\n" +
+                    "--, df.coverbindinggrammage grammage\n" +
+                    ", df.coverbindinginteriorcolour interiorcolour\n" +
+                    ", df.coverbindingboardthickness boardthickness\n" +
+                    ", df.coverbindingspec spec\n" +
+                    ", df.productionmapscolor mapscolor\n" +
+                    ", df.productiontextdesigntype textdesigntype\n" +
+                    ", df.productionclassification classification\n" +
+                    ", df.productionhalftonescolors halftonescolors\n" +
+                    ", df.productionbiblioreference biblioreference\n" +
+                    ", df.productionextentstatus extentstatus\n" +
+                    ", df.productionpagesarabic pagesarabic\n" +
+                    ", df.productiongraphicsbw graphicsbw\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref desc";
@@ -472,7 +472,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", df.metainfmodifiedon metamodifiedon\n" +
                     ", df.productprojectno sourceref\n" +
                     ", cj.orderno orderno\n" +
-                    ", cj.relationtype\trelationtype\n" +
+                    ", cj.relationtype relationtype\n" +
                     ", cj.projectno projectno\n" +
                     "--, cj.relimpressionid relimpressionid\n" +
                     ", cj.isbn isbn\n" +
@@ -490,7 +490,7 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_responsibilities=
             "select sourceref from(select \n" +
-                    " df.productprojectno sourceref, cj.responsibleperson\tresponsibleperson\n" +
+                    " df.productprojectno sourceref, cj.responsibleperson responsibleperson\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
                     "where responsibleperson is not null and responsibleperson!=''\n" +
@@ -517,7 +517,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_sublocation=
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
-                    ", cj.warehouse\twarehouse\n" +
+                    ", cj.warehouse warehouse\n" +
                     "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_product df \n" +
                     "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
                     "where warehouse is not null and warehouse!=''\n" +
@@ -764,7 +764,7 @@ public class BCSDataLakeDataCheckSQL {
                     "object,type,name,comments,source \n" +
                     "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_extobject_part\n" +
                     "where sourceref in ('%s') \n" +
-                    "and inbound_ts=(select max(inbound_ts) from \"bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+"\".\"stg_history_extobject_part\")\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_extobject_part)\n" +
                     "order by sourceref,name,object desc";
 
     public static String randomId_stg_current_fullversionfamily=
@@ -1002,5 +1002,484 @@ public class BCSDataLakeDataCheckSQL {
                     "where sourceref in ('%s')\n" +
                     "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part)\n" +
                     "order by sourceref,childprojectno desc";
+
+    public static String randomId_ingestTableFor_stg_current_classification_series =
+            "select distinct sourceref from(SELECT metainfdeleted metadeleted, metainfmodifiedon metamodifiedon, contentseriesid sourceref, cl.businessunit, cl.value\n" +
+                    ", cl.classificationtype, cl.priority, cl.classificationcode FROM\n" +
+                    "(bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series f\n" +
+                    "CROSS JOIN UNNEST(distributionclassification) x (cl))) limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_content_series =
+            "select distinct sourceref from(SELECT df.metainfdeleted metadeleted,df.metainfmodifiedon metamodifiedon,df.contentseriesid sourceref,df.contentsubgroup subgroup,df.contentseriescode seriescode,df.contentmedium medium\n" +
+                    ",df.contentwmyn wmyn,df.contentsubtitle subtitle,df.contenttitle title,df.contentserialtype serialtype,df.contentdivision division,df.contentobjType objType\n" +
+                    ",df.contentcompanygroup companygroup,df.contentseriesissn seriesissn\n" +
+                    ",df.contentfirstbinding binding,df.contentvolumeno volumeno,df.contentlanguage language,df.contentpublisher publisher,df.contentseriesid seriesid,df.contentshortTitle shorttitle,df.contentpiidack piidack,df.contentownership ownership,df.contentdeltype deltype,df.contentnumbered numbered,df.contentbibliographicserial bibliographicserial\n" +
+                    ",df.contentmainseries mainseries,df.contenteditionid editionid FROM\n" +
+                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df) limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_originatoraddress_series =
+            "select distinct businesspartnerid from (select distinct uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon, uo.businesspartnerid businesspartnerid\n" +
+                    ", ua.country country, ua.postalcode postalcode, ua.additionaladdress additionaladdress, ua.houseno houseno\n" +
+                    ", ua.internet internet, ua.city city, ua.street street, ua.email email, ua.district district\n" +
+                    ", ua.mobile mobile, ua.fax fax, ua.telephoneother telephoneother, ua.telephonemain telephonemain\n" +
+                    "from ((select df.metainfdeleted , df.metainfmodifiedon , co.businesspartnerid , co.authoraddress\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
+                    "CROSS JOIN UNNEST(authoraddress) z (ua))) limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_originatornotes_series =
+            "select distinct businesspartnerid from (select distinct  uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon,\n" +
+                    "uo.contentseriesid sourceref, uo.businesspartnerid businesspartnerid, ua.notes notes,\n" +
+                    "ua.companygroup companygroup from  ((select df.metainfdeleted , df.metainfmodifiedon ,df.contentseriesid, co.businesspartnerid ,\n" +
+                    "co.authornotes from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df  CROSS JOIN UNNEST(contactsoriginators) x (co)))uo CROSS JOIN UNNEST(authornotes) z (ua)))\n" +
+                    " limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_originator_series =
+            "select distinct businesspartnerid from" +
+                    "(select\n" +
+                    "df.metainfdeleted metadeleted, df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.contentseriesid sourceref, co.firstname firstname\n" +
+                    ", co.businesspartnerid businesspartnerid, co.lastname lastname\n" +
+                    ", co.sequence sequence, co.prefix prefix\n" +
+                    ", co.copyrightholdertype copyrightholdertype, co.searchterm searchterm\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df CROSS JOIN UNNEST(contactsoriginators) x (co))) limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_product_series =
+            "select distinct sourceref from(select df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon, df.contentseriesid sourceref\n" +
+                    ", df.productorderno orderno, df.productversiontype versiontype\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df)) limit %s";
+
+    public static String randomId_ingestTableFor_stg_current_text_series =
+            "select distinct sourceref from(\n" +
+                    "select df.metainfdeleted metadeleted, df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.contentseriesid sourceref, cj.tab, cj.texttype, cj.name, cj.text\n" +
+                    ", cj.status from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df \n" +
+                    "CROSS JOIN UNNEST(distributiontext) x (cj)) limit %s";
+
+    public static String getInitialIngestDataFor_stg_current_classification_series_rec =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",businessunit as businessunit" +
+                    ",classificationtype as classificationtype" +
+                    ",priority as priority" +
+                    ",classificationcode as classificationcode" +
+                    ",value as value" +
+                    " from(SELECT metainfdeleted metadeleted, metainfmodifiedon metamodifiedon, contentseriesid sourceref, cl.businessunit, cl.value\n" +
+                    ", cl.classificationtype, cl.priority, cl.classificationcode FROM\n" +
+                    "(bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series f\n" +
+                    "CROSS JOIN UNNEST(distributionclassification) x (cl)))  where sourceref in ('%s') order by sourceref,metamodifiedon,classificationtype,classificationcode desc";
+
+    public static String getCurrentTableDataFor_stg_current_classification_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",businessunit as businessunit" +
+                    ",classificationtype as classificationtype" +
+                    ",priority as priority" +
+                    ",classificationcode as classificationcode" +
+                    ",value as value" +
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification_series" +
+                    " where sourceref in ('%s') order by sourceref,metamodifiedon,classificationtype,classificationcode desc";
+
+    public static String getInitialIngestDataFor_stg_current_content_series_rec =
+           "select metadeleted as metadeleted" +
+                   ",metamodifiedon as metamodifiedon" +
+                   ",sourceref as sourceref" +
+                   ",subgroup as subgroup" +
+                   ",seriescode as seriescode" +
+                   ",medium as medium" +
+                   ",wmyn as wmyn" +
+                   ",subtitle as subtitle" +
+                   ",title as title" +
+                   ",serialtype as serialtype" +
+                   ",division as division" +
+                   ",objtype as objtype" +
+                   ",companygroup as companygroup" +
+                   ",seriesissn as seriesissn" +
+                   ",binding as binding" +
+                   ",volumeno as volumeno" +
+                   ",language as language" +
+                   ",publisher as publisher" +
+                   ",seriesid as seriesid" +
+                   ",shorttitle as shorttitle" +
+                   ",piidack as piidack" +
+                   ",ownership as ownership" +
+                   ",deltype as deltype" +
+                   ",numbered as numbered" +
+                   ",bibliographicserial as bibliographicserial" +
+                   ",mainseries as mainseries" +
+                   ",editionid as editionid " +
+                   " from(SELECT df.metainfdeleted metadeleted,df.metainfmodifiedon metamodifiedon,df.contentseriesid sourceref,df.contentsubgroup subgroup\n" +
+                   ",df.contentseriescode seriescode,df.contentmedium medium,df.contentwmyn wmyn\n" +
+                   ",df.contentsubtitle subtitle,df.contenttitle title,df.contentserialtype serialtype\n" +
+                   ",df.contentdivision division,df.contentobjType objType,df.contentcompanygroup companygroup,df.contentseriesissn seriesissn,df.contentfirstbinding binding\n" +
+                   ",df.contentvolumeno volumeno,df.contentlanguage language\n" +
+                   ",df.contentpublisher publisher,df.contentseriesid seriesid,df.contentshortTitle shorttitle\n" +
+                   ",df.contentpiidack piidack,df.contentownership ownership,df.contentdeltype deltype\n" +
+                   ",df.contentnumbered numbered,df.contentbibliographicserial bibliographicserial\n" +
+                   ",df.contentmainseries mainseries,df.contenteditionid editionid FROM\n" +
+                   " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df)where sourceref in ('%s') order by sourceref,seriescode,editionid desc";
+
+            public static String getCurrentTableDataFor_stg_current_content_series =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",sourceref as sourceref" +
+                            ",subgroup as subgroup" +
+                            ",seriescode as seriescode" +
+                            ",medium as medium" +
+                            ",wmyn as wmyn" +
+                            ",subtitle as subtitle" +
+                            ",title as title" +
+                            ",serialtype as serialtype" +
+                            ",division as division" +
+                            ",objtype as objtype" +
+                            ",companygroup as companygroup" +
+                            ",seriesissn as seriesissn" +
+                            ",binding as binding" +
+                            ",volumeno as volumeno" +
+                            ",language as language" +
+                            ",publisher as publisher" +
+                            ",seriesid as seriesid" +
+                            ",shorttitle as shorttitle" +
+                            ",piidack as piidack" +
+                            ",ownership as ownership" +
+                            ",deltype as deltype" +
+                            ",numbered as numbered" +
+                            ",bibliographicserial as bibliographicserial" +
+                            ",mainseries as mainseries" +
+                            ",editionid as editionid " +
+                            " from" +
+                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series where sourceref in ('%s') order by sourceref,seriescode,editionid desc\n";
+
+            public static String getInitialIngestDataFor_stg_current_originatoraddress_series_rec =
+                    "select metadeleted as metadeleted\n" +
+                            ",metamodifiedon as metamodifiedon\n" +
+                            ",businesspartnerid as businesspartnerid\n" +
+                            ",country as country\n" +
+                            ",postalcode as postalcode\n" +
+                            ",additionaladdress as additionaladdress\n" +
+                            ",houseno as houseno \n" +
+                            ",internet as internet\n" +
+                            ",city as city\n" +
+                            ",street as street\n" +
+                            ",email as email\n" +
+                            ",district as district\n" +
+                            ",mobile as mobile\n" +
+                            ",fax as fax\n" +
+                            ",telephoneother as telephoneother\n" +
+                            ",telephonemain as telephonemain" +
+                            " from (select distinct uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon, uo.businesspartnerid businesspartnerid\n" +
+                            ", ua.country country, ua.postalcode postalcode, ua.additionaladdress additionaladdress, ua.houseno houseno\n" +
+                            ", ua.internet internet, ua.city city, ua.street street, ua.email email, ua.district district\n" +
+                            ", ua.mobile mobile, ua.fax fax, ua.telephoneother telephoneother, ua.telephonemain telephonemain\n" +
+                            "from ((select df.metainfdeleted , df.metainfmodifiedon , co.businesspartnerid , co.authoraddress\n" +
+                            "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df CROSS JOIN UNNEST(contactsoriginators) x (co)))uo\n" +
+                            "CROSS JOIN UNNEST(authoraddress) z (ua))) where businesspartnerid in (%s) order by businesspartnerid desc";
+
+            public static String getCurrentTableDataFor_stg_current_originatoraddress_series =
+                    "select metadeleted as metadeleted\n" +
+                            ",metamodifiedon as metamodifiedon\n" +
+                            ",businesspartnerid as businesspartnerid\n" +
+                            ",country as country\n" +
+                            ",postalcode as postalcode\n" +
+                            ",additionaladdress as additionaladdress\n" +
+                            ",houseno as houseno \n" +
+                            ",internet as internet\n" +
+                            ",city as city\n" +
+                            ",street as street\n" +
+                            ",email as email\n" +
+                            ",district as district\n" +
+                            ",mobile as mobile\n" +
+                            ",fax as fax\n" +
+                            ",telephoneother as telephoneother\n" +
+                            ",telephonemain as telephonemain" +
+                            " from " +
+                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatoraddress_series where businesspartnerid in (%s) order by businesspartnerid desc";
+
+            public static String getInitialIngestDataFor_stg_current_originatornotes_series_rec =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",businesspartnerid  as businesspartnerid " +
+                            ",sourceref as sourceref" +
+                        //    ",notestype as notestype" +
+                            ",notes as notes" +
+                            ",companygroup as companygroup" +
+                            " from (select distinct  uo.metainfdeleted metadeleted, uo.metainfmodifiedon metamodifiedon,\n" +
+                            "uo.contentseriesid sourceref, uo.businesspartnerid businesspartnerid, ua.notes notes,\n" +
+                            "ua.companygroup companygroup from ((select df.metainfdeleted , df.metainfmodifiedon ,df.contentseriesid, co.businesspartnerid ,\n" +
+                            "co.authornotes from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df  CROSS JOIN UNNEST(contactsoriginators) x (co)))uo CROSS JOIN UNNEST(authornotes) z (ua)))\n" +
+                            "where businesspartnerid in (%s) order by businesspartnerid,notes desc";
+
+            public static String getCurrentTableDataFor_stg_current_originatornotes_series =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",businesspartnerid  as businesspartnerid " +
+                            ",sourceref as sourceref" +
+                           // ",notestype as notestype" +
+                            ",notes as notes" +
+                            ",companygroup as companygroup" +
+                            " from " +
+                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatornotes_series where businesspartnerid in (%s) order by businesspartnerid,notes desc";
+
+
+            public static String getInitialIngestDataFor_stg_current_originators_series_rec =
+                    "select metadeleted as metadeleted \n" +
+                            ",metamodifiedon as metamodifiedon\n" +
+                            ",sourceref as sourceref \n" +
+                            ",firstname as firstname\n" +
+                            ",businesspartnerid as businesspartnerid\n" +
+                            ",lastname as lastname\n" +
+                            ",sequence as sequence\n" +
+                            ",prefix as prefix\n" +
+                            ",copyrightholdertype as copyrightholdertype\n" +
+                            ",searchterm as searchterm" +
+                            " from(\n" +
+                            "(select\n" +
+                            "\"df\".\"metainfdeleted\" \"metadeleted\", \"df\".\"metainfmodifiedon\" \"metamodifiedon\"\n" +
+                            ", \"df\".\"contentseriesid\" \"sourceref\", \"co\".\"firstname\"\t\"firstname\", \"co\".\"businesspartnerid\"\t\"businesspartnerid\", \"co\".\"lastname\"\t\"lastname\", \"co\".\"sequence\"\t\"sequence\"\n" +
+                            ", \"co\".\"prefix\"\t\"prefix\", \"co\".\"copyrightholdertype\"\t\"copyrightholdertype\"\n" +
+                            ", \"co\".\"searchterm\"\t\"searchterm\"  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df\n" +
+                            "CROSS JOIN UNNEST(\"contactsoriginators\") x (\"co\")))) where businesspartnerid in (%s) order by businesspartnerid,sourceref,metamodifiedon desc";
+
+            public static String getCurrentTableDataFor_stg_current_originators_series=
+                    "select metadeleted as metadeleted \n" +
+                            ",metamodifiedon as metamodifiedon\n" +
+                            ",sourceref as sourceref \n" +
+                            ",firstname as firstname\n" +
+                            ",businesspartnerid as businesspartnerid\n" +
+                            ",lastname as lastname\n" +
+                            ",sequence as sequence\n" +
+                            ",prefix as prefix\n" +
+                            ",copyrightholdertype as copyrightholdertype\n" +
+                            ",searchterm as searchterm" +
+                            " from " +
+                            "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators_series where businesspartnerid in (%s) order by businesspartnerid,sourceref,metamodifiedon desc";
+
+            public static String getInitialIngestDataFor_stg_current_product_series_rec =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",sourceref as sourceref" +
+                            ",orderno as orderno" +
+                            ",versiontype as versiontype" +
+                            " from(select df.metainfdeleted metadeleted, df.metainfmodifiedon metamodifiedon,\n" +
+                            "df.contentseriesid sourceref, df.productorderno orderno, df.productversiontype \n" +
+                            "versiontype from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df))\n" +
+                            "where sourceref in ('%s') order by sourceref,orderno desc\n";
+
+            public static String getCurrentTableDataFor_stg_current_product_series =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",sourceref as sourceref" +
+                            ",orderno as orderno" +
+                            ",versiontype as versiontype" +
+                            " from " +
+                            "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product_series where sourceref in ('%s') order by sourceref,orderno desc\n";
+
+            public static String getInitialIngestDataFor_stg_current_text_series_rec  =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",sourceref as sourceref" +
+                            ",tab as tab" +
+                            ",texttype as texttype" +
+                            ",text as text" +
+                            ",status as status" +
+                            ",name as name" +
+                            " from(select\n" +
+                            "df.metainfdeleted metadeleted, df.metainfmodifiedon metamodifiedon\n" +
+                            ", df.contentseriesid sourceref, cj.tab, cj.texttype\n" +
+                            ", cj.text, cj.status, cj.name from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest_series df \n" +
+                            "CROSS JOIN UNNEST(distributiontext) x (cj))\n" +
+                            "where sourceref in ('%s') order by sourceref,name desc";
+
+            public static String getCurrentTableDataFor_stg_current_text_series =
+                    "select metadeleted as metadeleted" +
+                            ",metamodifiedon as metamodifiedon" +
+                            ",sourceref as sourceref" +
+                            ",tab as tab" +
+                            ",texttype as texttype" +
+                            ",text as text" +
+                            ",status as status" +
+                            ",name as name" +
+                            " from "    +
+                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text_series where sourceref in ('%s') order by sourceref,name desc";
+
+
+    public static String randomId_stg_current_classification_series =
+     "select distinct sourceref"+
+             " from" +
+             " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification_series" +
+             " limit %s";
+
+    public static String randomId_stg_current_content_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series" +
+                    " limit %s";
+
+    public static String randomId_stg_current_originatoraddress_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatoraddress_series" +
+                    " limit %s";
+    public static String randomId_stg_current_originatornotes_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatornotes_series" +
+                    " limit %s";
+    public static String randomId_stg_current_originator_series =
+            "select distinct businesspartnerid"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators_series" +
+                    " limit %s";
+    public static String randomId_stg_current_product_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product_series" +
+                    " limit %s";
+    public static String randomId_stg_current_text_series =
+            "select distinct sourceref"+
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text_series" +
+                    " limit %s";
+
+
+    public static String getCurrentHistoryTableDataFor_stg_current_classification_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",businessunit as businessunit" +
+                    ",classificationtype as classificationtype" +
+                    ",priority as priority" +
+                    ",classificationcode as classificationcode" +
+                    ",value as value" +
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part" +
+                    " where sourceref in ('%s') and \n" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_series_part)\n" +
+                    " order by sourceref,metamodifiedon,classificationtype,classificationcode desc";
+
+    public static String getHistoryTableDataFor_stg_current_content_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",subgroup as subgroup" +
+                    ",seriescode as seriescode" +
+                    ",medium as medium" +
+                    ",wmyn as wmyn" +
+                    ",subtitle as subtitle" +
+                    ",title as title" +
+                    ",serialtype as serialtype" +
+                    ",division as division" +
+                    ",objtype as objtype" +
+                    ",companygroup as companygroup" +
+                    ",seriesissn as seriesissn" +
+                    ",binding as binding" +
+                    ",volumeno as volumeno" +
+                    ",language as language" +
+                    ",publisher as publisher" +
+                    ",seriesid as seriesid" +
+                    ",shorttitle as shorttitle" +
+                    ",piidack as piidack" +
+                    ",ownership as ownership" +
+                    ",deltype as deltype" +
+                    ",numbered as numbered" +
+                    ",bibliographicserial as bibliographicserial" +
+                    ",mainseries as mainseries" +
+                    ",editionid as editionid " +
+                    " from" +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part" +
+                    " where sourceref in ('%s') and \n" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_series_part)\n" +
+                    " order by sourceref,seriescode,editionid desc\n";
+
+    public static String getHistoryTableDataFor_stg_current_originatoraddress_series =
+            "select metadeleted as metadeleted\n" +
+                    ",metamodifiedon as metamodifiedon\n" +
+                    ",businesspartnerid as businesspartnerid\n" +
+                    ",country as country\n" +
+                    ",postalcode as postalcode\n" +
+                    ",additionaladdress as additionaladdress\n" +
+                    ",houseno as houseno \n" +
+                    ",internet as internet\n" +
+                    ",city as city\n" +
+                    ",street as street\n" +
+                    ",email as email\n" +
+                    ",district as district\n" +
+                    ",mobile as mobile\n" +
+                    ",fax as fax\n" +
+                    ",telephoneother as telephoneother\n" +
+                    ",telephonemain as telephonemain" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatoraddress_series_part)\n" +
+                    "order by businesspartnerid desc";
+
+    public static String getHistTableDataFor_stg_current_originators_series=
+            "select metadeleted as metadeleted \n" +
+                    ",metamodifiedon as metamodifiedon\n" +
+                    ",sourceref as sourceref \n" +
+                    ",firstname as firstname\n" +
+                    ",businesspartnerid as businesspartnerid\n" +
+                    ",lastname as lastname\n" +
+                    ",sequence as sequence\n" +
+                    ",prefix as prefix\n" +
+                    ",copyrightholdertype as copyrightholdertype\n" +
+                    ",searchterm as searchterm" +
+                    " from " +
+                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_series_part)\n" +
+                    " order by businesspartnerid,sourceref,metamodifiedon desc";
+
+    public static String getHistoryTableDataFor_stg_current_originatornotes_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",businesspartnerid  as businesspartnerid " +
+                    ",sourceref as sourceref" +
+                    // ",notestype as notestype" +
+                    ",notes as notes" +
+                    ",companygroup as companygroup" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part" +
+                    " where businesspartnerid in (%s) and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originatornotes_series_part)\n" +
+                    " order by businesspartnerid,notes desc";
+
+    public static String getHistoryTableDataFor_stg_current_product_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",orderno as orderno" +
+                    ",versiontype as versiontype" +
+                    " from " +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part" +
+                    " where sourceref in ('%s') and" +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_series_part)\n" +
+                    " order by sourceref,orderno desc\n";
+
+
+    public static String getHistoryTableDataFor_stg_current_text_series =
+            "select metadeleted as metadeleted" +
+                    ",metamodifiedon as metamodifiedon" +
+                    ",sourceref as sourceref" +
+                    ",tab as tab" +
+                    ",texttype as texttype" +
+                    ",text as text" +
+                    ",status as status" +
+                    ",name as name" +
+                    " from "    +
+                    " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part" +
+                    " where sourceref in ('%s') and " +
+                    " inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_series_part)\n" +
+                    " order by sourceref,name desc";
+
+
+
+
+
+
 
 }
