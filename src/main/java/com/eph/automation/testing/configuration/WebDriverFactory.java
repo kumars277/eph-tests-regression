@@ -25,7 +25,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
     public WebDriver get() {
 
         //if (TestContext.getValues().gridRun) {
-            if (true) {
+            if (false) {
             try {
                 DesiredCapabilities capabilities = DesiredCapabilities.chrome();
                 capabilities.setPlatform(Platform.ANY);
