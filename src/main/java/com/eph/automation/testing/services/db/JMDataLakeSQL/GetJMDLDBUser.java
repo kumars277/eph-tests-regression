@@ -32,7 +32,7 @@ public class GetJMDLDBUser {
                 dbJMDataLake = "journalmaestro_uat";
             }
         }else{
-            dbJMDataLake = "journalmaestro_uat2";
+            dbJMDataLake = "journalmaestro_uat";
         }
         return dbJMDataLake;
     }

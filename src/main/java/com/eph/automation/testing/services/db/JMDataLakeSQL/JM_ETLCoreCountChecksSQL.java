@@ -810,10 +810,10 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        wpr.notified_date as            notified_date\n" +
-            "from  journalmaestro_uat2.jmf_work_person_role   wpr\n" +
-            "join  journalmaestro_uat2.jmf_work               w  on w.work_id = wpr.f_work\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
             "where wpr.party_role_type in ('PPC', 'PU')\n" +
             "and   wpr.notified_date is not null\n" +
             "and   w.work_journey_identifier = 'A1'\n" +
@@ -843,11 +843,11 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        wpr.notified_date as            notified_date\n" +
-            "from  journalmaestro_uat2.jmf_work_person_role   wpr\n" +
-            "join  journalmaestro_uat2.jmf_work               w  on w.work_id = wpr.f_work\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "join journalmaestro_uat2.works_attrs_roles_people_v warp on\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
             "         (warp.pmgcode = w.pmg_code\n" +
             "      and warp.pmccode = w.pmc_code\n" +
             "      and warp.pd_email is not null\n" +
@@ -883,10 +883,10 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        w.notified_date as              notified_date\n" +
-            "from  journalmaestro_uat2.jmf_work               w\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "join  journalmaestro_uat2.works_attrs_roles_people_v warp on\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
             "         (warp.resp_cen = w.responsibility_centre_code\n" +
             "      and warp.bc_email is not null\n" +
             "      and warp.bc_email <> 'Not Found')\n" +
@@ -939,11 +939,11 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                                                             dq_err,\n" +
             "        wpr.notified_date as                                                notified_date\n" +
-            "from  journalmaestro_uat2.jmf_work_person_role  wpr\n" +
-            "join  journalmaestro_uat2.jmf_work               w0 on w0.work_id = wpr.f_work\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role  wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w0 on w0.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
             "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
             "                               and w1.work_journey_identifier = 'A1'\n" +
             "where wpr.party_role_type in ('PPC', 'PU')\n" +
@@ -988,9 +988,9 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as date)                end_date,\n" +
             "       'N'  as                             dq_err,\n" +
             "        ppa.notified_date as               notified_date\n" +
-            "from  ((journalmaestro_uat2.jmf_pmg_pubdir_allocation   ppa\n" +
-            "join    journalmaestro_uat2.pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
-            "join    journalmaestro_uat2.jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
+            "from  ((" + GetJMDLDBUser.getJMDB() + ".jmf_pmg_pubdir_allocation   ppa\n" +
+            "join    " + GetJMDLDBUser.getJMDB() + ".pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
+            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
             "where    ppa.allocation_type = 'PD'\n" +
             "and      ppa.notified_date >= ppj.jnl_created_date\n" +
             "  )\n" +
