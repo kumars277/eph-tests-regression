@@ -1096,7 +1096,7 @@ public class JMETLDataChecks {
     //  ETL Data Comparisons
     @Given("^We get the (.*) random JM ETL ids of (.*)$")
     public void getRandomJMETLIds(String numberOfRecords, String Currenttable) {
-//       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (Currenttable) {
