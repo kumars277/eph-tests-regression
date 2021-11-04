@@ -29,7 +29,7 @@ public class GetJMDLDBUser {
                 dbJMDataLake = "journalmaestro_sit";
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
-                dbJMDataLake = "journalmaestro_uat2";
+                dbJMDataLake = "journalmaestro_uat";
             }
         }else{
             dbJMDataLake = "journalmaestro_uat2";
