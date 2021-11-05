@@ -2121,8 +2121,8 @@ public class JMETLDataChecksSQL {
             "UNION\n" +
             "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v)where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc";
 
-    public static String GET_PRODUCT_PERSON_ROLE_DQ_QUERY ="select * from \n" +
-            "(with base_data as\n" +
+    public static String GET_PRODUCT_PERSON_ROLE_DQ_QUERY ="select * from (\n" +
+            "with base_data as\n" +
             "(\n" +
             "select\n" +
             "scenario_name,                   -- scenario NAME 'New Proprietary' etc\n" +
@@ -2132,7 +2132,7 @@ public class JMETLDataChecksSQL {
             "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
             "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
             "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-            "base_title,                      -- jm-manifestation-title a suffix of (Print) or (Online)\n" +
+            "base_title,                      -- JM-manifestation-title a suffix of (Print) or (Online)\n" +
             "w0_journal_number,\n" +
             "m0_journal_number,\n" +
             "w0_chronicle_id,\n" +
@@ -2161,11 +2161,13 @@ public class JMETLDataChecksSQL {
             "employee_number_new,             -- ditto\n" +
             "dq_err,                          -- default is 'N', but is set 'Y' by part1 if PU email or PU peoplehub_id is missing.\n" +
             "notified_date\n" +
-            "from  journalmaestro_uat2.etl_product_part1_v\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v\n" +
             "where  (notified_date is not null\n" +
             "and   ((upsert = 'Insert')\n" +
             "    or (upsert = 'Update' and scenario_name = 'Change Allocated Resources')))\n" +
             ")\n" +
+            "-- we are now processing FOR ALL INSERTS (NP, NS, AC, MI) then for CA UPDATES. Filter out RN Title Updates (not processed here)\n" +
+            "-- select * from base_data\n" +
             ", crosstab_data as\n" +
             "(\n" +
             "select\n" +
@@ -2175,7 +2177,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-SUB-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'SUB' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2196,7 +2198,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-JBS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'JBS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2217,7 +2219,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-BKF-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'BKF' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2238,7 +2240,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-RPR-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'RPR' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2259,7 +2261,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-OOA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'OOA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2280,7 +2282,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-OAA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'OAA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2301,7 +2303,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-JAS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
             "   'JAS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2322,7 +2324,7 @@ public class JMETLDataChecksSQL {
             "    jm_source_reference||'-PKG-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                    -- not known by jm for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                    -- not known by JM for new products.\n" +
             "   'PKG' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2336,6 +2338,8 @@ public class JMETLDataChecksSQL {
             "from base_data\n" +
             "where packages = 'Y'\n" +
             ")\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             ",result_data as\n" +
             "(\n" +
             "select\n" +
