@@ -2405,10 +2405,10 @@ public class JMETLDataChecksSQL {
             "      'N' as                                                dq_err,\n" +
             "       m.notified_date as                                   notified_date,\n" +
             "      'J0'||w.elsevier_journal_number                       work_source_reference      -- Added New work source reference derived from jmf_work\n" +
-            "from  journalmaestro_uat2.jmf_manifestation      m\n" +
-            "join  journalmaestro_uat2.jmf_work               w  on m.f_work = w.work_id\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on w.work_chronicle_id        = wc.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation      m\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on m.f_work = w.work_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on w.work_chronicle_id        = wc.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
             "where w.work_journey_identifier = 'A1'\n" +
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
             "and   m.notified_date is not null\n" +
@@ -2437,14 +2437,14 @@ public class JMETLDataChecksSQL {
             "        END) as                                                           dq_err,\n" +
             "        m1.notified_date as                                               notified_date,\n" +
             "        CAST (null as varchar) as                                         work_source_reference      -- Added a Null Value for new work_source_reference field\n" +
-            "from (((journalmaestro_uat2.etl_manifestation_updates1_v mu1\n" +
-            "        join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = mu1.w0_chronicle_id)\n" +
+            "from (((" + GetJMDLDBUser.getJMDB() + ".etl_manifestation_updates1_v mu1\n" +
+            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = mu1.w0_chronicle_id)\n" +
             "                                   and (w1.elsevier_journal_number = mu1.w0_journal_number)\n" +
             "                                   and (w1.work_journey_identifier = 'A1')))                        -- we've definitely got one work, the A1.\n" +
-            "        join journalmaestro_uat2.jmf_work_chronicle wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
+            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
             "                                   and (w1.work_journey_identifier = 'A1')\n" +
             "                                   and (wc.chronicle_scenario_code = 'RN')))\n" +
-            "        join journalmaestro_uat2.jmf_manifestation  m1 on ((m1.f_work = w1.work_id)\n" +
+            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation  m1 on ((m1.f_work = w1.work_id)\n" +
             "                                   and (m1.elsevier_journal_number = mu1.m0_journal_number)\n" +
             "                                   and (m1.manifestation_type      = mu1.m0_manifestation_type)))\n" +
             "where m1.notified_date is not null\n" +
