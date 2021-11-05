@@ -73,7 +73,7 @@ public class JM_ETLCoreCountChecksSQL {
             "-- this is to assist with the legal ownership case statement without having a separate view\n" +
             "   coowned_journals AS (\n" +
             "   SELECT DISTINCT co.f_work, co.legal_owner_type\n" +
-            "   FROM   journalmaestro_uat2.jmf_work_ownership co\n" +
+            "   FROM   " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership co\n" +
             "   WHERE (((co.notified_date IS NOT NULL)\n" +
             "       AND (co.journal_ownership_type = 'CO'))\n" +
             "       AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
@@ -140,14 +140,14 @@ public class JM_ETLCoreCountChecksSQL {
             "             END),w.main_language_code) language_code,\n" +
             "       'N'  as                          dq_err,\n" +
             "        w.notified_date as              notified_date\n" +
-            "from    journalmaestro_uat2.jmf_work                 w\n" +
-            "join      journalmaestro_uat2.jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join      journalmaestro_uat2.jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
+            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work                 w\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
             "                                    and fo.journal_ownership_type = 'FO'\n" +
             "--        manifestation (below) becomes a left join because there are a few single-manifestation exceptions where ISSN <> ISSN-L\n" +
-            "left join journalmaestro_uat2.jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
             "                                     and (wo1.journal_ownership_type = 'FO'))\n" +
             "--        Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
             "--        business rules declare there to be only one legal owner type per journal\n" +
@@ -197,10 +197,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                       w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                       w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                          and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  wc.chronicle_scenario_code = 'RN'\n" +
             "and    w0.work_journey_identifier = 'A0'\n" +
@@ -245,10 +245,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        w1.notified_date as             notified_date\n" +
-            "from journalmaestro_uat2.jmf_work                     w0\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "from " + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
             "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
             "                               and w1.work_journey_identifier = 'A1'\n" +
             "where   w0.work_journey_identifier = 'A0'\n" +
@@ -295,10 +295,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'DC'\n" +
@@ -345,10 +345,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'TR'\n" +
