@@ -379,12 +379,12 @@ public class JMETLDataChecksSQL {
         ")where jm_source_reference in ('%s') \n" +
         "order by jm_source_reference desc";
 
-    public static String GET_WWORK_DQ_QUERY ="select * from \n" +
-            "(WITH\n" +
+    public static String GET_WWORK_DQ_QUERY ="select * from (\n" +
+            "WITH\n" +
             "-- this is to assist with the legal ownership case statement without having a separate view\n" +
             "   coowned_journals AS (\n" +
             "   SELECT DISTINCT co.f_work, co.legal_owner_type\n" +
-            "   FROM   journalmaestro_uat2.jmf_work_ownership co\n" +
+            "   FROM   " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership co\n" +
             "   WHERE (((co.notified_date IS NOT NULL)\n" +
             "       AND (co.journal_ownership_type = 'CO'))\n" +
             "       AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
@@ -423,6 +423,11 @@ public class JMETLDataChecksSQL {
             "        END) as                         f_oa_type,\n" +
             "        w.imprint_code as               f_imprint,\n" +
             "        w.opco_r12_id as                opco,\n" +
+            "--      in place of deprecated f_society_ownership we are now sending f_legal_ownership.\n" +
+            "--      the following case statement is EPH Ownership Level 1, values JVE/ELS/SOC/COM/UNI\n" +
+            "--      The first condition is testing for Joint Venture, the second for fully-owned, the last three for co-owned.\n" +
+            "--      The Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
+            "--      Note, business rules declare there should be only ONE co-owned legal owner type per journal\n" +
             "       (CASE\n" +
             "            when (w.joint_venture_indicator = 'Y')     then 'JVE'\n" +
             "            when (fo.legal_owner_type is not null)     then  fo.legal_owner_type\n" +
@@ -451,14 +456,14 @@ public class JMETLDataChecksSQL {
             "             END),w.main_language_code) language_code,\n" +
             "       'N'  as                          dq_err,\n" +
             "        w.notified_date as              notified_date\n" +
-            "from    journalmaestro_uat2.jmf_work                 w\n" +
-            "join      journalmaestro_uat2.jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join      journalmaestro_uat2.jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
+            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work                 w\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
             "                                    and fo.journal_ownership_type = 'FO'\n" +
             "--        manifestation (below) becomes a left join because there are a few single-manifestation exceptions where ISSN <> ISSN-L\n" +
-            "left join journalmaestro_uat2.jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
             "                                     and (wo1.journal_ownership_type = 'FO'))\n" +
             "--        Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
             "--        business rules declare there to be only one legal owner type per journal\n" +
@@ -472,6 +477,10 @@ public class JMETLDataChecksSQL {
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
             "and   w.notified_date is not null\n" +
             "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "--  RENAME\n" +
+            "--  Title updates to work level. This is RN (Rename).\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
             "        wc.chronicle_scenario_code as   scenario_code,\n" +
             "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
@@ -482,7 +491,7 @@ public class JMETLDataChecksSQL {
             "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
             "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
             "        w1.work_title as                work_title,                 -- the TITLE UPDATE\n" +
-            "        CAST (null as varchar) as       work_subtitle,              -- jm does not master subtitle.\n" +
+            "        CAST (null as varchar) as       work_subtitle,              -- JM does not master subtitle.\n" +
             "        CAST (null as boolean) as       electro_rights_indicator,\n" +
             "        CAST (null as integer) as       volume,                     -- for inserts was set 0\n" +
             "        CAST (null as integer) as       copyright_year,\n" +
@@ -497,6 +506,7 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar) as       f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar) as       f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar) as       opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
             "        CAST (null as varchar) as       f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar) as       subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar) as       resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -507,10 +517,10 @@ public class JMETLDataChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                       w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                       w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                          and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  wc.chronicle_scenario_code = 'RN'\n" +
             "and    w0.work_journey_identifier = 'A0'\n" +
@@ -519,6 +529,16 @@ public class JMETLDataChecksSQL {
             "and    w1.work_title is not null\n" +
             "and    w1.work_title <> w0.work_title\n" +
             "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE PMC  - PMC UPDATES EPH_WWORK\n" +
+            "-- this is CAR - Change Allocated Resource - where changes to PMC will go to EPH WWORK.\n" +
+            "-- take from JMF_WORK, from the merge with family resource details.\n" +
+            "--\n" +
+            "-- Change of PMC\n" +
+            "--  A number of journals under a given PMG are assigned to a new PMC. Write a wwork update.\n" +
+            "--  The new PMC Code will be held on jmf_family_resource_details for the given journal where Resource_Key = 'PMC', in field NEW_VALUE.\n" +
+            "--  For info, the old PMC code will be in INITIAL_VALUE.\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
             "        wc.chronicle_scenario_code as   scenario_code,\n" +
             "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
@@ -544,6 +564,7 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -554,10 +575,10 @@ public class JMETLDataChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        w1.notified_date as             notified_date\n" +
-            "from journalmaestro_uat2.jmf_work                     w0\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "from " + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
             "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
             "                               and w1.work_journey_identifier = 'A1'\n" +
             "where   w0.work_journey_identifier = 'A0'\n" +
@@ -568,6 +589,11 @@ public class JMETLDataChecksSQL {
             "and     w1.pmc_new <> w1.pmc_old\n" +
             "and     w1.notified_date is not null\n" +
             "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE - DISCONTINUE\n" +
+            "-- Discontinue is taken from JMF_WORK.\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "--\n" +
             "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
             "        wc.chronicle_scenario_code as   scenario_code,\n" +
             "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
@@ -593,6 +619,7 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -603,15 +630,20 @@ public class JMETLDataChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'DC'\n" +
             "and    w0.notified_date is not null\n" +
             "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE - TRANSFER\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- EPHD-2915 set WTA determined by 'Society' as well as 'Third Party'\n" +
+            "--           transfer_date is collected from A1\n" +
             "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
             "        wc.chronicle_scenario_code as   scenario_code,\n" +
             "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
@@ -642,6 +674,7 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -652,14 +685,15 @@ public class JMETLDataChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'TR'\n" +
-            "and    w0.notified_date is not null) where jm_source_reference in ('%s')\n" +
+            "and    w0.notified_date is not null\n" +
+            "order by notified_date, jm_source_reference) where jm_source_reference in ('%s')\n" +
             "order by jm_source_reference, work_title, scenario_name,pmc_old desc";
 
     public static String GET_WORK_IDENTIFIER_DQ_QUERY ="select * from (select cs.chronicle_scenario_name as                                      scenario_name,\n" +
