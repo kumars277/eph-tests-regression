@@ -378,6 +378,10 @@ else {
                         System.out.println("page not found");
                         statusDescription = "Page not Found";
                         break;
+                        //502: bad gateway
+                        //503: service Unavailable
+
+
                     //default:	System.out.println("less frequent error code: "+respCode);statusDescription="less frequent error code: "+respCode;break;
                 }
 

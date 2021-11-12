@@ -24,12 +24,17 @@ public class WebDriverFactory implements Provider<WebDriver> {
     @Override
     public WebDriver get() {
 
-        if (TestContext.getValues().gridRun) {
+        //if (TestContext.getValues().gridRun) {
+            if (false) {
             try {
                 DesiredCapabilities capabilities = DesiredCapabilities.chrome();
                 capabilities.setPlatform(Platform.ANY);
-                URL hubUrl = new URL("http://10.153.95.253:4444/wd/hub");
-                return new RemoteWebDriver(hubUrl, capabilities);
+                URL hubUrl = new URL("http://10.183.88.203:4444/wd/hub");
+
+                RemoteWebDriver rwd =new RemoteWebDriver(hubUrl, capabilities);
+                rwd.get("https://google.com");
+                System.out.println(rwd.getTitle());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

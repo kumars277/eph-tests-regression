@@ -37,14 +37,18 @@ public class JM_ETLCoreCountChecksSteps {
             case "etl_work_subject_area_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK_SUBJECT_AREA;
                 break;
-
             case "etl_work_person_role_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK_PERSON_ROLE;
+                break;
+            case "etl_work_business_model_dq_v":
+                sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK_BUSINESS_MODEL;
+                break;
+            case "etl_work_access_model_dq_v":
+                sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK_ACCESS_MODEL;
                 break;
             case "etl_manifestation_updates1_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION_UPDATES;
                 break;
-
             case "etl_manifestation_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION;
                 break;
@@ -100,6 +104,12 @@ public class JM_ETLCoreCountChecksSteps {
                 break;
             case "etl_work_person_role_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_PERSON_ROLE_Count;
+                break;
+            case "etl_work_business_model_dq_v":
+                sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_BUSINESS_MODEL_Count;
+                break;
+            case "etl_work_access_model_dq_v":
+                sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_ACCESS_MODEL_Count;
                 break;
             case "etl_manifestation_updates1_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_MANIFESTATION_UPDATES;

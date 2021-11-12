@@ -111,7 +111,7 @@ public class APIDataSQL {
           + " (select work_fin_attribs_id where effective_end_date <current_date) ";
 
   public static final String SELECT_GD_RANDOM_WORK_ID =
-      "SELECT \"work_id\" as WORK_ID\n"
+      "SELECT work_id as WORK_ID\n"
           + "FROM semarchy_eph_mdm.gd_wwork \n"
           + "WHERE exists (\n"
           + "SELECT * FROM semarchy_eph_mdm.gd_manifestation\n"

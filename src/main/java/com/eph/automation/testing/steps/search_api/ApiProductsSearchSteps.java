@@ -109,7 +109,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-12MJKW"); Log.info("hard coded product ids are : " + ids);
+      ids.clear(); ids.add("EPR-112SJ4"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -120,6 +120,12 @@ public class ApiProductsSearchSteps {
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage + " Verify list with random ids is not empty.",
         ids.isEmpty());
+  }
+
+  @Given("^We get product by ID (.*)$")
+  public static void getProductbyId(String productId)
+  {
+
   }
 
   @Given("^We get (.*) search ids from the db for person roles of products$")

@@ -48,6 +48,8 @@ public class ProductFinderTasks {
     public Properties prop_info = new Properties();
     public Properties prop_subArea = new Properties();
     public Properties prop_identifier = new Properties();
+    public Properties prop_specialties = new Properties();
+
     public Properties prop_comCode = new Properties();
     public Properties prop_AccProducts = new Properties();
     public Properties prop_editorial1 = new Properties();
@@ -84,10 +86,8 @@ public class ProductFinderTasks {
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
+        Log.info(HomePageAddress);
         Log.info("\nhome page loaded...");
-
-
-
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
@@ -151,7 +151,8 @@ public class ProductFinderTasks {
         //created by Nishant @ 22 May 2020
         String IdLocator = String.format(ProductFinderConstants.buildIdLocator, workId);
         tasks.click("XPATH", IdLocator);
-        Thread.sleep(5000);
+        tasks.waitUntilPageLoad();
+        Thread.sleep(2000);
     }
 
     public void clickLogo() throws InterruptedException {
@@ -294,54 +295,79 @@ public class ProductFinderTasks {
     public void getUI_WorkOverview_Information() {
         //created by Nishant @5 Jun 2020
         //updated UI changes and locator by Nishant @ 15 Oct 2020 for EPHD-2241
+        //updated UI changes and locator by Nishant @ 12 Oct 2021 for regression testing
 
-        //capture Information values
-        /*if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
+        if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
         {
-
-        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr");
-        for (int i = 0; i < rows_info.size(); i++) {
-            String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
-            prop_info.setProperty(key, value);
-        }
-       }
-        else
-            {*/
-                List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
-                for (int i = 0; i < rows_info.size()-1; i++) {
-                    String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-                    String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
-                    prop_info.setProperty(key, value);
+            //capture Information values
+            List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr");
+            for (int i = 0; i < rows_info.size(); i++) {
+                String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+                String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+                prop_info.setProperty(key, value);
             }
-            //}
-        //capture subject area values
-        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr");
-        for (int i = 0; i < rows_subArea.size(); i++) {
-            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
-            prop_subArea.setProperty(key, value);
+
+            //capture identifiers values
+            List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.identifierRow + "/table/tbody/tr");
+            for (int i = 1; i <= rows_identifiers.size(); i++) {
+                String key = tasks.findElement("XPATH", ProductFinderConstants.identifierRow + "/table/tbody/tr[" + (i) + "]/td[1]").getText();
+                String value = tasks.findElement("XPATH", ProductFinderConstants.identifierRow + "/table/tbody/tr[" + (i) + "]/td[2]").getText();
+                prop_identifier.setProperty(key, value);
+            }
+
+            //capture subject area values
+            List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr");
+            for (int i = 0; i < rows_subArea.size(); i++) {
+                String key = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+                String value = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+                prop_subArea.setProperty(key, value);
+            }
+
+            //capture specialties
+            List<WebElement> rows_specialties = tasks.findmultipleElements("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr");
+            for (int i = 0; i < rows_subArea.size(); i++) {
+                String key = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+                String value = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+                prop_subArea.setProperty(key, value);
+            }
+
+
+
+        }
+        else //JF
+        {
+            //capture Information values
+            List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr");
+            for (int i = 0; i < rows_info.size(); i++) {
+                String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+                String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+                prop_info.setProperty(key, value);}
         }
 
         //capture identifiers values
-        //updated by Nishant @ 15 Oct 2020 for EPHD-2041 regression testing
-        if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
-        {
-            List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
-            for (int i = 1; i < rows_identifiers.size(); i++) {
-                String key = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + i + "]/td[1]").get(1).getText();
-                String value = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + i + "]/td[2]").get(1).getText();
-                prop_identifier.setProperty(key, value);
-            }
-        } else //for Journal Finder UI
-        {
-            List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
-            for (int i = 1; i <= rows_identifiers.size(); i++) {
-                String key = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i) + "]/td[1]").getText();
-                String value = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i) + "]/td[2]").getText();
-                prop_identifier.setProperty(key, value);
-            }
+        List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr");
+        for (int i = 1; i <= rows_identifiers.size(); i++) {
+            String key = tasks.findElement("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr[" + (i) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr[" + (i) + "]/td[2]").getText();
+            prop_identifier.setProperty(key, value);
         }
+        //capture subject area values
+        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.subAreaRowJF + "/table/tbody/tr");
+        for (int i = 0; i < rows_subArea.size(); i++) {
+            String key = tasks.findElement("XPATH", ProductFinderConstants.subAreaRowJF + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.subAreaRowJF + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            prop_subArea.setProperty(key, value);
+        }
+
+        //capture specialties
+        List<WebElement> rows_specialties = tasks.findmultipleElements("XPATH", ProductFinderConstants.specialtiesRowJF + "/li");
+        for (int i = 1; i <= rows_specialties.size(); i++) {
+            String key = tasks.findElement("XPATH", ProductFinderConstants.specialtiesRowJF + "/li[" + i + "]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.specialtiesRowJF + "/li[" + i  + "]").getText();
+            prop_specialties.setProperty(key, value);
+        }
+
+
     }
 
     public void getUI_WorkOverview_Financial() {
