@@ -1,24 +1,24 @@
-package com.eph.automation.testing.services.db.sdrmsql;
+package com.eph.automation.testing.services.db.ermsDataLakeSQL;
 import com.eph.automation.testing.helper.Log;
 
-public class GetSdrmDbUser {
+public class GetErmsDbUser {
 
-    private GetSdrmDbUser(){
-        Log.info("sdrmdb User");}
+    private GetErmsDbUser(){
+        Log.info("erms User");}
 
-    public static String getSDRMDataBase(){
-        String dbSDRM = null;
+    public static String getERMSDataBase(){
+        String dbERMS = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbSDRM = "sdrm_staging_sit";
+                dbERMS = "erms_staging_sit";
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
-                dbSDRM = "sdrm_staging_uat";
+                dbERMS = "erms_staging_uat";
             }
         }else{
-            dbSDRM = "sdrm_staging_uat";
+            dbERMS = "erms_staging_uat";
         }
-        return dbSDRM;
+        return dbERMS;
     }
 
     public static String getProdStagingDataBase(){
