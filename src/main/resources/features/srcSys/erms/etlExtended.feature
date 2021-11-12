@@ -1,0 +1,69 @@
+Feature:Validate data between SDRM ETL Tables
+
+  #Confluence:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45509983346/ERMS+Inbound
+  #Git for Query: https://github.com/elsevier-bts/eph-datalabs-dag/tree/master_v1/src/dag/resources/property_substituted/erms_inbound
+
+  @ERMS
+  Scenario Outline: Check between ERMS Inbound and transform current tables
+    Given Get the total count of ERMS Data from Inbound Load <tableName>
+    Then  We know the total count of Current ERMS ETL data <tableName>
+    And Compare count of ERMS Inbound load with current ERMS ETL table are identical <tableName>
+   # Given We get the <countOfRandomIds> random EPR ids <tableName>
+  #  When  Get the data from the ERMS inbound tables
+  #  Then  Get the data from the ERMS transform current tables
+  #  And   we compare the records of ERMS Inbound and ERMS current tables
+    Examples:
+      | tableName                                                                    |countOfRandomIds |
+      |erms_transform_current_work_identifier                                        |50               |
+      |erms_transform_current_work_person_role                                       |50                |
+
+  @ERMS
+  Scenario Outline: Check between ERMS Current and transform file tables
+    Given We know the total count of Current ERMS ETL data <SrctableName>
+    Then  We know the total count of erms transform file <trgtTable>
+    And Compare count of ERMS current and the ERMS transform file table are identical <SrctableName><trgtTable>
+   # Given We get the <countOfRandomIds> random EPR ids <tableName>
+  #  When  Get the data from the ERMS inbound tables
+  #  Then  Get the data from the ERMS transform current tables
+  #  And   we compare the records of ERMS Inbound and ERMS current tables
+    Examples:
+      | SrctableName                            |trgtTable                                        |countOfRandomIds |
+      |erms_transform_current_work_identifier   |erms_transform_file_history_work_identifier_part | 50               |
+      |erms_transform_current_work_person_role  |erms_transform_file_history_work_person_role_part|50                |
+
+  @ERMS
+  Scenario Outline: Check between ERMS Current and transform partition history tables
+    Given We know the total count of Current ERMS ETL data <SrctableName>
+    Then  We know the total count of erms transform partition history <trgtTable>
+    And Compare count of ERMS current and the ERMS transform partition history table are identical <SrctableName><trgtTable>
+ # Given We get the <countOfRandomIds> random EPR ids <tableName>
+ # When  Get the data from the ERMS inbound tables
+ # Then  Get the data from the ERMS transform current tables
+ # And   we compare the records of ERMS Inbound and ERMS current tables
+    Examples:
+      | SrctableName                            |trgtTable                                        |countOfRandomIds |
+      |erms_transform_current_work_identifier   |erms_transform_history_work_identifier_part      | 50               |
+      |erms_transform_current_work_person_role  |erms_transform_history_work_person_role_part     |50                |
+
+  @ERMS
+    Scenario Outline: Check ERMS latest tables data transffered from delta current and exclude tables
+    Given We know the total count of latest ERMS ETL data <SrctableName>
+    Then  We know the total count of erms delta current and exclude tables <SrctableName>
+    And Compare count of ERMS latest with the delta current and exclude tables are identical <SrctableName>
+ # Given We get the <countOfRandomIds> random EPR ids <tableName>
+ # When  Get the data from the ERMS inbound tables
+ # Then  Get the data from the ERMS transform current tables
+ # And   we compare the records of ERMS Inbound and ERMS current tables
+    Examples:
+      | SrctableName                           |countOfRandomIds |
+      |erms_transform_latest_work_identifier   | 50               |
+      |erms_transform_latest_work_person_role  |50                |
+
+    @ERMS
+    Scenario Outline: Verify Duplicate Entry for ERMS COre in transform latest tables
+      Given Get the ERMS Duplicate count in latest tables <SrctableName>
+      Then  Check the ERMS latest count should be equal to Zero <SrctableName>
+      Examples:
+        | SrctableName                           |
+        |erms_transform_latest_work_identifier   |
+        |erms_transform_latest_work_person_role  |
