@@ -75,7 +75,7 @@ public class ProductsMatchedApiObject {
       }
       i++;
     }
-    Assert.assertTrue(DataQualityContext.breadcrumbMessage + "id found in response", found);
+    Assert.assertTrue(DataQualityContext.breadcrumbMessage + "id not found in response", found);
     return found;
   }
 

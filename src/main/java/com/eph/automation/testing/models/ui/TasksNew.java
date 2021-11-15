@@ -49,6 +49,7 @@ public class TasksNew {
         click("ID", ProductFinderConstants.nextButton);
         Thread.sleep(1000);
         waitUntilPageLoad();
+        Log.info("signed in to "+url);
       } catch (Exception e) {
         Log.error(e.getMessage());
       }
@@ -177,7 +178,9 @@ public class TasksNew {
       elementScrolltoView(element);
       wait.until(ExpectedConditions.elementToBeClickable(element));
       element.click();
-      Thread.sleep(2000);
+      Thread.sleep(3000);
+      //waitUntilPageLoad();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
