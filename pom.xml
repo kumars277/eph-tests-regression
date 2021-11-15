@@ -158,7 +158,7 @@
         <!--<dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-s3</artifactId><version>1.11.718</version></dependency>-->
         <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk</artifactId><version>1.11.274</version></dependency>
         <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-core</artifactId><version>1.11.307</version></dependency>
-      <dependency><groupId>com.syncron.amazonaws</groupId><artifactId>simba-athena-jdbc-driver</artifactId><version>2.0.2</version></dependency>
+     <!-- <dependency><groupId>com.syncron.amazonaws</groupId><artifactId>simba-athena-jdbc-driver</artifactId><version>2.0.2</version></dependency>-->
         <dependency><groupId>com.syncron.amazonaw</groupId><artifactId>simba-athena-jdbc-driver</artifactId><version>2.0.2</version><scope>system</scope>
             <systemPath>${project.basedir}/lib/com/athena/simba-athena-jdbc-driver-2.0.2.jar</systemPath></dependency>
        <!--<dependency><groupId>com.amazonaws.athena.jdbc</groupId><artifactId>atl-athena-jdbc-driver</artifactId><version>1.0.2-atlassian-1</version></dependency>-->
