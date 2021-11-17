@@ -1,4 +1,4 @@
-Feature:Validate data between SDRM ETL Tables
+Feature:Validate data between ERMS ETL Tables
 
   #Confluence:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45509983346/ERMS+Inbound
   #Git for Query: https://github.com/elsevier-bts/eph-datalabs-dag/tree/master_v1/src/dag/resources/property_substituted/erms_inbound
@@ -8,10 +8,10 @@ Feature:Validate data between SDRM ETL Tables
     Given Get the total count of ERMS Data from Inbound Load <tableName>
     Then  We know the total count of Current ERMS ETL data <tableName>
     And Compare count of ERMS Inbound load with current ERMS ETL table are identical <tableName>
-   # Given We get the <countOfRandomIds> random EPR ids <tableName>
-  #  When  Get the data from the ERMS inbound tables
-  #  Then  Get the data from the ERMS transform current tables
-  #  And   we compare the records of ERMS Inbound and ERMS current tables
+   # Given Get the <countOfRandomIds> random EPR ids from the table ERMS inbound <tableName>
+ #   When  Get the data from the ERMS inbound tables <tableName>
+ #   Then  Get the data from the ERMS transform current tables <tableName>
+ #   And   we compare the records of ERMS Inbound and ERMS current tables <tableName>
     Examples:
       | tableName                                                                    |countOfRandomIds |
       |erms_transform_current_work_identifier                                        |50               |

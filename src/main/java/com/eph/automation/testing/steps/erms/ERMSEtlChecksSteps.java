@@ -4,17 +4,19 @@ package com.eph.automation.testing.steps.erms;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.services.db.ermsDataLakeSQL.ErmsEtlCountChecksSql;
-import com.eph.automation.testing.services.db.sdrmsql.SDRMDataChecksSQL;
+import com.eph.automation.testing.services.db.ermsDataLakeSQL.ErmsEtlChecksSql;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Map;
 
-public class ERMSCountChecksSteps {
+public class ERMSEtlChecksSteps {
 
     private static String ermsCurrentSQLCount;
     private static String ermsInboundSQLCount;
@@ -31,18 +33,20 @@ public class ERMSCountChecksSteps {
     private static int ermsDeltaCurrAndExclCount;
     private static int ermsDuplicateLatestCount;
     private static String noTablemsg = "no table found";
+    private static String sql;
+    private static List<String> ids;
 
     @Given("^Get the total count of ERMS Data from Inbound Load (.*)$")
     public static void getCountERMSInboundTables(String tableName){
         switch (tableName){
             case "erms_transform_current_work_identifier":
                 Log.info("Getting Inbound Count for work_identifier...");
-                ermsInboundSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_INBOUND_COUNT;
+                ermsInboundSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_INBOUND_COUNT;
                 break;
 
             case "erms_transform_current_work_person_role":
                 Log.info("Getting Inbound Count for work person role...");
-                ermsInboundSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_INBOUND_COUNT;
+                ermsInboundSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_INBOUND_COUNT;
                 break;
 
             default:
@@ -60,12 +64,12 @@ public class ERMSCountChecksSteps {
         switch (tableName){
             case "erms_transform_current_work_identifier":
                 Log.info("Getting Inbound Count for work_identifier...");
-                ermsCurrentSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_CURRENT_COUNT;
+                ermsCurrentSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_CURRENT_COUNT;
                 break;
 
             case "erms_transform_current_work_person_role":
                 Log.info("Getting Inbound Count for work person role...");
-                ermsCurrentSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_CURRENT_COUNT;
+                ermsCurrentSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_CURRENT_COUNT;
                 break;
 
             default:
@@ -85,18 +89,41 @@ public class ERMSCountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+tableName+" and Inbound ", ermsCurrentCount, ermsInboundCount);
     }
 
+    @And("^Get the (.*) random EPR ids from the table ERMS inbound (.*)$")
+    public void getRandomErmsEprIds(String numberOfRecords,String tableName){
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random ids from ERMS Inbound Tables....");
+        List<Map<?, ?>> randomids;
+        switch (tableName) {
+            case "erms_transform_current_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_RANDOM_WORK_IDENTIFIER_ID_INBOUND, numberOfRecords);
+                break;
+            case "erms_transform_current_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_RANDOM_WORK_PERSON_ID_INBOUND, numberOfRecords);
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        ids = randomids.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
+        Log.info(sql);
+        Log.info(ids.toString());
+    }
+
+
 
     @Then("^We know the total count of erms transform file (.*)$")
     public static void getCountERMSTransformFileTables(String tableName){
         switch (tableName){
             case "erms_transform_file_history_work_identifier_part":
                 Log.info("Getting tranform file Count for work_identifier...");
-                ermstransformSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_TRANSFORM_FILE_COUNT;
+                ermstransformSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_TRANSFORM_FILE_COUNT;
                 break;
 
             case "erms_transform_file_history_work_person_role_part":
                 Log.info("Getting transform file Count for work person role...");
-                ermstransformSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_TRANSFORM_FILE_COUNT;
+                ermstransformSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_TRANSFORM_FILE_COUNT;
                 break;
 
             default:
@@ -120,12 +147,12 @@ public class ERMSCountChecksSteps {
         switch (tableName){
             case "erms_transform_history_work_identifier_part":
                 Log.info("Getting tranform Partition Count for work_identifier...");
-                ermstransformPartitionSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_TRANSFORM_PARTITION_COUNT;
+                ermstransformPartitionSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_TRANSFORM_PARTITION_COUNT;
                 break;
 
             case "erms_transform_history_work_person_role_part":
                 Log.info("Getting transform Partition Count for work person role...");
-                ermstransformPartitionSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_TRANSFORM_PARTITION_COUNT;
+                ermstransformPartitionSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_TRANSFORM_PARTITION_COUNT;
                 break;
 
             default:
@@ -149,12 +176,12 @@ public class ERMSCountChecksSteps {
         switch (tableName){
             case "erms_transform_latest_work_identifier":
                 Log.info("Getting Latest Count for work_identifier...");
-                ermsLatestSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_LATEST_COUNT;
+                ermsLatestSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_LATEST_COUNT;
                 break;
 
             case "erms_transform_latest_work_person_role":
                 Log.info("Getting Latest Count for work person role...");
-                ermsLatestSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_LATEST_COUNT;
+                ermsLatestSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_LATEST_COUNT;
                 break;
 
             default:
@@ -171,12 +198,12 @@ public class ERMSCountChecksSteps {
         switch (tableName){
             case "erms_transform_latest_work_identifier":
                 Log.info("Getting Latest Count for work_identifier...");
-                ermsDeltaAndExclSQLCount = ErmsEtlCountChecksSql.GET_WORK_IDENTIFIER_DELTA_AND_EXCL_COUNT;
+                ermsDeltaAndExclSQLCount = ErmsEtlChecksSql.GET_WORK_IDENTIFIER_DELTA_AND_EXCL_COUNT;
                 break;
 
             case "erms_transform_latest_work_person_role":
                 Log.info("Getting Latest Count for work person role...");
-                ermsDeltaAndExclSQLCount = ErmsEtlCountChecksSql.GET_WORK_PERSON_ROLE_DELTA_AND_EXCL_COUNT;
+                ermsDeltaAndExclSQLCount = ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_DELTA_AND_EXCL_COUNT;
                 break;
 
             default:
@@ -200,11 +227,11 @@ public class ERMSCountChecksSteps {
         switch (tableName){
             case "erms_transform_latest_work_identifier":
                 Log.info("Getting Duplicate Acc Prod Latest Table Count...");
-                ermsDuplicateLatestSQLCount = ErmsEtlCountChecksSql.GET_DUPLICATES_LATEST_WORK_IDENTIFIER_COUNT;
+                ermsDuplicateLatestSQLCount = ErmsEtlChecksSql.GET_DUPLICATES_LATEST_WORK_IDENTIFIER_COUNT;
                 break;
             case "erms_transform_latest_work_person_role":
                 Log.info("Getting Duplicate MANIF Latest Table Count...");
-                ermsDuplicateLatestSQLCount = ErmsEtlCountChecksSql.GET_DUPLICATES_LATEST_WORK_PERSON_ROLE_COUNT;
+                ermsDuplicateLatestSQLCount = ErmsEtlChecksSql.GET_DUPLICATES_LATEST_WORK_PERSON_ROLE_COUNT;
                 break;
             default:
                 Log.info(noTablemsg);
