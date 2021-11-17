@@ -4,17 +4,20 @@ package com.eph.automation.testing.steps.erms;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.ErmsEtlAccessDLContext;
 import com.eph.automation.testing.services.db.ermsDataLakeSQL.ErmsEtlChecksSql;
+import com.eph.automation.testing.models.dao.erms.ErmsDLAccessObject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
 
-import java.util.List;
-import java.util.Map;
 
 public class ERMSEtlChecksSteps {
 
@@ -111,6 +114,110 @@ public class ERMSEtlChecksSteps {
         Log.info(ids.toString());
     }
 
+    @When("^Get the data from the ERMS inbound tables (.*)$")
+    public static void getERMSInboundRecords(String tableName) {
+        Log.info("We get the erms inbound records...");
+        switch (tableName) {
+            case "erms_transform_current_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_IDENTIFIER_REC_INBOUND_DATA, String.join("','",ids));
+                break;
+            case "erms_transform_current_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_INBOUND_DATA, String.join("','",ids));
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        ErmsEtlAccessDLContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, ErmsDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @Then("^Get the data from the ERMS transform current tables (.*)$")
+    public static void getERMSCurrentRecords(String tableName) {
+        Log.info("We get the erms current records...");
+        switch (tableName) {
+            case "erms_transform_current_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_IDENTIFIER_REC_CURRENT_DATA, String.join("','",ids));
+                break;
+            case "erms_transform_current_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_CURRENT_DATA, String.join("','",ids));
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        ErmsEtlAccessDLContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, ErmsDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @And("^we compare the records of ERMS Inbound and ERMS current tables (.*)$")
+    public void compareErmsInboundandCurrent(String tableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (ErmsEtlAccessDLContext.recordsFromInboundData.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ids to compare the records between Inbound and current...");
+            for (int i = 0; i < ErmsEtlAccessDLContext.recordsFromInboundData.size(); i++) {
+                switch (tableName) {
+                    case "erms_transform_current_work_identifier":
+                        Log.info("comparing inbound and etl_accountable_product_current_v records...");
+                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id));
+
+                        String[] allWorkIdentifierCol = {"getepr_id", "geterms_id", "getu_key"};
+                        for (String strTemp : allWorkIdentifierCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recordsFromInboundData.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recordsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("epr_id => " + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).getepr_id() +
+                                    " " + strTemp + " => ERMS Inbound = " + method.invoke(objectToCompare1) +
+                                    " work_identifier = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_identifier for uKey:" + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+
+                    case "erms_transform_current_work_person_role":
+                        Log.info("erms_transform_current_work_person_role records.... ");
+                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::geteph_work_id)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::geteph_work_id));
+
+                        String[] allWorkPersonRoleCol = {"geteph_work_id", "getu_key", "getwork_source_ref", "geterms_person_ref", "getperson_source_ref", "getf_role", "getemail","getname","getstaff_user","geteffective_start_date","geteffective_end_date","getmodified_date","getis_deleted"};
+                        for (String strTemp : allWorkPersonRoleCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recordsFromInboundData.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recordsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("sourceRef => " + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).geteph_work_id() +
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " work_person_role = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_person_role for workId:" + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).geteph_work_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+
+                        break;
+                    default:
+                        Log.info(noTablemsg);
+                }
+            }
+        }
+    }
 
 
     @Then("^We know the total count of erms transform file (.*)$")
