@@ -94,7 +94,7 @@ public class ERMSEtlChecksSteps {
 
     @And("^Get the (.*) random EPR ids from the table ERMS inbound (.*)$")
     public void getRandomErmsEprIds(String numberOfRecords,String tableName){
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids from ERMS Inbound Tables....");
         List<Map<?, ?>> randomids;
