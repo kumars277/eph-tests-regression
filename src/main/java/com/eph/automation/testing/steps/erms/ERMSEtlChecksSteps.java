@@ -158,8 +158,8 @@ public class ERMSEtlChecksSteps {
                 switch (tableName) {
                     case "erms_transform_current_work_identifier":
                         Log.info("comparing inbound and etl_accountable_product_current_v records...");
-                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id)); //sort primarykey data in the lists
-                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id));
+                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::getu_key)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getu_key));
 
                         String[] allWorkIdentifierCol = {"getepr_id", "geterms_id", "getu_key"};
                         for (String strTemp : allWorkIdentifierCol) {
@@ -186,10 +186,10 @@ public class ERMSEtlChecksSteps {
 
                     case "erms_transform_current_work_person_role":
                         Log.info("erms_transform_current_work_person_role records.... ");
-                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::geteph_work_id)); //sort primarykey data in the lists
-                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::geteph_work_id));
+                        ErmsEtlAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id));
 
-                        String[] allWorkPersonRoleCol = {"geteph_work_id", "getu_key", "getwork_source_ref", "geterms_person_ref", "getperson_source_ref", "getf_role", "getemail","getname","getstaff_user","geteffective_start_date","geteffective_end_date","getmodified_date","getis_deleted"};
+                        String[] allWorkPersonRoleCol = {"getepr_id", "getu_key", "getwork_source_ref", "geterms_person_ref", "getperson_source_ref", "getf_role", "getemail","getname","getstaff_user","geteffective_start_date","geteffective_end_date","getmodified_date","getis_deleted"};
                         for (String strTemp : allWorkPersonRoleCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -200,12 +200,12 @@ public class ERMSEtlChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("sourceRef => " + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).geteph_work_id() +
+                            Log.info("work_ID => " + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).getepr_id() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " work_person_role = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_person_role for workId:" + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).geteph_work_id(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_person_role for workId:" + ErmsEtlAccessDLContext.recordsFromInboundData.get(i).getepr_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }

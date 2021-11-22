@@ -5,9 +5,9 @@ Feature:Validate data between ERMS ETL Tables
 
   @ERMS
   Scenario Outline: Check between ERMS Inbound and transform current tables
-   # Given Get the total count of ERMS Data from Inbound Load <tableName>
-   # Then  We know the total count of Current ERMS ETL data <tableName>
-   # And Compare count of ERMS Inbound load with current ERMS ETL table are identical <tableName>
+    Given Get the total count of ERMS Data from Inbound Load <tableName>
+    Then  We know the total count of Current ERMS ETL data <tableName>
+    And Compare count of ERMS Inbound load with current ERMS ETL table are identical <tableName>
     Given Get the <countOfRandomIds> random EPR ids from the table ERMS inbound <tableName>
     When Get the data from the ERMS inbound tables <tableName>
     Then Get the data from the ERMS transform current tables <tableName>
@@ -15,7 +15,7 @@ Feature:Validate data between ERMS ETL Tables
     Examples:
       | tableName                                                                    |countOfRandomIds |
       |erms_transform_current_work_identifier                                        |10               |
-    #  |erms_transform_current_work_person_role                                       |50                |
+      |erms_transform_current_work_person_role                                       |2                |
 
   @ERMS
   Scenario Outline: Check between ERMS Current and transform file tables

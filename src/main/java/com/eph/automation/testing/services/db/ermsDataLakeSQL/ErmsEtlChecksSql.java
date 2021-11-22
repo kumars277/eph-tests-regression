@@ -155,9 +155,101 @@ public class ErmsEtlChecksSql {
                     ",effective_end_date as effective_end_date" +
                     ",modified_date as modified_date" +
                     ",is_deleted as is_deleted" +
-                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_current_work_person_role where eph_work_id in ('%s') order by eph_work_id desc";
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_current_work_person_role where eph_work_id in ('%s') order by u_key desc";
 
     public static final String GET_RANDOM_WORK_PERSON_ID_INBOUND =
+            "select eph_work_id as epr_id" +
+                    " from(\n" +
+                    "SELECT\n" +
+                    "  \"concat\"(\"jnl\".\"u_key\", 'PAECP', \"wd\".\"sourceref\") u_key\n" +
+                    ", \"jnl\".\"u_key\" work_source_ref\n" +
+                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
+                    ", \"jnl\".\"PAECP\" erms_person_ref\n" +
+                    ", \"wd\".\"sourceref\" person_source_ref\n" +
+                    ", 'PAECP' f_role\n" +
+                    ", \"cnt\".\"email\"\n" +
+                    ", \"cnt\".\"name\"\n" +
+                    ", \"cnt\".\"staff_user\"\n" +
+                    ", \"cjr\".\"effective_start_date\"\n" +
+                    ", \"cjr\".\"effective_end_date\"\n" +
+                    ", \"cjr\".\"modified_date\"\n" +
+                    ", \"cjr\".\"is_deleted\"\n" +
+                    ", \"jnl\".\"inbound_ts\"\n" +
+                    "FROM\n" +
+                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PAECP = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Assistant Editorial Contracts & Payment')))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PAECP)))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
+                    "LEFT JOIN  "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
+                    "WHERE (w.work_id IS NOT NULL)\n" +
+                    "UNION SELECT\n" +
+                    "  \"concat\"(\"jnl\".\"u_key\", 'PCS', \"wd\".\"sourceref\") u_key\n" +
+                    ", \"jnl\".\"u_key\" work_source_ref\n" +
+                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
+                    ", \"jnl\".\"PCS\" erms_person_ref\n" +
+                    ", \"wd\".\"sourceref\" person_source_ref\n" +
+                    ", 'PCS' f_role\n" +
+                    ", \"cnt\".\"email\"\n" +
+                    ", \"cnt\".\"name\"\n" +
+                    ", \"cnt\".\"staff_user\"\n" +
+                    ", \"cjr\".\"effective_start_date\"\n" +
+                    ", \"cjr\".\"effective_end_date\"\n" +
+                    ", \"cjr\".\"modified_date\"\n" +
+                    ", \"cjr\".\"is_deleted\"\n" +
+                    ", \"jnl\".\"inbound_ts\"\n" +
+                    "FROM\n" +
+                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PCS = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Content Specialist')))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PCS)))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
+                    "LEFT JOIN "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
+                    "WHERE (w.work_id IS NOT NULL)\n" +
+                    "UNION SELECT\n" +
+                    "  \"concat\"(\"jnl\".\"u_key\", 'PSM', \"wd\".\"sourceref\") u_key\n" +
+                    ", \"jnl\".\"u_key\" work_source_ref\n" +
+                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
+                    ", \"jnl\".\"PSM\" erms_person_ref\n" +
+                    ", \"wd\".\"sourceref\" person_source_ref\n" +
+                    ", 'PSM' f_role\n" +
+                    ", \"cnt\".\"email\"\n" +
+                    ", \"cnt\".\"name\"\n" +
+                    ", \"cnt\".\"staff_user\"\n" +
+                    ", \"cjr\".\"effective_start_date\"\n" +
+                    ", \"cjr\".\"effective_end_date\"\n" +
+                    ", \"cjr\".\"modified_date\"\n" +
+                    ", \"cjr\".\"is_deleted\"\n" +
+                    ", \"jnl\".\"inbound_ts\"\n" +
+                    "FROM\n" +
+                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
+                    "INNER JOIN  "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PSM = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Support Manager')))\n" +
+                    "INNER JOIN  "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PSM)))\n" +
+                    "INNER JOIN  "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
+                    "LEFT JOIN   "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
+                    "WHERE (w.work_id IS NOT NULL)\n" +
+                    "UNION SELECT\n" +
+                    "  \"concat\"(\"jnl\".\"u_key\", 'MCM', \"wd\".\"sourceref\") u_key\n" +
+                    ", \"jnl\".\"u_key\" work_source_ref\n" +
+                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
+                    ", \"jnl\".\"MCM\" erms_person_ref\n" +
+                    ", \"wd\".\"sourceref\" person_source_ref\n" +
+                    ", 'MCM' f_role\n" +
+                    ", \"cnt\".\"email\"\n" +
+                    ", \"cnt\".\"name\"\n" +
+                    ", \"cnt\".\"staff_user\"\n" +
+                    ", \"cjr\".\"effective_start_date\"\n" +
+                    ", \"cjr\".\"effective_end_date\"\n" +
+                    ", \"cjr\".\"modified_date\"\n" +
+                    ", \"cjr\".\"is_deleted\"\n" +
+                    ", \"jnl\".\"inbound_ts\"\n" +
+                    "FROM\n" +
+                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.MCM = cjr.contact_ref)) AND (cjr.role_type = 'Marketing Communications Manager')))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.MCM)))\n" +
+                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
+                    "LEFT JOIN  "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
+                    "WHERE (w.work_id IS NOT NULL))order by rand() limit %s";
+
+    public static final String GET_WORK_PERSON_ROLE_INBOUND_DATA =
             "select eph_work_id as epr_id" +
                     ",u_key as u_key" +
                     ",work_source_ref as work_source_ref" +
@@ -259,98 +351,7 @@ public class ErmsEtlChecksSql {
                     "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.MCM)))\n" +
                     "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
                     "LEFT JOIN  "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
-                    "WHERE (w.work_id IS NOT NULL)) where eph_work_id in ('%s') order by eph_work_id desc";
-
-    public static final String GET_WORK_PERSON_ROLE_INBOUND_DATA =
-            "select eph_work_id as epr_id from(\n" +
-                    "SELECT\n" +
-                    "  \"concat\"(\"jnl\".\"u_key\", 'PAECP', \"wd\".\"sourceref\") u_key\n" +
-                    ", \"jnl\".\"u_key\" work_source_ref\n" +
-                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
-                    ", \"jnl\".\"PAECP\" erms_person_ref\n" +
-                    ", \"wd\".\"sourceref\" person_source_ref\n" +
-                    ", 'PAECP' f_role\n" +
-                    ", \"cnt\".\"email\"\n" +
-                    ", \"cnt\".\"name\"\n" +
-                    ", \"cnt\".\"staff_user\"\n" +
-                    ", \"cjr\".\"effective_start_date\"\n" +
-                    ", \"cjr\".\"effective_end_date\"\n" +
-                    ", \"cjr\".\"modified_date\"\n" +
-                    ", \"cjr\".\"is_deleted\"\n" +
-                    ", \"jnl\".\"inbound_ts\"\n" +
-                    "FROM\n" +
-                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PAECP = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Assistant Editorial Contracts & Payment')))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PAECP)))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
-                    "LEFT JOIN  "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
-                    "WHERE (w.work_id IS NOT NULL)\n" +
-                    "UNION SELECT\n" +
-                    "  \"concat\"(\"jnl\".\"u_key\", 'PCS', \"wd\".\"sourceref\") u_key\n" +
-                    ", \"jnl\".\"u_key\" work_source_ref\n" +
-                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
-                    ", \"jnl\".\"PCS\" erms_person_ref\n" +
-                    ", \"wd\".\"sourceref\" person_source_ref\n" +
-                    ", 'PCS' f_role\n" +
-                    ", \"cnt\".\"email\"\n" +
-                    ", \"cnt\".\"name\"\n" +
-                    ", \"cnt\".\"staff_user\"\n" +
-                    ", \"cjr\".\"effective_start_date\"\n" +
-                    ", \"cjr\".\"effective_end_date\"\n" +
-                    ", \"cjr\".\"modified_date\"\n" +
-                    ", \"cjr\".\"is_deleted\"\n" +
-                    ", \"jnl\".\"inbound_ts\"\n" +
-                    "FROM\n" +
-                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PCS = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Content Specialist')))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PCS)))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
-                    "LEFT JOIN "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
-                    "WHERE (w.work_id IS NOT NULL)\n" +
-                    "UNION SELECT\n" +
-                    "  \"concat\"(\"jnl\".\"u_key\", 'PSM', \"wd\".\"sourceref\") u_key\n" +
-                    ", \"jnl\".\"u_key\" work_source_ref\n" +
-                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
-                    ", \"jnl\".\"PSM\" erms_person_ref\n" +
-                    ", \"wd\".\"sourceref\" person_source_ref\n" +
-                    ", 'PSM' f_role\n" +
-                    ", \"cnt\".\"email\"\n" +
-                    ", \"cnt\".\"name\"\n" +
-                    ", \"cnt\".\"staff_user\"\n" +
-                    ", \"cjr\".\"effective_start_date\"\n" +
-                    ", \"cjr\".\"effective_end_date\"\n" +
-                    ", \"cjr\".\"modified_date\"\n" +
-                    ", \"cjr\".\"is_deleted\"\n" +
-                    ", \"jnl\".\"inbound_ts\"\n" +
-                    "FROM\n" +
-                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
-                    "INNER JOIN  "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.PSM = cjr.contact_ref)) AND (cjr.role_type = 'Publishing Support Manager')))\n" +
-                    "INNER JOIN  "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.PSM)))\n" +
-                    "INNER JOIN  "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
-                    "LEFT JOIN   "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
-                    "WHERE (w.work_id IS NOT NULL)\n" +
-                    "UNION SELECT\n" +
-                    "  \"concat\"(\"jnl\".\"u_key\", 'MCM', \"wd\".\"sourceref\") u_key\n" +
-                    ", \"jnl\".\"u_key\" work_source_ref\n" +
-                    ", \"jnl\".\"epr_id\" eph_work_id\n" +
-                    ", \"jnl\".\"MCM\" erms_person_ref\n" +
-                    ", \"wd\".\"sourceref\" person_source_ref\n" +
-                    ", 'MCM' f_role\n" +
-                    ", \"cnt\".\"email\"\n" +
-                    ", \"cnt\".\"name\"\n" +
-                    ", \"cnt\".\"staff_user\"\n" +
-                    ", \"cjr\".\"effective_start_date\"\n" +
-                    ", \"cjr\".\"effective_end_date\"\n" +
-                    ", \"cjr\".\"modified_date\"\n" +
-                    ", \"cjr\".\"is_deleted\"\n" +
-                    ", \"jnl\".\"inbound_ts\"\n" +
-                    "FROM\n" +
-                    "  (((("+GetErmsDbUser.getERMSDataBase()+".erms_journal_current jnl\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contactjournalrel_current cjr ON (((jnl.u_key = cjr.journal_ref) AND (jnl.MCM = cjr.contact_ref)) AND (cjr.role_type = 'Marketing Communications Manager')))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getERMSDataBase()+".erms_contact_current cnt ON ((cjr.contact_ref = cnt.contact_id) AND (cnt.contact_id = jnl.MCM)))\n" +
-                    "INNER JOIN "+GetErmsDbUser.getProdStagingDataBase()+".workday_reference_v wd ON (wd.email = cnt.email))\n" +
-                    "LEFT JOIN  "+GetErmsDbUser.getProdDataBase()+".gd_wwork w ON (jnl.epr_id = w.work_id))\n" +
-                    "WHERE (w.work_id IS NOT NULL))order by rand() limit %s";
+                    "WHERE (w.work_id IS NOT NULL))where eph_work_id in ('%s') order by u_key desc";
 
     public static final String GET_WORK_IDENTIFIER_CURRENT_COUNT =
             "select count(*) as Target_Count from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_work_identifier_v";
