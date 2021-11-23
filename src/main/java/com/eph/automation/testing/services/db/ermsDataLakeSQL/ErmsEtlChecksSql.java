@@ -1,8 +1,6 @@
 package com.eph.automation.testing.services.db.ermsDataLakeSQL;
 
 
-import com.eph.automation.testing.services.db.ermsDataLakeSQL.GetErmsDbUser;
-
 public class ErmsEtlChecksSql {
     private ErmsEtlChecksSql(){
         throw new IllegalStateException("Utility class");
@@ -393,6 +391,42 @@ public class ErmsEtlChecksSql {
 
     public static final String GET_DUPLICATES_LATEST_WORK_PERSON_ROLE_COUNT =
             "select count(*) as Duplicate_Count from (select count(*) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_person_role where delete_flag=false group by u_key having count()>1 )";
+
+    public static final String GET_RANDOM_WORK_IDENTIFIER_ID_CURRENT =
+            "select epr_id as epr_id" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_work_identifier_v order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_PERSON_ID_CURRENT =
+            "select eph_work_id as epr_id" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_current_work_person_role order by rand() limit %s";
+
+    public static final String GET_WORK_IDENTIFIER_TRANSFORM_FILE_REC =
+            "select epr_id as epr_id" +
+                    ",erms_id as erms_id" +
+                    ",u_key as u_key" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_file_history_work_identifier_part " +
+                    "where transform_file_ts=(select max(transform_file_ts) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_file_history_work_identifier_part)" +
+                    "and epr_id in ('%s') order by epr_id desc";
+
+    public static final String GET_WORK_PERSON_ROLE_TRANSFORM_FILE_REC =
+            "select eph_work_id as epr_id" +
+                    ",u_key as u_key" +
+                    ",work_source_ref as work_source_ref" +
+                    ",erms_person_ref as erms_person_ref" +
+                    ",person_source_ref as person_source_ref" +
+                    ",f_role as f_role" +
+                    ",email as email" +
+                    ",name as name" +
+                    ",staff_user as staff_user" +
+                    ",effective_start_date as effective_start_date" +
+                    ",effective_end_date as effective_end_date" +
+                    ",modified_date as modified_date" +
+                    ",is_deleted as is_deleted" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_file_history_work_person_role_part" +
+                    " where transform_file_ts=(select max(transform_file_ts) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_file_history_work_person_role_part)" +
+                    " and eph_work_id in ('%s') order by u_key desc";
+
+
+
 
 }
 
