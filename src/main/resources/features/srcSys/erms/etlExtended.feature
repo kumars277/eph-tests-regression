@@ -15,17 +15,17 @@ Feature:Validate data between ERMS ETL Tables
     Examples:
       | tableName                                                                    |countOfRandomIds |
       |erms_transform_current_work_identifier                                        |10               |
-      |erms_transform_current_work_person_role                                       |2                |
+      |erms_transform_current_work_person_role                                       |20                |
 
   @ERMS
   Scenario Outline: Check between ERMS Current and transform file tables
     Given We know the total count of Current ERMS ETL data <SrctableName>
     Then  We know the total count of erms transform file <trgtTable>
     And Compare count of ERMS current and the ERMS transform file table are identical <SrctableName><trgtTable>
-   # Given We get the <countOfRandomIds> random EPR ids <tableName>
-  #  When  Get the data from the ERMS inbound tables
-  #  Then  Get the data from the ERMS transform current tables
-  #  And   we compare the records of ERMS Inbound and ERMS current tables
+    Given Get the <countOfRandomIds> random EPR ids from the current table <SrctableName>
+    When  Get the data from the ERMS transform current tables <SrctableName>
+    Then  Get the data from the ERMS transform files tables <trgtTable>
+    And   we compare the records of ERMS Current and ERMS tranform file tables <SrctableName> and <trgtTable>
     Examples:
       | SrctableName                            |trgtTable                                        |countOfRandomIds |
       |erms_transform_current_work_identifier   |erms_transform_file_history_work_identifier_part | 50               |
