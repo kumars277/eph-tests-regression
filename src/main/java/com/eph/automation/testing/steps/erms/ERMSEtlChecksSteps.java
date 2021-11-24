@@ -468,5 +468,93 @@ public class ERMSEtlChecksSteps {
 
     }
 
+    @Then("^Get the data from the ERMS transform history partition tables (.*)$")
+    public static void getERMStransPartitionRecords(String tableName) {
+        Log.info("We get the erms transform History Partition records...");
+        switch (tableName) {
+            case "erms_transform_history_work_identifier_part":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_IDENTIFIER_HIST_PARTITION_REC, String.join("','",ids));
+                break;
+            case "erms_transform_history_work_person_role_part":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_HIST_PARTITION_REC, String.join("','",ids));
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        ErmsEtlAccessDLContext.recFromCurrentHist = DBManager.getDBResultAsBeanList(sql, ErmsDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @And("^we compare the records of ERMS Current and ERMS tranform history partition tables (.*) and (.*)$")
+    public void compareErmsCurrentandTransHist(String srctableName, String trgtTable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (ErmsEtlAccessDLContext.recordsFromCurrent.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ids to compare the records between Current and transform_hist_part...");
+            for (int i = 0; i < ErmsEtlAccessDLContext.recordsFromCurrent.size(); i++) {
+                switch (srctableName) {
+                    case "erms_transform_current_work_identifier":
+                        Log.info("comparing " + srctableName + " and " + trgtTable + " records...");
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getu_key)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(ErmsDLAccessObject::getu_key));
+
+                        String[] allWorkIdentifierCol = {"getepr_id", "geterms_id", "getu_key"};
+                        for (String strTemp : allWorkIdentifierCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recordsFromCurrent.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recFromCurrentHist.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("epr_id => " + ErmsEtlAccessDLContext.recordsFromCurrent.get(i).getepr_id() +
+                                    " " + strTemp + " => " + srctableName + " = " + method.invoke(objectToCompare1) +
+                                    " " + trgtTable + " = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " + trgtTable + " for uKey:" + ErmsEtlAccessDLContext.recordsFromCurrent.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+
+                    case "erms_transform_current_work_person_role":
+                        Log.info("comparing " + srctableName + " and " + trgtTable + " records...");
+                        ErmsEtlAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id));
+
+                        String[] allWorkPersonRoleCol = {"getepr_id", "getu_key", "getwork_source_ref", "geterms_person_ref", "getperson_source_ref", "getf_role",
+                                "getemail", "getname", "getstaff_user", "geteffective_start_date", "geteffective_end_date", "getmodified_date", "getis_deleted"};
+                        for (String strTemp : allWorkPersonRoleCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recordsFromCurrent.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recFromCurrentHist.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("work_ID => " + ErmsEtlAccessDLContext.recordsFromCurrent.get(i).getepr_id() +
+                                    " " + strTemp + " => " + srctableName + " = " + method.invoke(objectToCompare1) +
+                                    " " + trgtTable + " = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " + trgtTable + " for workId:" + ErmsEtlAccessDLContext.recordsFromCurrent.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+
+                        break;
+                    default:
+                        Log.info(noTablemsg);
+                }
+            }
+        }
+    }
 
 }

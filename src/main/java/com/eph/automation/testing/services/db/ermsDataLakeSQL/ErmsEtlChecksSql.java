@@ -426,6 +426,37 @@ public class ErmsEtlChecksSql {
                     " and eph_work_id in ('%s') order by u_key desc";
 
 
+    public static final String GET_WORK_IDENTIFIER_HIST_PARTITION_REC =
+            "select epr_id as epr_id" +
+                    ",erms_id as erms_id" +
+                    ",u_key as u_key" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_identifier_part " +
+                    "where delete_flag=false and transform_ts=(select max(transform_ts) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_identifier_part)" +
+                    "and epr_id in ('%s') order by epr_id desc";
+
+    public static final String GET_WORK_PERSON_ROLE_HIST_PARTITION_REC =
+            "select eph_work_id as epr_id" +
+                    ",u_key as u_key" +
+                    ",work_source_ref as work_source_ref" +
+                    ",erms_person_ref as erms_person_ref" +
+                    ",person_source_ref as person_source_ref" +
+                    ",f_role as f_role" +
+                    ",email as email" +
+                    ",name as name" +
+                    ",staff_user as staff_user" +
+                    ",effective_start_date as effective_start_date" +
+                    ",effective_end_date as effective_end_date" +
+                    ",modified_date as modified_date" +
+                    ",is_deleted as is_deleted" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_person_role_part" +
+                    " where delete_flag=false and transform_ts=(select max(transform_ts) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_person_role_part)" +
+                    " and eph_work_id in ('%s') order by u_key desc";
+
+
+
+
+
+
 
 
 }
