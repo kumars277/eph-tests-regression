@@ -452,9 +452,63 @@ public class ErmsEtlChecksSql {
                     " where delete_flag=false and transform_ts=(select max(transform_ts) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_person_role_part)" +
                     " and eph_work_id in ('%s') order by u_key desc";
 
+    public static final String GET_RANDOM_WORK_IDENTIFIER_ID_LATEST =
+            "select epr_id as epr_id" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_identifier order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_PERSON_ID_LATEST =
+            "select eph_work_id as epr_id" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_person_role order by rand() limit %s";
+
+    public static final String GET_WORK_IDENTIFIER_DELTA_AND_EXCL_REC =
+            "select epr_id as epr_id" +
+                    ",erms_id as erms_id" +
+                    ",u_key as u_key" +
+                    " from \n" +
+                    "(select c.epr_id,c.erms_id,c.u_key from "+ GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_identifier_excl_delta as c union all \n" +
+                    "select d.epr_id,d.erms_id,d.u_key from "+ GetErmsDbUser.getERMSDataBase()+".erms_delta_current_work_identifier as d)" +
+                    " where epr_id in ('%s') order by epr_id desc";
+
+    public static final String GET_WORK_PERSON_ROLE_DELTA_AND_EXCL_REC =
+            "select eph_work_id as epr_id" +
+                    ",u_key as u_key" +
+                    ",work_source_ref as work_source_ref" +
+                    ",erms_person_ref as erms_person_ref" +
+                    ",person_source_ref as person_source_ref" +
+                    ",f_role as f_role" +
+                    ",email as email" +
+                    ",name as name" +
+                    ",staff_user as staff_user" +
+                    ",effective_start_date as effective_start_date" +
+                    ",effective_end_date as effective_end_date" +
+                    ",modified_date as modified_date" +
+                    ",is_deleted as is_deleted" +
+                    " from \n" +
+                    "(select c.u_key,c.eph_work_id,c.work_source_ref,c.erms_person_ref,c.person_source_ref,c.f_role,c.email,c.name,c.staff_user,c.effective_start_date,c.effective_end_date,c.modified_date,c.is_deleted from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_history_work_person_role_excl_delta as c union all \n" +
+                    "select d.u_key,d.eph_work_id,d.work_source_ref,d.erms_person_ref,d.person_source_ref,d.f_role,d.email,d.name,d.staff_user,d.effective_start_date,d.effective_end_date,d.modified_date,d.is_deleted from "+GetErmsDbUser.getERMSDataBase()+".erms_delta_current_work_person_role as d)" +
+                    " where eph_work_id in ('%s') order by u_key desc";
 
 
+    public static final String GET_WORK_IDENTIFIER_REC_LATEST_DATA =
+            "select epr_id as epr_id" +
+                    ",erms_id as erms_id" +
+                    ",u_key as u_key" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_identifier where epr_id in ('%s') order by epr_id desc";
 
+    public static final String GET_WORK_PERSON_ROLE_LATEST_DATA =
+            "select eph_work_id as epr_id" +
+                    ",u_key as u_key" +
+                    ",work_source_ref as work_source_ref" +
+                    ",erms_person_ref as erms_person_ref" +
+                    ",person_source_ref as person_source_ref" +
+                    ",f_role as f_role" +
+                    ",email as email" +
+                    ",name as name" +
+                    ",staff_user as staff_user" +
+                    ",effective_start_date as effective_start_date" +
+                    ",effective_end_date as effective_end_date" +
+                    ",modified_date as modified_date" +
+                    ",is_deleted as is_deleted" +
+                    " from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_person_role where eph_work_id in ('%s') order by u_key desc";
 
 
 

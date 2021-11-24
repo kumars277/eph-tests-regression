@@ -50,13 +50,13 @@ Feature:Validate data between ERMS ETL Tables
     Given We know the total count of latest ERMS ETL data <SrctableName>
     Then  We know the total count of erms delta current and exclude tables <SrctableName>
     And Compare count of ERMS latest with the delta current and exclude tables are identical <SrctableName>
- # Given We get the <countOfRandomIds> random EPR ids <tableName>
- # When  Get the data from the ERMS inbound tables
- # Then  Get the data from the ERMS transform current tables
- # And   we compare the records of ERMS Inbound and ERMS current tables
+    Given Get the <countOfRandomIds> random EPR ids from the latest table <SrctableName>
+    When  Get the data from the ERMS erms delta current and exclude tables <SrctableName>
+    Then  Get the data from the ERMS transform latest tables <SrctableName>
+     And   we compare the records for ERMS latest tables <SrctableName>
     Examples:
       | SrctableName                           |countOfRandomIds |
-      |erms_transform_latest_work_identifier   | 50               |
+     |erms_transform_latest_work_identifier   | 50               |
       |erms_transform_latest_work_person_role  |50                |
 
     @ERMS
