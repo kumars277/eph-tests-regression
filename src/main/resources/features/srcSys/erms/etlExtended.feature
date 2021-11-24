@@ -36,10 +36,10 @@ Feature:Validate data between ERMS ETL Tables
     Given We know the total count of Current ERMS ETL data <SrctableName>
     Then  We know the total count of erms transform partition history <trgtTable>
     And Compare count of ERMS current and the ERMS transform partition history table are identical <SrctableName><trgtTable>
- # Given We get the <countOfRandomIds> random EPR ids <tableName>
- # When  Get the data from the ERMS inbound tables
- # Then  Get the data from the ERMS transform current tables
- # And   we compare the records of ERMS Inbound and ERMS current tables
+    Given Get the <countOfRandomIds> random EPR ids from the current table <SrctableName>
+    When  Get the data from the ERMS transform current tables <SrctableName>
+    Then  Get the data from the ERMS transform history partition tables <trgtTable>
+    And   we compare the records of ERMS Current and ERMS tranform history partition tables <SrctableName> and <trgtTable>
     Examples:
       | SrctableName                            |trgtTable                                        |countOfRandomIds |
       |erms_transform_current_work_identifier   |erms_transform_history_work_identifier_part      | 50               |

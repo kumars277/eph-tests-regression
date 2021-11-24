@@ -19,9 +19,6 @@ public class ErmsEtlAccessDLContext {
     public static List<ErmsDLAccessObject> recordsFromCurrent;
     public static List<ErmsDLAccessObject> recFromCurrentHist;
     public static List<ErmsDLAccessObject> recFromTransformFile;
-    public static List<ErmsDLAccessObject> recFromDiffOfTransformFile;
-    public static List<ErmsDLAccessObject> recFromDeltaCurrent;
-    public static List<ErmsDLAccessObject> recFromDeltaCurrentHist;
     public static List<ErmsDLAccessObject> recFromDiffOfDeltaAndCurrHist;
     public static List<ErmsDLAccessObject> recFromExclDelta;
     public static List<ErmsDLAccessObject> recFromDiffOfDeltaAndExcl;
