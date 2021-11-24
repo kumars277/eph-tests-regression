@@ -557,4 +557,132 @@ public class ERMSEtlChecksSteps {
         }
     }
 
+    @Given("^Get the (.*) random EPR ids from the latest table (.*)$")
+    public void getRandomErmsLatestIds(String numberOfRecords,String tableName){
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random ids from ERMS Latest Tables....");
+        List<Map<?, ?>> randomids;
+        switch (tableName) {
+            case "erms_transform_latest_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_RANDOM_WORK_IDENTIFIER_ID_LATEST, numberOfRecords);
+                break;
+            case "erms_transform_latest_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_RANDOM_WORK_PERSON_ID_LATEST, numberOfRecords);
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        ids = randomids.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
+        Log.info(sql);
+        Log.info(ids.toString());
+    }
+
+    @Then("^Get the data from the ERMS erms delta current and exclude tables (.*)$")
+    public static void getERMSCDeltaCurrAndExclRecords(String tableName) {
+        Log.info("We get the sum of delta current and exclude records...");
+        switch (tableName) {
+            case "erms_transform_latest_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_IDENTIFIER_DELTA_AND_EXCL_REC, String.join("','",ids));
+                break;
+            case "erms_transform_latest_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_DELTA_AND_EXCL_REC, String.join("','",ids));
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl = DBManager.getDBResultAsBeanList(sql, ErmsDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @Then("^Get the data from the ERMS transform latest tables (.*)$")
+    public static void getERMSLatestRecords(String tableName) {
+        Log.info("We get the erms latest table records...");
+        switch (tableName) {
+            case "erms_transform_latest_work_identifier":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_IDENTIFIER_REC_LATEST_DATA, String.join("','",ids));
+                break;
+            case "erms_transform_latest_work_person_role":
+                sql = String.format(ErmsEtlChecksSql.GET_WORK_PERSON_ROLE_LATEST_DATA, String.join("','",ids));
+                break;
+            default:
+                Log.info(noTablemsg);
+        }
+        ErmsEtlAccessDLContext.recFromLatest = DBManager.getDBResultAsBeanList(sql, ErmsDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @And("^we compare the records for ERMS latest tables (.*)$")
+    public void compareErmsCurrentandTransHist(String srctableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ids to compare the records in ERMs latest tables...");
+            for (int i = 0; i < ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.size(); i++) {
+                switch (srctableName) {
+                    case "erms_transform_latest_work_identifier":
+                        Log.info("comparing records for" + srctableName +"...");
+                        ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.sort(Comparator.comparing(ErmsDLAccessObject::getu_key)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recFromLatest.sort(Comparator.comparing(ErmsDLAccessObject::getu_key));
+
+                        String[] allWorkIdentifierCol = {"getepr_id", "geterms_id", "getu_key"};
+                        for (String strTemp : allWorkIdentifierCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recFromLatest.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("epr_id => " + ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i).getepr_id() +
+                                    " " + strTemp + " => DeltaCurrentAndExcl = " + method.invoke(objectToCompare1) +
+                                    " " + srctableName + " = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " + srctableName + " for uKey:" + ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+
+                    case "erms_transform_latest_work_person_role":
+                        Log.info("Sorting the ids to compare the records in ERMs latest tables...");
+                        ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id)); //sort primarykey data in the lists
+                        ErmsEtlAccessDLContext.recFromLatest.sort(Comparator.comparing(ErmsDLAccessObject::getepr_id));
+
+                        String[] allWorkPersonRoleCol = {"getepr_id", "getu_key", "getwork_source_ref", "geterms_person_ref", "getperson_source_ref", "getf_role",
+                                "getemail", "getname", "getstaff_user", "geteffective_start_date", "geteffective_end_date", "getmodified_date", "getis_deleted"};
+                        for (String strTemp : allWorkPersonRoleCol) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            ErmsDLAccessObject objectToCompare1 = ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i);
+                            ErmsDLAccessObject objectToCompare2 = ErmsEtlAccessDLContext.recFromLatest.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("work_ID => " + ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i).getepr_id() +
+                                    " " + strTemp + " => DeltaCurrentAndExcl = " + method.invoke(objectToCompare1) +
+                                    " " + srctableName + " = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " + srctableName + " for workId:" + ErmsEtlAccessDLContext.recFromSumOfDeltaCurrAndExcl.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+
+                        break;
+                    default:
+                        Log.info(noTablemsg);
+                }
+            }
+        }
+    }
+
 }
