@@ -25,7 +25,7 @@ public class CKETLCoreDataChecks {
 
     @Given("^We get the (.*) random CK ids of (.*)$")
     public static void getRandomidsFromCurrent(String numberOfRecords, String Currenttablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for CK Current Tables....");
         List<Map<?, ?>> randomids;

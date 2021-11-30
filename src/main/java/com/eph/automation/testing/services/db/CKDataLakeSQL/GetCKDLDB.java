@@ -12,7 +12,7 @@ public class GetCKDLDB {
             }
         }else{
             // dbCKDL = "dpp_staging_sit";
-            dbCKDL = "dpp_staging_sit";
+            dbCKDL = "dpp_staging_uat";
         }
         return dbCKDL;
     }

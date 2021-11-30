@@ -14,13 +14,10 @@ Feature:Validate data for ck ETL tables
 #    And Compare CK records in Inbound Source and Current of <InboundSourcetablename>
 
     Examples:
-      |numberOfRecords |DeltaHistorytablename                    |DeltaCurrenttablename                    |
-      | 5              |ck_delta_history_package_part            |ck_delta_current_package                 |
-      | 5              |ck_delta_history_subject_area_part       |ck_delta_current_package_work            |
-      | 5              |ck_delta_history_work_part               |ck_delta_current_package_work_url        |
-      | 5              |ck_delta_history_package_work_part       |ck_delta_current_subject_area            |
-      | 5              |ck_delta_history_work_subject_area_part  |ck_delta_current_work                    |
-      | 5              |ck_delta_history_package_work_url_part   |ck_delta_current_work_subject_area       |
+      |numberOfRecords |DeltaHistorytablename                    |DeltaCurrenttablename               |
+      | 5              |ck_delta_history_package_work_part       |ck_delta_current_package_work                    |
+      | 5              |ck_delta_history_work_subject_area_part  |ck_delta_current_work_subject_area  |
+
 
 
 
