@@ -100,7 +100,7 @@ public class CKETLCoreDataChecks {
             Log.info("Sorting the ids to compare the records between Inbound Source and current...");
             for (int i = 0; i < CKAccessDLContext.CKCurrentTableDataObjectList.size(); i++) {
                 switch (InboundSourcetablename) {
-                    case "ck_package_form_v":
+                    case "ck_package_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
@@ -127,7 +127,7 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_subject_area_form_v":
+                    case "ck_subject_area_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
@@ -154,7 +154,7 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_work_form_v":
+                    case "ck_work4_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
@@ -181,7 +181,7 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_package_work_form_v":
+                    case "ck_package_work3_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
@@ -208,7 +208,7 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_work_subject_area_form_v":
+                    case "ck_work_subject_area3_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
@@ -235,7 +235,7 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_package_work_url_form_v":
+                    case "ck_package_work_url4_transform_v":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
