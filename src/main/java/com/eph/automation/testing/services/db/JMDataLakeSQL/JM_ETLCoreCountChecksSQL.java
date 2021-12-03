@@ -16,7 +16,11 @@ public class JM_ETLCoreCountChecksSQL {
 
     public static String GET_JMF_WORK_PERSON_ROLE="select count(*) as count from "+ GetJMDLDBUser.getJMDB()+".etl_work_person_role_dq_v";
 
+    public static String GET_JMF_WORK_BUSINESS_MODEL="select count(*) as count from "+ GetJMDLDBUser.getJMDB()+".etl_work_business_model_dq_v";
+
     public static String GET_JMF_MANIFESTATION_UPDATES="select count(*) as count from "+ GetJMDLDBUser.getJMDB()+".etl_manifestation_updates1_v";
+
+    public static String GET_JMF_WORK_ACCESS_MODEL="select count(*) as count from "+ GetJMDLDBUser.getJMDB()+".etl_work_access_model_dq_v";
 
     public static String GET_JMF_MANIFESTATION="select count(*) as count from "+ GetJMDLDBUser.getJMDB()+".etl_manifestation_dq_v";
 
@@ -69,7 +73,7 @@ public class JM_ETLCoreCountChecksSQL {
             "-- this is to assist with the legal ownership case statement without having a separate view\n" +
             "   coowned_journals AS (\n" +
             "   SELECT DISTINCT co.f_work, co.legal_owner_type\n" +
-            "   FROM   journalmaestro_uat2.jmf_work_ownership co\n" +
+            "   FROM   " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership co\n" +
             "   WHERE (((co.notified_date IS NOT NULL)\n" +
             "       AND (co.journal_ownership_type = 'CO'))\n" +
             "       AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
@@ -136,14 +140,14 @@ public class JM_ETLCoreCountChecksSQL {
             "             END),w.main_language_code) language_code,\n" +
             "       'N'  as                          dq_err,\n" +
             "        w.notified_date as              notified_date\n" +
-            "from    journalmaestro_uat2.jmf_work                 w\n" +
-            "join      journalmaestro_uat2.jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join      journalmaestro_uat2.jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
+            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work                 w\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
             "                                    and fo.journal_ownership_type = 'FO'\n" +
             "--        manifestation (below) becomes a left join because there are a few single-manifestation exceptions where ISSN <> ISSN-L\n" +
-            "left join journalmaestro_uat2.jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
-            "left join journalmaestro_uat2.jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
             "                                     and (wo1.journal_ownership_type = 'FO'))\n" +
             "--        Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
             "--        business rules declare there to be only one legal owner type per journal\n" +
@@ -193,10 +197,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                       w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                       w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                          and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  wc.chronicle_scenario_code = 'RN'\n" +
             "and    w0.work_journey_identifier = 'A0'\n" +
@@ -241,10 +245,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        w1.notified_date as             notified_date\n" +
-            "from journalmaestro_uat2.jmf_work                     w0\n" +
-            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
-            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join journalmaestro_uat2.jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "from " + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
             "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
             "                               and w1.work_journey_identifier = 'A1'\n" +
             "where   w0.work_journey_identifier = 'A0'\n" +
@@ -291,10 +295,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'DC'\n" +
@@ -341,10 +345,10 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                         dq_err,\n" +
             "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
-            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
             "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
             "where  w0.work_journey_identifier = 'A0'\n" +
             "and    wc.chronicle_scenario_code = 'TR'\n" +
@@ -761,7 +765,7 @@ public class JM_ETLCoreCountChecksSQL {
             ")\n" +
             "select * from result_data)";
 
-    public static String GET_JMF_STAGING_WORK_PERSON_ROLE_Count="select count(*) as COUNT from \n" +
+    public static String GET_JMF_STAGING_WORK_PERSON_ROLE_Count="select count(*) as COUNT from(\n" +
             "(select distinct\n" +
             "       scenario_name,\n" +
             "       scenario_code,\n" +
@@ -791,25 +795,25 @@ public class JM_ETLCoreCountChecksSQL {
             "            when 'Y' then 'Update'\n" +
             "            else 'Update'\n" +
             "        END) as                         upsert,\n" +
-            "        CAST (null as varchar) as                                     jm_source_ref_old, -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as                                     jm_source_ref_old, \n" +
             "       'J0'||w.elsevier_journal_number||'-'||wpr.peoplehub_id||'-PU'  jm_source_ref_new,\n" +
             "        w.eph_work_id as                eph_work_id,\n" +
             "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
             "        wpr.eph_person_id as            f_person,\n" +
             "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       employee_number_old, \n" +
             "        wpr.peoplehub_id as             employee_number_new,\n" +
             "       'PU' as                          f_role,\n" +
-            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       internal_email_old,  \n" +
             "        lower(wpr.email_address) as     internal_email_new,\n" +
             "        wpr.notified_date as            start_date,\n" +
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        wpr.notified_date as            notified_date\n" +
-            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role   wpr\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w  on w.work_id = wpr.f_work\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
             "where wpr.party_role_type in ('PPC', 'PU')\n" +
             "and   wpr.notified_date is not null\n" +
             "and   w.work_journey_identifier = 'A1'\n" +
@@ -824,26 +828,26 @@ public class JM_ETLCoreCountChecksSQL {
             "            when 'Y' then 'Update'\n" +
             "            else 'Update'\n" +
             "        END) as                         upsert,\n" +
-            "        CAST (null as varchar) as                                         jm_source_ref_old, -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as                                         jm_source_ref_old, \n" +
             "       'J0'||w.elsevier_journal_number||'-'||warp.pd_peoplehub_id||'-PD'  jm_source_ref_new,\n" +
             "        w.eph_work_id as                eph_work_id,\n" +
             "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
             "        wpr.eph_person_id as            f_person,\n" +
             "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       employee_number_old, \n" +
             "        warp.pd_peoplehub_id as         employee_number_new,\n" +
             "        'PD' as                         f_role,\n" +
-            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       internal_email_old,  \n" +
             "        lower(warp.pd_email) as         internal_email_new,\n" +
             "        wpr.notified_date as            start_date,\n" +
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        wpr.notified_date as            notified_date\n" +
-            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role   wpr\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w  on w.work_id = wpr.f_work\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "join "+ GetJMDLDBUser.getJMDB()+".works_attrs_roles_people_v warp on\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
             "         (warp.pmgcode = w.pmg_code\n" +
             "      and warp.pmccode = w.pmc_code\n" +
             "      and warp.pd_email is not null\n" +
@@ -854,7 +858,7 @@ public class JM_ETLCoreCountChecksSQL {
             "and   wpr.notified_date is not null\n" +
             "and   w.work_journey_identifier = 'A1'\n" +
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "UNION\n" +
+            "UNION  \n" +
             "-- BUSINESS CONTROLLERS\n" +
             "SELECT DISTINCT\n" +
             "       cs.chronicle_scenario_name as    scenario_name,\n" +
@@ -870,28 +874,28 @@ public class JM_ETLCoreCountChecksSQL {
             "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
             "        CAST (null as varchar)          f_person, -- eph_person_id\n" +
             "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       employee_number_old, \n" +
             "        warp.bc_peoplehub_id as         employee_number_new,\n" +
             "        'BC' as                         f_role,\n" +
-            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        CAST (null as varchar) as       internal_email_old,  \n" +
             "        lower(warp.bc_email)            internal_email_new,\n" +
             "        w.notified_date as              start_date,\n" +
             "        CAST (null as date)             end_date,\n" +
             "       'N'  as                          dq_err,\n" +
             "        w.notified_date as              notified_date\n" +
-            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".works_attrs_roles_people_v warp on\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
             "         (warp.resp_cen = w.responsibility_centre_code\n" +
             "      and warp.bc_email is not null\n" +
             "      and warp.bc_email <> 'Not Found')\n" +
             "--    this last join is to pick up BC email and peoplehub_id from works_attrs_roles_people_v\n" +
-            "--    for the given responsibility_centre_code. jm only holds BC's names.\n" +
+            "--    for the given responsibility_centre_code. JM only holds BC's names.\n" +
             "where w.notified_date is not null\n" +
             "and   w.work_journey_identifier = 'A1'\n" +
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "UNION\n" +
+            "UNION  \n" +
             "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "-- UPDATE PUBLISHER\n" +
             "-- there are two possible sources - (1) jmf_family_resource_details has been drawn up into jmf_work.\n" +
@@ -935,23 +939,23 @@ public class JM_ETLCoreCountChecksSQL {
             "            else 'N'\n" +
             "        END) as                                                             dq_err,\n" +
             "        wpr.notified_date as                                                notified_date\n" +
-            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role  wpr\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w0 on w0.work_id = wpr.f_work\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
-            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join "+ GetJMDLDBUser.getJMDB()+".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role  wpr\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w0 on w0.work_id = wpr.f_work\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
+            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
             "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
             "                               and w1.work_journey_identifier = 'A1'\n" +
             "where wpr.party_role_type in ('PPC', 'PU')\n" +
             "and   w0.work_journey_identifier = 'A0'\n" +
             "and   wc.chronicle_scenario_code = 'CA'\n" +
-            "and   w1.pu_peoplehubid_new is not null  \n" +
-            "and   w1.pu_email_new       is not null  \n" +
-            "and   wpr.notified_date is not null\n" +
-            "UNION\n" +
+            "and   w1.pu_peoplehubid_new is not null  -- EPHD-2877 filter out PMC-change records\n" +
+            "and   w1.pu_email_new       is not null  -- EPHD-2877 filter out PMC-change records\n" +
+            "and   wpr.notified_date     is not null\n" +
+            "UNION  \n" +
             "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "-- UPDATE PUBLISHING DIRECTOR\n" +
-            "-- jm updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
+            "-- JM updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
             "-- This is why we need to use pmg_pmc_journals_v not works_attrs_roles_people_v.\n" +
             "-- Updates are passed to EPH by WORK PERSON ROLE as if they had come through from jmf_work_person_role\n" +
             "-- (In JMF this is the current model for PU changes, but not yet for PD changes.)\n" +
@@ -984,13 +988,55 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as date)                end_date,\n" +
             "       'N'  as                             dq_err,\n" +
             "        ppa.notified_date as               notified_date\n" +
-            "from  (("+ GetJMDLDBUser.getJMDB()+".jmf_pmg_pubdir_allocation   ppa\n" +
-            "join    "+ GetJMDLDBUser.getJMDB()+".pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
-            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
+            "from  ((" + GetJMDLDBUser.getJMDB() + ".jmf_pmg_pubdir_allocation   ppa\n" +
+            "join    " + GetJMDLDBUser.getJMDB() + ".pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
+            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
             "where    ppa.allocation_type = 'PD'\n" +
-            "and      ppa.notified_date is not null\n" +
+            "and      ppa.notified_date >= ppj.jnl_created_date\n" +
             "  )\n" +
-            "order by notified_date, jm_source_ref_new)";
+            "order by notified_date, jm_source_ref_new\n" +
+            "))";
+
+    public static String GET_JMF_STAGING_WORK_ACCESS_MODEL_Count="select count(*) as COUNT from(\n" +
+            "select  cs.chronicle_scenario_name as                                 scenario_name,\n" +
+            "        cs.chronicle_scenario_code as                                 scenario_code,\n" +
+            "       'J0'||w.elsevier_journal_number as                             external_work_ref,\n" +
+            "       'J0'||w.elsevier_journal_number||'-'||wam.access_model_code as external_reference,\n" +
+            "        CAST (null as integer) as                                     eph_work_id,\n" +
+            "        wam.access_model_code as                                      access_model_code,\n" +
+            "        wam.access_model_description as                               access_model_description,\n" +
+            "        wam.notified_date as                                          notified_date\n" +
+            "from    "+ GetJMDLDBUser.getJMDB()+".jmf_work_access_model   wam\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_work                  w on w.work_id = wam.f_work\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".eph_access_model_v       am on am.code   = wam.access_model_code\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle       wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs  on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
+            "where   w.work_journey_identifier = 'A1'\n" +
+            "and     wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "and     w.notified_date is not null\n" +
+            "-- and     w.elsevier_journal_number > '31434'\n" +
+            "order by w.elsevier_journal_number)";
+
+
+    public static String GET_JMF_STAGING_WORK_BUSINESS_MODEL_Count="select count(*) as COUNT from (\n" +
+            "select  cs.chronicle_scenario_name as                                   scenario_name,\n" +
+            "        cs.chronicle_scenario_code as                                   scenario_code,\n" +
+            "        'J0'||w.elsevier_journal_number as                               external_work_ref,\n" +
+            "       'J0'||w.elsevier_journal_number||'-'||wbm.business_model_code as external_reference,\n" +
+            "        CAST (null as integer) as                                       eph_work_id,\n" +
+            "        wbm.business_model_code as                                      business_model_code,\n" +
+            "        wbm.business_model_description as                               business_model_description,\n" +
+            "        wbm.notified_date as                                            notified_date\n" +
+            "from    "+ GetJMDLDBUser.getJMDB()+".jmf_work_business_model wbm\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_work                  w on w.work_id = wbm.f_work\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".eph_business_model_v     bm on bm.code   = wbm.business_model_code\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle       wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs  on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
+            "where   w.work_journey_identifier = 'A1'\n" +
+            "and     wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "and     w.notified_date is not null\n" +
+            "-- and     w.elsevier_journal_number > '31434'\n" +
+            "order by w.elsevier_journal_number)";
 
     public static String GET_JMF_STAGING_MANIFESTATION_UPDATES="select count(*) as count from (\n" +
             "select cs.chronicle_scenario_name as              scenario,\n" +

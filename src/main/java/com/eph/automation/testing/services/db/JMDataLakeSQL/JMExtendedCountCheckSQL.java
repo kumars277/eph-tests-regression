@@ -37,7 +37,7 @@ public class JMExtendedCountCheckSQL {
             "from "+ GetJMDLDBUser.getJMDB()+ ".jnl_fulfilment_system_v jfs)";
 
 //  Product Extended Count
-    public static String GET_Product_Extended = "select count(*) as TOTAL_COUNT from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" in ('jm','JM_FIXED')";
+    public static String GET_Product_Extended = "select count(*) as TOTAL_COUNT from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" in ('JM','JM_FIXED')";
 
 //    jm Extended data checks
     public static String GET_JM_EXTENDED_IDs = "select epr_id as EPR_ID from (\n" +
@@ -102,5 +102,5 @@ public class JMExtendedCountCheckSQL {
             ", jfs.delete_flag\n" +
             "from "+ GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')";
 
-    public static String GET_PRODUCT_EXTENDED_RECORDS = "select * from product_staging_database_uat2.product_availability_extended_allsource_v where \"source\" in ('jm','JM_FIXED') and epr_id in ('%s')";
+    public static String GET_PRODUCT_EXTENDED_RECORDS = "select * from product_staging_database_uat2.product_availability_extended_allsource_v where \"source\" in ('JM','JM_FIXED') and epr_id in ('%s')";
 }
