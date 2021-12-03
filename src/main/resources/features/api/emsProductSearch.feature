@@ -125,6 +125,25 @@ Feature: Search API: Products
       | pmcCode       |
       | pmgCode       |
 
+  @SearchAPI
+  Scenario Outline: verify search API pagination productSearch
+    Given verify pagination duplicate ids retried for product <Keyword> with <scroll>
+    Examples:
+      |Keyword        | scroll  |
+      |science            |30s      |
+      |test               |40s      |
+      |technolog          |50s      |
+      |research           |60s      |
+      |development        |80s      |
+      |people             |90s      |
+      | doctor            |10s      |
+      | maths             |20s      |
+      | bio               |30s      |
+      | cell              |30s      |
+      | engineer          |30s      |
+      | blood             |30s      |
+      | medicine          |30s      |
+
   @searchAPI @productSearchAPI
   Scenario Outline: Product search E2E
     Given  We get product by ID <id>

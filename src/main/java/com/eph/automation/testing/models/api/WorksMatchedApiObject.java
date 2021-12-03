@@ -17,6 +17,14 @@ public class WorksMatchedApiObject {
     public int getTotalMatchCount() {return totalMatchCount;}
     public void setTotalMatchCount(int totalMatchCount) {this.totalMatchCount = totalMatchCount;}
 
+    int pageableMatchCount;
+    public int getPageableMatchCount() {return pageableMatchCount;}
+    public void setPageableMatchCount(int pageableMatchCount) {this.pageableMatchCount = pageableMatchCount;}
+
+    String scrollId;
+    public void setScrollId(String scrollId) {this.scrollId = scrollId;}
+    public String getScrollId() {return scrollId;}
+
     WorkApiObject[] items;
     public WorkApiObject[] getItems() {return items;}
     public void setItems(WorkApiObject[] items) {this.items = items;}

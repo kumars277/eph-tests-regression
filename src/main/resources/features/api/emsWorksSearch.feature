@@ -157,7 +157,6 @@ Feature: Customer Search API: Works
     And     We get the work search data from EPH GD
     Then    work details are retrieved by isInPackage and compared
 
-
   @searchAPI @workSearchAPI @CkAPI
   Scenario Outline: Search works by excludeNonElsevier
     Given   verify works retrieved by search <option> for excludeNonElsevier
@@ -169,7 +168,6 @@ Feature: Customer Search API: Works
       | human                              |
       | medicine                           |
 
-
   @SearchAPI
   Scenario Outline: verify search API pagination - work search
   Given verify pagination duplicate ids retried by search <option>
@@ -177,13 +175,26 @@ Feature: Customer Search API: Works
   |option|
   |physics      |
 
-
   @SearchAPI
-  Scenario Outline: verify search API pagination IsInworkpackage
-    Given verify pagination duplicate ids retried for <workPackage> with <scroll>
+  Scenario Outline: verify search API pagination workSearch
+    Given verify pagination duplicate ids retried for work <workPackage> with <scroll>
     Examples:
       |workPackage        | scroll  |
-      |EPR-W-12TB96       | 30s     |
+     # |EPR-W-12TB96       | 30s     |
+      |science            |30s      |
+      |test               |40s      |
+      |technolog          |50s      |
+      |research           |60s      |
+      |development        |80s      |
+      |people             |90s      |
+      | doctor            |10s      |
+      | maths             |20s      |
+      | bio               |30s      |
+      | cell              |30s      |
+      | engineer          |30s      |
+      | blood             |30s      |
+      | medicine          |30s      |
+
 
 
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}

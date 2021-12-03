@@ -13,24 +13,21 @@ public class ProductsMatchedApiObject {
 
   public ProductsMatchedApiObject() {}
 
-  public int getTotalMatchCount() {
-    return totalMatchCount;
-  }
-
-  public void setTotalMatchCount(int totalMatchCount) {
-    this.totalMatchCount = totalMatchCount;
-  }
-
-  public ProductApiObject[] getItems() {
-    return items;
-  }
-
-  public void setItems(ProductApiObject[] items) {
-    this.items = items;
-  }
-
   private int totalMatchCount;
+  public int getTotalMatchCount() {return totalMatchCount;}
+  public void setTotalMatchCount(int totalMatchCount) {this.totalMatchCount = totalMatchCount;}
+
+  int pageableMatchCount;
+  public int getPageableMatchCount() {return pageableMatchCount;}
+  public void setPageableMatchCount(int pageableMatchCount) {this.pageableMatchCount = pageableMatchCount;}
+
+  String scrollId;
+  public void setScrollId(String scrollId) {this.scrollId = scrollId;}
+  public String getScrollId() {return scrollId;}
+
   private ProductApiObject[] items;
+  public ProductApiObject[] getItems() {return items;}
+  public void setItems(ProductApiObject[] items) {this.items = items;}
 
   public void verifyProductsAreReturned() {
     Assert.assertNotEquals("Verify more than zero items returned by API", 0, totalMatchCount);

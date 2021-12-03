@@ -6,6 +6,8 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
+import com.eph.automation.testing.models.api.WorkApiObject;
+import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.api.APIService;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.*;
+import static com.eph.automation.testing.services.api.APIService.searchForProductsBySearchResult;
+
 /** Created by Georgi Vlaykov on 11/02/2019 */
 public class ApiProductsSearchSteps {
 
@@ -958,6 +962,48 @@ public class ApiProductsSearchSteps {
     returnedProducts.verifyAPIReturnedProductsCount(productCountDB);
   }
 
+
+  @When("^verify pagination duplicate ids retried for product (.*) with (.*)$")
+  public void verifyPaginationForProduct(String keyword, String scroll)  throws AzureOauthTokenFetchingException {
+  //created by Nishant @ 30 Nov 2021
+    ProductsMatchedApiObject returnedProducts = null;
+    Log.info("searching for product..." + keyword);
+
+    int fromCntr = 0;    int sizeCntr = 50;    String scrollId = "";
+    ArrayList<String> idsToVerify = new ArrayList<>();
+
+    do{
+      //call this API first
+      if (fromCntr == 0) {
+        returnedProducts =
+
+                searchForProductsBySearchResult(keyword +"&_alt=1"+ from + fromCntr + size + sizeCntr + "&reverse=true&scroll=" + scroll);
+        scrollId = returnedProducts.getScrollId(); //get scroll id from response
+      }
+      else //call scroll API for rest of iterations
+      {
+        returnedProducts = APIService.searchForProductByScrollId(scrollId+"?scroll=" + scroll);
+      }
+
+      Log.info("Total work found - " + returnedProducts.getTotalMatchCount());
+      Log.info("scanning workID from " + (fromCntr) + " to " + (fromCntr+sizeCntr) + " records...");
+
+      returnedProducts.verifyProductsAreReturned();
+      ProductApiObject[] items = returnedProducts.getItems().clone();
+      Log.info("previous ids...");      Log.info(idsToVerify.toString());
+
+      for (int i = 0; i < items.length; i++) {
+        Assert.assertFalse("duplicate found at index "+i+" "+items[i].getId().toString(),
+                idsToVerify.contains(items[i].getId().toString()));
+        idsToVerify.add(items[i].getId());
+      }
+      fromCntr += sizeCntr;
+    }
+    while (fromCntr < returnedProducts.getTotalMatchCount());
+  }
+
+
+
   private static int getCount(String countType) {
     switch (countType) {
       case "getNumberOfPackageComponents":
@@ -1056,5 +1102,7 @@ public class ApiProductsSearchSteps {
         DBManager.getDBResultMap(sql, Constants.EPH_URL);
     return ((Long) countByProductStatus.get(0).get(count)).intValue();
   }
+
+
 
 }

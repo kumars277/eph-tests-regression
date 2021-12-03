@@ -1161,21 +1161,21 @@ public class ApiWorksSearchSteps {
   }
 
 
-  @When("^verify pagination duplicate ids retried for (.*) with (.*)$")
-  public void verifyPaginationIsInWorkPackage(String workPackageId, String scroll)  throws AzureOauthTokenFetchingException {
+  @When("^verify pagination duplicate ids retried for work (.*) with (.*)$")
+  public void verifyPaginationForWork(String keyword, String scroll)  throws AzureOauthTokenFetchingException {
 
     WorksMatchedApiObject returnedWorks = null;
-    Log.info("searching for workPackage..." + workPackageId);
+    Log.info("searching for workPackage..." + keyword);
 
-    int fromCntr = 0;    int sizeCntr = 20;    String scrollId = "";
+    int fromCntr = 0;    int sizeCntr = 50;    String scrollId = "";
     ArrayList<String> idsToVerify = new ArrayList<>();
 
     do{
       //call this API first
       if (fromCntr == 0) {
         returnedWorks =
-                APIService.searchForWorkByIsInPackage(workPackageId + from + fromCntr + size + sizeCntr + "&scroll=" + scroll);
-        scrollId = returnedWorks.getWorkEdition(); //get scroll id from response
+                APIService.searchForWorksBySearchOptionResult(keyword +"&_alt=1"+ from + fromCntr + size + sizeCntr + "&reverse=true&scroll=" + scroll);
+        scrollId = returnedWorks.getScrollId(); //get scroll id from response
       }
       else //call scroll API for rest of iterations
       {
