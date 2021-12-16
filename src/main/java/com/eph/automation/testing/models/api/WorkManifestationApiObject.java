@@ -61,7 +61,7 @@ public class WorkManifestationApiObject {
         manifestationCore.compareWithDB(this.id);
 
         if (manifestationExtended != null) {
-            Log.info("\nverifying manifestationExtended Data...");
+
             getJsonToObject_extendedManifestation(this.id);
             manifestationExtended.compareWithDB();
         }

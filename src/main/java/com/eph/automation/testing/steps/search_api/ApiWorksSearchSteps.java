@@ -16,6 +16,7 @@ import static com.eph.automation.testing.services.api.APIService.searchForWorkBy
 
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import com.jayway.restassured.RestAssured;
 import cucumber.api.java.en.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -73,7 +74,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-    //ids.clear();ids.add("EPR-W-12TB9G");Log.info("hard coded work ids are : " + ids);
+   // ids.clear();ids.add("EPR-W-11N73G");Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -93,7 +94,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-  //  ids.clear();    ids.add("EPR-W-102NR7");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102NWM");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -136,6 +137,7 @@ public class ApiWorksSearchSteps {
     Log.info("Selected random extended manifestation ids  : " + manifestaionids);
     DataQualityContext.breadcrumbMessage += "->" + manifestaionids;
     verifyListNotEmpty(manifestaionids);
+    manifestaionids.clear();manifestaionids.add("EPR-M-1251CX");manifestaionids.add("EPR-M-11S7FY");
   }
 
   @Given("^We set specific journal ids for search")
@@ -202,7 +204,7 @@ public class ApiWorksSearchSteps {
   public void compareWorkSearchResultsWithDB() throws AzureOauthTokenFetchingException {
     int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
-      Log.info("#################################################################################");
+      Log.info("#########");
       Log.info("Verifying " + DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
 
       workApi_response =
@@ -263,10 +265,10 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by workType and compared$")
-  public void compareWorksByWorkTypeWithDB() {
+  public void compareWorksByWorkTypeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
-    try {
+   // try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String searchKeyword =
@@ -285,10 +287,10 @@ public class ApiWorksSearchSteps {
         returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkType(searchKeyword, workType));
       }
 
-    } catch (Exception e) {
+  /*  } catch (Exception e) {
       e.getMessage();
       scenarioFailed();
-    }
+    }*/
   }
 
   @Then("^the work details are retrieved by manifestationType and compared$")
@@ -392,8 +394,10 @@ public class ApiWorksSearchSteps {
     try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
+        Log.info("\n");
         Log.info("###########-----getWorkByTitle - " + titleType);
-        Log.info("#######################################################");
+        Log.info("###############");
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "-> Verify that the searched work exists and is accessible trough the API",
                 200,APIService.checkWorkExists(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
 

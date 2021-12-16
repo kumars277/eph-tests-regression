@@ -113,7 +113,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-      ids.clear(); ids.add("EPR-112SJ4"); Log.info("hard coded product ids are : " + ids);
+     // ids.clear(); ids.add("EPR-112SJ4"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();

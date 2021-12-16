@@ -33,10 +33,14 @@ Feature: Customer Search API: Works
       | options               |
       | PERSON_NAME           |
       | PEOPLE_HUB_ID         |
-      | PERSON_ID             |
-      # updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
-      | personIdCurrent       |
       | personFullNameCurrent |
+      | PERSON_ID             |
+
+
+
+      # updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
+   #   | personIdCurrent       |
+
 
 
   @searchAPI @workSearchAPI
@@ -80,13 +84,14 @@ Feature: Customer Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
+      | WORK_PRODUCT_ID                        |
       | WORK_ID                                |
       | WORK_TITLE                             |
       | WORK_IDENTIFIER                        |
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |
-      | WORK_PRODUCT_ID                        |
+
       | WORK_PRODUCT_SUMMARY_NAME              |
       | WORK_PERSONS_FULLNAME                  |
       | WORK_MANIFESTATION_PRODUCT_ID          |
@@ -168,12 +173,12 @@ Feature: Customer Search API: Works
       | human                              |
       | medicine                           |
 
-  @SearchAPI
-  Scenario Outline: verify search API pagination - work search
-  Given verify pagination duplicate ids retried by search <option>
-  Examples:
-  |option|
-  |physics      |
+#  @SearchAPI
+#  Scenario Outline: verify search API pagination - work search
+#  Given verify pagination duplicate ids retried by search <option>
+#  Examples:
+#  |option|
+#  |physics      |
 
   @SearchAPI
   Scenario Outline: verify search API pagination workSearch

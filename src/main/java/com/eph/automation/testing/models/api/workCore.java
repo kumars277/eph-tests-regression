@@ -25,9 +25,9 @@ public class workCore {
     ApiWorksSearchSteps apiWorksSearchSteps;
 
     List<String> ignorePMC = Arrays.asList("CKSPECPKG","FSPKG","CKFLEX","CKFLEXAG","NEJ","NEB");
-    private List<WorkDataObject> workDataObjectsFromEPHGD;
-    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {return workDataObjectsFromEPHGD;}
-    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;}
+    private List<WorkDataObject> workDataObjectsFromEPHGD_local;
+    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {return workDataObjectsFromEPHGD_local;}
+    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {this.workDataObjectsFromEPHGD_local = workDataObjectsFromEPHGD;}
 
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
     public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
@@ -166,21 +166,21 @@ public class workCore {
 
         getWorkDataFromEPHGD(workId);
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - title", title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - title", title, this.workDataObjectsFromEPHGD_local.get(0).getWORK_TITLE());
         printLog("title");
 
-        if (!(subTitle == null && this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - subTitle", subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
+        if (!(subTitle == null && this.workDataObjectsFromEPHGD_local.get(0).getWORK_SUBTITLE() == null)) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - subTitle", subTitle, this.workDataObjectsFromEPHGD_local.get(0).getWORK_SUBTITLE());
             printLog("subTitle");
         }
 
-        if (electronicRightsInd != null | this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - electronicRightsInd", Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
+        if (electronicRightsInd != null | this.workDataObjectsFromEPHGD_local.get(0).getELECTRONIC_RIGHTS_IND() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - electronicRightsInd", Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD_local.get(0).getELECTRONIC_RIGHTS_IND()));
             printLog("electronicRightsInd");
         }
 
-        if (!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - language", language.get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
+        if (!(this.workDataObjectsFromEPHGD_local.get(0).getLANGUAGE_CODE() == null)) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - language", language.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLANGUAGE_CODE());
             printLog("language code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - language", language.get("name"), getLanguageName(language.get("code").toString()));
             printLog("language Name");
@@ -188,8 +188,8 @@ public class workCore {
         }
 
         //subscription type, implemented by Nishant @ 18 May 2021, EPHD-3122
-        if (subscriptionType != null | this.workDataObjectsFromEPHGD.get(0).getSUBSCRIPTION_TYPE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - subscriptionType", subscriptionType.get("code"), this.workDataObjectsFromEPHGD.get(0).getSUBSCRIPTION_TYPE());
+        if (subscriptionType != null | this.workDataObjectsFromEPHGD_local.get(0).getSUBSCRIPTION_TYPE() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - subscriptionType", subscriptionType.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSUBSCRIPTION_TYPE());
             printLog("subscriptionType");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - subscriptionName", subscriptionType.get("name"), getSubscriptionName(subscriptionType.get("code").toString()));
             printLog("subscriptionName");
@@ -198,21 +198,21 @@ public class workCore {
 
         if (!(editionNumber == null)) {
             int apiEditionNumber = Integer.valueOf(editionNumber);
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - EditionNumber", editionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - EditionNumber", editionNumber, this.workDataObjectsFromEPHGD_local.get(0).getEDITION_NUMBER());
             printLog("EditionNumber");
         }
 
 
         //  int apiVolume =Integer.valueOf(volume);
-        //Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - ", " - ",volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());        printLog("volume");
-        //if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
+        //Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - ", " - ",volume, this.workDataObjectsFromEPHGD_local.get(0).getVOLUME());        printLog("volume");
+        //if(Integer.parseInt(this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR())!=0) {
 
-        if (this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - copyrightYear", copyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
+        if (this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - copyrightYear", copyrightYear, this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR());
             printLog("copyrightYear");
         }
 
-        if (!(identifiers == null && this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER() == null)) {
+        if (!(identifiers == null && this.workDataObjectsFromEPHGD_local.get(0).getIDENTIFIER() == null)) {
             Log.info("total identifiers found..." + identifiers.length);
             for (WorkIdentifiersApiObject workIdentifier : identifiers) {
                 workIdentifier.compareWithDB();
@@ -220,7 +220,7 @@ public class workCore {
             printLog("identifiers");
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workType", type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workType", type.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_TYPE());
         printLog("workType code");
 
         //added by Nishant @ 19 Oct 2021
@@ -235,7 +235,7 @@ public class workCore {
             printLog("nonElsevierInd");
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workStatus", status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workStatus", status.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_STATUS());
         printLog("workStatus code");
 
 
@@ -247,28 +247,28 @@ public class workCore {
 		"actualDiscontinueDate"
         */
 
-        if (plannedLaunchDate != null | this.workDataObjectsFromEPHGD.get(0).getPLANNED_LAUNCH_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedLanuchDate", plannedLaunchDate, this.workDataObjectsFromEPHGD.get(0).getPLANNED_LAUNCH_DATE());
+        if (plannedLaunchDate != null | this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_LAUNCH_DATE() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedLanuchDate", plannedLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_LAUNCH_DATE());
             printLog("plannedLanuchDate");
         }
 
-        if (actualLaunchDate != null | this.workDataObjectsFromEPHGD.get(0).getACTUAL_LAUNCH_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualLaunchDate", actualLaunchDate, this.workDataObjectsFromEPHGD.get(0).getACTUAL_LAUNCH_DATE());
+        if (actualLaunchDate != null | this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_LAUNCH_DATE() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualLaunchDate", actualLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_LAUNCH_DATE());
             printLog("actualLaunchDate");
         }
 
-        if (plannedDiscontinuationDate != null | this.workDataObjectsFromEPHGD.get(0).getPLANNED_DISCONTINUE_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedDiscontinuationDate", plannedDiscontinuationDate, this.workDataObjectsFromEPHGD.get(0).getPLANNED_DISCONTINUE_DATE());
+        if (plannedDiscontinuationDate != null | this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_DISCONTINUE_DATE() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedDiscontinuationDate", plannedDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_DISCONTINUE_DATE());
             printLog("plannedDiscontinuationDate");
         }
 
-        if (actualDiscontinuationDate != null | this.workDataObjectsFromEPHGD.get(0).getACTUAL_DISCONTINUE_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualDiscontinuationDate", actualDiscontinuationDate, this.workDataObjectsFromEPHGD.get(0).getACTUAL_DISCONTINUE_DATE());
+        if (actualDiscontinuationDate != null | this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_DISCONTINUE_DATE() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualDiscontinuationDate", actualDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_DISCONTINUE_DATE());
             printLog("actualDiscontinuationDate");
         }
 
-        if (!(imprint == null && this.workDataObjectsFromEPHGD.get(0).getIMPRINT() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - imprint", imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
+        if (!(imprint == null && this.workDataObjectsFromEPHGD_local.get(0).getIMPRINT() == null)) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - imprint", imprint.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getIMPRINT());
             printLog("imprint code");
         }
 
@@ -285,8 +285,8 @@ public class workCore {
        // as per above story, openAccessType and societyOwnership should have null value at work level.
        // changing script accordingly.
 
-            if (societyOwnership != null | this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP());
+            if (societyOwnership != null | this.workDataObjectsFromEPHGD_local.get(0).getSOCIETY_OWNERSHIP() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSOCIETY_OWNERSHIP());
             printLog("societyOwnership code");
 
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("name"), getSocietyOwnershipName(societyOwnership.get("code").toString()));
@@ -298,8 +298,8 @@ public class workCore {
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ",null,societyOwnership);
             printLog("societyOwnership");*/
 
-        if (legalOwnership != null | this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
+        if (legalOwnership != null | this.workDataObjectsFromEPHGD_local.get(0).getLEGAL_OWNERSHIP() != null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLEGAL_OWNERSHIP());
             printLog("legalOwnership code");
 
             String[] lov = getLegalOwnershipValue(legalOwnership.get("code").toString());
@@ -406,17 +406,17 @@ public class workCore {
 
 
         if(!ignorePMC.contains(type.get("code").toString())){
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD_local.get(0).getPMC());
             printLog("pmc code");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD_local.get(0).getPMC()));
             printLog("pmg code");
         }
-        if (this.workDataObjectsFromEPHGD.get(0).getF_accountable_product() != null) {
+        if (this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product() != null) {
             //accountable products varification implemmented by Nishant on 22 Apr 2020
             Log.info("workType - " + type.get("code"));
-            Log.info("verifying accountable product id..." + this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
-            getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+            Log.info("verifying accountable product id..." + this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product());
+            getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product());
 
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - getGlProductSegmentCode",accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
             printLog("getGlProductSegmentCode");
@@ -488,7 +488,7 @@ public class workCore {
 
         //The data is stored in table semarchy_eph_mdm.gd_work_relationship.  //workRelationships - EPR-11119M
         if (workRelationships != null) {
-            workRelationships.compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+            workRelationships.compareWithDB(this.workDataObjectsFromEPHGD_local.get(0).getWORK_ID());
             printLog("workRelationships");
         }
 
@@ -499,7 +499,7 @@ public class workCore {
         List<String> ids = new ArrayList<>();
         ids.add(workID);
         String sql = String.format(APIDataSQL.GET_GD_DATA_WORK, Joiner.on("','").join(ids));
-        workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+        workDataObjectsFromEPHGD_local = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     private String getPMGcodeByPMC(String pmcCode) {

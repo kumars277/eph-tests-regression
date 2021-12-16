@@ -8,6 +8,7 @@ import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.jayway.restassured.response.Response;
 import org.junit.Assert;
@@ -217,7 +218,7 @@ public class APIService {
     pmcCode          : 300,303 or 746
     pmgCode          : 030,090 or 077
     */
-
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     Response response =
         given()
             .baseUri(searchAPIEndPoint)
@@ -230,11 +231,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
   // getWorks APIs
   public static int checkWorkExists(String workID) throws AzureOauthTokenFetchingException {
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     return given()
         .baseUri(searchAPIEndPoint)
         .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
