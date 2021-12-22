@@ -206,7 +206,7 @@ public class APIDataSQL {
   // created by Nishant @ 20 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG_WITHSEARCH =
       "select count(a.product_id) "
-          + "from ( \n"
+          + " from ( \n"
           + " select p.product_id,p.name,pmc.f_pmg from"
           + " semarchy_eph_mdm.gd_product p,"
           + " semarchy_eph_mdm.gd_manifestation m,"
@@ -223,7 +223,7 @@ public class APIDataSQL {
           + " inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id"
           + " inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc"
           + " )a"
-          + "where upper(a.name) like '%%%s%%' and a.f_pmg='%s'";
+          + " where upper(a.name) like '%%%s%%' and a.f_pmg='%s'";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG =
       "select count(a.product_id) from ( "
@@ -530,7 +530,7 @@ public class APIDataSQL {
           + "from semarchy_eph_mdm.gd_work_legal_owner gwlo where f_wwork ='PARAM1'";
 
   public static final String SELECT_GD_ACCESSMODEL_BY_WORKID =
-      "select f_access_model from semarchy_eph_mdm.gd_work_access_model gwam where f_wwork ='PARAM1'";
+      "select f_access_model,effective_start_date, effective_end_date from semarchy_eph_mdm.gd_work_access_model gwam where f_wwork ='PARAM1'";
 
   public static final String SELECT_GD_BUSINESSMODEL_BY_WORKID =
       "select f_business_model, effective_start_date , effective_end_date "

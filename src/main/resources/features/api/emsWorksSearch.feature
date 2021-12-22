@@ -173,14 +173,19 @@ Feature: Customer Search API: Works
       | human                              |
       | medicine                           |
 
-#  @SearchAPI
-#  Scenario Outline: verify search API pagination - work search
-#  Given verify pagination duplicate ids retried by search <option>
-#  Examples:
-#  |option|
-#  |physics      |
 
-  @SearchAPI
+  #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
+
+  @searchAPI @workSearchAPI
+  Scenario Outline: Search E2E
+    Given  We get the work data from EPH GD for <id>
+    Then   the work details are retrieved and compared
+    Examples:
+      | id                        |
+      | EPR-W-102S7C              |
+
+#NA as per EPHD-3935 - The scroll API method needs to be removed in SIT
+  @notInUse
   Scenario Outline: verify search API pagination workSearch
     Given verify pagination duplicate ids retried for work <workPackage> with <scroll>
     Examples:
@@ -200,27 +205,23 @@ Feature: Customer Search API: Works
       | blood             |30s      |
       | medicine          |30s      |
 
+    #  @SearchAPI
+#  Scenario Outline: verify search API pagination - work search
+#  Given verify pagination duplicate ids retried by search <option>
+#  Examples:
+#  |option|
+#  |physics      |
 
-
-  #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
-
-  @searchAPI @workSearchAPI
-  Scenario Outline: Search E2E
-    Given  We get the work data from EPH GD for <id>
-    Then   the work details are retrieved and compared
-    Examples:
-      | id                        |
-      | EPR-W-102S7C              |
 
 # covered in above tests
-  @APIv3
+  @notInUse
   Scenario: verify Manifestation Extended specific ID
     Given   We get 2 random search ids for Extended manifestation
     And     get work by manifestation
     And     We get the work search data from EPH GD
     Then    the work details are retrieved and compared
 
-  @APIv3
+  @notInUse
   Scenario: verify Work Extended by specific ID
     Given   We get 1 random search ids for Extended works
     And     We get the work search data from EPH GD

@@ -160,7 +160,7 @@ Feature: Product Finder production smoke tests
 
 
 #below 3 scenario clubbed in 1 as above
-
+@notInUse
     Scenario Outline: Verify any broken link on PF - work
       Given user is on Product/Journal Finder search page <ui>
       And verify links on home page
@@ -172,7 +172,7 @@ Feature: Product Finder production smoke tests
       |ui   |keyword    |
       |PF   |math       |
    #     |JF   |clinic     |
-
+  @notInUse
   Scenario Outline: Verify any broken link on PF - manifestation
     Given user is on Product/Journal Finder search page <ui>
     When Searches for given <keyword>
@@ -184,7 +184,7 @@ Feature: Product Finder production smoke tests
       |ui   |keyword    |
       |PF   |math       |
    #     |JF   |clinic     |
-
+  @notInUse
   Scenario Outline: Verify any broken link on PF - Product
     Given user is on Product/Journal Finder search page <ui>
     When Searches for given <keyword>

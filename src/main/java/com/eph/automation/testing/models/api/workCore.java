@@ -162,7 +162,7 @@ public class workCore {
 
     public void compareWithDB(String workId) {
         Log.info("----- Verifying workCore data... " + workId);
-        DataQualityContext.breadcrumbMessage+=" > "+workId;
+     //   DataQualityContext.breadcrumbMessage+=" > "+workId;
 
         getWorkDataFromEPHGD(workId);
 
@@ -343,16 +343,14 @@ public class workCore {
 
                          if(accessModel_api.get(cnt).getEffectiveStartDate()!=null)
                          {
-                             Log.info("workAccessModel effectiveStartDate present");
-                             //need to write validation rule
-                             Assert.assertTrue(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveStartDate present",false);
+                             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " workAccessModel effective_start_date ",accessModel_api.get(cnt).getEffectiveStartDate(),workAccessModelsDB.get(i).get("effective_start_date").toString());
+                             printLog("workAccessModel effective_start_date "+accessModel_api.get(cnt).getAccessModel().get("effective_start_date"));
 
                          }
                         if(accessModel_api.get(cnt).getEffectiveEndDate()!=null)
                         {
-                            Log.info("workAccessModel EffectiveEndDate present");
-                            //need to write validation rule
-                            Assert.assertTrue(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveEndDate present",false);
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveEndDate ",accessModel_api.get(cnt).getEffectiveEndDate(),workAccessModelsDB.get(i).get("effective_end_date").toString());
+                            printLog("workAccessModel effectiveEndDate "+accessModel_api.get(cnt).getAccessModel().get("effectiveEndDate"));
                         }
 
                         accModelFound = true;

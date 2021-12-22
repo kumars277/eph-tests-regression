@@ -119,13 +119,36 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
+      | pmgCode       |
       | workType      |
       | productStatus |
       | productType   |
       | pmcCode       |
-      | pmgCode       |
 
-  @SearchAPI
+
+  @searchAPI @productSearchAPI
+  Scenario Outline: Product search E2E
+    Given  We get product by ID <id>
+    And    We get the search data from EPH GD for products
+    Then   the product details are retrieved and compared
+    Examples:
+      | id         |
+      | EPR-11BBFJ |
+      | EPR-11BBFK |
+      | EPR-11BBFM |
+      | EPR-11BBFN |
+      | EPR-11BBFR |
+
+  @searchAPI @productSearchAPI
+  Scenario Outline: search product and verify title contains searchKey
+    Given  We get 1 random search ids for products <paramKey>
+    And    We get the search data from EPH GD for products
+    Then   the product title are retrieved by <paramKey> compared
+    Examples:
+      | paramKey      |
+      | productStatus |
+
+  @notInUse
   Scenario Outline: verify search API pagination productSearch
     Given verify pagination duplicate ids retried for product <Keyword> with <scroll>
     Examples:
@@ -143,25 +166,3 @@ Feature: Search API: Products
       | engineer          |30s      |
       | blood             |30s      |
       | medicine          |30s      |
-
-  @searchAPI @productSearchAPI
-  Scenario Outline: Product search E2E
-    Given  We get product by ID <id>
-    And    We get the search data from EPH GD for products
-    Then   the product details are retrieved and compared
-    Examples:
-      | id         |
-      | EPR-11BBFJ |
-      | EPR-11BBFK |
-      | EPR-11BBFM |
-      | EPR-11BBFN |
-      | EPR-11BBFR |
-
-  @searchAPIdebug @productSearchAPIdebug
-  Scenario Outline: search product and verify title contains searchKey
-    Given  We get 1 random search ids for products <paramKey>
-    And    We get the search data from EPH GD for products
-    Then   the product title are retrieved by <paramKey> compared
-    Examples:
-      | paramKey      |
-      | productStatus |

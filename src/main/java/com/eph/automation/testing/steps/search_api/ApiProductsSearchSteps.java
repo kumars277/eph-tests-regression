@@ -113,7 +113,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-112SJ4"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10MC4S"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -121,6 +121,7 @@ public class ApiProductsSearchSteps {
       Log.info("product_identifier hard coded product ids are : " + ids);
     }
     DataQualityContext.breadcrumbMessage += "->" + ids;
+
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage + " Verify list with random ids is not empty.",
         ids.isEmpty());
@@ -815,7 +816,7 @@ public class ApiProductsSearchSteps {
   }
 
   @Then("^the product count are retrieved by (.*) compared$")
-  public static void theProductDetailsAreRetrievedByParamKeyAndCompared(String paramKey) {
+  public static void theProductDetailsAreRetrievedByParamKeyAndCompared(String paramKey) throws AzureOauthTokenFetchingException {
     /*//logic updated by Nishant @ 04 Jun 2021
     //as per Ron, API product search result returns products even though product name does not contains searchKey but its manifestaion or work title does.
     */
@@ -823,7 +824,7 @@ public class ApiProductsSearchSteps {
     String defaultSearch = "CELL";
     int productCountDB = 0;
 
-    try {
+    //try {
       String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().split(" ")[0]).toUpperCase();
       switch (paramKey) {
         case "productStatus":
@@ -908,7 +909,7 @@ public class ApiProductsSearchSteps {
 
       returnedProducts.verifyProductsAreReturned();
       returnedProducts.verifyAPIReturnedProductsCount(productCountDB);
-
+/*
     } catch (Exception e) {
       Log.info(e.getMessage());
       Assert.assertFalse(
@@ -917,7 +918,7 @@ public class ApiProductsSearchSteps {
               + e.getMessage()
               + " scenario Failed ",
           true);
-    }
+    }*/
   }
 
   @Then("^the product title are retrieved by (.*) compared$")
