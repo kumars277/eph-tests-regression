@@ -53,20 +53,34 @@ public class WorkIdentifiersApiObject {
         //updated by Nishant @ 18 May 2021, EPHD-3122
         Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
-        printLog("work identifier code");
-
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
-        printLog("work identifier name");
-
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_START_DATE());
-        printLog("work identifier effectiveStartDate");
-
-        if(effectiveEndDate!=null|DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
+        boolean identifierMatched = false;
+        for(int i=0;i<this.DBworkIdentifier.size();i++)
         {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE());
-            printLog("work identifier effectiveEndtDate");
+            if(this.identifierType.get("code").toString().equalsIgnoreCase(this.DBworkIdentifier.get(i).getF_TYPE()))
+            {
+                identifierMatched=true;
+
+                printLog("work identifier code");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
+                printLog("work identifier name");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_START_DATE());
+                printLog("work identifier effectiveStartDate");
+
+                if(effectiveEndDate!=null|DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
+                {
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE());
+                    printLog("work identifier effectiveEndtDate");
+                }
+
+                break;
+            }
         }
+
+        Assert.assertTrue(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",identifierMatched);
+
+
     }
 
     private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122

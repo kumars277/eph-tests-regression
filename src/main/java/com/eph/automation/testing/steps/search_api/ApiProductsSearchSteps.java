@@ -113,7 +113,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10MC4S"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-12FS58"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -933,7 +933,7 @@ public class ApiProductsSearchSteps {
     int sizeCntr = 500;
 
     if (paramKey.equalsIgnoreCase("productStatus")) {
-      DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
+      DataQualityContext.breadcrumbMessage += "-> product status " + productDataObjects.get(0).getF_STATUS();
       productCountDB =
           getCount(
               productCountByProductStatus, defaultSearch, productDataObjects.get(0).getF_STATUS());

@@ -162,7 +162,7 @@ public class workCore {
 
     public void compareWithDB(String workId) {
         Log.info("----- Verifying workCore data... " + workId);
-     //   DataQualityContext.breadcrumbMessage+=" > "+workId;
+        DataQualityContext.breadcrumbMessage+=" > "+workId;
 
         getWorkDataFromEPHGD(workId);
 

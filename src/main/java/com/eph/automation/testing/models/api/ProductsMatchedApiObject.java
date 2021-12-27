@@ -79,23 +79,25 @@ public class ProductsMatchedApiObject {
   public boolean verifyAllTitleContainsSearchKey(String searchKey) {
     // created by Nishant @ 04 June 2021
     int i = 0;
-    boolean found = false;
+    boolean notFound = false;
     int bound = items.length;
-    while (i < bound && !found) {
+    while (i < bound && !notFound) {
       if (!Pattern.compile(Pattern.quote(searchKey), Pattern.CASE_INSENSITIVE)
           .matcher(items[i].getProductCore().getName())
           .find()) {
-        found = true;
+        notFound = true;
         Log.info(
             items[i].getId()
                 + " at counter "
                 + i
                 + " - title does not include search string -"
                 + searchKey);
+
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage + " title not contains searchKey "+ searchKey, notFound);
       }
       i++;
     }
-    Assert.assertFalse(DataQualityContext.breadcrumbMessage + "title contains searchKey", found);
-    return found;
+
+    return notFound;
   }
 }

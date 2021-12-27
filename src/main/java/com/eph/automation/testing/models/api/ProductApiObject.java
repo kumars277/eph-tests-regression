@@ -83,7 +83,7 @@ public class ProductApiObject {
         */
 
     public void compareWithDB() {
-       try {
+      // try {
            getProductDataFromEPHGD(this.id);
            createdDate = createdDate.replace("T", " ").replace("Z", "");
            updatedDate = updatedDate.replace("T", " ").replace("Z", "");
@@ -136,7 +136,7 @@ public class ProductApiObject {
            //5. pricingExtended comparison
            //implemented by Nishant @ 8 May 2020
            if (work != null) {
-               DataQualityContext.breadcrumbMessage += "->" + work.getId();
+            //   DataQualityContext.breadcrumbMessage += "->" + work.getId();
                work.getWorkCore().compareWithDB(work.getId());
                if (work.getWorkExtended() != null) {
                    WorkApiObject workApiObject = new WorkApiObject();
@@ -144,14 +144,14 @@ public class ProductApiObject {
                    work.getWorkExtended().compareWithDB(work.getId());
                }
            }
-       }
+       /*}
        catch (Exception e)
        {
            e.getMessage();
 
            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
         //   DataQualityContext.api_response.prettyPrint();
-       }
+       }*/
 
     }
 

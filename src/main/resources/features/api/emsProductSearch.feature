@@ -17,8 +17,8 @@ Feature: Search API: Products
     Examples:
       | title                              |
       | PRODUCT_MANIFESTATION_WORK_TITLE   |
-   #   | PRODUCT_TITLE                      |
-   #   | PRODUCT_MANIFESTATION_TITLE        |
+      | PRODUCT_TITLE                      |
+      | PRODUCT_MANIFESTATION_TITLE        |
 
 
   @searchAPI @productSearchAPI
@@ -29,7 +29,7 @@ Feature: Search API: Products
     Examples:
       | idType                                |
       | PRODUCT_ID                            |
-      | PRODUCT_IDENTIFIER                    |
+#      | PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_ID                       |
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_ID              |
@@ -44,7 +44,7 @@ Feature: Search API: Products
     Then   the products detail are retrieved and compared when searched by type and <identifier>
     Examples:
       | identifier                            |
-      | PRODUCT_IDENTIFIER                    |
+  #    | PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |
@@ -56,9 +56,10 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
+      | PRODUCT_PERSONS_FULLNAME                    |
       | PRODUCT_ID                                  |
       | PRODUCT_TITLE                               |
-      | PRODUCT_IDENTIFIER                          |
+ #     | PRODUCT_IDENTIFIER                          |
       | PRODUCT_WORK_ID                             |
       | PRODUCT_WORK_TITLE                          |
       | PRODUCT_WORK_IDENTIFIER                     |
@@ -68,7 +69,7 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_WORK_ID               |
       | PRODUCT_MANIFESTATION_WORK_TITLE            |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER       |
-      | PRODUCT_PERSONS_FULLNAME                    |
+
       | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
 
