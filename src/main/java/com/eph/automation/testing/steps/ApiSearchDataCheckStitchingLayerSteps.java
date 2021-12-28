@@ -126,7 +126,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                         response = apiService.getProductById(randomIdsData.get(i).get("epr_id").toString());
 
                         AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), AvailabilityExtendedTestClass.class);
-                        if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
+                        if (jsonValue.getAvailabilityExtended().getApplications() != null || response.getAvailabilityExtended().getApplications() != null) {
                             compare_stch_product_ext_json_byAvailability(jsonValue, response.getAvailabilityExtended());
                         }
                         break;
@@ -134,7 +134,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     case "stch_product_ext_json_byPricing":
                         response = apiService.getProductById(randomIdsData.get(i).get("epr_id").toString());
                         PricingExtendedTestClass pricingJsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), PricingExtendedTestClass.class);
-                        if (pricingJsonValue.getPricingExtended().getExtendedPrices() != null | response.getPricingExtended().getExtendedPrices() != null) {
+                        if (pricingJsonValue.getPricingExtended().getExtendedPrices() != null || response.getPricingExtended().getExtendedPrices() != null) {
                             compare_stch_product_ext_json_byPricing(pricingJsonValue, response.getPricingExtended());
                         }
                         break;
@@ -160,6 +160,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                         workResponse = apiService.getWorkByID(randomIdsData.get(i).get("epr_id").toString());
                         compare_stch_work_core_json(i);
                         break;
+                        default: throw new IllegalArgumentException(stich_table);
                 }
             }
 
@@ -266,14 +267,14 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         printLog("revenueModel code");
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchProductCore -> revenueModel Name", jsonValue.getProductCore().getRevenueModel().get("name"), response.getProductCore().getRevenueModel().get("name"));
         printLog("revenueModel Name");
-        if (jsonValue.getProductCore().getEtaxProductCode() != null | response.getProductCore().getEtaxProductCode() != null) {
+        if (jsonValue.getProductCore().getEtaxProductCode() != null || response.getProductCore().getEtaxProductCode() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchProductCore -> eTax code", jsonValue.getProductCore().getEtaxProductCode().get("code"), response.getProductCore().getEtaxProductCode().get("code"));
             printLog("etaxProductCode code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchProductCore -> eTax name", jsonValue.getProductCore().getEtaxProductCode().get("name"), response.getProductCore().getEtaxProductCode().get("name"));
             printLog("etaxProductCode Name");
         }
 
-        if (jsonValue.getProductCore().getProductPersons() != null | response.getProductCore().getProductPersons() != null) {
+        if (jsonValue.getProductCore().getProductPersons() != null || response.getProductCore().getProductPersons() != null) {
             ArrayList<PersonsApiObject> productPersons_json = new ArrayList<>(Arrays.asList(jsonValue.getProductCore().getProductPersons()));
             ArrayList<PersonsApiObject> productPersons_api = new ArrayList<>(Arrays.asList(response.getProductCore().getProductPersons()));
 
@@ -336,12 +337,12 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestationCore -> FirstPubDate", jsonValue.getManifestation().getManifestationCore().getFirstPubDate(), response.getManifestation().getManifestationCore().getFirstPubDate());
                 printLog("FirstPubDate");
 
-                if (jsonValue.getManifestation().getManifestationCore().getIdentifiers() != null | response.getManifestation().getManifestationCore().getIdentifiers() != null) {
+                if (jsonValue.getManifestation().getManifestationCore().getIdentifiers() != null || response.getManifestation().getManifestationCore().getIdentifiers() != null) {
 
                     ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getManifestationCore().getIdentifiers()));
                     ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_api = new ArrayList<>(Arrays.asList(response.getManifestation().getManifestationCore().getIdentifiers()));
 
-                    if (manifestationIdentifiers_api.size() != 0 | manifestationIdentifiers_json.size() != 0) {
+                    if (!manifestationIdentifiers_api.isEmpty() || !manifestationIdentifiers_json.isEmpty()) {
                         ignore.clear();
                         for (int mi = 0; mi < manifestationIdentifiers_api.size(); mi++) {
                             Log.info("----->verification for manifestationIdentifiers " + mi);
@@ -387,7 +388,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
             //3. workCore validation
             Log.info("----->verification for work data");
-            if (jsonValue.getManifestation().getWork() != null | response.getManifestation().getWork() != null) {
+            if (jsonValue.getManifestation().getWork() != null || response.getManifestation().getWork() != null) {
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getId(), response.getManifestation().getWork().getId());
                 printLog("work id");
                 Log.info("----->verification for workCore ");
@@ -395,13 +396,13 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 printLog(" work title");
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getElectronicRightsInd(), response.getManifestation().getWork().getWorkCore().getElectronicRightsInd());
                 printLog(" work ElectronicRightsInd");
-                if (jsonValue.getManifestation().getWork().getWorkCore().getLanguage() != null | response.getManifestation().getWork().getWorkCore().getLanguage() != null) {
+                if (jsonValue.getManifestation().getWork().getWorkCore().getLanguage() != null || response.getManifestation().getWork().getWorkCore().getLanguage() != null) {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getLanguage().get("code"), response.getManifestation().getWork().getWorkCore().getLanguage().get("code"));
                     printLog(" work language code");
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getLanguage().get("name"), response.getManifestation().getWork().getWorkCore().getLanguage().get("name"));
                     printLog(" work language name");
                 }
-                if (jsonValue.getManifestation().getWork().getWorkCore().getSubscriptionType() != null | response.getManifestation().getWork().getWorkCore().getSubscriptionType() != null) {
+                if (jsonValue.getManifestation().getWork().getWorkCore().getSubscriptionType() != null || response.getManifestation().getWork().getWorkCore().getSubscriptionType() != null) {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getSubscriptionType().get("code"), response.getManifestation().getWork().getWorkCore().getSubscriptionType().get("code"));
                     printLog(" work subscriptionType code");
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getSubscriptionType().get("name"), response.getManifestation().getWork().getWorkCore().getSubscriptionType().get("name"));
@@ -414,7 +415,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 printLog(" work copyrightYear");
                 ArrayList<WorkIdentifiersApiObject> workIdentifiers_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getWork().getWorkCore().getIdentifiers()));
                 ArrayList<WorkIdentifiersApiObject> workIdentifiers_api = new ArrayList<>(Arrays.asList(response.getManifestation().getWork().getWorkCore().getIdentifiers()));
-                if (workIdentifiers_api.size() != 0 | workIdentifiers_json.size() != 0) {
+                if (!workIdentifiers_api.isEmpty() || !workIdentifiers_json.isEmpty()) {
 
                     ignore.clear();
                     for (int wi = 0; wi < workIdentifiers_api.size(); wi++) {
@@ -460,7 +461,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getImprint().get("name"), response.getManifestation().getWork().getWorkCore().getImprint().get("name"));
                 printLog("work imprint name");
 
-                if (jsonValue.getManifestation().getWork().getWorkCore().getSocietyOwnership() != null | response.getManifestation().getWork().getWorkCore().getSocietyOwnership() != null) {
+                if (jsonValue.getManifestation().getWork().getWorkCore().getSocietyOwnership() != null || response.getManifestation().getWork().getWorkCore().getSocietyOwnership() != null) {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getSocietyOwnership().get("code"), response.getManifestation().getWork().getWorkCore().getSocietyOwnership().get("code"));
                     printLog("work societyOwnership code");
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getSocietyOwnership().get("name"), response.getManifestation().getWork().getWorkCore().getSocietyOwnership().get("name"));
@@ -469,7 +470,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     printLog("work societyOwnership ownershipRollUp");
                 }
 
-                if (jsonValue.getManifestation().getWork().getWorkCore().getLegalOwnership() != null |
+                if (jsonValue.getManifestation().getWork().getWorkCore().getLegalOwnership() != null ||
                         response.getManifestation().getWork().getWorkCore().getLegalOwnership() != null) {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getLegalOwnership().get("code"), response.getManifestation().getWork().getWorkCore().getLegalOwnership().get("code"));
                     printLog("work legalOwnership code");
@@ -479,7 +480,6 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     printLog("work legalOwnership ownershipRollUp");
                 }
   /*              Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"), response.getManifestation().getWork().getWorkCore().getOpenAccessType().get("code"));
-
                 printLog("work openAccessType code");
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getOpenAccessType().get("name"), response.getManifestation().getWork().getWorkCore().getOpenAccessType().get("name"));
                 printLog("work openAccessType name");
@@ -492,7 +492,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 printLog("work pmg code");
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getPmc().getPmg().get("name"), response.getManifestation().getWork().getWorkCore().getPmc().getPmg().get("name"));
                 printLog("work pmg name");
-                if (jsonValue.getManifestation().getWork().getWorkCore().getAccountableProduct() != null |
+                if (jsonValue.getManifestation().getWork().getWorkCore().getAccountableProduct() != null ||
                         response.getManifestation().getWork().getWorkCore().getAccountableProduct() != null) {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getAccountableProduct().getGlProductSegmentCode(), response.getManifestation().getWork().getWorkCore().getAccountableProduct().getGlProductSegmentCode());
                     printLog("work accountableProduct GlProductSegmentCode");
@@ -503,7 +503,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->Work -> ", jsonValue.getManifestation().getWork().getWorkCore().getAccountableProduct().getGlProductParentValue().get("name"), response.getManifestation().getWork().getWorkCore().getAccountableProduct().getGlProductParentValue().get("name"));
                     printLog("work accountableProduct GlProductParentValue Name");
                 }
-                if (jsonValue.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes() != null | response.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes() != null) {
+                if (jsonValue.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes() != null || response.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes() != null) {
                     ArrayList<FinancialAttributesApiObject> workFinancialAttributes_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes()));
                     ArrayList<FinancialAttributesApiObject> workFinancialAttributes_api = new ArrayList<>(Arrays.asList(response.getManifestation().getWork().getWorkCore().getWorkFinancialAttributes()));
 
@@ -542,7 +542,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
                 ArrayList<PersonsApiObject> workPersons_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getWork().getWorkCore().getWorkPersons()));
                 ArrayList<PersonsApiObject> workPersons_api = new ArrayList<>(Arrays.asList(response.getManifestation().getWork().getWorkCore().getWorkPersons()));
-                if (workPersons_api.size() != 0 | workPersons_json.size() != 0) {
+                if (!workPersons_api.isEmpty() || !workPersons_json.isEmpty()) {
 
                     ignore.clear();
                     for (int wp = 0; wp < workPersons_api.size(); wp++) {
@@ -573,7 +573,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                                 printLog("work personsPerson email");
 
                                 //commented by Nishant @ 8 June 2021 untill Ekin/Ron replies for startDate mismatch issue
-                         //       Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->workCore->workPerson "+wp+" Effective_start_date -> ", workPersons_api.get(wp).getEffectiveStartDate(), workPersons_json.get(cnt).getEffectiveStartDate());
+                                Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->workCore->workPerson "+wp+" Effective_start_date -> ", workPersons_api.get(wp).getEffectiveStartDate(), workPersons_json.get(cnt).getEffectiveStartDate());
                                 printLog("workPerson Effective_start_date");
                                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestation->workCore->workPerson "+wp+" Effective_end_date -> ", workPersons_api.get(wp).getEffectiveEndDate(), workPersons_json.get(cnt).getEffectiveEndDate());
                                 printLog("workPerson Effective_end_date");
@@ -612,7 +612,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchManifestationExtended-> ", jsonValue.getManifestationExtended().getDiscountCodeUS(), response.getManifestation().getManifestationExtended().getDiscountCodeUS());
         printLog("DiscountCodeUS");
 
-        if (jsonValue.getManifestationExtended().getManifestationExtendedPageCounts() != null | response.getManifestation().getManifestationExtended().getManifestationExtendedPageCounts() != null) {
+        if (jsonValue.getManifestationExtended().getManifestationExtendedPageCounts() != null || response.getManifestation().getManifestationExtended().getManifestationExtendedPageCounts() != null) {
             ArrayList<ManifestationExtendedPageCountsAPIObj> ManifestationExtendedPageCounts_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestationExtended().getManifestationExtendedPageCounts()));
             ArrayList<ManifestationExtendedPageCountsAPIObj> ManifestationExtendedPageCounts_api = new ArrayList<>(Arrays.asList(response.getManifestation().getManifestationExtended().getManifestationExtendedPageCounts()));
 
@@ -639,7 +639,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             }
         }
 
-        if (jsonValue.getManifestationExtended().getManifestationExtendedRestrictions() != null | response.getManifestation().getManifestationExtended().getManifestationExtendedRestrictions() != null) {
+        if (jsonValue.getManifestationExtended().getManifestationExtendedRestrictions() != null || response.getManifestation().getManifestationExtended().getManifestationExtendedRestrictions() != null) {
             ArrayList<ManifestationExtended.ManifestationExtendedRestrictions> ManifestationExtendedRestrictions_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestationExtended().getManifestationExtendedRestrictions()));
             ArrayList<ManifestationExtended.ManifestationExtendedRestrictions> ManifestationExtendedRestrictions_api = new ArrayList<>(Arrays.asList(response.getManifestation().getManifestationExtended().getManifestationExtendedRestrictions()));
 
@@ -698,7 +698,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         printLog("PtsBusinessUnitDesc");
 
         //by Nishant @ 09 Feb 2021
-        if (jsonValue.getWorkExtended().getWorkExtendedPersons() != null |
+        if (jsonValue.getWorkExtended().getWorkExtendedPersons() != null ||
                 response.getWork().getWorkExtended().getWorkExtendedPersons() != null) {
             ArrayList<WorkExtendedPersons> workExtendedPersons_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedPersons()));
             ArrayList<WorkExtendedPersons> workExtendedPersons_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedPersons()));
@@ -733,7 +733,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             }
         }
 
-        if (jsonValue.getWorkExtended().getWorkExtendedEditorialBoard() != null | response.getWork().getWorkExtended().getWorkExtendedEditorialBoard() != null) {
+        if (jsonValue.getWorkExtended().getWorkExtendedEditorialBoard() != null || response.getWork().getWorkExtended().getWorkExtendedEditorialBoard() != null) {
             ArrayList<WorkExtended.WorkExtendedEditorialBoard> workExtendedEditorialBoards_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedEditorialBoard()));
             ArrayList<WorkExtended.WorkExtendedEditorialBoard> workExtendedEditorialBoards_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedEditorialBoard()));
 
@@ -794,7 +794,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             }
         }
 
-        if (jsonValue.getWorkExtended().getWorkExtendedSubjectAreas() != null | response.getWork().getWorkExtended().getWorkExtendedSubjectAreas() != null) {
+        if (jsonValue.getWorkExtended().getWorkExtendedSubjectAreas() != null || response.getWork().getWorkExtended().getWorkExtendedSubjectAreas() != null) {
             ArrayList<WorkExtended.WorkExtendedSubjectAreas> workExtendedSubjectAreas_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedSubjectAreas()));
             ArrayList<WorkExtended.WorkExtendedSubjectAreas> workExtendedSubjectAreas_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedSubjectAreas()));
             ignore.clear();
@@ -820,12 +820,12 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                     }
                 }
 
-
+                Assert.assertTrue("subject area not found", extSubAreaFound);
 
             }
         }
 
-        if (jsonValue.getWorkExtended().getWorkExtendedUrls() != null | response.getWork().getWorkExtended().getWorkExtendedUrls() != null) {
+        if (jsonValue.getWorkExtended().getWorkExtendedUrls() != null || response.getWork().getWorkExtended().getWorkExtendedUrls() != null) {
             ArrayList<WorkExtended.WorkExtendedUrls> workExtendedUrls_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedUrls()));
             ArrayList<WorkExtended.WorkExtendedUrls> workExtendedUrls_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedUrls()));
             for (int eu = 0; eu < workExtendedUrls_api.size(); eu++) {
@@ -846,7 +846,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             }
         }
 
-        if (jsonValue.getWorkExtended().getWorkExtendedMetrics() != null | response.getWork().getWorkExtended().getWorkExtendedMetrics() != null) {
+        if (jsonValue.getWorkExtended().getWorkExtendedMetrics() != null || response.getWork().getWorkExtended().getWorkExtendedMetrics() != null) {
             ArrayList<WorkExtended.WorkExtendedMetrics> workExtendedMetrics_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedMetrics()));
             ArrayList<WorkExtended.WorkExtendedMetrics> workExtendedMetrics_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedMetrics()));
             for (int em = 0; em < workExtendedMetrics_api.size(); em++) {
@@ -877,21 +877,21 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getElectronicRightsInd(), workResponse.getWorkCore().getElectronicRightsInd());
         printLog("electronicRightsInd");
 
-        if (jsonValue.getWorkCore().getLanguage() != null | workResponse.getWorkCore().getLanguage() != null) {
+        if (jsonValue.getWorkCore().getLanguage() != null || workResponse.getWorkCore().getLanguage() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getLanguage().get("code"), workResponse.getWorkCore().getLanguage().get("code"));
             printLog("language code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getLanguage().get("name"), workResponse.getWorkCore().getLanguage().get("name"));
             printLog("language name");
         }
 
-        if (jsonValue.getWorkCore().getSubscriptionType() != null | workResponse.getWorkCore().getSubscriptionType() != null) {
+        if (jsonValue.getWorkCore().getSubscriptionType() != null || workResponse.getWorkCore().getSubscriptionType() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getSubscriptionType().get("code"), workResponse.getWorkCore().getSubscriptionType().get("code"));
             printLog("subscriptionType code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getSubscriptionType().get("name"), workResponse.getWorkCore().getSubscriptionType().get("name"));
             printLog("subscriptionType name");
         }
 
-        if (jsonValue.getWorkCore().getIdentifiers() != null | workResponse.getWorkCore().getIdentifiers() != null) {
+        if (jsonValue.getWorkCore().getIdentifiers() != null || workResponse.getWorkCore().getIdentifiers() != null) {
             ArrayList<WorkIdentifiersApiObject> identifiers_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkCore().getIdentifiers()));
             ArrayList<WorkIdentifiersApiObject> identifiers_api = new ArrayList<>(Arrays.asList(workResponse.getWorkCore().getIdentifiers()));
 
@@ -934,14 +934,14 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getStatus().get("statusRollUp"), workResponse.getWorkCore().getStatus().get("statusRollUp"));
         printLog("work status statusRollUp");
 
-        if (jsonValue.getWorkCore().getImprint() != null | workResponse.getWorkCore().getImprint() != null) {
+        if (jsonValue.getWorkCore().getImprint() != null || workResponse.getWorkCore().getImprint() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getImprint().get("code"), workResponse.getWorkCore().getImprint().get("code"));
             printLog("work imprint code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getImprint().get("name"), workResponse.getWorkCore().getImprint().get("name"));
             printLog("work imprint name");
         }
 
-        if (jsonValue.getWorkCore().getSocietyOwnership() != null | workResponse.getWorkCore().getSocietyOwnership() != null) {
+        if (jsonValue.getWorkCore().getSocietyOwnership() != null || workResponse.getWorkCore().getSocietyOwnership() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getSocietyOwnership().get("code"), workResponse.getWorkCore().getSocietyOwnership().get("code"));
             printLog("societyOwnership code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getSocietyOwnership().get("name"), workResponse.getWorkCore().getSocietyOwnership().get("name"));
@@ -949,7 +949,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getSocietyOwnership().get("ownershipRollUp"), workResponse.getWorkCore().getSocietyOwnership().get("ownershipRollUp"));
             printLog("societyOwnership ownershipRollUp");
         }
-        if (jsonValue.getWorkCore().getOpenAccessType() != null | workResponse.getWorkCore().getOpenAccessType() != null) {
+        if (jsonValue.getWorkCore().getOpenAccessType() != null || workResponse.getWorkCore().getOpenAccessType() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getOpenAccessType().get("code"), workResponse.getWorkCore().getOpenAccessType().get("code"));
             printLog("getOpenAccessType code");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getOpenAccessType().get("name"), workResponse.getWorkCore().getOpenAccessType().get("name"));
@@ -965,7 +965,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getPmc().getPmg().get("name"), workResponse.getWorkCore().getPmc().getPmg().get("name"));
         printLog("pmg name");
 
-        if (jsonValue.getWorkCore().getAccountableProduct() != null | workResponse.getWorkCore().getAccountableProduct() != null) {
+        if (jsonValue.getWorkCore().getAccountableProduct() != null || workResponse.getWorkCore().getAccountableProduct() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getAccountableProduct().getGlProductSegmentCode(), workResponse.getWorkCore().getAccountableProduct().getGlProductSegmentCode());
             printLog("work accountableProduct GlProductSegmentCode");
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", jsonValue.getWorkCore().getAccountableProduct().getGlProductSegmentName(), workResponse.getWorkCore().getAccountableProduct().getGlProductSegmentName());
@@ -977,7 +977,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         }
         ArrayList<FinancialAttributesApiObject> workFinancialAttributes_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkCore().getWorkFinancialAttributes()));
         ArrayList<FinancialAttributesApiObject> workFinancialAttributes_api = new ArrayList<>(Arrays.asList(workResponse.getWorkCore().getWorkFinancialAttributes()));
-        if (workFinancialAttributes_api.size() != 0 | workFinancialAttributes_json.size() != 0) {
+        if (!workFinancialAttributes_api.isEmpty()|| !workFinancialAttributes_json.isEmpty()){
 
             ignore.clear();
             for (int wf = 0; wf < workFinancialAttributes_api.size(); wf++) {
@@ -1013,7 +1013,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         ArrayList<PersonsApiObject> workPersons_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkCore().getWorkPersons()));
         ArrayList<PersonsApiObject> workPersons_api = new ArrayList<>(Arrays.asList(workResponse.getWorkCore().getWorkPersons()));
 
-        if (workPersons_api.size() != 0 | workPersons_json.size() != 0) {
+        if (!workPersons_api.isEmpty() || !workPersons_json.isEmpty()) {
 
             ignore.clear();
             for (int wp = 0; wp < workPersons_api.size(); wp++) {
@@ -1057,7 +1057,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         }
 
 
-        if (jsonValue.getWorkCore().getWorkSubjectAreas() != null | workResponse.getWorkCore().getWorkSubjectAreas() != null) {
+        if (jsonValue.getWorkCore().getWorkSubjectAreas() != null || workResponse.getWorkCore().getWorkSubjectAreas() != null) {
             ArrayList<SubjectAreasApiObject> workCoreSubjectAreas_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkCore().getWorkSubjectAreas()));
             ArrayList<SubjectAreasApiObject> workCoreSubjectAreas_api = new ArrayList<>(Arrays.asList(workResponse.getWorkCore().getWorkSubjectAreas()));
 
@@ -1078,7 +1078,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                         Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getSubjectArea().getType().get("name"), workCoreSubjectAreas_api.get(sa).getSubjectArea().getType().get("name"));
                         printLog("WorkCore SubjectArea type name");
 
-                        if(workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea()!=null |
+                        if(workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea()!=null ||
                                 workCoreSubjectAreas_api.get(sa).getSubjectArea().getParentSubjectArea()!=null)
                         {
                             Assert.assertEquals(DataQualityContext.breadcrumbMessage + "stchWorkCore-> ", workCoreSubjectAreas_json.get(cnt).getSubjectArea().getParentSubjectArea().get("code"), workCoreSubjectAreas_api.get(sa).getSubjectArea().getParentSubjectArea().get("code"));
@@ -1097,7 +1097,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
 
         //created by Nishant @ 19 Feb 2021 EPHD-2747
-        if (jsonValue.getManifestations() != null | workResponse.getManifestations() != null) {
+        if (jsonValue.getManifestations() != null || workResponse.getManifestations() != null) {
             ArrayList<WorkManifestationApiObject> workManifestation_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestations()));
             ArrayList<WorkManifestationApiObject> workManifestation_api = new ArrayList<>(Arrays.asList(workResponse.getManifestations()));
            ignore.clear();
@@ -1123,7 +1123,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
                 ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_json = new ArrayList<>(Arrays.asList(workManifestation_json.get(cnt).getManifestationCore().getIdentifiers()));
                 ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_api = new ArrayList<>(Arrays.asList(workManifestation_api.get(wm).getManifestationCore().getIdentifiers()));
-                if (manifestationIdentifiers_api.size() != 0 | manifestationIdentifiers_json.size() != 0) {
+                if (!manifestationIdentifiers_api.isEmpty() || !manifestationIdentifiers_json.isEmpty()) {
                     for (int mi = 0; mi < manifestationIdentifiers_api.size(); mi++) {
                         boolean identifierFound = false;
                         for(int cnt2 =0;cnt2<manifestationIdentifiers_json.size();cnt2++) {
@@ -1161,7 +1161,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 printLog("workManifestationCore statusRollUp");
 
 
-                if (workManifestation_api.get(wm).getProducts() != null | workManifestation_json.get(cnt).getProducts() != null) {
+                if (workManifestation_api.get(wm).getProducts() != null || workManifestation_json.get(cnt).getProducts() != null) {
                     List<ManifestationProductAPIObject> manifestationProduct_json = workManifestation_json.get(wm).getProducts();
                     List<ManifestationProductAPIObject> manifestationProduct_api = workManifestation_api.get(wm).getProducts();
                     for (int mp = 0; mp < manifestationProduct_api.size(); mp++) {
@@ -1204,7 +1204,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
         ArrayList<WorkProductsApiObj> workProduct_json = new ArrayList<>(Arrays.asList(jsonValue.getProducts()));
         List<ManifestationProductAPIObject> workProducts_api = workResponse.getProducts();
-        if (workProducts_api.size() != 0 | workProduct_json.size() != 0) {
+        if (!workProducts_api.isEmpty() || !workProduct_json.isEmpty()) {
             ignore.clear();
             for (int mp = 0; mp < workProducts_api.size(); mp++) {
                 boolean productFound = false;
@@ -1237,21 +1237,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
             }
         }
-/*
-        if(jsonValue.getWorkExtended().getWorkExtendedMetrics()!=null |  response.getWork().getWorkExtended().getWorkExtendedMetrics()!=null) {
-            ArrayList<WorkExtended.WorkExtendedMetrics> workExtendedMetrics_json = new ArrayList<>(Arrays.asList(jsonValue.getWorkExtended().getWorkExtendedMetrics()));
-            ArrayList<WorkExtended.WorkExtendedMetrics> workExtendedMetrics_api = new ArrayList<>(Arrays.asList(response.getWork().getWorkExtended().getWorkExtendedMetrics()));
-            for (int em = 0; em < workExtendedMetrics_api.size(); em++) {
-                Log.info("----->verification for workExtendedMetrics " + em);
-                Assert.assertEquals(workExtendedMetrics_json.get(em).getExtendedMetric().getType().get("code"), workExtendedMetrics_api.get(em).getExtendedMetric().getType().get("code"));printLog("workExtendedMetrics type code");
-                Assert.assertEquals(workExtendedMetrics_json.get(em).getExtendedMetric().getType().get("name"), workExtendedMetrics_api.get(em).getExtendedMetric().getType().get("name"));printLog("workExtendedMetrics type name");
-                Assert.assertEquals(workExtendedMetrics_json.get(em).getExtendedMetric().getMetric(), workExtendedMetrics_api.get(em).getExtendedMetric().getMetric());printLog("workExtendedMetrics metric ");
-                Assert.assertEquals(workExtendedMetrics_json.get(em).getExtendedMetric().getMetricYear(), workExtendedMetrics_api.get(em).getExtendedMetric().getMetricYear());printLog("workExtendedMetrics metricYear");
-                Assert.assertEquals(workExtendedMetrics_json.get(em).getExtendedMetric().getMetricUrl(), workExtendedMetrics_api.get(em).getExtendedMetric().getMetricUrl());printLog("workExtendedMetrics metricUrl");
-            }
-        }
 
-*/
         Log.info("");
     }
 

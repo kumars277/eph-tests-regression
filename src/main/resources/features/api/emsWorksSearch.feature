@@ -18,9 +18,9 @@ Feature: Customer Search API: Works
     Then   the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
+      |JOURNAL_ACRONYM    |
       |TITLE              |
       |EPR_ID             |
-      |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
       |ISSN               |
 

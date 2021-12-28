@@ -4,6 +4,7 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
@@ -127,6 +128,7 @@ public class ApiProductsSearchSteps {
 
 
 
+
   @Given("^We get (.*) search ids from the db for person roles of products$")
   public static void getRandomPersonRolesIds(String numberOfRecords) {
     sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_PERSON_ROLE, numberOfRecords);
@@ -203,6 +205,24 @@ public class ApiProductsSearchSteps {
         DataQualityContext.breadcrumbMessage
             + " Verify That product objects list from DB is not empty.",
         productDataObjects.isEmpty());
+  }
+
+  @Given("^We set specific product ids for search$")
+  public static void setSpecificProductIdsForSearch() {
+
+    ids = new ArrayList<String>();
+
+    if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+    {ids.add("EPR-11BBFJ") ;
+    ids.add("EPR-11BBFK");
+    ids.add("EPR-11BBFM");
+    ids.add("EPR-11BBFN");
+    ids.add("EPR-11BBFR");}
+else{
+      ids.add("EPR-12JB8J") ;
+      ids.add("EPR-12RM3V");
+    }
+
   }
 
   private static void getWorksDataFromEPHGD(String workId) {
@@ -304,11 +324,8 @@ public class ApiProductsSearchSteps {
   public static void compareSearchResultsWithDB() throws AzureOauthTokenFetchingException {
     ProductApiObject response;
     for (ProductDataObject productDataObject : productDataObjects) {
-      /*int code = APIService.checkProductExists(productDataObject.getPRODUCT_ID());
-      if (code==200) {*/
         response = APIService.getProductById(productDataObject.getPRODUCT_ID());
         response.compareWithDB();
-     // }
     }
   }
 
@@ -1078,7 +1095,6 @@ public class ApiProductsSearchSteps {
         DBManager.getDBResultMap(sql, Constants.EPH_URL);
     return ((Long) countByProductStatus.get(0).get(count)).intValue();
   }
-
 
 
 }

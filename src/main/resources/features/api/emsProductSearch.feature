@@ -128,17 +128,11 @@ Feature: Search API: Products
 
 
   @searchAPI @productSearchAPI
-  Scenario Outline: Product search E2E
-    Given  We get product by ID <id>
+  Scenario: Product search E2E
+    Given  We set specific product ids for search
     And    We get the search data from EPH GD for products
     Then   the product details are retrieved and compared
-    Examples:
-      | id         |
-      | EPR-11BBFJ |
-      | EPR-11BBFK |
-      | EPR-11BBFM |
-      | EPR-11BBFN |
-      | EPR-11BBFR |
+
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product and verify title contains searchKey
