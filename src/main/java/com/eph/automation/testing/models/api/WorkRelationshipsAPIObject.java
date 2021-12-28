@@ -55,129 +55,65 @@ public class WorkRelationshipsAPIObject {
       ArrayList<workParent> list_workParent = new ArrayList<>(Arrays.asList(workParent));
       getWorkRelationshipParentRecordsEPHGD(workId);
       for (int wp = 0; wp < workParent.length; wp++) {
+        boolean parentFound = false;
         for (int wp2 = 0; wp2 < workParent.length; wp2++) {
-          if (!list_workParent
-              .get(wp)
-              .id
-              .equalsIgnoreCase(
-                  dataQualityContext
-                      .workRelationshipParentDataObjectsFromEPGD
-                      .get(wp2)
-                      .getF_PARENT())) ;
-          else {
-            printLog("verifying workParent " + list_workParent.get(wp).id);
-            Assert.assertEquals(
-                workId + " - parent relationshipType",
-                list_workParent.get(wp).type.get("code"),
-                dataQualityContext
-                    .workRelationshipParentDataObjectsFromEPGD
-                    .get(wp2)
-                    .getF_RELATIONSHIP_TYPE());
-            printLog("relationshipType");
+          if (list_workParent.get(wp).id.equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_PARENT()) &&
+                  list_workParent.get(wp).type.get("code").toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_RELATIONSHIP_TYPE()))
+           {
+             parentFound = true;
+            Log.info("verifying workParent " + list_workParent.get(wp).id+", code "+list_workParent.get(wp).type.get("code"));
 
-            Assert.assertEquals(
-                workId + " - parent effectiveStartDate",
-                list_workParent.get(wp).effectiveStartDate,
-                dataQualityContext
-                    .workRelationshipParentDataObjectsFromEPGD
-                    .get(wp2)
-                    .getEFFECTIVE_START_DATE());
+            Assert.assertEquals(workId + " - parent effectiveStartDate",list_workParent.get(wp).effectiveStartDate,dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE());
             printLog("effectiveStartDate");
 
             getWorksDataFromEPHGD(list_workParent.get(wp).id);
-            // Log.info("comparing\n-title\n-work Type code\n-work status code");
-            Assert.assertEquals(
-                workId + " - parent work Title",
-                list_workParent.get(wp).workSummary.title,
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+
+            Assert.assertEquals(workId + " - parent work Title",list_workParent.get(wp).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             printLog("work Title");
 
-            Assert.assertEquals(
-                workId + " - parent work Type",
-                list_workParent.get(wp).workSummary.type.get("code"),
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+            Assert.assertEquals(workId + " - parent work Type",list_workParent.get(wp).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
             printLog("work Type");
 
-            Assert.assertEquals(
-                workId + " -parent work Status",
-                list_workParent.get(wp).workSummary.status.get("code"),
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+            Assert.assertEquals(workId + " -parent work Status",list_workParent.get(wp).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
             printLog("work Status");
           }
         }
+        Assert.assertTrue("Not found, parent "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
       }
     }
     if (workChild != null) {
       ArrayList<workChild> list_workChild = new ArrayList<>(Arrays.asList(workChild));
       getWorkRelationshipChildRecordsEPHGD(workId);
       for (int wc = 0; wc < workChild.length; wc++) {
+        boolean childFound = false;
         for (int wc2 = 0; wc2 < workChild.length; wc2++) {
-          if (!(list_workChild
-                  .get(wc)
-                  .id
-                  .equalsIgnoreCase(
-                      dataQualityContext
-                          .workRelationshipChildDataObjectsFromEPGD
-                          .get(wc2)
-                          .getF_CHILD())
-              & list_workChild
-                  .get(wc)
-                  .type
-                  .get("code")
-                  .toString()
-                  .equalsIgnoreCase(
-                      dataQualityContext
-                          .workRelationshipChildDataObjectsFromEPGD
-                          .get(wc2)
-                          .getF_RELATIONSHIP_TYPE()))) ;
-          else {
-            printLog("verifying workChild " + list_workChild.get(wc).id);
-            printLog("relationshipType");
-            // Log.info("-Relationship type code\n-Relationship effectiveStartDate");
-            //   Assert.assertEquals(workId+ " - child
-            // relationshipType",list_workChild.get(wc).type.get("code"),
-            // dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_RELATIONSHIP_TYPE());
+          if (list_workChild.get(wc).id.equalsIgnoreCase(dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_CHILD()) &&
+                  list_workChild.get(wc).type.get("code").toString().equalsIgnoreCase(dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_RELATIONSHIP_TYPE()))
+           {
+             childFound=true;
+            Log.info("verifying workChild " + list_workChild.get(wc).id+", child "+list_workChild.get(wc).type.get("code"));
 
-            Assert.assertEquals(
-                workId + " - child effectiveStartDate",
-                list_workChild.get(wc).effectiveStartDate,
-                dataQualityContext
-                    .workRelationshipChildDataObjectsFromEPGD
-                    .get(wc2)
-                    .getEFFECTIVE_START_DATE());
+            Assert.assertEquals(workId + " - child effectiveStartDate",list_workChild.get(wc).effectiveStartDate,dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getEFFECTIVE_START_DATE());
             printLog("effectiveStartDate");
 
             getWorksDataFromEPHGD(list_workChild.get(wc).id);
-            //     Log.info("comparing \n-title\n-work Type code\n-work status code");
-            Assert.assertEquals(
-                workId + " - child work Title",
-                list_workChild.get(wc).workSummary.title,
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+
+            Assert.assertEquals(workId + " - child work Title",list_workChild.get(wc).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             printLog("work Title");
 
-            Assert.assertEquals(
-                workId + " - child work Type",
-                list_workChild.get(wc).workSummary.type.get("code"),
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+            Assert.assertEquals(workId + " - child work Type",list_workChild.get(wc).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
             printLog("work Type");
 
-            Assert.assertEquals(
-                workId + " - child work Status",
-                list_workChild.get(wc).workSummary.status.get("code"),
-                dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+            Assert.assertEquals(workId + " - child work Status",list_workChild.get(wc).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
             printLog("work Status");
-            if (list_workChild.get(wc).effectiveEndDate != null) {
-              Assert.assertEquals(
-                  workId + " - child effectiveStartDate",
-                  list_workChild.get(wc).effectiveEndDate,
-                  dataQualityContext
-                      .workRelationshipChildDataObjectsFromEPGD
-                      .get(wc2)
-                      .getEFFECTIVE_END_DATE());
+
+            if (list_workChild.get(wc).effectiveEndDate != null) {Assert.assertEquals(workId + " - child effectiveStartDate",list_workChild.get(wc).effectiveEndDate,
+                    dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getEFFECTIVE_END_DATE());
               printLog("effectiveEndDate");
             }
           }
         }
+        Assert.assertTrue("Not found, child "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
       }
     }
   }

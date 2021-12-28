@@ -357,7 +357,7 @@ public class APIDataSQL {
   //there are duplicate component available in package but API returns only unique record count
   //hence distinct count would be required to compare
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PACKAGE =
-      "select  count(f_component) from semarchy_eph_mdm.gd_product_rel_package "
+      "select  count(distinct(f_component)) from semarchy_eph_mdm.gd_product_rel_package "
           + "where f_package_owner in ('%s')";
 
   public static final String SELECT_GD_RANDOM_PRODUCT_PERSON_ROLE =

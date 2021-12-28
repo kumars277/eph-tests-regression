@@ -139,7 +139,7 @@ public class specificScenariosSteps {
       for (int i = 0; i < randomWorkId.size(); i++) {
 
         returnedWorks =
-            apiService.searchForWorksBySearchOptionResult(
+            apiService.getWorksBySearchOption(
                 randomWorkId.get(i).get("f_parent").toString());
 
         returnedWorks.printWorkEdition();
@@ -198,7 +198,7 @@ public class specificScenariosSteps {
         for (int i = 0; i < relationship.size(); i++) {
           if (relationship.get(i).get("code").toString().equalsIgnoreCase("EDI")) {
             String parentWork = relationship.get(i).get("f_parent").toString();
-            workApi_response = apiService.searchForWorkByIDResult(parentWork);
+            workApi_response = apiService.getWorkByID(parentWork);
 
             System.out.println(
                 "\nparent relationship"
@@ -246,7 +246,7 @@ public class specificScenariosSteps {
         for (int i = 0; i < relationship.size(); i++) {
           if (relationship.get(i).get("code").toString().equalsIgnoreCase("EDI")) {
             String childWork = relationship.get(i).get("f_child").toString();
-            workApi_response = apiService.searchForWorkByIDResult(childWork);
+            workApi_response = apiService.getWorkByID(childWork);
 
             System.out.println(
                 "\nchild relationship"

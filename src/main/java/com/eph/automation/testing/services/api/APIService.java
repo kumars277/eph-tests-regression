@@ -42,11 +42,10 @@ public class APIService {
         .statusCode();
   }
 
-  public static ProductApiObject searchForProductResult(String productID)
-      throws AzureOauthTokenFetchingException {
+  public static ProductApiObject getProductById(String productID) throws AzureOauthTokenFetchingException {
     // updated by Nishant @ 28 Apr 2020
-    Response response =
-        given()
+    Response response = getResponse("/product-hub-products/products/" + productID);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -55,13 +54,15 @@ public class APIService {
     DataQualityContext.api_response = response;
  //   DataQualityContext.api_response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
+
     return response.thenReturn().as(ProductApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByTitleResult(String title)
-      throws AzureOauthTokenFetchingException {
+  public static ProductsMatchedApiObject getProductsByTitle(String title)throws AzureOauthTokenFetchingException {
     // updated by Nishant @ 4 May 2020
-    Response response =
+    Response response =getResponse("/product-hub-products/products?queryType=name&queryValue=" + title);
+    /*
         given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
@@ -70,54 +71,37 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByIdentifierResult(String identifier)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
-            .baseUri(searchAPIEndPoint)
-            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
-            .when()
-            .get("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
+  public static ProductsMatchedApiObject getProductsByIdentifier(String identifier) throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
+    return response.thenReturn().as(ProductsMatchedApiObject.class);
+  }
+
+  public static ProductsMatchedApiObject getProductssByIdentifierAndType( String identifier, String identifierType) throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=identifier&queryValue=" + identifier+"&identifierType="+identifierType);
+      /*      given()
+                    .baseUri(searchAPIEndPoint)
+                    .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                    .param("identifierType", identifierType)
+                    .when()
+                    .get("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductssByIdentifierAndTypeResult(
-      String identifier, String identifierType) throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
-            .baseUri(searchAPIEndPoint)
-            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
-            .param("identifierType", identifierType)
-            .when()
-            .get("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
-    DataQualityContext.api_response = response;
-    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+  public static ProductsMatchedApiObject getProductsByPackage(String packageID) throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=isInPackages&queryValue=" + packageID);
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByPackageResult(String packageID)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
-            .baseUri(searchAPIEndPoint)
-            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
-            .when()
-            .get("/product-hub-products/products?queryType=isInPackages&queryValue=" + packageID);
-
-    DataQualityContext.api_response = response;
-    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
-    return response.thenReturn().as(ProductsMatchedApiObject.class);
-  }
-
-  public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static ProductsMatchedApiObject getProductsByComponents(String componentID)throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=HasComponents&queryValue=" + componentID);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -126,14 +110,15 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByaccountableProduct(
-      String accountableProduct) throws AzureOauthTokenFetchingException {
+  public static ProductsMatchedApiObject getProductsByAccountableProduct(String accountableProduct) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse("/product-hub-products/products?queryType=accountableProduct&queryValue="
+            + accountableProduct);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -143,13 +128,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByPersonIDResult(String personId)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static ProductsMatchedApiObject getProductsByPersonID(String personId)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=personId&queryValue=" + personId);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -157,13 +142,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByPMCResult(String pmcCode)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static ProductsMatchedApiObject getProductsByPMC(String pmcCode)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=pmcCode&queryValue=" + pmcCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -171,13 +156,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
+
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsByPMGResult(String pmgCode)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static ProductsMatchedApiObject getProductsByPMG(String pmgCode)   throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=pmgCode&queryValue=" + pmgCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -185,13 +171,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductsBySearchResult(String searchOption)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static ProductsMatchedApiObject getProductsBySearch(String searchOption)   throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products?queryType=search&queryValue=" + searchOption);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -200,13 +186,29 @@ public class APIService {
     DataQualityContext.api_response = response;
 
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     // updates by Nishant to fix escaped char in json response issue
     return response.thenReturn().as(ProductsMatchedApiObject.class, ObjectMapperType.JACKSON_2);
   }
 
-  public static ProductsMatchedApiObject searchForProductByParam(
-      String searchTerm, String paramKey, String paramValue)
-      throws AzureOauthTokenFetchingException {
+  public static Response getResponse(String getParam) throws AzureOauthTokenFetchingException {
+    Response response = null;
+    //try {
+      response = given()
+              .baseUri(searchAPIEndPoint)
+              .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+              .when()
+              .get(getParam);
+    /*} catch (AzureOauthTokenFetchingException e) {
+      e.printStackTrace();
+    }*/
+
+    DataQualityContext.api_response = response;
+    Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
+    return response;
+  }
+
+  public static ProductsMatchedApiObject getProductByParam( String searchTerm, String paramKey, String paramValue) throws AzureOauthTokenFetchingException {
     /*
      //created by Nishant as per search API v2 changes
     function supports below
@@ -247,11 +249,10 @@ public class APIService {
         .statusCode();
   }
 
-  public static WorkApiObject searchForWorkByIDResult(String workID)
-      throws AzureOauthTokenFetchingException {
+  public static WorkApiObject getWorkByID(String workID)      throws AzureOauthTokenFetchingException {
     // updated by Nishant @ 30 Mar 2020 as per latest API changes
-    Response response =
-        given()
+    Response response =getResponse("/product-hub-works/works/" + workID);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -259,43 +260,42 @@ public class APIService {
 
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
     DataQualityContext.api_response = response;
+    */
     return response.thenReturn().as(WorkApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByTitleResult(String title)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorkByTitle(String title)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse(worksByTitleResource + title);
+       /* given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
             .get(worksByTitleResource + title);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());*/
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorksByIdentifier(String identifier)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=identifier&queryValue=" + identifier);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
             .get("/product-hub-works/works?queryType=identifier&queryValue=" + identifier);
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(
-      String identifier, String identifierType) throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorksByIdentifierAndType( String identifier, String identifierType) throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=identifier&queryValue=" + identifier   + "&identifierType=" + identifierType);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
-            .param("identifierType", identifierType)
+          //  .param("identifierType", identifierType)
             .when()
             .get(
                 "/product-hub-works/works?queryType=identifier&queryValue="
@@ -305,14 +305,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor)
-      throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksBySearchOption(String searchFor)      throws AzureOauthTokenFetchingException {
 
-    Response response =
-        given()
+    Response response =getResponse(worksBySearchResource + searchFor);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -320,14 +320,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByQueryTypeResult(
-      String queryType, String queryValue) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByParam(      String queryType, String queryValue) throws AzureOauthTokenFetchingException {
 
-    Response response =
-        given()
+    Response response =getResponse("/product-hub-works/works?queryType=" + queryType + "&queryValue=" + queryValue);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -335,13 +335,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorkByPMC(String pmcCode)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=pmcCode&queryValue=" + pmcCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -349,13 +349,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorkByPMG(String pmgCode)      throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=pmgCode&queryValue=" + pmgCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -363,13 +363,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByPersonIDResult(String identifier)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorksByPersonID(String personId) throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=personId&queryValue=" + personId);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -377,13 +377,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByPersonFullNameResult(String queryValue)
-      throws AzureOauthTokenFetchingException {
-    Response response =
-        given()
+  public static WorksMatchedApiObject getWorksByPersonFullName(String queryValue)   throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?queryType=personFullNameCurrent&queryValue="+ queryValue);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -393,14 +393,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByaccountableProduct(String accountableProduct)
-      throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByaccountableProduct(String accountableProduct)   throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse("/product-hub-works/works?queryType=accountableProduct&queryValue="+ accountableProduct);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -410,14 +410,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByWorkStatus(
-      String searchKeyword, String workStatus) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByWorkStatus( String searchKeyword, String workStatus) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse(worksByTitleResource + searchKeyword + "&workStatus=" + workStatus);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -425,14 +425,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByWorkType(
-      String searchKeyword, String workType) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByWorkType(      String searchKeyword, String workType) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse(worksByTitleResource + searchKeyword + "&workType=" + workType);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -440,14 +440,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksByManifestationType(
-      String searchKeyword, String manifestationType) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByManifestationType(      String searchKeyword, String manifestationType) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse(worksBySearchResource + searchKeyword + "&manifestationType=" + manifestationType);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -455,14 +455,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksBySearchWithPMCCode(
-      String searchKeyword, String pmcCode) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksBySearchWithPMC(      String searchKeyword, String pmcCode) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse(worksByTitleResource + searchKeyword + "&pmcCode=" + pmcCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -470,14 +470,14 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorksBySearchWithPMGCode(
-      String searchKeyword, String pmgCode) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksBySearchWithPMG(      String searchKeyword, String pmgCode) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =
-        given()
+    Response response =getResponse(worksBySearchResource + searchKeyword + "&pmgCode=" + pmgCode);
+      /*  given()
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .when()
@@ -485,13 +485,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByHasWorkComponents(String workID)
-          throws AzureOauthTokenFetchingException {
-    Response response =
-            given()
+  public static WorksMatchedApiObject getWorkByHasWorkComponents(String workID)          throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?_alt=1&queryType=hasWorkComponents&queryValue=" + workID);
+      /*      given()
                     .baseUri(searchAPIEndPoint)
                     .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                     .when()
@@ -500,13 +500,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByIsInPackage(String workID)
-          throws AzureOauthTokenFetchingException {
-    Response response =
-            given()
+  public static WorksMatchedApiObject getWorkByIsInPackage(String workID)          throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works?_alt=1&queryType=isInWorkPackages&queryValue=" + workID);
+      /*      given()
                     .baseUri(searchAPIEndPoint)
                     .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                     .when()
@@ -514,13 +514,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject searchForWorkByScrollId(String scrollId)
-          throws AzureOauthTokenFetchingException {
-    Response response =
-            given()
+  public static WorksMatchedApiObject getWorksByScrollId(String scrollId)          throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-works/works/scroll/"+scrollId);
+      /*      given()
                     .baseUri(searchAPIEndPoint)
                     .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                     .when()
@@ -528,13 +528,13 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static ProductsMatchedApiObject searchForProductByScrollId(String scrollId)
-          throws AzureOauthTokenFetchingException {
-    Response response =
-            given()
+  public static ProductsMatchedApiObject getProductsByScrollId(String scrollId)          throws AzureOauthTokenFetchingException {
+    Response response =getResponse("/product-hub-products/products/scroll/"+scrollId);
+      /*      given()
                     .baseUri(searchAPIEndPoint)
                     .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                     .when()
@@ -542,6 +542,7 @@ public class APIService {
 
     DataQualityContext.api_response = response;
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    */
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
