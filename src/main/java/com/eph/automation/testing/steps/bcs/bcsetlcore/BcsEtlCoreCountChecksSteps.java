@@ -51,54 +51,54 @@ public class BcsEtlCoreCountChecksSteps {
     public static void getBCSCoreCount (String tableName) {
         switch (tableName){
             case "etl_accountable_product_current_v":
-                Log.info("Getting bcs Core Accountable Product Current Table Count...");
+                Log.info("Getting bcs Core Accountable Product table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT;
                 break;
             case "etl_manifestation_current_v":
-                Log.info("Getting bcs Core Manifestation Current Table Count...");
+                Log.info("Getting bcs Core Manifestation table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_CURR_COUNT;
                 break;
             case "etl_person_current_v":
-                Log.info("Getting bcs Core Person Current Table Count...");
+                Log.info("Getting bcs Core Person table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PERSON_CURR_COUNT;
                 break;
             case "etl_product_current_v":
-                Log.info("Getting bcs Core Product Current Table Count...");
+                Log.info("Getting bcs Core Product table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PRODUCT_CURR_COUNT;
                 break;
             case "etl_work_person_role_current_v":
-                Log.info("Getting bcs Core work person Current Table Count...");
+                Log.info("Getting bcs Core work person table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_PERS_CURR_COUNT;
                 break;
             case "etl_work_relationship_current_v":
-                Log.info("Getting bcs Core work Relation Current Table Count...");
+                Log.info("Getting bcs Core work Relation table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_RELT_CURR_COUNT;
                 break;
             case "etl_work_current_v":
-                Log.info("Getting bcs Core work Current Table Count...");
+                Log.info("Getting bcs Core work table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_CURR_COUNT;
                 break;
             case "etl_work_identifier_current_v":
-                Log.info("Getting bcs Core work identifier Current Table Count...");
+                Log.info("Getting bcs Core work identifier table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_IDENTIF_CURR_COUNT;
                 break;
             case "etl_manifestation_identifier_current_v":
-                Log.info("Getting bcs Core manif identifier Current Table Count...");
+                Log.info("Getting bcs Core manif identifier table Current view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT;
                 break;
             case "all_manifestation_statuses_v":
-                Log.info("Getting bcs Core manif statuses view Count...");
+                Log.info("Getting bcs Core manif table statuses view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT;
                 break;
             case "all_manifestation_pubdates_v":
-                Log.info("Getting bcs Core manif pubdates view Count...");
+                Log.info("Getting bcs Core manif table pubdates view Count...");
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_PUBDATES_COUNT;
                 break;
             default:
                 Log.info(noTablemsg);
 
         }
-        Log.info(bcsCoreSQLCurrentCount);
+     //   Log.info(bcsCoreSQLCurrentCount);
         List<Map<String, Object>> bcsETLCoreCurrentTableCount = DBManager.getDBResultMap(bcsCoreSQLCurrentCount, Constants.AWS_URL);
         bcsCoreCurrentCount = ((Long) bcsETLCoreCurrentTableCount.get(0).get("Target_Count")).intValue();
     }
@@ -132,54 +132,54 @@ public class BcsEtlCoreCountChecksSteps {
     public static void getCountInboundTables(String tableName){
         switch (tableName){
             case "etl_accountable_product_current_v":
-                Log.info("Getting Inbound Current of Acc Prod Table Count...");
+                Log.info("Getting Inbound Current View count of Acc Prod Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_ACC_PROD_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_manifestation_current_v":
-                Log.info("Getting Inbound Current of Manifestation Table Count...");
+                Log.info("Getting Inbound Current View count of Manifestation Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_MANIF_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_person_current_v":
-                Log.info("Getting Inbound Current of Person Table Count...");
+                Log.info("Getting Inbound Current View count of Person Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_PERSON_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_product_current_v":
-                Log.info("Getting Inbound Current of Product Table Count...");
+                Log.info("Getting Inbound Current View count of Product Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_PRODUCT_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_person_role_current_v":
-                Log.info("Getting Inbound Current of Work Person Table Count...");
+                Log.info("Getting Inbound Current View count of Work Person Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_PERSON_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_relationship_current_v":
-                Log.info("Getting Inbound Current of Work Relation Table Count...");
+                Log.info("Getting Inbound Current View count of Work Relation Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_RELT_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_current_v":
-                Log.info("Getting Inbound Current of Work Table Count...");
+                Log.info("Getting Inbound Current View count of Work Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_identifier_current_v":
-                Log.info("Getting Inbound Current of Work Identifier Table Count...");
+                Log.info("Getting Inbound Current View count of  Work Identifier Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_IDENTIF_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_manifestation_identifier_current_v":
-                Log.info("Getting Inbound Current of Manif Identifier Table Count...");
+                Log.info("Getting Inbound Current View count of Manif Identifier Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_MANIF_IDENTIF_INBOUND_CURRENT_COUNT;
                 break;
             case "all_manifestation_statuses_v":
-                Log.info("Getting Inbound Current of Manif statuses Table Count...");
+                Log.info("Getting Inbound statuses View count of Manif Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_MANIF_STATUSES_INBOUND_COUNT;
                 break;
             case "all_manifestation_pubdates_v":
-                Log.info("Getting Inbound Current of Manif pubdates Table Count...");
+                Log.info("Getting Inbound pubdates View count of Manif Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_MANIF_PUBDATES_INBOUND_COUNT;
                 break;
             default:
                 Log.info(noTablemsg);
 
         }
-        Log.info(bcsInboundCurrentSQLCount);
+      //  Log.info(bcsInboundCurrentSQLCount);
         List<Map<String, Object>> bcsInboundCurrentTableCount = DBManager.getDBResultMap(bcsInboundCurrentSQLCount, Constants.AWS_URL);
         bcsInboundCurrentCount = ((Long) bcsInboundCurrentTableCount.get(0).get("Source_Count")).intValue();
     }

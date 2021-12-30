@@ -26,10 +26,12 @@ public class BcsEtlCoreDataChecksSteps {
     private static String noTablemsg = "No such tables found";
 
     @Given("^Get the (.*) of BCS Core data from Inbound Tables (.*)$")
-    public static void getRandomidsFromInound(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random ids for bcs Core Inbound Tables....");
+    public static void getRandomidsFromInound(String countOfRandomIds, String tableName) {
+
+        String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+      if(numberOfRecords==null)numberOfRecords=countOfRandomIds;
+     //   Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get "+numberOfRecords+" random ids for bcs Core Inbound Tables....");
         List<Map<?, ?>> randomids;
         switch (tableName) {
             case "etl_accountable_product_current_v":
@@ -70,8 +72,8 @@ public class BcsEtlCoreDataChecksSteps {
         }
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("sourceRef")).collect(Collectors.toList());
-        Log.info(sql);
-        Log.info(ids.toString());
+      //  Log.info(sql);
+        Log.info("below ids selected to be verified \n"+ids.toString());
     }
 
 
@@ -116,7 +118,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
+      //  Log.info(sql);
     }
 
     @Then("^Data from the BCS Core Current Tables to compare Inbound Check (.*)$")
@@ -161,7 +163,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
+      //  Log.info(sql);
     }
 
     @And("^Compare data of BCS Inbound and BCS Core (.*) tables are identical$")

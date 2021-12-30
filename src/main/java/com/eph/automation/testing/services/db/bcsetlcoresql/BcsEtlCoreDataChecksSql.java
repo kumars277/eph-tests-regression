@@ -48,7 +48,7 @@ public class BcsEtlCoreDataChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
                     "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
                     ")  A \n" +
-                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) and sourceref in ('%s') order by sourceref desc";
+                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) and u_key in ('%s') order by sourceref desc";
 
     public static final String GET_RANDOM_WRK_PERS_KEY_INBOUND =
             "SELECT u_key as sourceref\n" +
@@ -960,7 +960,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",accountableparent as accountableParent \n" +
                     ",dq_err as dqErr \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_accountable_product_current_v \n" +
-                    "where sourceref in ('%s') \n" +
+                    "where u_key in ('%s') \n" +
                     "order by sourceref desc";
 
 
