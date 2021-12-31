@@ -492,8 +492,9 @@ public class BcsEtlCoreDataChecksSteps {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
-    public static void getRandomidsFromCurrent(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    public static void getRandomidsFromCurrent(String countOfRandomIds, String tableName) {
+        String numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+       if(numberOfRecords==null)numberOfRecords = countOfRandomIds;
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for bcs Core Current Tables....");
 

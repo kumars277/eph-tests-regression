@@ -107,7 +107,7 @@ public class BcsEtlCoreCountChecksSteps {
     public static void getInboundLeadIndicator(){
         Log.info("Getting Lead indiccator Count from Inbound...");
         leadIndicatorSQLCountInbound = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT;
-        Log.info(leadIndicatorSQLCountInbound);
+     //   Log.info(leadIndicatorSQLCountInbound);
         List<Map<String, Object>> leadIndicatorInboundTableCount = DBManager.getDBResultMap(leadIndicatorSQLCountInbound, Constants.AWS_URL);
         leadIndicatorCountInbound = ((Long) leadIndicatorInboundTableCount.get(0).get("Source_Count")).intValue();
 
@@ -117,7 +117,7 @@ public class BcsEtlCoreCountChecksSteps {
     public static void getCurrLeadIndicator(){
         Log.info("Getting Lead indiccator Count from manifestation identifier current...");
         leadIndicatorSQLCount = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT;
-        Log.info(leadIndicatorSQLCount);
+      //  Log.info(leadIndicatorSQLCount);
         List<Map<String, Object>> leadIndicatorCurrentTableCount = DBManager.getDBResultMap(leadIndicatorSQLCount, Constants.AWS_URL);
         leadIndicatorCountCurr = ((Long) leadIndicatorCurrentTableCount.get(0).get("Target_Count")).intValue();
     }
@@ -148,11 +148,11 @@ public class BcsEtlCoreCountChecksSteps {
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_PRODUCT_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_person_role_current_v":
-                Log.info("Getting Inbound Current View count of Work Person Table...");
+                Log.info("Getting Inbound Current View count of Work Person Role Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_PERSON_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_relationship_current_v":
-                Log.info("Getting Inbound Current View count of Work Relation Table...");
+                Log.info("Getting Inbound Current View count of Work Relationship Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_WRK_RELT_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_work_current_v":

@@ -616,7 +616,7 @@ public class BcsEtlCoreCountChecksSql {
                     "   , 'N' dq_err\n" +
                     "   FROM\n" +
                     "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".workday_reference_v w on r.email = w.email \n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workday_reference_v w on r.email = w.email \n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode)) \n" +
                     ") A\n" +
                     "INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily vf on a.worksourceref = vf.workmasterprojectno and a.worksourceref = vf.sourceref\n" +
