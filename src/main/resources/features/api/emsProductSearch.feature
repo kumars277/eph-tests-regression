@@ -20,9 +20,6 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_TITLE        |
       | PRODUCT_MANIFESTATION_WORK_TITLE   |
 
-
-
-
   @searchAPI @productSearchAPI
   Scenario Outline: search product by identifier
     Given  We get 1 random search ids for products <idType>
@@ -71,7 +68,6 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_WORK_ID               |
       | PRODUCT_MANIFESTATION_WORK_TITLE            |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER       |
-
       | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
 
@@ -127,8 +123,6 @@ Feature: Search API: Products
       | productType   |
       | pmcCode       |
       | pmgCode       |
-
-
 
   @searchAPI @productSearchAPI
   Scenario: Product search E2E
