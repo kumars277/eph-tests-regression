@@ -16,9 +16,11 @@ Feature: Search API: Products
     Then the product details are retrieved when searched by <title> and compared
     Examples:
       | title                              |
-      | PRODUCT_MANIFESTATION_WORK_TITLE   |
       | PRODUCT_TITLE                      |
       | PRODUCT_MANIFESTATION_TITLE        |
+      | PRODUCT_MANIFESTATION_WORK_TITLE   |
+
+
 
 
   @searchAPI @productSearchAPI
@@ -120,11 +122,12 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
-      | pmgCode       |
       | workType      |
       | productStatus |
       | productType   |
       | pmcCode       |
+      | pmgCode       |
+
 
 
   @searchAPI @productSearchAPI

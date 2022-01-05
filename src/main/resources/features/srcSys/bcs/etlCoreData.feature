@@ -18,8 +18,8 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |etl_manifestation_current_v                  |10              |
       |etl_person_current_v                         |10              |
       |etl_product_current_v                        |10              |
- ##     |etl_work_person_role_current_v               |10              | // bcs_ingestion_database_sit.workday_reference_v is missing
- ##     |etl_work_relationship_current_v              |10              | //count mismatch
+      |etl_work_person_role_current_v               |10              |
+      |etl_work_relationship_current_v              |10              |
       |etl_work_current_v                           |10              |
       |etl_work_identifier_current_v                |10              |
       |etl_manifestation_identifier_current_v       |10              |
@@ -50,7 +50,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       | etl_person_current_v                   | etl_transform_history_person_part                   |   10                |
       | etl_product_current_v                  | etl_transform_history_product_part                  |   10                |
       | etl_work_person_role_current_v         | etl_transform_history_work_person_role_part         |   10                |
-  #    | etl_work_relationship_current_v        | etl_transform_history_work_relationship_part        |   10                | count mismatch
+      | etl_work_relationship_current_v        | etl_transform_history_work_relationship_part        |   10                |
       | etl_work_current_v                     |etl_transform_history_work_part                      |   10                |
       | etl_work_identifier_current_v          | etl_transform_history_work_identifier_part          |   10                |
 

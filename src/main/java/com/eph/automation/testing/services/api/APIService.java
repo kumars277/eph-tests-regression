@@ -133,12 +133,11 @@ public class APIService {
             .baseUri(searchAPIEndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .param(paramKey, paramValue)
-            .param("queryType", "name")
-            .param("queryValue", searchTerm)
             .when()
-            .get("/product-hub-products/products");
+            .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
 
     DataQualityContext.api_response = response;
+   response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
 
     return response.thenReturn().as(ProductsMatchedApiObject.class);

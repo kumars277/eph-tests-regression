@@ -112,7 +112,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-   //   ids.clear(); ids.add("EPR-12RM3V"); Log.info("hard coded product ids are : " + ids);
+   //   ids.clear(); ids.add("EPR-12CN1R"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -338,46 +338,47 @@ else{
     for (ProductDataObject productDataObject : productDataObjects) {
 
       int fromCntr = 0;
-      int sizeCntr = 50;
+      int sizeCntr = 500;
 
       switch (title) {
         case PR_TITLE:
-          returnedProducts = getProductsByTitle(productDataObject.getPRODUCT_NAME() + from + fromCntr + size + sizeCntr);
-
-          Log.info(
-              "Total product found for product title... - "
-                  + returnedProducts.getTotalMatchCount());
-          while (!returnedProducts.verifyProductWithIdIsReturnedOnly(
-                  productDataObjects.get(0).getPRODUCT_ID())
-              && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-
-            Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
-            returnedProducts =
-                    getProductsByTitle(
-                    productDataObject.getPRODUCT_NAME() + from + fromCntr + size + sizeCntr);
-          }
-
-          break;
+          returnedProducts = ProductByTitle_Iterative(productDataObject.getPRODUCT_NAME(),fromCntr, sizeCntr);break;
 
         case PRM_TITLE:
-          getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-
-          returnedProducts =getProductsByTitle(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE()+ "&from=0&size=100");
-
-
-          break;
+            getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+            returnedProducts = ProductByTitle_Iterative(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE(),fromCntr,sizeCntr);break;
 
         case PRMW_TITLE:
           getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-          returnedProducts =getProductsByTitle(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()+ "&from=0&size=100");
-          break;
+          returnedProducts =ProductByTitle_Iterative(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE(),fromCntr, sizeCntr); break;
+
         default:
           throw new IllegalArgumentException(title);
       }
       returnedProducts.verifyProductsAreReturned();
       returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
     }
+  }
+
+  public ProductsMatchedApiObject ProductByTitle_Iterative(String title, int fromCntr, int sizeCntr)
+  {
+    //created by Nishant @ 5 Jan 2022
+
+    ProductsMatchedApiObject returnedProducts = null;
+    try {
+      returnedProducts = getProductsByTitle(title+ from + fromCntr + size + sizeCntr);
+
+      Log.info("Total product found for title... - "+ returnedProducts.getTotalMatchCount());
+      while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
+        fromCntr += sizeCntr;
+
+        Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
+        returnedProducts =getProductsByTitle(title+ from + fromCntr + size + sizeCntr);
+      }
+    } catch (AzureOauthTokenFetchingException e) {
+      e.printStackTrace();
+    }
+    return returnedProducts;
   }
 
   @When("^the product details are retrieved and compared when searched by (.*)$")
@@ -883,19 +884,11 @@ else{
           break;
         case "pmcCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-          DataQualityContext.breadcrumbMessage +=
-              "->" + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
-          returnedProducts =
-                  getProductByParam(
-                  searchTerm,
-                  paramKey,
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
-          productCountDB =
-              getCount(
-                  "getProductCountByPMCCode",
-                  searchTerm,
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          DataQualityContext.breadcrumbMessage +="->" + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
+          returnedProducts =getProductByParam(defaultSearch,paramKey,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          productCountDB =getCount("getProductCountByPMCCode",defaultSearch,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           break;
+
         case "pmgCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           String pmgCode =
@@ -916,38 +909,23 @@ else{
   @Then("^the product title are retrieved by (.*) compared$")
   public static void theProductTitleAreRetrievedAndCotainsSearchKey(String paramKey)
       throws AzureOauthTokenFetchingException, NullPointerException {
-
-    ProductsMatchedApiObject returnedProducts = new ProductsMatchedApiObject();
-
     String defaultSearch = "CELL";
     int productCountDB = 0;
     int fromCntr = 0;
     int sizeCntr = 500;
 
+    ProductsMatchedApiObject returnedProducts = new ProductsMatchedApiObject();
+
     if (paramKey.equalsIgnoreCase("productStatus")) {
       DataQualityContext.breadcrumbMessage += "-> product status " + productDataObjects.get(0).getF_STATUS();
-      productCountDB =
-          getCount(
-              productCountByProductStatus, defaultSearch, productDataObjects.get(0).getF_STATUS());
+      productCountDB =getCount(productCountByProductStatus, defaultSearch, productDataObjects.get(0).getF_STATUS());
 
-      returnedProducts =
-              getProductByParam(
-              defaultSearch + from + fromCntr + size + sizeCntr,
-              paramKey,
-              productDataObjects.get(0).getF_STATUS());
-      Log.info(
-          "Total product found for product status with search... - "
-              + returnedProducts.getTotalMatchCount());
-      while (!returnedProducts.verifyAllTitleContainsSearchKey(defaultSearch)
-          && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
+      returnedProducts =getProductByParam(defaultSearch + from + fromCntr + size + sizeCntr,paramKey,productDataObjects.get(0).getF_STATUS());
+      Log.info("Total product found for product status with search... - "+ returnedProducts.getTotalMatchCount());
+      while (!returnedProducts.verifyAllTitleContainsSearchKey(defaultSearch)&& fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
         fromCntr += sizeCntr;
-        Log.info(
-            "scanned productID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-        returnedProducts =
-                getProductByParam(
-                defaultSearch + from + fromCntr + size + sizeCntr,
-                paramKey,
-                productDataObjects.get(0).getF_STATUS());
+        Log.info("scanned productID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
+        returnedProducts =getProductByParam(defaultSearch + from + fromCntr + size + sizeCntr,paramKey,productDataObjects.get(0).getF_STATUS());
       }
     }
 
