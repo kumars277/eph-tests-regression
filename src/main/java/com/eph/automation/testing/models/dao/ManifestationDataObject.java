@@ -17,7 +17,8 @@ public class  ManifestationDataObject {
     private String PAGE_WIDTH;
     private String WEIGHT;
     private String CARTON_QTY;
-    private String internationalEditionInd;
+    //private String internationalEditionInd;
+    private String INTER_EDITION_FLAG;
     private String COPYRIGHT_DATE;
     private String F_PRODUCT_MANIFESTATION_TYP;
     private String FORMAT_TXT;
@@ -36,7 +37,7 @@ public class  ManifestationDataObject {
     private String F_EVENT;
     private String B_CLASSNAME;
     private int PMX_SOURCE_REFERENCE;
-    private String INTER_EDITION_FLAG;
+
     private String FIRST_PUB_DATE;
     private String LAST_PUB_DATE;
     private String F_TYPE;
@@ -81,12 +82,12 @@ public class  ManifestationDataObject {
     public String getCARTON_QTY() {return CARTON_QTY;}
     public void setCARTON_QTY(String CARTON_QTY) {this.CARTON_QTY = CARTON_QTY;}
 
-    public String getInternationalEditionInd() {
+    /*public String getInternationalEditionInd() {
         if(internationalEditionInd.equalsIgnoreCase("t"))internationalEditionInd= "True";
         if(internationalEditionInd.equalsIgnoreCase("f")) internationalEditionInd= "False";
      return internationalEditionInd;
-    }
-    public void setInternationalEditionInd(String INTERNATIONAL_EDITION_IND) {this.internationalEditionInd = INTERNATIONAL_EDITION_IND;}
+    }*/
+  //  public void setInternationalEditionInd(String INTERNATIONAL_EDITION_IND) {this.internationalEditionInd = INTERNATIONAL_EDITION_IND;}
 
     public String getCOPYRIGHT_DATE() {return COPYRIGHT_DATE;}
     public void setCOPYRIGHT_DATE(String COPYRIGHT_DATE) {this.COPYRIGHT_DATE = COPYRIGHT_DATE;}
@@ -131,7 +132,12 @@ public class  ManifestationDataObject {
     public int getPMX_SOURCE_REFERENCE() {return PMX_SOURCE_REFERENCE;}
     public void setPMX_SOURCE_REFERENCE(int PMX_SOURCE_REFERENCE) {this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;}
 
-    public String getINTER_EDITION_FLAG() {return INTER_EDITION_FLAG;}
+    public String getINTER_EDITION_FLAG() {
+        if(INTER_EDITION_FLAG!=null){
+        if(INTER_EDITION_FLAG.equalsIgnoreCase("t"))INTER_EDITION_FLAG= "True";
+        if(INTER_EDITION_FLAG.equalsIgnoreCase("f")) INTER_EDITION_FLAG= "False";}
+        return INTER_EDITION_FLAG;
+    }
     public void setINTER_EDITION_FLAG(String INTER_EDITION_FLAG) {this.INTER_EDITION_FLAG = INTER_EDITION_FLAG;}
 
     public String getFIRST_PUB_DATE() {return FIRST_PUB_DATE;}
@@ -166,7 +172,7 @@ public class  ManifestationDataObject {
                 ", PAGE_WIDTH='" + PAGE_WIDTH + '\'' +
                 ", WEIGHT='" + WEIGHT + '\'' +
                 ", CARTON_QTY='" + CARTON_QTY + '\'' +
-                ", INTERNATIONAL_EDITION_IND='" + internationalEditionInd + '\'' +
+               // ", INTERNATIONAL_EDITION_IND='" + internationalEditionInd + '\'' +
                 ", COPYRIGHT_DATE='" + COPYRIGHT_DATE + '\'' +
                 ", F_PRODUCT_MANIFESTATION_TYP='" + F_PRODUCT_MANIFESTATION_TYP + '\'' +
                 ", FORMAT_TXT='" + FORMAT_TXT + '\'' +
@@ -209,7 +215,7 @@ public class  ManifestationDataObject {
                 Objects.equals(PAGE_WIDTH, that.PAGE_WIDTH) &&
                 Objects.equals(WEIGHT, that.WEIGHT) &&
                 Objects.equals(CARTON_QTY, that.CARTON_QTY) &&
-                Objects.equals(internationalEditionInd, that.internationalEditionInd) &&
+              //  Objects.equals(internationalEditionInd, that.internationalEditionInd) &&
                 Objects.equals(COPYRIGHT_DATE, that.COPYRIGHT_DATE) &&
                 Objects.equals(F_PRODUCT_MANIFESTATION_TYP, that.F_PRODUCT_MANIFESTATION_TYP) &&
                 Objects.equals(FORMAT_TXT, that.FORMAT_TXT) &&
@@ -234,6 +240,6 @@ public class  ManifestationDataObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, internationalEditionInd, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, WORK_TYPE_ID, MANIFESTATION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS, DQ_ERR, UPDATED, F_EVENT, B_CLASSNAME, PMX_SOURCE_REFERENCE, INTER_EDITION_FLAG, FIRST_PUB_DATE, LAST_PUB_DATE, F_TYPE, F_STATUS, F_FORMAT_TYPE, F_WWORK);
+        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, WORK_TYPE_ID, MANIFESTATION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS, DQ_ERR, UPDATED, F_EVENT, B_CLASSNAME, PMX_SOURCE_REFERENCE, INTER_EDITION_FLAG, FIRST_PUB_DATE, LAST_PUB_DATE, F_TYPE, F_STATUS, F_FORMAT_TYPE, F_WWORK);
     }
 }

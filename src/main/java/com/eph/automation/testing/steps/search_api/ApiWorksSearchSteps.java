@@ -94,7 +94,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102V2J");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-11F3HN");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -751,59 +751,37 @@ public class ApiWorksSearchSteps {
     int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
       String workId = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
+      String resourceString = "";
       //   DataQualityContext.breadcrumbMessage += "->" + ids;
       switch (searchType) {
-        case "EPR_ID":
-          returnedWorks = APIService.getWorksBySearchOption(workId);
-          break;
+        case "EPR_ID":              resourceString = workId;          break;
+        case "TITLE":               resourceString = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE();break;
 
-        case "TITLE":
-          returnedWorks =
-                  APIService.getWorksBySearchOption(
-                          DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
-          break;
+        case "JOURNAL_ACRONYM":     getWorkIdentifiersByWorkID(workId);
+                                  for (WorkDataObject workIdentifier : workIdentifiers) {
+                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM"))
+                                    {resourceString = workIdentifier.getIDENTIFIER();break;}
+                                  }break;
 
-        case "JOURNAL_ACRONYM":
-          getWorkIdentifiersByWorkID(workId);
-          String jacronymValue = "";
-          for (WorkDataObject workIdentifier : workIdentifiers) {
-            if (workIdentifier.getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM")) {
-              jacronymValue = workIdentifier.getIDENTIFIER();
-              break;
-            }
-          }
-          returnedWorks = APIService.getWorksBySearchOption(jacronymValue);
-          break;
+        case "JOURNAL_NUMBER":      getWorkIdentifiersByWorkID(workId);
+                                  for (WorkDataObject workIdentifier : workIdentifiers) {
+                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER"))
+                                    {resourceString = workIdentifier.getIDENTIFIER();break;}
+                                  }break;
 
-        case "JOURNAL_NUMBER":
-          getWorkIdentifiersByWorkID(workId);
-          String jNumber = "";
-          for (WorkDataObject workIdentifier : workIdentifiers) {
-            if (workIdentifier.getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
-              jNumber = workIdentifier.getIDENTIFIER();
-              break;
-            }
-          }
-          returnedWorks = APIService.getWorksBySearchOption(jNumber);
-          break;
+        case "ISSN":                getWorkIdentifiersByWorkID(workId);
 
-        case "ISSN":
-          getWorkIdentifiersByWorkID(workId);
-          String issn = "";
-          for (WorkDataObject workIdentifier : workIdentifiers) {
-            if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L")) {
-              issn = workIdentifier.getIDENTIFIER();
-              break;
-            }
-          }
-          returnedWorks = APIService.getWorksBySearchOption(issn);
-          break;
+                                  for (WorkDataObject workIdentifier : workIdentifiers) {
+                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L"))
+                                    {resourceString = workIdentifier.getIDENTIFIER();break;}
+                                  }break;
+
         default:throw new IllegalArgumentException(searchType);
       }
+      returnedWorks = APIService.getWorksBySearchOption(resourceString);
       assert returnedWorks != null;
-      returnedWorks.verifyWorksAreReturned();
-      returnedWorks.verifyWorkWithIdIsReturned(
-              DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+     // returnedWorks.verifyWorksAreReturned();
+      returnedWorks.verifyWorkWithIdIsReturned(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
     }
   }
 

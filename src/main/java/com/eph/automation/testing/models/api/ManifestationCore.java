@@ -51,8 +51,8 @@ public class ManifestationCore {
         Assert.assertEquals(keyTitle, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());        printLog("manifestation keyTitle");
 
 
-    if (DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getInternationalEditionInd() != null | internationalEditionInd != null) {
-        Assert.assertEquals(Boolean.valueOf(internationalEditionInd), Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getInternationalEditionInd()));
+    if (internationalEditionInd != null || DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG() != null) {
+        Assert.assertEquals(Boolean.valueOf(internationalEditionInd), Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG()));
         printLog("internationalEditionInd");
     }
 

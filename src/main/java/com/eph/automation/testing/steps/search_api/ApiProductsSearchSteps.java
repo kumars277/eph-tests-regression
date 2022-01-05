@@ -112,7 +112,7 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-   //   ids.clear(); ids.add("EPR-12CN1R"); Log.info("hard coded product ids are : " + ids);
+      ids.clear(); ids.add("EPR-113H4D"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
       ids.clear();
@@ -523,8 +523,7 @@ else{
           case PR_ID:             apiResource = productDataObject.getPRODUCT_ID();                                  break;
           case PRM_ID:            apiResource =String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());  break;
           case PRW_ID:            apiResource =productDataObjects.get(0).getF_PRODUCT_WORK();                       break;
-          case PRMW_ID:
-            getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+          case PRMW_ID:           getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                                   apiResource =DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID();     break;
 
           case PR_IDENTIFIER:     getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
@@ -534,60 +533,41 @@ else{
 
                                   apiResource = "123456789";                                                        break;
 
-          case PRW_IDENTIFIER:  getWorkIdentifiersByWorkID(productDataObjects.get(0).getF_PRODUCT_WORK());
+          case PRW_IDENTIFIER:    getWorkIdentifiersByWorkID(productDataObjects.get(0).getF_PRODUCT_WORK());
                                   apiResource =workIdentifiers.get(0).getIDENTIFIER();                              break;
 
-          case PRM_IDENTIFIER:     List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(
-                  productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-
+          case PRM_IDENTIFIER:    List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                                   apiResource =manifestationIdentifiers.get(0).get(identifier).toString();           break;
 
-          case PRMW_IDENTIFIER:
-            getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-            getWorkIdentifiersByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+          case PRMW_IDENTIFIER:   getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                                  getWorkIdentifiersByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                                   apiResource =workIdentifiers.get(0).getIDENTIFIER();                              break;
-
 
           case PR_TITLE:          apiResource = productDataObject.getPRODUCT_NAME();                                break;
 
-          case PRW_TITLE:     getWorksDataFromEPHGD(productDataObjects.get(0).getF_PRODUCT_WORK());
+          case PRW_TITLE:         getWorksDataFromEPHGD(productDataObjects.get(0).getF_PRODUCT_WORK());
                                   apiResource = DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE();	break;
 
-
-          case PRM_TITLE:     getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+          case PRM_TITLE:         getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                                   apiResource =   manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE();     break;
 
-          case PRMW_TITLE:    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+          case PRMW_TITLE:        getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                                   apiResource =DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE();  break;
 
+          case PR_PERSONFULLNAME: getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
+                                  getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                                  apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " "  + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() ;break;
 
-          case PR_PERSONFULLNAME:
-            /*
-            created by Nishant @8 May 2020
-            getProuctByPerson returns sometimes 70000+ records and most probable intended product id does not appear in first 20 records
-            hence we need to send API request with size 5000 and check if intended workID is returned
-            if not, send request againuntil product id found
-            */
-            getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
-            getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-            apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " "  + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() ;
-            break;
+          case PRW_PERSONFULLNAME:getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
+                                  getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                                  apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME();  break;
 
-          case PRW_PERSONFULLNAME:
-            getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
-            getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-            apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME();
-            break;
+          case PRMW_PERSONFULLNAME:getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                                  getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+                                  getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                                  apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()+ " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME();  break;
 
-          case PRMW_PERSONFULLNAME:
-            getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-            getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-            getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-            apiResource = personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()+ " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME();
-            break;
-
-          default:
-            throw new IllegalStateException("Unexpected value: " + searchOption);
+          default:            throw new IllegalStateException("Unexpected value: " + searchOption);
         }
 
         returnedProducts = getProductsBySearch(apiResource+from + fromCntr + size + sizeCntr);
@@ -597,6 +577,13 @@ else{
           returnedProducts.verifyNoProductReturned();
         } else
           {
+             /*
+            created by Nishant @8 May 2020
+            getProuctByPerson returns sometimes 70000+ records and most probable intended product id does not appear in first 20 records
+            hence we need to send API request with size 5000 and check if intended workID is returned
+            if not, send request againuntil product id found
+            */
+
           Log.info("Total product found search... - "+ returnedProducts.getTotalMatchCount());
           while (!returnedProducts.verifyProductWithIdIsReturnedOnly(
                   productDataObjects.get(0).getPRODUCT_ID())
@@ -885,8 +872,8 @@ else{
         case "pmcCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           DataQualityContext.breadcrumbMessage +="->" + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
-          returnedProducts =getProductByParam(defaultSearch,paramKey,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
-          productCountDB =getCount("getProductCountByPMCCode",defaultSearch,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          returnedProducts =getProductByParam(searchTerm,paramKey,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          productCountDB =getCount("getProductCountByPMCCode",searchTerm,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           break;
 
         case "pmgCode":

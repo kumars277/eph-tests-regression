@@ -3,7 +3,6 @@ Feature: Customer Search API: Works
          I would like to search works from Enterprise Customer Hub using EIP Search
          So that I can use the details to validate business needs
 
-
   @searchAPI @workSearchAPI
   Scenario: search work by ID
     Given   We get 1 random search ids for works default
@@ -18,11 +17,11 @@ Feature: Customer Search API: Works
     Then   the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
-      |JOURNAL_ACRONYM    |
-      |TITLE              |
       |EPR_ID             |
-      |JOURNAL_NUMBER     |
+      |TITLE              |
       |ISSN               |
+      |JOURNAL_NUMBER     |
+      |JOURNAL_ACRONYM    |
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
@@ -35,13 +34,8 @@ Feature: Customer Search API: Works
       | PEOPLE_HUB_ID         |
       | personFullNameCurrent |
       | PERSON_ID             |
-
-
-
       # updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
    #   | personIdCurrent       |
-
-
 
   @searchAPI @workSearchAPI
   Scenario Outline: search work by title
@@ -50,9 +44,9 @@ Feature: Customer Search API: Works
     Then   the work details are retrieved by title <tType> and compared
     Examples:
     | tType                                   |
-    | WORK_PRODUCT_SUMMARY_NAME                |
     | WORK_TITLE                               |
     | WORK_MANIFESTATION_TITLE                 |
+    | WORK_PRODUCT_SUMMARY_NAME                |
     | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME  |
 
   @searchAPI @workSearchAPI
@@ -62,10 +56,10 @@ Feature: Customer Search API: Works
     Then   the works search by identifier <idType> details are retrieved and compared
     Examples:
       | idType                        |
-      | WORK_IDENTIFIER               |
-      | WORK_MANIFESTATION_IDENTIFIER |
       | WORK_ID                       |
+      | WORK_IDENTIFIER               |
       | WORK_MANIFESTATION_ID         |
+      | WORK_MANIFESTATION_IDENTIFIER |
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier and Type
@@ -84,18 +78,17 @@ Feature: Customer Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
-      | WORK_PRODUCT_ID                        |
       | WORK_ID                                |
       | WORK_TITLE                             |
       | WORK_IDENTIFIER                        |
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |
-
+      | WORK_PRODUCT_ID                        |
       | WORK_PRODUCT_SUMMARY_NAME              |
-      | WORK_PERSONS_FULLNAME                  |
       | WORK_MANIFESTATION_PRODUCT_ID          |
       | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
+      | WORK_PERSONS_FULLNAME                  |
 
   @searchAPI @workSearchAPI
   Scenario: search work by random Person id
@@ -172,8 +165,6 @@ Feature: Customer Search API: Works
       | blood                              |
       | human                              |
       | medicine                           |
-
-
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
 
   @searchAPI @workSearchAPI
