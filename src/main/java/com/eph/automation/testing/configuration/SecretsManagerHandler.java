@@ -42,7 +42,15 @@ public class SecretsManagerHandler {
             default: throw new IllegalArgumentException("Illegal argument: " +TestContext.getValues().environment);
         }
 
-
+        /*
+        JSONObject object = getSecretKeyObj("eu-west-1",secretName);
+      switch(TestContext.getValues().environment) {
+            case "SIT": DBconnection = getSITdbConnection(object,connectionURL);break;
+            case "UAT": DBconnection = getUATdbConnection(object,connectionURL);break;
+            case "UAT2":DBconnection = getUAT2dbConnection(object,connectionURL);break;
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
+        }
+*/
         return DBconnection;
     }
 
@@ -80,13 +88,15 @@ public class SecretsManagerHandler {
         //updated by Nishant @ 30 Dec 2021
         String connectionString = "";
         switch (connectionURL) {
-            case "AWS_URL":
-                //connectioString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;
-                // AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
-          //      connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-          //          "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-           //   return connectionString;
-            return object.getAsString("SIT_AWS_URL");
+           case "AWS_URL":
+//                return object.getAsString("SIT_AWS_URL");
+
+//                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+//                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
+            connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+                    "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
+              return connectionString;
+
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
