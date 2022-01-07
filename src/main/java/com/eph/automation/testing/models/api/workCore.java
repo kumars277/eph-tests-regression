@@ -10,9 +10,9 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.steps.search_api.ApiWorksSearchSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
-import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
+import java.text.ParseException;
 import java.util.*;
 
 /*
@@ -160,7 +160,7 @@ public class workCore {
     //commented by Nishant @ 13 Apr 2020,yet to implement
     //if(!(this.subjectAreas==null)&&!(this.subjectAreas.length==0)){for (SubjectAreasApiObject sa : this.subjectAreas) {sa.compareWithDB(this.id);}}
 
-    public void compareWithDB(String workId) {
+    public void compareWithDB(String workId) throws ParseException {
         Log.info("----- Verifying workCore data... " + workId);
         DataQualityContext.breadcrumbMessage+=" > "+workId;
 

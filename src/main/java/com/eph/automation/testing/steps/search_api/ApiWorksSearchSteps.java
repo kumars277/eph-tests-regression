@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
 import cucumber.api.java.en.*;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.Assert;
@@ -74,7 +75,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-103CRC");Log.info("hard coded work ids are : " + ids);
+    //ids.clear();ids.add("EPR-W-105MSY");Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -201,7 +202,7 @@ public class ApiWorksSearchSteps {
 
   // Updated by Nishant for data model changes in Apr 2020
   @When("^the work details are retrieved and compared$")
-  public void compareWorkSearchResultsWithDB() throws AzureOauthTokenFetchingException {
+  public void compareWorkSearchResultsWithDB() throws AzureOauthTokenFetchingException, ParseException {
     int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
       Log.info("#########");
@@ -235,19 +236,16 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by workStatus and compared$")
-  public void compareWorksByWorkStatusWithDB() {
+  public void compareWorksByWorkStatusWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-    try {
+
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        String searchKeyword =
-                DataQualityContext
-                        .workDataObjectsFromEPHGD
-                        .get(0)
-                        .getWORK_TITLE()
-                        .split(" ")[0]
-                        .toUpperCase();
+
+        String searchKeyword =DataQualityContext.workDataObjectsFromEPHGD.get(0)
+                        .getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ")
+                .split(" ")[0].toUpperCase();
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
         Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
 
@@ -255,13 +253,9 @@ public class ApiWorksSearchSteps {
         printTotalWorkCount(returnedWorks);
 
         returnedWorks.verifyWorksAreReturned();
-        returnedWorks.verifyWorksReturnedCount(
-                getNumberOfWorksByWorkStatus(searchKeyword, workStatus));
+        returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkStatus(searchKeyword, workStatus));
       }
-    } catch (Exception e) {
-      Log.info("e.message " + e.toString());
-      scenarioFailed();
-    }
+
   }
 
   @Then("^the work details are retrieved by workType and compared$")
@@ -332,7 +326,7 @@ public class ApiWorksSearchSteps {
     try{
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       String searchKeyword =
-              DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0];
+              DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0];
 
       for (int i = 0; i < bound; i++) {
         Log.info(
@@ -564,7 +558,7 @@ public class ApiWorksSearchSteps {
 
   @When("^the works retrieved by search (.*) details are retrieved and compared$")
   public void compareWorksRetrievdBySearchOptionWithDB(String searchType)
-          throws AzureOauthTokenFetchingException {
+          throws AzureOauthTokenFetchingException, ParseException {
     // completed by Nishant @ 23-24 Apr 2020
     WorksMatchedApiObject returnedWorks = null;
 
@@ -742,7 +736,7 @@ public class ApiWorksSearchSteps {
 
   @When("^the journal by search (.*) details are retrieved and compared$")
   public void compareWorksRetrievdByJournalSearchOptionWithDB(String searchType)
-          throws AzureOauthTokenFetchingException {
+          throws AzureOauthTokenFetchingException, ParseException {
     // created by Nishant @ 24-25 Apr 2020
     WorksMatchedApiObject returnedWorks = null;
 
@@ -845,7 +839,7 @@ public class ApiWorksSearchSteps {
 
   @When("^work response is compared with the DB for (.*)$")
   public static void compareSearchResultCountForPersonOptions(String personSearchOption)
-          throws AzureOauthTokenFetchingException {
+          throws AzureOauthTokenFetchingException, ParseException {
     WorksMatchedApiObject returnedWorks = null;
     int dbCount = 0;
     int bound = ids.size();

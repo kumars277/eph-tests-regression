@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Verify;
 import org.junit.Assert;
 
+import java.text.ParseException;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorksMatchedApiObject {
 
@@ -35,7 +37,7 @@ public class WorksMatchedApiObject {
         //API count could be higher than DB count as it comes from Elastic search
         Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" is less than DB count "+worksInDB);}
 
-    public void verifyWorkWithIdIsReturned(String workID) {
+    public void verifyWorkWithIdIsReturned(String workID) throws ParseException {
         int i = 0;
         boolean found = false;
         boolean failed = false;

@@ -3,9 +3,9 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
+import java.text.ParseException;
 import java.util.regex.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -60,7 +60,7 @@ public class ProductsMatchedApiObject {
     return found;
   }
 
-  public boolean verifyProductWithIdIsReturned(String productID) {
+  public boolean verifyProductWithIdIsReturned(String productID) throws ParseException {
     int i = 0;
     boolean found = false;
     int bound = items.length;
@@ -84,16 +84,27 @@ public class ProductsMatchedApiObject {
     while (i < bound && !notFound) {
       if (!Pattern.compile(Pattern.quote(searchKey), Pattern.CASE_INSENSITIVE)
           .matcher(items[i].getProductCore().getName())
-          .find()) {
+          .find())
+      {
         notFound = true;
-        Log.info(
-            items[i].getId()
-                + " at counter "
-                + i
-                + " - title does not include search string -"
-                + searchKey);
+          Log.info(items[i].getId()+ " at counter "+ i+ " - title does not include search string -"
+                  + searchKey +", title - "+items[i].getProductCore().getName());
 
-        Assert.assertFalse(DataQualityContext.breadcrumbMessage + " title not contains searchKey "+ searchKey, notFound);
+          //check if manifestation title contains search key
+          if (items[i].getManifestation() != null) {
+            if (Pattern.compile(Pattern.quote(searchKey), Pattern.CASE_INSENSITIVE)
+                    .matcher(items[i].getManifestation().getManifestationCore().getKeyTitle()).find()) {
+              Log.info(items[i].getManifestation().getId()+ " at counter "+ i+ " - manifestation title includes search string -"
+                      + searchKey +", title - "+items[i].getManifestation().getManifestationCore().getKeyTitle());
+              notFound = false;
+            }
+          }
+          //check product work title
+          if(notFound){
+            if (items[i].getWork() != null) {  Log.info(items[i].getWork().getWorkCore().getTitle().toString());}
+          }
+
+          Assert.assertFalse(DataQualityContext.breadcrumbMessage + " product/manifestation title does not contain searchKey "+ searchKey, notFound);
       }
       i++;
     }
