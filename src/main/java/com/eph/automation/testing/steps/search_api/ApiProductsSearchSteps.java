@@ -331,40 +331,33 @@ else{
   }
 
   @When("^the product details are retrieved when searched by (.*) and compared$")
-  public void productSearchByTitleAndCompare(String title)
-          throws AzureOauthTokenFetchingException, NullPointerException, ParseException {
+  public void productSearchByTitleAndCompare(String title)throws NullPointerException, ParseException {
     // updated by Nishant @ 4 May 2020
     ProductsMatchedApiObject returnedProducts = null;
-
     for (ProductDataObject productDataObject : productDataObjects) {
-
-      int fromCntr = 0;
-      int sizeCntr = 500;
-
+      String searchTitle = "";
       switch (title) {
-        case PR_TITLE:
-          returnedProducts = ProductByTitle_Iterative(productDataObject.getPRODUCT_NAME(),fromCntr, sizeCntr);break;
+        case PR_TITLE:    searchTitle = productDataObject.getPRODUCT_NAME();          break;
 
-        case PRM_TITLE:
-            getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-            returnedProducts = ProductByTitle_Iterative(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE(),fromCntr,sizeCntr);break;
+        case PRM_TITLE:   getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+          searchTitle = manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE();      break;
 
-        case PRMW_TITLE:
-          getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-          returnedProducts =ProductByTitle_Iterative(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE(),fromCntr, sizeCntr); break;
+        case PRMW_TITLE:  getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+          searchTitle = DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE();break;
 
-        default:
-          throw new IllegalArgumentException(title);
+        default:          throw new IllegalArgumentException(title);
       }
+      returnedProducts = ProductByTitle_Iterative(searchTitle);
       returnedProducts.verifyProductsAreReturned();
       returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
     }
   }
 
-  public ProductsMatchedApiObject ProductByTitle_Iterative(String title, int fromCntr, int sizeCntr)
+  public ProductsMatchedApiObject ProductByTitle_Iterative(String title)
   {
     //created by Nishant @ 5 Jan 2022
-
+    int fromCntr = 0;
+    int sizeCntr = 400;
     ProductsMatchedApiObject returnedProducts = null;
     try {
       returnedProducts = getProductsByTitle(title+ from + fromCntr + size + sizeCntr);

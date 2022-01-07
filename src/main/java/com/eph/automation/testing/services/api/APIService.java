@@ -177,7 +177,6 @@ public class APIService {
   }
 
   public static WorksMatchedApiObject getWorksBySearchOption(String searchFor)      throws AzureOauthTokenFetchingException {
-
     Response response =getResponse(worksBySearchResource + searchFor);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
