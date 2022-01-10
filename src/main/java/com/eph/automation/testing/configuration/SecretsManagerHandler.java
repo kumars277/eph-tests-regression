@@ -112,8 +112,13 @@ public class SecretsManagerHandler {
 
     public static String getUATdbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
+        String connectionString = "";
         switch (connectionURL) {
-            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
+            case "AWS_URL":
+                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
+                        "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
+                return connectionString;
+//                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
