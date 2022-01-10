@@ -18,6 +18,7 @@ import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import org.junit.Assert;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class ProductApiObject {
         }
         */
 
-    public void compareWithDB() {
+    public void compareWithDB() throws ParseException {
       // try {
            getProductDataFromEPHGD(this.id);
            createdDate = createdDate.replace("T", " ").replace("Z", "");

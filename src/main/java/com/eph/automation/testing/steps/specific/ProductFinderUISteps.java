@@ -133,7 +133,7 @@ public class ProductFinderUISteps {
                 productFinderTasks.searchFor(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
                 break;
             case "Keyword":
-                productFinderTasks.searchFor(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0]);
+                productFinderTasks.searchFor(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0]);
                 break;
         }
 
@@ -626,7 +626,7 @@ public class ProductFinderUISteps {
                 productFinderTasks.searchFor(dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
                 break;
             case "Keyword":
-                String[] keyword = dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME().split(" ");
+                String[] keyword = dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
                 productFinderTasks.searchFor(keyword[0] + " " + keyword[1]);
                 break;
                 default:throw new IllegalArgumentException(option);
@@ -705,7 +705,7 @@ public class ProductFinderUISteps {
                 productFinderTasks.searchFor(dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
                 break;
             case "Keyword":
-                String[] keyword = dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE().split(" ");
+                String[] keyword = dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
                 productFinderTasks.searchFor(keyword[0] + " " + keyword[1]);
                 break;
                 default:throw new IllegalArgumentException(option);

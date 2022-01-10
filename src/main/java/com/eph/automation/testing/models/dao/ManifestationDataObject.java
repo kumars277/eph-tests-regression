@@ -135,7 +135,7 @@ public class  ManifestationDataObject {
     public String getINTER_EDITION_FLAG() {
         if(INTER_EDITION_FLAG!=null){
         if(INTER_EDITION_FLAG.equalsIgnoreCase("t"))INTER_EDITION_FLAG= "True";
-        if(INTER_EDITION_FLAG.equalsIgnoreCase("f")) INTER_EDITION_FLAG= "False";}
+        else if(INTER_EDITION_FLAG.equalsIgnoreCase("f")) INTER_EDITION_FLAG= "False";}
         return INTER_EDITION_FLAG;
     }
     public void setINTER_EDITION_FLAG(String INTER_EDITION_FLAG) {this.INTER_EDITION_FLAG = INTER_EDITION_FLAG;}

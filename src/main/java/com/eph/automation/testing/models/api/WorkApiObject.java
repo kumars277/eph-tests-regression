@@ -16,6 +16,7 @@ import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +64,7 @@ public class WorkApiObject {
     public List<ManifestationProductAPIObject> getProducts() {return products;}
     public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
-    public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
+    public void compareWithDB() throws ParseException {//implemented by Nishant @ 23 Apr 2020
 
         boolean failed = false;
 

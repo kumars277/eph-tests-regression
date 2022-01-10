@@ -137,7 +137,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
 
     DataQualityContext.api_response = response;
-   //response.prettyPrint();
+  // response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
 
     return response.thenReturn().as(ProductsMatchedApiObject.class);
@@ -177,7 +177,6 @@ public class APIService {
   }
 
   public static WorksMatchedApiObject getWorksBySearchOption(String searchFor)      throws AzureOauthTokenFetchingException {
-
     Response response =getResponse(worksBySearchResource + searchFor);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }

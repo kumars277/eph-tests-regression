@@ -16,10 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkRelationshipsAPIObject {
@@ -48,13 +47,16 @@ public class WorkRelationshipsAPIObject {
     this.workChild = workChild;
   }
 
-  public void compareWithDB(String workId) {
+  public void compareWithDB(String workId) throws ParseException {
     // updated by Nishant @ 05 Apr 2021
     Log.info("verifying workRelationship..." + workId);
     if (workParent != null) {
       ArrayList<workParent> list_workParent = new ArrayList<>(Arrays.asList(workParent));
       getWorkRelationshipParentRecordsEPHGD(workId);
       for (int wp = 0; wp < workParent.length; wp++) {
+          if(list_workParent.get(wp).workSummary.status.get("code").toString().equalsIgnoreCase("NVW"))
+          {continue;}
+
         boolean parentFound = false;
         for (int wp2 = 0; wp2 < workParent.length; wp2++) {
           if (list_workParent.get(wp).id.equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_PARENT()) &&
@@ -76,6 +78,7 @@ public class WorkRelationshipsAPIObject {
 
             Assert.assertEquals(workId + " -parent work Status",list_workParent.get(wp).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
             printLog("work Status");
+            break;
           }
         }
         Assert.assertTrue("Not found, parent "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
@@ -116,6 +119,17 @@ public class WorkRelationshipsAPIObject {
         Assert.assertTrue("Not found, child "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
       }
     }
+  }
+
+  public boolean isExpired(String date) throws ParseException {
+      Boolean endDated = false;
+      SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
+
+      Date DateToCmp = dateFormatter.parse(date);
+      Date Todate = new Date();
+
+      if(Todate.compareTo(DateToCmp)>0){    endDated = true;}
+        return endDated;
   }
 
   private void getWorkRelationshipParentRecordsEPHGD(String workId) {

@@ -8,8 +8,8 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import net.minidev.json.parser.ParseException;
 
+import java.text.ParseException;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -55,7 +55,7 @@ public class ProductManifestationApiObject {
 
     }
 */
-    public void compareWithDB() {
+    public void compareWithDB() throws ParseException {
         WorkManifestationApiObject workManifestationApiObject = new WorkManifestationApiObject();
         workManifestationApiObject.getManifestationDetailByID(this.id);
         manifestationCore.compareWithDB(this.id);

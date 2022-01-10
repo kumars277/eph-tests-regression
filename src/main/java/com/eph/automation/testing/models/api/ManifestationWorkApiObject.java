@@ -15,6 +15,7 @@ import com.google.common.base.Joiner;
 import org.junit.Assert;
 
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class ManifestationWorkApiObject {
     public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
 
-    public void compareWithDB(){
+    public void compareWithDB() throws ParseException {
         getWorkDataFromEPHGD(this.id);
         Log.info("comparing work id..."+this.id);
         Log.info("-title\n-subTitle \n-electronicRightsInd \n-language code \n-editionNumber \n-volume \n-copyrightYear");

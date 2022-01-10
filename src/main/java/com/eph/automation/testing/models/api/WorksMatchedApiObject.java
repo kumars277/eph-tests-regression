@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Verify;
 import org.junit.Assert;
 
+import java.text.ParseException;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorksMatchedApiObject {
 
@@ -35,21 +37,35 @@ public class WorksMatchedApiObject {
         //API count could be higher than DB count as it comes from Elastic search
         Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" is less than DB count "+worksInDB);}
 
-    public void verifyWorkWithIdIsReturned(String workID) {
+
+    public boolean verifyWorkWithIdIsReturned(String workID){
         int i = 0;
         boolean found = false;
-        boolean failed = false;
-
         while (i < items.length && !found) {
             if (items[i].getId().equals(workID)) {
                 found = true;
-                items[i].compareWithDB();
+                try {
+                    items[i].compareWithDB();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             i++;
         }
         Assert.assertTrue(DataQualityContext.breadcrumbMessage + " work id found not  ", found);
+        return found;
     }
 
+    //created by Nishant @ 24 Apr 2020 to verify getWorkByPersonName returns expected workId (only boolean return)
+    //based on this output we will call API again
+    public boolean verifyWorkWithIdIsReturnedOnly(String workID){
+        int i=0;
+        boolean found=false;
+        while(i<items.length&&!found){
+            if(items[i].getId().equals(workID))found=true;
+            i++; }
+        return found;
+    }
 
     public String getWorkEdition() {return items[0].getId(); }
 
@@ -95,17 +111,6 @@ public class WorksMatchedApiObject {
     }
 
 
-    //created by Nishant @ 24 Apr 2020 to verify getWorkByPersonName returns expected workId (only boolean return)
-    //based on this output we will call API again
-    public boolean verifyWorkWithIdIsReturnedOnly(String workID){
-        int i=0;
-        boolean found=false;
-        while(i<items.length&&!found){
-            if(items[i].getId().equals(workID))
-                found=true;
-            i++;
-        }
-        return found;
-    }
+
 
 }
