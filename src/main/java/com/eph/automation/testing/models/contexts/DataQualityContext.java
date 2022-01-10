@@ -98,6 +98,7 @@ public class DataQualityContext {
     public static AvailabilityExtendedTestClass availabilityExtendedTestClass;
 
     public static String uiUnderTest;
+    public static String randomWorkStatus;
     public static String DateAndTime;
     public static Properties prop_filters = new Properties();
     public static ArrayList<String> RowData;

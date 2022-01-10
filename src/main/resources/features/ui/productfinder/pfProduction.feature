@@ -38,7 +38,7 @@ Feature: Product Finder production smoke tests
   Scenario Outline: Search and filter with Work Types
     Given user is on Product Finder search page
     And   Searches for given <keyword>
-    And   Filter the Search Result by "<workType>"
+    And   Filter Search Result for workType "<workType>"
     Then  Search items are listed and click an id from the result
     And   Verify user is forwarded to the searched work page from Search Result
     Then  Verify the Work id Type is "<workType>"
@@ -51,30 +51,30 @@ Feature: Product Finder production smoke tests
   Scenario Outline: Search and filter them with Work Statuses and Types
     Given user is on Product Finder search page
     And Searches for given <keyword>
-    And Filter the Search Result by "<workStatus>"
-    And Filter the Search Result by "<workType>"
+    And Filter Search Result with workType "<workType>" and workStatus "<keyword>"
     Then Search items are listed and click an id from the result
     And  Verify user is forwarded to the searched work page from Search Result
     Then  Verify the Work id Type is "<workType>"
-    Then Verify the Work Status is "<workStatus>"
+    Then Verify the Work Status
     Examples:
       |keyword        |workStatus          |workType  |
       |clinical       |Launched            |Journal   |
       |surgical       |Planned             |Book      |
+      |blood          |                    |Journal   |
 
   @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Work Status
     Given user is on Product/Journal Finder search page <ui>
     And Searches for given <keyword>
-    And Filter the Search Result by "<workStatus>"
+    And Filter the Search Result for workStatus "<keyword>"
     Then Search items are listed and click an id from the result
     And  Verify user is forwarded to the searched work page from Search Result
-    Then Verify the Work Status is "<workStatus>"
+    Then Verify the Work Status
     Examples:
       |ui |keyword        |workStatus          |
+      |JF |clinic         |Planned             |
       |JF |math           |Launched            |
       |PF |math           |Launched            |
-      |JF |clinic         |Planned             |
       |PF |clinic         |No Longer Published |
 
   @PFProd @UI @PFRegressionSuite

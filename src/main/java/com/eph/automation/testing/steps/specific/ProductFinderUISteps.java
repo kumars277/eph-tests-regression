@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import cucumber.api.java.en.*;
 
 
+import static org.apache.commons.lang.math.RandomUtils.nextInt;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import javax.net.ssl.SSLHandshakeException;
@@ -49,6 +51,7 @@ public class ProductFinderUISteps {
     private ProductFinderTasks productFinderTasks;
     private TasksNew tasks;
     private String sql;
+   // private String randomWorkStatus;
 
     private static List<String> productIdList;
     private static List<String> workIdList = new ArrayList<>();
@@ -217,7 +220,7 @@ public class ProductFinderUISteps {
             int i=0;
             for (String workId : workIdList) {
                 productFinderTasks.searchFor(workId);
-                filter_Search_Result_by_workType(chooseWorkType);
+                filter_Search_Result_for_workType(chooseWorkType);
 
                 productFinderTasks.searchOnResultPages(workId);
                 assertTrue(tasks.verifyElementTextisDisplayed(workId));
@@ -374,7 +377,7 @@ public class ProductFinderUISteps {
 
     @Given("^Searches for given ([^\"]*)$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
-        Log.info("searching keyword..." + searchKeyword);
+       // Log.info("searching keyword..." + searchKeyword);
         productFinderTasks.searchFor(searchKeyword);
     }
 
@@ -390,12 +393,71 @@ public class ProductFinderUISteps {
       productFinderTasks.verifyManifestationTab();
     }
 
+    @Given("^Filter Search Result with workType \"([^\"]*)\" and workStatus \"([^\"]*)\"$")
+    public void filter_Search_Result_for_workStatus_AndType(String workType,String keyword) throws InterruptedException {
+        Random rand =  new Random();
+        int i=0;
+        List<String> ignoreStatus = new ArrayList<>();
+        try{
+            do{
+                if(i!=0){productFinderTasks.searchFor(keyword);}i++;
+                //filter with work type
+                String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
+                tasks.click("XPATH",buildWorkTypeFilterLocator);
+                Thread.sleep(1000);
 
-    @Given("^Filter the Search Result by \"([^\"]*)\"$")
-    public void filter_Search_Result_by_workType(String workFilterType) throws InterruptedException {
-        String buildWorkFilterLocator = "//span[contains(text(),\'" + workFilterType + "\')]";
+                //filter with work status
+                List<WebElement> availableWorkStatus =tasks.findmultipleElements("XPATH","//div[@formarrayname='workStatus']") ;
+                do{
+                    randomWorkStatus = availableWorkStatus.get(rand.nextInt(availableWorkStatus.size())).getText();
+                }
+                while(ignoreStatus.contains(randomWorkStatus));
+                ignoreStatus.add(randomWorkStatus);
+                String buildWorkFilterLocator = "//span[contains(text(),\'" + randomWorkStatus + "\')]";
+                tasks.click("XPATH", buildWorkFilterLocator);
+                Log.info("chosen work status - "+randomWorkStatus);
+                Thread.sleep(1000);
+            }
+            while(tasks.findElement("XPATH",
+                    "//div[contains(text(),' There are no results that match your search')]").isDisplayed());
+        }
+        catch (org.openqa.selenium.NoSuchElementException e)
+        {Log.info("result filtered by work status..."+randomWorkStatus);}
+
+    }
+
+
+    @Given("^Filter the Search Result for workStatus \"([^\"]*)\"$")
+    public void filter_Search_Result_for_workStatus(String keyword) throws InterruptedException {
+        Random rand =  new Random();
+        int i=0;
+        List<String> ignoreStatus = new ArrayList<>();
+        try{
+        do{
+            if(i!=0){productFinderTasks.searchFor(keyword);}i++;
+            List<WebElement> availableWorkStatus =tasks.findmultipleElements("XPATH","//div[@formarrayname='workStatus']") ;
+            do{
+            randomWorkStatus = availableWorkStatus.get(rand.nextInt(availableWorkStatus.size())).getText();
+            }
+            while(ignoreStatus.contains(randomWorkStatus));
+            ignoreStatus.add(randomWorkStatus);
+            String buildWorkFilterLocator = "//span[contains(text(),\'" + randomWorkStatus + "\')]";
         tasks.click("XPATH", buildWorkFilterLocator);
-        Thread.sleep(3000);
+        Log.info("chosen work status - "+randomWorkStatus);
+        Thread.sleep(1000);}
+        while(tasks.findElement("XPATH",
+                "//div[contains(text(),' There are no results that match your search')]").isDisplayed());
+        }
+        catch (org.openqa.selenium.NoSuchElementException e)
+        {Log.info("result filtered by work status..."+randomWorkStatus);}
+
+    }
+
+    @Given("^Filter Search Result for workType \"([^\"]*)\"$")
+    public void filter_Search_Result_for_workType(String workType) throws InterruptedException {
+        String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
+        tasks.click("XPATH",buildWorkTypeFilterLocator);
+        Thread.sleep(1000);
     }
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\"$")
@@ -455,8 +517,8 @@ public class ProductFinderUISteps {
     }
 
 
-    @Then("^Verify the Work Status is \"([^\"]*)\"$")
-    public void verify_the_Work_Status_is(String workStatus) throws InterruptedException {
+    @Then("^Verify the Work Status$")
+    public void verify_the_Work_Status() throws InterruptedException {
         //updated by Nishant @ 22 May 2020
         //updated by Nishant @ 22 Apr 2021
         List<String> workStatusCode;
@@ -465,8 +527,8 @@ public class ProductFinderUISteps {
         String[] workStatusCodesofPlanned = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
         String[] workStatusCodesofApproved = {"WAP"};
         boolean flag = false;
-        tasks.waitUntilPageLoad();
-        workStatusUIValidation(workStatus);
+       // tasks.waitUntilPageLoad();
+        workStatusUIValidation(randomWorkStatus);
 
         if (!TestContext.getValues().environment.equalsIgnoreCase("PROD") &&
                 !TestContext.getValues().environment.equalsIgnoreCase("PRODUCTION")&&
@@ -476,7 +538,7 @@ public class ProductFinderUISteps {
             List<Map<?, ?>> workTypeStatusCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             workStatusCode = workTypeStatusCode.stream().map(m -> (String) m.get("WORK_STATUS")).map(String::valueOf).collect(Collectors.toList());
 
-            switch (workStatus) {
+            switch (randomWorkStatus) {
                 case "Approved":
                     if (Arrays.stream(workStatusCodesofApproved).anyMatch(workStatusCode::contains)) flag = true;
                     break;
@@ -487,10 +549,12 @@ public class ProductFinderUISteps {
                     if (Arrays.stream(workStatusCodesofPlanned).anyMatch(workStatusCode::contains)) flag = true;
                     break;
                 case "No Longer Published":
+                case "Divested":
+                case "Discontinued":
                     if (Arrays.stream(workStatusCodesofNoLongerPub).anyMatch(workStatusCode::contains)) flag = true;
                     break;
             }
-            assertTrue("The given work Id is successfully filtered by the Work Status and verified by DB: " + workStatus, flag);
+            assertTrue("The given work Id is successfully filtered by the Work Status and verified by DB: " + randomWorkStatus, flag);
         }
     }
 
@@ -503,31 +567,30 @@ public class ProductFinderUISteps {
     }
 
 
-    private void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
-        boolean flag = false;
-        productFinderTasks.getUI_WorkOverview_Information();
-
-        switch (workStatus) {
-
-            case "Launched":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched") ||
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published")) flag = true;
-                break;
-
-            case "Planned":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))flag = true;          break;
-
-            case "Approved":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved"))flag = true;         break;
-
-            case "No Longer Published":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued")||
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested"))flag = true;     break;
-        }
-
-
-        assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
+private void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
+    boolean flag = false;
+    productFinderTasks.getUI_WorkOverview_Information();
+    String overviewWorkStatus = productFinderTasks.prop_info.getProperty("Work Status");
+    switch (workStatus) {
+        case "Launched":if (overviewWorkStatus.contains("Launched") ||
+                    overviewWorkStatus.contains("Published")) flag = true;break;
+        case "Approved":    if (overviewWorkStatus.contains("Approved"))flag = true;break;
+        case "Planned":if (overviewWorkStatus.contains("Planned"))flag = true;break;
+        case "Discontinue Approved": if (overviewWorkStatus.contains("Discontinue Approved"))flag = true;break;
+        case "Transfer Approved":if (overviewWorkStatus.contains("Transfer Approved"))flag = true;break;
+        case "Divestment Approved":if (overviewWorkStatus.contains("Divestment Approved"))flag = true;break;
+        case "Transferred":if (overviewWorkStatus.contains("Transferred"))flag = true;break;
+        case "Withdrawn":
+        case "Never Published":if (overviewWorkStatus.contains("Withdrawn"))flag = true;break;
+        case "Divested":if (overviewWorkStatus.contains("Divested"))flag = true;break;
+        case "Discontinued":if (overviewWorkStatus.contains("Discontinued"))flag = true;break;
+        case "No Longer Published":
+            if (overviewWorkStatus.contains("Discontinued")||
+                    overviewWorkStatus.contains("Divested"))flag = true;break;
+                    default:throw new IllegalArgumentException();
     }
+    assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
+}
 
     private void productStatusUIValidation(String filterType) {//created by Nishant @21 Apr 2021
         boolean flag = false;
@@ -826,8 +889,6 @@ public class ProductFinderUISteps {
     }
 
     private void getFirstIdOnPage() throws InterruptedException {//by Nishant @ 2 Jun 2020
-
-        Log.info("looking for products on ");
         tasks.waitUntilPageLoad();
         List<WebElement> itemInfo = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
         ArrayList<String> idFound = new ArrayList<>();
@@ -839,7 +900,7 @@ public class ProductFinderUISteps {
                 if (text.contains("ID")) {idFound.add(text);break;}
             }
         }
-        Assert.assertTrue("at leaset one id present on page ",!idFound.isEmpty());
+        Assert.assertTrue("zero id present on page ",!idFound.isEmpty());
 
         Log.info("first id on search result page is : " + idFound.get(0));
         ProductFinderTasks.searchResultId = idFound.get(0).split(" ")[2];

@@ -135,7 +135,7 @@ public class TasksNew {
           elements = driver.findElements(By.tagName(locatorValue));
           break;
       }
-      wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+     // wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     } catch (Exception e) {
       e.printStackTrace();
     }
