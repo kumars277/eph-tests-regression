@@ -52,7 +52,8 @@ public class ManifestationCore {
 
 
     if (internationalEditionInd != null || DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG() != null) {
-        Assert.assertEquals(Boolean.valueOf(internationalEditionInd), Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG()));
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+">manifestationCore>internationalEditionInd>",Boolean.valueOf(internationalEditionInd),
+                Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG()));
         printLog("internationalEditionInd");
     }
 

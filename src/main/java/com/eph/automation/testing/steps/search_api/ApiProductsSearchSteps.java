@@ -509,7 +509,7 @@ else{
       for (ProductDataObject productDataObject : productDataObjects) {
 
         int fromCntr = 0;
-        int sizeCntr = 500;
+        int sizeCntr = 450;
         String apiResource = "";
         ProductsMatchedApiObject returnedProducts;
 

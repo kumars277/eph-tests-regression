@@ -472,7 +472,7 @@ public class APIDataSQL {
           + "B_CLASSNAME as B_CLASSNAME,\n"
           + "MANIFESTATION_ID as MANIFESTATION_ID,\n"
           + "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n"
-          + "INTER_EDITION_FLAG as internationalEditionInd,\n"
+          + "INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n"
           + "FIRST_PUB_DATE as FIRST_PUB_DATE,\n"
           + "LAST_PUB_DATE as LAST_PUB_DATE, \n"
           + "F_TYPE as F_TYPE,\n"
