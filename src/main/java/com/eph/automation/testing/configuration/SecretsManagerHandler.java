@@ -125,7 +125,6 @@ public class SecretsManagerHandler {
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
     }
-
     public static String getUAT2dbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
         String connectionString = "";
