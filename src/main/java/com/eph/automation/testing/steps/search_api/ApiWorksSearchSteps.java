@@ -101,7 +101,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-11F3HN");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-12TX8X");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -682,7 +682,6 @@ public class ApiWorksSearchSteps {
   public void compareWorkSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
-    try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         Log.info(
@@ -695,12 +694,7 @@ public class ApiWorksSearchSteps {
         returnedWorks.verifyWorksReturnedCount(
                 getNumberOfWorksByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
       }
-
-    } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }
-  }
+}
 
   @When("^the work details are retrieved by PMG Code and compared$")
   public void compareWorkSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
