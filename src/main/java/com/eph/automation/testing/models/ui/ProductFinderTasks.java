@@ -222,28 +222,12 @@ public class ProductFinderTasks {
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("JF")) referenceUrl = "journals/" + referenceUrl;
 
         switch (TestContext.getValues().environment) {
-            case "SIT":
-                targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
-                break;
-            case "UAT":
-                targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;
-                break;
-            case "UAT2":
-                targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
-                break;
-            case "PRODUCTION":
-                targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
-                break;
+            case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;break;
+            case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;break;
+            case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;break;
+            case "PRODUCTION":targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;break;
         }
-     /*
-        if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
-            targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
-        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
-            targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;
-        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT2"))
-            targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
-        else targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
-        */
+
         Log.info("Expected Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;

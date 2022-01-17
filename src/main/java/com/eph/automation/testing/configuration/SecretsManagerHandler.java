@@ -90,14 +90,14 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
            case "AWS_URL":
                 return object.getAsString("SIT_AWS_URL");
+        //local profile
+        //      connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+        //       "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
 
-//                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-//                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
-
-//               SIT Settings
-//            connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-//                    "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-//              return connectionString;
+        //Jenkins profile
+        //      connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+        //       "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
+        //return connectionString;
 
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
@@ -125,7 +125,6 @@ public class SecretsManagerHandler {
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
     }
-
     public static String getUAT2dbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
         String connectionString = "";
