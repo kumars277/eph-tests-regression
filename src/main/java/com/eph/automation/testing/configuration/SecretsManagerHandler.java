@@ -89,15 +89,15 @@ public class SecretsManagerHandler {
         String connectionString = "";
         switch (connectionURL) {
            case "AWS_URL":
-//                return object.getAsString("SIT_AWS_URL");
+                return object.getAsString("SIT_AWS_URL");
 
 //                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
 //                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
 
 //               SIT Settings
-            connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-                    "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-              return connectionString;
+//            connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+//                    "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
+//              return connectionString;
 
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
