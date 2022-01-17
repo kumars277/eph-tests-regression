@@ -136,7 +136,13 @@ public class ProductFinderUISteps {
                 productFinderTasks.searchFor(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
                 break;
             case "Keyword":
-                productFinderTasks.searchFor(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0]);
+                String[] titleSplit = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+                String keyword = "";
+                for(int i=0;i<=(titleSplit.length)/2;i++)
+                {
+                    keyword = keyword+titleSplit[i]+" ";
+                }
+                productFinderTasks.searchFor(keyword);
                 break;
         }
 
