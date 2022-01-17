@@ -115,10 +115,10 @@ public class SecretsManagerHandler {
 //                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
 //                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
 //                 Jenkins profile
-//                        connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
-//                        "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-//                return connectionString;
-                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
+                        connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
+                        "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
+                return connectionString;
+//                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
