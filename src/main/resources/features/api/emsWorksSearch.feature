@@ -1,6 +1,6 @@
 Feature: Search API: Works
          As an EIP-MS Integration User
-         I would like to search works from Enterprise Customer Hub using EIP Search
+         I would like to search works from Enterprise Product Hub using EIP Search
          So that I can use the details to validate business needs
 
   @searchAPI @workSearchAPI
@@ -30,12 +30,11 @@ Feature: Search API: Works
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
+      | personFullNameCurrent |
       | PERSON_NAME           |
       | PEOPLE_HUB_ID         |
-      | personFullNameCurrent |
       | PERSON_ID             |
-      # updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
-   #   | personIdCurrent       |
+     #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI
   Scenario Outline: search work by title

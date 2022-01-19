@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-10497G");Log.info("hard coded work ids are : " + ids);
+   // ids.clear();ids.add("EPR-W-104C24");Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -101,7 +101,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-12TX8X");  Log.info("hard coded work ids are : " + ids);
+    ids.clear();    ids.add("EPR-W-102R98");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -290,10 +290,9 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by manifestationType and compared$")
-  public void compareWorksByManifestationTypeWithDB() {
+  public void compareWorksByManifestationTypeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-    try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
@@ -302,6 +301,7 @@ public class ApiWorksSearchSteps {
                         .workDataObjectsFromEPHGD
                         .get(0)
                         .getWORK_TITLE()
+                        .replaceAll("[^a-zA-Z0-9]", " ")
                         .split(" ")[0]
                         .toUpperCase();
         String ManifestationType =
@@ -316,10 +316,7 @@ public class ApiWorksSearchSteps {
                 getNumberOfWorksByManifestationType(searchKeyword, ManifestationType));
       }
 
-    } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }
+
   }
 
   @Then("^the work details are retrieved by search with PMC code and compared$")
@@ -353,9 +350,9 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by search with PMG code and compared$")
-  public void compareWorkBySearchWithPMGCodeWithDB() {
+  public void compareWorkBySearchWithPMGCodeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    try {
+
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       String searchKeyword =
               DataQualityContext
@@ -376,10 +373,7 @@ public class ApiWorksSearchSteps {
                 getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
       }
 
-    } catch (Exception e) {
-      Log.info(e.getMessage());
-      scenarioFailed();
-    }
+
   }
 
   @When("^the work details are retrieved by title (.*) and compared$")
