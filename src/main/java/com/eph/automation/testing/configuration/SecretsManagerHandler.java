@@ -33,9 +33,7 @@ public class SecretsManagerHandler {
             case "UAT":
                 secretName=getUATSecretName(connectionURL);
                 Log.info("secrete name => "+secretName);
-                Log.info("connectionURL => "+connectionURL);
                 DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
-                Log.info("DBconnection to string => "+DBconnection.toString());
                 break;
 
             case "UAT2":
@@ -92,7 +90,7 @@ public class SecretsManagerHandler {
         String connectionString = "";
         switch (connectionURL) {
            case "AWS_URL":
-                return object.getAsString("SIT_AWS_URL");
+               return object.getAsString("SIT_AWS_URL");
 //        local profile
 //              connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
 //               "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
@@ -124,10 +122,7 @@ public class SecretsManagerHandler {
 //                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
-            case "EPH_URL":
-                Log.info("EPH_POSTGRE_UAT_URL value = > "+object.getAsString("EPH_POSTGRE_UAT_URL"));
-                Log.info("connection string =>"+DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL")));
-                return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
+            case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
     }
@@ -150,24 +145,20 @@ public class SecretsManagerHandler {
 
     public static JSONObject getSecretKeyObj(String region, String secretName){
         //created by Nishant @  29 Mar 2021
-        Log.info("get secrete key obj");
         JSONObject object = null;
 
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
                 .withRegion(region)
                 .build();
-        Log.info("client created...");
+
         String secret = "";
         String decodedBinarySecret = "";
 
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
-
-
         GetSecretValueResult getSecretValueResult = null;
 
         try {getSecretValueResult = client.getSecretValue(getSecretValueRequest);}
         catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {throw e;}
-
 
         if (getSecretValueResult.getSecretString() != null) {secret = getSecretValueResult.getSecretString();}
         else {decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());}
@@ -175,9 +166,7 @@ public class SecretsManagerHandler {
 
         JSONParser parser = new JSONParser();
         try {object = (JSONObject) parser.parse(secret);}
-        catch (ParseException e) {e.printStackTrace();
-        }
-        Log.info("secrete key object to string=> "+object.toString());
+        catch (ParseException e) {e.printStackTrace();}
         return object;
     }
 
