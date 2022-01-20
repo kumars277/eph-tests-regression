@@ -195,11 +195,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getNotestype));
                 bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                 break;
-
-
-
         }
-Log.info(sql);
     }
 
     @Then("^Get the records from current tables (.*)$")
@@ -305,7 +301,6 @@ Log.info(sql);
                 bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
                 break;
         }
-        Log.info(sql);
     }
 
     @And("Compare the records of initial ingest and current table (.*)")
@@ -1694,7 +1689,6 @@ Log.info(sql);
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_versionfamily,countOfRandomIds);break;
 
         }
-        Log.info(sql);
         List<Map<?, ?>> randomEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         if (sourceTable.equalsIgnoreCase("stg_current_originatoraddress")||sourceTable.equalsIgnoreCase("stg_current_originatornotes"))
             Ids = randomEPRIds.stream().map(m -> (Integer) m.get("businesspartnerid")).map(String::valueOf).collect(Collectors.toList());
@@ -1703,10 +1697,7 @@ Log.info(sql);
         Log.info("Randomly picked ids..." + Ids);
 
        //  Ids.clear();Ids.add("550805"); //added by Nishant to debug failures
-
         DataQualityContext.breadcrumbMessage += "->" + Ids;
-
-
     }
 
     @When("Get data from BCS stg_current (.*)")
@@ -1811,7 +1802,6 @@ Log.info(sql);
             break;
 
         }
-        Log.info(sql);
     }
 
 
@@ -1911,7 +1901,6 @@ Log.info(sql);
                 bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
                 break;
         }
-        Log.info(sql);
     }
 
 
@@ -3476,7 +3465,7 @@ Log.info(sql);
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
-        Log.info(sql);
+
         //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
         DataQualityContext.breadcrumbMessage += "->" + Ids;
     }
@@ -3526,7 +3515,7 @@ Log.info(sql);
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
                 break;
         }
-        Log.info(sql);
+
     }
 
 
@@ -3576,7 +3565,6 @@ Log.info(sql);
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
                 break;
             }
-        Log.info(sql);
     }
 
     @And("Compare the records for the initial ingest book series and current table book series (.*)")
@@ -3841,7 +3829,7 @@ Log.info(sql);
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
-        Log.info(sql);
+
         DataQualityContext.breadcrumbMessage += "->" + Ids;
     }
 
@@ -3893,7 +3881,7 @@ Log.info(sql);
                 bcsDataQualityContext.bcsHistoryTableDataObjectsList = DBManager.getDBResultAsBeanList(sql, BCSHistoryTableDataObject.class, Constants.AWS_URL);
                 break;
         }
-        Log.info(sql);
+
     }
 
     @And("Compare the records for the current book series and history table book series (.*)")

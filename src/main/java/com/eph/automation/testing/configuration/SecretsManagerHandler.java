@@ -30,9 +30,7 @@ public class SecretsManagerHandler {
                         DBconnection = getSITdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
 
             case "UAT": secretName=getUATSecretName(connectionURL);Log.info("secrete name => "+secretName);
-                        DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
-                        Log.info("DBConection value = > "+DBconnection.toString());
-                        break;
+                        DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
 
             case "UAT2":secretName=getUAT2SecretName(connectionURL);
                         DBconnection = getUAT2dbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
@@ -87,17 +85,10 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021
         String connectionString = "";
         switch (connectionURL) {
-            case "AWS_URL":
-                Log.info("UAT_AWS_URL value=> "+object.getAsString("UAT_AWS_URL"));
-            return object.getAsString("UAT_AWS_URL");//Jenkins profile
+            case "AWS_URL":           return object.getAsString("UAT_AWS_URL");//Jenkins profile
         //   Local profile
         //               return=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
         //                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
-
-//                 Jenkins profile
-       //                 connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
-       //                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-        //        return connectionString;
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
@@ -140,7 +131,6 @@ public class SecretsManagerHandler {
 
         if (getSecretValueResult.getSecretString() != null) {secret = getSecretValueResult.getSecretString();}
         else {decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());}
-
 
         JSONParser parser = new JSONParser();
         try {object = (JSONObject) parser.parse(secret);}
