@@ -35,7 +35,7 @@ public class GetBcsEtlCoreDLDBUser {
             }
 
         }else{
-            dbERMS = "erms_staging_uat";
+            dbERMS = "erms_staging_sit";
         }
         return dbERMS;
     }
@@ -50,7 +50,7 @@ public class GetBcsEtlCoreDLDBUser {
                 dbProdDB = "product_database_uat";
             }
         }else{
-               dbProdDB = "product_database_uat";
+               dbProdDB = "product_database_sit";
         }
         return dbProdDB;
     }
@@ -65,7 +65,7 @@ public class GetBcsEtlCoreDLDBUser {
                 dbDpp = "dpp_database_uat";
             }
         }else{
-             dbDpp = "dpp_database_uat";
+             dbDpp = "dpp_database_sit";
         }
         return dbDpp;
     }
@@ -79,7 +79,7 @@ public class GetBcsEtlCoreDLDBUser {
                 dbJM = "journalmaestro_uat";
             }
         }else{
-              dbJM = "journalmaestro_uat";
+              dbJM = "journalmaestro_sit";
         }
         return dbJM;
     }
@@ -95,7 +95,7 @@ public class GetBcsEtlCoreDLDBUser {
             }
 
         }else{
-            dbProd = "product_staging_database_uat";
+            dbProd = "product_staging_database_sit";
         }
         return dbProd;
     }
@@ -111,7 +111,7 @@ public class GetBcsEtlCoreDLDBUser {
             }
 
         }else{
-            dbProdDb = "product_database_uat";
+            dbProdDb = "product_database_sit";
         }
         return dbProdDb;
     }

@@ -16,7 +16,7 @@ public class GetSDBooksDLDBUser {
                 dbSDDL = "sdbooks_staging_uat";
             }
         }else{
-            dbSDDL = "sdbooks_staging_uat";
+            dbSDDL = "sdbooks_staging_sit";
         }
         return dbSDDL;
     }
@@ -31,7 +31,7 @@ public class GetSDBooksDLDBUser {
                 dbProdDb = "product_staging_database_uat";
             }
         }else{
-            dbProdDb = "product_staging_database_uat";
+            dbProdDb = "product_staging_database_sit";
         }
         return dbProdDb;
     }

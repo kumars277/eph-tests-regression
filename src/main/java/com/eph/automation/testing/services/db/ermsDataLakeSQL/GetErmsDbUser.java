@@ -16,7 +16,8 @@ public class GetErmsDbUser {
                 dbERMS = "erms_staging_uat";
             }
         }else{
-            dbERMS = "erms_staging_uat";
+            dbERMS = "erms_staging_sit";
+            //  dbERMS = "erms_staging_uat";
         }
         return dbERMS;
     }
@@ -32,7 +33,8 @@ public class GetErmsDbUser {
                 dbProdstgDb = "product_staging_database_uat";
             }
         }else{
-            dbProdstgDb = "product_staging_database_uat";
+           // dbProdstgDb = "product_staging_database_uat";
+            dbProdstgDb = "product_staging_database_sit";
         }
         return dbProdstgDb;
     }
@@ -48,7 +50,8 @@ public class GetErmsDbUser {
                 dbProdDb = "product_database_uat";
             }
         }else{
-             dbProdDb = "product_database_uat";
+            // dbProdDb = "product_database_uat";
+            dbProdDb = "product_database_sit";
         }
         return dbProdDb;
     }

@@ -416,9 +416,9 @@ public class BcsEtlCoreLatestDataChecksSteps {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta tables (.*)$")
-    public static void getIdsFromDiffOfDeltaCurrAndExcl(String countOfRandomIds, String tableName) {
-       String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
+    public static void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        //if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for bcs Core Tables from Diff of Delta Current and Exclude....");
         switch (tableName) {

@@ -1657,8 +1657,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", false delete_flag\n" +
                     "FROM\n" +
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
                     "UNION ALL SELECT\n" +
                     "  cr.epr work_epr_id\n" +
@@ -1864,8 +1864,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", false delete_flag\n" +
                     "FROM\n" +
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
                     "UNION ALL SELECT\n" +
                     "  cr.epr work_epr_id\n" +
@@ -2108,8 +2108,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", false delete_flag\n" +
                     "FROM\n" +
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN product_database_uat.gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN product_database_uat.gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
                     "UNION ALL SELECT\n" +
                     "  cr.epr work_epr_id\n" +

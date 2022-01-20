@@ -16,8 +16,11 @@ public class GetJMDLDBUser {
             }
 
         }else{
-             dbJMDL = "journalmaestro_staging_uat";
-            dbJMSQL = "jmf_uat_application";
+        //     dbJMDL = "journalmaestro_staging_uat";
+         //   dbJMSQL = "jmf_uat_application";
+
+            dbJMDL = "journalmaestro_staging_sit";
+            dbJMSQL = "jmf_sit_application";
         }
         return new String[]{dbJMSQL,dbJMDL};
     }
@@ -32,7 +35,8 @@ public class GetJMDLDBUser {
                 dbJMDataLake = "journalmaestro_uat";
             }
         }else{
-            dbJMDataLake = "journalmaestro_uat";
+           // dbJMDataLake = "journalmaestro_uat";
+            dbJMDataLake = "journalmaestro_sit";
         }
         return dbJMDataLake;
     }
@@ -47,7 +51,8 @@ public class GetJMDLDBUser {
                 dbJMDataLake = "journalmaestro_staging_uat";
             }
         }else{
-           dbJMDataLake = "journalmaestro_staging_uat";
+          // dbJMDataLake = "journalmaestro_staging_uat";
+            dbJMDataLake = "journalmaestro_staging_sit";
         }
         return dbJMDataLake;
     }
@@ -62,8 +67,8 @@ public class GetJMDLDBUser {
                 dbProdDL = "product_database_uat";
             }
         }else{
-            dbProdDL = "product_database_uat";
-           // dbProdDL = "product_database_sit";
+            //dbProdDL = "product_database_uat";
+            dbProdDL = "product_database_sit";
         }
         return dbProdDL;
     }
@@ -78,7 +83,8 @@ public class GetJMDLDBUser {
                 dbStageProdDL = "product_staging_database_uat";
             }
         }else{
-           dbStageProdDL = "product_staging_database_uat";
+           //dbStageProdDL = "product_staging_database_uat";
+            dbStageProdDL = "product_staging_database_sit";
         }
         return dbStageProdDL;
     }

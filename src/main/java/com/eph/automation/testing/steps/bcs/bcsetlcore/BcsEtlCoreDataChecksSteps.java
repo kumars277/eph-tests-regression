@@ -26,10 +26,9 @@ public class BcsEtlCoreDataChecksSteps {
     private static String noTablemsg = "No such tables found";
 
     @Given("^Get the (.*) of BCS Core data from Inbound Tables (.*)$")
-    public static void getRandomidsFromInound(String countOfRandomIds, String tableName) {
-
-        String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-      if(numberOfRecords==null)numberOfRecords=countOfRandomIds;
+    public static void getRandomidsFromInound(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+     // if(numberOfRecords==null)numberOfRecords=countOfRandomIds;
      //   Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get "+numberOfRecords+" random ids for bcs Core Inbound Tables....");
         List<Map<?, ?>> randomids;
@@ -72,7 +71,7 @@ public class BcsEtlCoreDataChecksSteps {
         }
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("sourceRef")).collect(Collectors.toList());
-      //  Log.info(sql);
+        Log.info(sql);
         Log.info("below ids selected to be verified \n"+ids.toString());
     }
 
@@ -118,7 +117,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-      //  Log.info(sql);
+        Log.info(sql);
     }
 
     @Then("^Data from the BCS Core Current Tables to compare Inbound Check (.*)$")
@@ -137,7 +136,6 @@ public class BcsEtlCoreDataChecksSteps {
             case "etl_product_current_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_PRODUCT_CURR_REC, String.join("','",ids));
                 break;
-
             case "etl_work_identifier_current_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_WORK_IDENT_CURR_DATA, String.join("','",ids));
                 break;
@@ -163,7 +161,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-      //  Log.info(sql);
+        Log.info(sql);
     }
 
     @And("^Compare data of BCS Inbound and BCS Core (.*) tables are identical$")
@@ -492,9 +490,9 @@ public class BcsEtlCoreDataChecksSteps {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
-    public static void getRandomidsFromCurrent(String countOfRandomIds, String tableName) {
-        String numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-       if(numberOfRecords==null)numberOfRecords = countOfRandomIds;
+    public static void getRandomidsFromCurrent(String numberOfRecords, String tableName) {
+      numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+     //  if(numberOfRecords==null)numberOfRecords = countOfRandomIds;
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for bcs Core Current Tables....");
 
