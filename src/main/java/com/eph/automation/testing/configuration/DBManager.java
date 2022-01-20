@@ -33,7 +33,7 @@ public class DBManager {
         Properties dbProps = new Properties();
         //updated by Nishant @ 15 Mar 2021 for secret manager
         //dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getPostgreDBConnection(dbEndPoint));
+        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getDBConnection(dbEndPoint));
 
 
         //Yank.setupConnectionPool("pool", dbProps);
@@ -102,7 +102,7 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(athenaDriver);
             }
-            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getDBConnection(URL));
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
@@ -124,7 +124,7 @@ public class DBManager {
             }
             //updated by Nishant @ 15 Mar 2021 for secret manager
            //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
-            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getDBConnection(URL));
 
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
@@ -161,7 +161,7 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(driver);
             }
-            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getDBConnection(URL));
             connection.setSchema(GetEPHDBUser.getDBUser());
             QueryRunner query = new QueryRunner();
             klassList = (List)query.query(connection, sql, new BeanListHandler(klass));
