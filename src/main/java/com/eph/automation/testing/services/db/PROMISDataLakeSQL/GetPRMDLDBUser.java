@@ -14,8 +14,8 @@ public class GetPRMDLDBUser {
                 dbPRMDL = "promis_staging_uat2";
             }
         }else{
-          // dbPRMDL = "promis_staging_sit";
-            dbPRMDL = "promis_staging_uat";
+           dbPRMDL = "promis_staging_sit";
+          //  dbPRMDL = "promis_staging_uat";
         }
         return dbPRMDL;
     }
@@ -33,8 +33,8 @@ public class GetPRMDLDBUser {
             }
 
         }else{
-           // dbProdDL = "product_database_sit";
-            dbProdDL = "product_database_uat";
+            dbProdDL = "product_database_sit";
+           // dbProdDL = "product_database_uat";
         }
         return dbProdDL;
     }
@@ -52,8 +52,8 @@ public class GetPRMDLDBUser {
             }
 
         }else{
-         //   dbStageProdDL = "product_staging_database_sit";
-            dbStageProdDL = "product_staging_database_uat";
+            dbStageProdDL = "product_staging_database_sit";
+         //   dbStageProdDL = "product_staging_database_uat";
         }
         return dbStageProdDL;
     }
@@ -68,8 +68,8 @@ public class GetPRMDLDBUser {
                 dbEphCrossRef = "eph_uat_crossreference_database";
             }
         }else{
-            //   dbEphCrossRef = "eph_sit_crossreference_database";
-            dbEphCrossRef = "eph_uat_crossreference_database";
+               dbEphCrossRef = "eph_sit_crossreference_database";
+           // dbEphCrossRef = "eph_uat_crossreference_database";
         }
         return dbEphCrossRef;
     }

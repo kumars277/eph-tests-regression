@@ -1900,7 +1900,7 @@ public class JMETLDataChecks {
                             " Stitch_JSON -> Identifier_Code => " + ExternalRefTemp[0].getidentifierType().getcode());
                     if (JMContext.JMObjectsFromDL.get(0).getf_type() != null ||
                             (ExternalRefTemp[0].getidentifierType().getcode() != null)) {
-                        Assert.assertEquals("The EPR => " + JMContext.JMObjectsFromDL.get(0).getf_type() + " is missing/not found in Work_Stitching table",
+                        Assert.assertEquals("The EPR => " + JMContext.JMObjectsFromDL.get(0).getf_wwork() + " is missing/not found in Work_Stitching table",
                                 JMContext.JMObjectsFromDL.get(0).getf_type(),
                                 ExternalRefTemp[0].getidentifierType().getcode());
                     }

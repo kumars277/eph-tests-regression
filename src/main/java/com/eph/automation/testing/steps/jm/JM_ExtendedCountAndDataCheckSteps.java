@@ -78,6 +78,7 @@ public class JM_ExtendedCountAndDataCheckSteps {
         sql = String.format(JMExtendedCountCheckSQL.GET_PRODUCT_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
         JMContext.JMTransformObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.AWS_URL);
+        System.out.println(JMContext.JMTransformObjectsFromDL.size());
     }
 
     @And("^Compare JM records in between JM Extended DB and Product Extended DB$")

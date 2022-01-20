@@ -2586,7 +2586,9 @@ public class JMETLDataChecksSQL {
     public static String GET_STITCHING_PRODUCT_CORE = "select * from "+ GetEPHDB.getStitchingDB() +".stch_product_core_json where epr_id in ('%s')";
 
     public static String GET_SEMARCHY_GD_WWORK = "select * from semarchy_eph_mdm.gd_wwork where work_id in ('%s')";
-    public static String GET_SEMARCHY_GD_WORK_IDENTIFIER = "select * from semarchy_eph_mdm.gd_work_identifier where external_reference like ('%s"+"%s"+"%%')";
+  //  public static String GET_SEMARCHY_GD_WORK_IDENTIFIER = "select * from semarchy_eph_mdm.gd_work_identifier where external_reference like ('%s"+"%s"+"%%')";
+  public static String GET_SEMARCHY_GD_WORK_IDENTIFIER = "select * from semarchy_eph_mdm.gd_work_identifier where f_wwork = '%s' and f_type='%s'";
+
     public static String GET_SEMARCHY_GD_PRODUCT = "select * from semarchy_eph_mdm.gd_product where product_id in ('%s')";
     public static String GET_SEMARCHY_GD_WORK_PERSON_ROLE = "select * from semarchy_eph_mdm.gd_work_person_role where f_wwork in ('%s') and f_role like ('%s')";
     public static String GET_SEMARCHY_GD_WORK_RELATIONSHIP = "select * from semarchy_eph_mdm.gd_work_relationship where f_parent in ('%s')";

@@ -102,5 +102,5 @@ public class JMExtendedCountCheckSQL {
             ", jfs.delete_flag\n" +
             "from "+ GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')";
 
-    public static String GET_PRODUCT_EXTENDED_RECORDS = "select * from product_staging_database_uat2.product_availability_extended_allsource_v where \"source\" in ('JM','JM_FIXED') and epr_id in ('%s')";
+    public static String GET_PRODUCT_EXTENDED_RECORDS = "select * from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" in ('JM','JM_FIXED') and epr_id in ('%s')";
 }

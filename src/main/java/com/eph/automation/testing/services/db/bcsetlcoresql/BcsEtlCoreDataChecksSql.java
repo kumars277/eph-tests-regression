@@ -698,9 +698,9 @@ public class BcsEtlCoreDataChecksSql {
                     "     ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
                     "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n" +
                     "UNION    SELECT\n" +
-                    "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_1_sourceref AS varchar), 'IRB'), CAST(d.work_2_sourceref AS varchar)), '') \"u_key\"\n" +
-                    "   , d.work_1_sourceref parentref\n" +
-                    "   , d.work_2_sourceref childref\n" +
+                    "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_2_sourceref AS varchar), 'IRB'), CAST(d.work_1_sourceref AS varchar)), '') \"u_key\"\n" +
+                    "   , d.work_2_sourceref parentref\n" +
+                    "   , d.work_1_sourceref childref\n" +
                     "   , 'EDI' relationtyperef\n" +
                     "   , \"date_parse\"(NULLIF(d.\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
                     "   , 'N' \"dq_err\"\n" +
@@ -778,9 +778,9 @@ public class BcsEtlCoreDataChecksSql {
                     "     ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
                     "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n" +
                     "UNION    SELECT\n" +
-                    "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_1_sourceref AS varchar), 'IRB'), CAST(d.work_2_sourceref AS varchar)), '') \"u_key\"\n" +
-                    "   , d.work_1_sourceref parentref\n" +
-                    "   , d.work_2_sourceref childref\n" +
+                    "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_2_sourceref AS varchar), 'IRB'), CAST(d.work_1_sourceref AS varchar)), '') \"u_key\"\n" +
+                    "   , d.work_2_sourceref parentref\n" +
+                    "   , d.work_1_sourceref childref\n" +
                     "   , 'EDI' relationtyperef\n" +
                     "   , \"date_parse\"(NULLIF(d.\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
                     "   , 'N' \"dq_err\"\n" +

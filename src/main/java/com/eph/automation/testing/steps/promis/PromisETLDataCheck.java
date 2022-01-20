@@ -440,7 +440,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis DeltaQuery ids of (.*)$")
     public void getRandomPromisDeltaIds(String numberOfRecords, String Deltatablename) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+     //  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Deltatablename, numberOfRecords);
@@ -702,7 +702,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis History Excluding Query ids of (.*)$")
     public void getRandomPromisHistExclIds(String numberOfRecords, String HistExcltablename) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    //   numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, HistExcltablename, numberOfRecords);

@@ -53,7 +53,7 @@ public class JM_ETLExtendedStitch {
 
     @Given("^Get the IDs (.*) of JM ETL Extended data$")
     public void getSomeRandomIds(String numberOfRecords) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for JM ETL Extended Tables....");
         List<Map<?, ?>> randomIds;

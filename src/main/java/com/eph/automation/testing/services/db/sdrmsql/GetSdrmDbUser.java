@@ -16,7 +16,7 @@ public class GetSdrmDbUser {
                 dbSDRM = "sdrm_staging_uat";
             }
         }else{
-            dbSDRM = "sdrm_staging_uat";
+            dbSDRM = "sdrm_staging_sit";
         }
         return dbSDRM;
     }
@@ -32,7 +32,7 @@ public class GetSdrmDbUser {
                 dbProdstgDb = "product_staging_database_uat";
             }
         }else{
-            dbProdstgDb = "product_staging_database_uat";
+            dbProdstgDb = "product_staging_database_sit";
         }
         return dbProdstgDb;
     }
@@ -48,7 +48,7 @@ public class GetSdrmDbUser {
                 dbProdDb = "product_database_uat";
             }
         }else{
-             dbProdDb = "product_database_uat";
+             dbProdDb = "product_database_sit";
         }
         return dbProdDb;
     }

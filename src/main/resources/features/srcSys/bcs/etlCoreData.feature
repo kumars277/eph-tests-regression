@@ -124,15 +124,15 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
     And  Compare the records of Exclude with diff of delta_current and current_hist tables <TargetTable>
     Examples:
       |FirstSourceTable                           |SecondSourceTable                                            |TargetTable                                               |countOfRandomIds |
-      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta      |50              |
-      |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta            |50              |
-      |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta                   |50              |
-      |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta                  |50              |
-      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_part                 |etl_transform_history_work_person_role_excl_delta         |50               |
-      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_part                 |etl_transform_history_work_relationship_excl_delta        |50              |
-      |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                     |50              |
-      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta          |50              |
-      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |50              |
+    #  |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta      |50              |
+   #   |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta            |50              |
+   #   |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta                   |50              |
+   #   |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta                  |50              |
+   #   |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_part                 |etl_transform_history_work_person_role_excl_delta         |50               |
+   #   |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_part                 |etl_transform_history_work_relationship_excl_delta        |50              |
+   #   |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                     |50              |
+   #   |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta          |50              |
+   #   |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |50              |
   @notUsed
   Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <sourceTable>

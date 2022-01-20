@@ -15,13 +15,13 @@ Feature:Validate data for Promis between transform tables
     And Compare Promis records for transform mapping and current of <tablename>
     Examples:
       |numberOfRecords  |tablename      |Currenttablename                        |
-      | 5                |subject_areas  |promis_transform_current_subject_areas |
-      | 5               |pricing        |promis_transform_current_pricing        |
-      | 5               |person_roles   |promis_transform_current_person_roles   |
-      | 5               |works          |promis_transform_current_works          |
-      | 5               |metrics        |promis_transform_current_metrics        |
-      | 5               |urls           |promis_transform_current_urls           |
-      | 5               |work_rels      |promis_transform_current_work_rels      |
+      | 50                |subject_areas  |promis_transform_current_subject_areas |
+      | 50               |pricing        |promis_transform_current_pricing        |
+      | 50               |person_roles   |promis_transform_current_person_roles   |
+      | 50               |works          |promis_transform_current_works          |
+      | 50               |metrics        |promis_transform_current_metrics        |
+      | 50               |urls           |promis_transform_current_urls           |
+      | 50               |work_rels      |promis_transform_current_work_rels      |
 
   @PROMISETL
   Scenario Outline: Verify that Promis is correct between Current and transform History tables
@@ -34,13 +34,13 @@ Feature:Validate data for Promis between transform tables
     And Compare Promis records for current and transform file of <TransformHistoryTable>
     Examples:
       |numberOfRecords  |PromisCurrentTable                    |TransformHistoryTable                             |
-      | 5               |promis_transform_current_subject_areas|promis_transform_file_history_subject_areas_part  |
-      | 5               |promis_transform_current_pricing      |promis_transform_file_history_pricing_part        |
-      | 5               |promis_transform_current_person_roles |promis_transform_file_history_person_roles_part   |
-      | 5               |promis_transform_current_works        |promis_transform_file_history_works_part          |
-      | 5               |promis_transform_current_metrics      |promis_transform_file_history_metrics_part        |
-      | 5               |promis_transform_current_urls         |promis_transform_file_history_urls_part           |
-      | 5               |promis_transform_current_work_rels    |promis_transform_file_history_work_rels_part      |
+      | 50               |promis_transform_current_subject_areas|promis_transform_file_history_subject_areas_part  |
+      | 50               |promis_transform_current_pricing      |promis_transform_file_history_pricing_part        |
+      | 50               |promis_transform_current_person_roles |promis_transform_file_history_person_roles_part   |
+      | 50               |promis_transform_current_works        |promis_transform_file_history_works_part          |
+      | 50               |promis_transform_current_metrics      |promis_transform_file_history_metrics_part        |
+      | 50               |promis_transform_current_urls         |promis_transform_file_history_urls_part           |
+      | 50               |promis_transform_current_work_rels    |promis_transform_file_history_work_rels_part      |
 
 @notUsed
   Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables
@@ -92,13 +92,13 @@ Feature:Validate data for Promis between transform tables
     And Compare Promis records for Latest query and Latest tables of <tablename>
     Examples:
       |numberOfRecords  |tablename      |Latesttablename                     |
-      | 5               |subject_areas  |promis_transform_latest_subject_areas |
-      | 5               |pricing        |promis_transform_latest_pricing       |
-      | 5               |person_roles   |promis_transform_latest_person_roles  |
-      | 5               |works          |promis_transform_latest_works         |
-      | 5               |metrics        |promis_transform_latest_metrics       |
-      | 5               |urls           |promis_transform_latest_urls          |
-      | 5               |work_rels      |promis_transform_latest_work_rels     |
+      | 50               |subject_areas  |promis_transform_latest_subject_areas |
+      | 50               |pricing        |promis_transform_latest_pricing       |
+      | 50               |person_roles   |promis_transform_latest_person_roles  |
+      | 50               |works          |promis_transform_latest_works         |
+      | 50               |metrics        |promis_transform_latest_metrics       |
+      | 50               |urls           |promis_transform_latest_urls          |
+      | 50               |work_rels      |promis_transform_latest_work_rels     |
 
 
 
