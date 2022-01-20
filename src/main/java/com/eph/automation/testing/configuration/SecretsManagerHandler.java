@@ -146,16 +146,19 @@ public class SecretsManagerHandler {
 
     public static JSONObject getSecretKeyObj(String region, String secretName){
         //created by Nishant @  29 Mar 2021
+        Log.info("get secrete key obj");
         JSONObject object = null;
 
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
                 .withRegion(region)
                 .build();
-
+        Log.info("client created...");
         String secret = "";
         String decodedBinarySecret = "";
 
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
+        Log.info(getSecretValueRequest.toString());
+        
         GetSecretValueResult getSecretValueResult = null;
 
         try {getSecretValueResult = client.getSecretValue(getSecretValueRequest);}
