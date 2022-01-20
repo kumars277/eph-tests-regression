@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-10497G");Log.info("hard coded work ids are : " + ids);
+   // ids.clear();ids.add("EPR-W-104C24");Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -101,7 +101,7 @@ public class ApiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-11F3HN");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102R98");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -290,10 +290,9 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by manifestationType and compared$")
-  public void compareWorksByManifestationTypeWithDB() {
+  public void compareWorksByManifestationTypeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-    try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
@@ -302,6 +301,7 @@ public class ApiWorksSearchSteps {
                         .workDataObjectsFromEPHGD
                         .get(0)
                         .getWORK_TITLE()
+                        .replaceAll("[^a-zA-Z0-9]", " ")
                         .split(" ")[0]
                         .toUpperCase();
         String ManifestationType =
@@ -316,10 +316,7 @@ public class ApiWorksSearchSteps {
                 getNumberOfWorksByManifestationType(searchKeyword, ManifestationType));
       }
 
-    } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }
+
   }
 
   @Then("^the work details are retrieved by search with PMC code and compared$")
@@ -353,9 +350,9 @@ public class ApiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by search with PMG code and compared$")
-  public void compareWorkBySearchWithPMGCodeWithDB() {
+  public void compareWorkBySearchWithPMGCodeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    try {
+
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       String searchKeyword =
               DataQualityContext
@@ -376,10 +373,7 @@ public class ApiWorksSearchSteps {
                 getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
       }
 
-    } catch (Exception e) {
-      Log.info(e.getMessage());
-      scenarioFailed();
-    }
+
   }
 
   @When("^the work details are retrieved by title (.*) and compared$")
@@ -682,7 +676,6 @@ public class ApiWorksSearchSteps {
   public void compareWorkSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
-    try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         Log.info(
@@ -695,12 +688,7 @@ public class ApiWorksSearchSteps {
         returnedWorks.verifyWorksReturnedCount(
                 getNumberOfWorksByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
       }
-
-    } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }
-  }
+}
 
   @When("^the work details are retrieved by PMG Code and compared$")
   public void compareWorkSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
@@ -723,8 +711,7 @@ public class ApiWorksSearchSteps {
   }
 
   @When("^the work response count is compared with the count in the DB for Person Id$")
-  public void compareSearchResultCountForPersonIdresponse()
-          throws AzureOauthTokenFetchingException {
+  public void compareSearchResultCountForPersonIdresponse() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
     for (String id : ids) {
@@ -737,176 +724,55 @@ public class ApiWorksSearchSteps {
   }
 
   @When("^work response is compared with the DB for (.*)$")
-  public static void compareSearchResultCountForPersonOptions(String personSearchOption)
-          throws AzureOauthTokenFetchingException {
+  public void compareSearchResultCountForPersonOptions(String personSearchOption) throws AzureOauthTokenFetchingException {
+    //created by Nishant @24 Apr 2020
+    // updated by Nishant @ 10 Jun 2021, @19 Jan 2022
     WorksMatchedApiObject returnedWorks = null;
     int dbCount = 0;
-    int bound = ids.size();
-    for (int i = 0; i < bound; i++) {
+
+    for (int i = 0; i < ids.size(); i++) {
+      String resourceString = "";
+
       getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-      getPersonDataByPersonId(
-              DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+      getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+
       Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
-      DataQualityContext.breadcrumbMessage +=
-              "->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
-      int fromCntr = 0;
-      int sizeCntr = 450;
+      DataQualityContext.breadcrumbMessage +="->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+
       switch (personSearchOption) {
         case "PERSON_NAME":
-          /*created by Nishant @24 Apr 2020
-          getWorkByPerson returns sometimes 70000+ records and most probable intended work id does not appear in first 20 records
-          hence we need to send API request with size 5000 and check if intended workID is returned
-          if not, send request again for next 5000 records*/
-
-          returnedWorks =
-                  APIService.getWorksByParam(
-                          "personName",
-                          DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
-                                  + " "
-                                  + DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
-                                  + from
-                                  + fromCntr
-                                  + size
-                                  + sizeCntr);
-
-          while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
-                  && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-            Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-            returnedWorks =
-                    APIService.getWorksBySearchOption(
-                            DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
-                                    + " "
-                                    + DataQualityContext
-                                    .personDataObjectsFromEPHGD
-                                    .get(0)
-                                    .getPERSON_FAMILY_NAME()
-                                    + from
-                                    + fromCntr
-                                    + size
-                                    + sizeCntr);
-          }
+          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+          returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);
           break;
 
-        case PER_FULLNAME_CURRENT: // updated by Nishant @ 10 Jun 2021
-          returnedWorks =
-                  APIService.getWorksByPersonFullName(
-                          DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
-                                  + " "
-                                  + DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
-                                  + from
-                                  + fromCntr
-                                  + size
-                                  + sizeCntr
-                                  + activeWorkTypeStatus);
-
-          while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
-                  && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-            Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-            returnedWorks =
-                    APIService.getWorksByPersonFullName(
-                            DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
-                                    + " "
-                                    + DataQualityContext
-                                    .personDataObjectsFromEPHGD
-                                    .get(0)
-                                    .getPERSON_FAMILY_NAME()
-                                    + from
-                                    + fromCntr
-                                    + size
-                                    + sizeCntr
-                                    + activeWorkTypeStatus);
-          }
+        case PER_FULLNAME_CURRENT:
+          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+                 + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+          returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);
           break;
 
         case "PEOPLE_HUB_ID":
-          returnedWorks =
-                  APIService.getWorksByPersonID(
-                          personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()
-                                  + from
-                                  + fromCntr
-                                  + size
-                                  + sizeCntr);
-          while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
-                  && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-            Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-            returnedWorks =
-                    APIService.getWorksByPersonID(
-                            personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()
-                                    + from
-                                    + fromCntr
-                                    + size
-                                    + sizeCntr);
-          }
+          resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID();
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
           break;
 
         case "PERSON_ID":
-          returnedWorks =
-                  APIService.getWorksByPersonID(
-                          personDataObjectsFromEPHGD.get(0).getPERSON_ID()
-                                  + from
-                                  + fromCntr
-                                  + size
-                                  + sizeCntr
-                                  + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
-          while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
-                  && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-            Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-            returnedWorks =
-                    APIService.getWorksByPersonID(
-                            personDataObjectsFromEPHGD.get(0).getPERSON_ID()
-                                    + from
-                                    + fromCntr
-                                    + size
-                                    + sizeCntr
-                                    + activeWorkTypeStatus);
-          }
+        case "personIdCurrent":
+          resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
           break;
 
-        case "personIdCurrent":
-          returnedWorks =
-                  APIService.getWorksByPersonID(
-                          personDataObjectsFromEPHGD.get(0).getPERSON_ID()
-                                  + from
-                                  + fromCntr
-                                  + size
-                                  + sizeCntr);
-          while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
-                  && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-            fromCntr += sizeCntr;
-            Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
-            returnedWorks =
-                    APIService.getWorksByPersonID(
-                            personDataObjectsFromEPHGD.get(0).getPERSON_ID()
-                                    + from
-                                    + fromCntr
-                                    + size
-                                    + sizeCntr);
-          }
-          break;
         default: throw new IllegalArgumentException(personSearchOption);
       }
 
-      returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
 
-      dbCount =
-              getNumberOfWorksByPersonIDs(
-                      personSearchOption,
-                      DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
+      dbCount =getNumberOfWorksByPersonIDs(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
       if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
-        returnedWorks.verifyWorkWithIdIsReturned(
-                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+        returnedWorks.verifyWorkWithIdIsReturned(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         Log.info("verified work present in search result...");
       }
     }

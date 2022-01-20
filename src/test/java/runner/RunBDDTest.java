@@ -9,14 +9,16 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        strict = false,
+
+        glue = {"com.eph.automation.testing.steps", "com.eph.automation.testing.common.hooks"},
         features = "src/main/resources/features",
-        format= {"pretty","json:target/cucumber.json" },
-       /* tags = {"@SDRM,@SD,@PROMISETL,@JRBIETLExtended,@JMETLCore," +
-                "@JMETLExtended,@ERMS,@BCSCore,@BCSExtended,@BCSInbound,@BCSCore,@GdToStitching,@JMETLExtendedStitch" +
-                ",@WorkExtStitching,@ProductExtStitching,@ManifExtStitching,@DLCoreView,@DLExtViews,@coreToGd"},*/
-       tags =  {"@DLExtViews"},
-        glue = {"com.eph.automation.testing.steps", "com.eph.automation.testing.common.hooks"})
+        plugin = {"pretty", "json:target/cucumber-reports/cucumber.json",
+                "junit:target/cucumber-reports/Cucumber.xml",
+                "html:target/cucumber-reports/feature-overview"
+                },
+        monochrome = true,
+        tags = {"@stitchingDataAPI"}
+        )
 
 public class RunBDDTest {
     public RunBDDTest() {

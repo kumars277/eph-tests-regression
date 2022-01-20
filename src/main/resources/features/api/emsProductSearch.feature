@@ -1,6 +1,6 @@
 Feature: Search API: Products
   As an EIP-MS Integration User
-  I would like to search products from Enterprise Customer Hub using EIP Search
+  I would like to search products from Enterprise Product Hub using EIP Search
   So that I can use the details to validate business needs
 
   @searchAPI @productSearchAPI
@@ -28,7 +28,7 @@ Feature: Search API: Products
     Examples:
       | idType                                |
       | PRODUCT_ID                            |
-#      | PRODUCT_IDENTIFIER                    |
+     #| PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_ID                       |
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_ID              |
@@ -43,7 +43,7 @@ Feature: Search API: Products
     Then   the products detail are retrieved and compared when searched by type and <identifier>
     Examples:
       | identifier                            |
-  #    | PRODUCT_IDENTIFIER                    |
+  #   | PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |
@@ -55,10 +55,9 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
-      | PRODUCT_PERSONS_FULLNAME                    |
       | PRODUCT_ID                                  |
       | PRODUCT_TITLE                               |
- #     | PRODUCT_IDENTIFIER                          |
+ #    | PRODUCT_IDENTIFIER                          |
       | PRODUCT_WORK_ID                             |
       | PRODUCT_WORK_TITLE                          |
       | PRODUCT_WORK_IDENTIFIER                     |
@@ -68,6 +67,7 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_WORK_ID               |
       | PRODUCT_MANIFESTATION_WORK_TITLE            |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER       |
+      | PRODUCT_PERSONS_FULLNAME                    |
       | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
 
@@ -87,8 +87,8 @@ Feature: Search API: Products
     Given   We get 1 random search ids for products default
     And     We get the search data from EPH GD for products
     Then    the product details are retrieved by PMG Code and compared
-   ##created by Nishant
 
+#created by Nishant
   @searchAPI @productSearchAPI
   Scenario: search products in Package - IsInPackage
     Given   We get 1 random package id
@@ -109,7 +109,7 @@ Feature: Search API: Products
       | type                                           |
       | PRODUCT_WORK_ACCOUNTABLE_PRODUCT               |
       | PRODUCT_MANIFESTATION_WORK_ACCOUNTABLE_PRODUCT |
-  #  |PRODUCT_ACCOUNTABLE_PRODUCT| NA as per Lujiang on 13 May 2020
+      #|PRODUCT_ACCOUNTABLE_PRODUCT| NA as per Lujiang on 13 May 2020
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by parameters
