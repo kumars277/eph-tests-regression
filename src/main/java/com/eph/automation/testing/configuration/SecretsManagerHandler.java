@@ -35,6 +35,7 @@ public class SecretsManagerHandler {
                 Log.info("secrete name => "+secretName);
                 Log.info("connectionURL => "+connectionURL);
                 DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
+                Log.info("DBconnection to string => "+DBconnection.toString());
                 break;
 
             case "UAT2":
@@ -123,7 +124,10 @@ public class SecretsManagerHandler {
 //                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
-            case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
+            case "EPH_URL":
+                Log.info("EPH_POSTGRE_UAT_URL value = > "+object.getAsString("EPH_POSTGRE_UAT_URL"));
+                Log.info("connection string =>"+DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL")));
+                return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
     }
@@ -157,23 +161,23 @@ public class SecretsManagerHandler {
         String decodedBinarySecret = "";
 
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
-        Log.info(getSecretValueRequest.toString());
+
 
         GetSecretValueResult getSecretValueResult = null;
 
         try {getSecretValueResult = client.getSecretValue(getSecretValueRequest);}
         catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {throw e;}
-        Log.info("secrete value result => "+getSecretValueResult.toString());
+
 
         if (getSecretValueResult.getSecretString() != null) {secret = getSecretValueResult.getSecretString();}
         else {decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());}
-        Log.info("secret string => "+secret.toString());
+
 
         JSONParser parser = new JSONParser();
         try {object = (JSONObject) parser.parse(secret);}
         catch (ParseException e) {e.printStackTrace();
         }
-        Log.info("object to string=> "+object.toString());
+        Log.info("secrete key object to string=> "+object.toString());
         return object;
     }
 
