@@ -98,7 +98,7 @@ public class BcsEtlCoreCountChecksSteps {
                 Log.info(noTablemsg);
 
         }
-     //   Log.info(bcsCoreSQLCurrentCount);
+        Log.info(bcsCoreSQLCurrentCount);
         List<Map<String, Object>> bcsETLCoreCurrentTableCount = DBManager.getDBResultMap(bcsCoreSQLCurrentCount, Constants.AWS_URL);
         bcsCoreCurrentCount = ((Long) bcsETLCoreCurrentTableCount.get(0).get("Target_Count")).intValue();
     }
@@ -179,7 +179,7 @@ public class BcsEtlCoreCountChecksSteps {
                 Log.info(noTablemsg);
 
         }
-      //  Log.info(bcsInboundCurrentSQLCount);
+        Log.info(bcsInboundCurrentSQLCount);
         List<Map<String, Object>> bcsInboundCurrentTableCount = DBManager.getDBResultMap(bcsInboundCurrentSQLCount, Constants.AWS_URL);
         bcsInboundCurrentCount = ((Long) bcsInboundCurrentTableCount.get(0).get("Source_Count")).intValue();
     }

@@ -17,8 +17,8 @@ public class GetStitchDLDBUser {
 
 
         }else{
-            //dbProdExt = "product_ext_database_sit";
-            dbProdExt = "product_ext_database_uat";
+           dbProdExt = "product_ext_database_sit";
+         //   dbProdExt = "product_ext_database_uat";
         }
         return dbProdExt;
     }
@@ -33,8 +33,8 @@ public class GetStitchDLDBUser {
                 dbExtStitching = "ephuat_extended_data_stitch";
             }
         }else{
-          //  dbExtStitching = "ephsit_extended_data_stitch";
-           dbExtStitching = "ephuat_extended_data_stitch";
+            dbExtStitching = "ephsit_extended_data_stitch";
+         //  dbExtStitching = "ephuat_extended_data_stitch";
         }
         return dbExtStitching;
     }
