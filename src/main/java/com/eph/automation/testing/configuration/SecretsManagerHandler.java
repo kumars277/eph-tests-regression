@@ -158,20 +158,22 @@ public class SecretsManagerHandler {
 
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
         Log.info(getSecretValueRequest.toString());
-        
+
         GetSecretValueResult getSecretValueResult = null;
 
         try {getSecretValueResult = client.getSecretValue(getSecretValueRequest);}
         catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {throw e;}
+        Log.info("secrete value result => "+getSecretValueResult.toString());
 
         if (getSecretValueResult.getSecretString() != null) {secret = getSecretValueResult.getSecretString();}
         else {decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());}
+        Log.info("secret string => "+secret.toString());
 
         JSONParser parser = new JSONParser();
         try {object = (JSONObject) parser.parse(secret);}
         catch (ParseException e) {e.printStackTrace();
         }
-
+        Log.info("object to string=> "+object.toString());
         return object;
     }
 
