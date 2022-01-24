@@ -7,15 +7,14 @@ Feature:Validate data for ck ETL tables
     Given We know the number of CK <DeltaHistorytablename> data in Delta History
     Then Get the count for CK <DeltaCurrenttablename> Delta Current
     And Compare the CK count for <DeltaHistorytablename> table between History and Delta Current
-
-#    Given We get the <numberOfReck_delta_history_package_partcords> random CK ids of <Currenttablename>
-#    When We get the CK Current records from <Currenttablename>
-#    Then We get the CK Inbound Source records from <InboundSourcetablename>
-#    And Compare CK records in Inbound Source and Current of <InboundSourcetablename>
+    Given We get the <numberOfRecords> random CK Delta ids of <DeltaCurrenttablename>
+    When We get the CK Delta Current Records from <DeltaCurrenttablename>
+    Then We get the CK Delta History records from <DeltaHistorytablename>
+    And Compare CK records in Delta Current and Delta History of <DeltaCurrenttablename>
 
     Examples:
       |numberOfRecords |DeltaHistorytablename                    |DeltaCurrenttablename               |
-      | 5              |ck_delta_history_package_work_part       |ck_delta_current_package_work                    |
+      | 5              |ck_delta_history_package_work_part       |ck_delta_current_package_work       |
       | 5              |ck_delta_history_work_subject_area_part  |ck_delta_current_work_subject_area  |
 
 
