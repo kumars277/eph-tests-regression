@@ -22,6 +22,38 @@ public class CKCurrentTablesDataObject {
     private String years_of_coverage;
     private String pdf_suppression;
     private String durable_url;
+    private String uncorrected_cmms_issn_isbn;
+    private String uncorrected_end_date;
+    private String journal_backfile_years;
+    private String video;
+    private String topic_pages;
+    private String journal_backfiles_only;
+    private String aip;
+    private String type;
+
+    public String gettype() {return type;}
+    public void settype(String type) {this.type = type;}
+
+    public String getaip() {return aip;}
+    public void setaip(String aip) {this.aip = aip;}
+
+    public String getjournal_backfiles_only() {return journal_backfiles_only;}
+    public void setjournal_backfiles_only(String journal_backfiles_only) {this.journal_backfiles_only = journal_backfiles_only;}
+
+    public String gettopic_pages() {return topic_pages;}
+    public void settopic_pages(String topic_pages) {this.topic_pages = topic_pages;}
+
+    public String getvideo() {return video;}
+    public void setvideo(String video) {this.video = video;}
+
+    public String getjournal_backfile_years() {return journal_backfile_years;}
+    public void setjournal_backfile_years(String journal_backfile_years) {this.journal_backfile_years = journal_backfile_years;}
+
+    public String getuncorrected_end_date() {return uncorrected_end_date;}
+    public void setuncorrected_end_date(String uncorrected_end_date) {this.uncorrected_end_date = uncorrected_end_date;}
+
+    public String getuncorrected_cmms_issn_isbn() {return uncorrected_cmms_issn_isbn;}
+    public void setuncorrected_cmms_issn_isbn(String uncorrected_cmms_issn_isbn) {this.uncorrected_cmms_issn_isbn = uncorrected_cmms_issn_isbn;}
 
     public String getdurable_url() {return durable_url;}
     public void setdurable_url(String durable_url) {this.durable_url = durable_url;}
