@@ -239,7 +239,7 @@ public class CKInboundDataChecks {
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
 
-                        String[] TransformCurrPackageWorkURL4Col = {"getu_key", "geteph_work_id", "get_eph_package_id", "getck_live_date", "getdurable_url"};
+                        String[] TransformCurrPackageWorkURL4Col = {"getu_key", "geteph_work_id", "geteph_package_id", "getck_live_date", "getdurable_url"};
                         for (String strTemp : TransformCurrPackageWorkURL4Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
