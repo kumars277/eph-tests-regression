@@ -113,18 +113,13 @@ public class ApiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-115RKK"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10KBWS"); Log.info("hard coded product ids are : " + ids);
 
-    if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {
-      ids.clear();
-      ids.add("EPR-10V1T5");
-      Log.info("product_identifier hard coded product ids are : " + ids);
-    }
+    if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
+      Log.info("product_identifier hard coded product ids are : " + ids);}
     DataQualityContext.breadcrumbMessage += "->" + ids;
 
-    Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage + " Verify list with random ids is not empty.",
-        ids.isEmpty());
+    Assert.assertFalse(DataQualityContext.breadcrumbMessage + " Verify list with random ids is not empty.",ids.isEmpty());
   }
 
 
@@ -579,8 +574,7 @@ else{
             */
 
           Log.info("Total product found search... - "+ returnedProducts.getTotalMatchCount());
-          while (!returnedProducts.verifyProductWithIdIsReturnedOnly(
-                  productDataObjects.get(0).getPRODUCT_ID())
+          while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID())
                   && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
 
             Log.info("scanned product from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
@@ -588,9 +582,18 @@ else{
             returnedProducts = getProductsBySearch(apiResource+from + fromCntr + size + sizeCntr);
 
           }
+            if(returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()))
+            {
+              Log.info("intetended product found for scan from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
+              returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
+            }
+            else
+            {
+              Log.info("intetended product not found till scan from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage + "- scenned "+(fromCntr+ sizeCntr)+ "records...",false);
+            }
+          //returnedProducts.verifyProductsAreReturned();
 
-          returnedProducts.verifyProductsAreReturned();
-          returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
         }
       }
     } catch (Exception e) {

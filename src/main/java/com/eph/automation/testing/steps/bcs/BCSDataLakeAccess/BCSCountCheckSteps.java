@@ -139,7 +139,6 @@ public class BCSCountCheckSteps {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate= dateFormat.format(cal.getTime());
         Log.info("Current Date=> "+currentDate);
-
         Log.info("Getting History Table Count...");
 
         switch (tableName){

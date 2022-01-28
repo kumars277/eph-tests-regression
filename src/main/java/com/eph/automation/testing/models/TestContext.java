@@ -9,9 +9,8 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-          System.setProperty("ENV","UAT");
+         // System.setProperty("ENV","UAT");
          //   System.setProperty("browser","chrome");
-
 
         String browserName = System.getProperty("browser");
         String gridRun = System.getProperty("gridRun");
@@ -28,8 +27,6 @@ public class TestContext {
         testProperties.s3Key = s3Key !=null ? s3Key: "Image URLs for parties.csv";
         testProperties.rowFrom =rowFrom !=null ?rowFrom:"";
         testProperties.rowTill =rowTill !=null ?rowTill:"";
-
-
         return testProperties;
     }
 }

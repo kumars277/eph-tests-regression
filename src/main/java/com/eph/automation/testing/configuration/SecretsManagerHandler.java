@@ -4,6 +4,7 @@ package com.eph.automation.testing.configuration;
 * */
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
@@ -19,38 +20,23 @@ import java.util.Base64;
 
 public class SecretsManagerHandler {
 
-    public static String getPostgreDBConnection(String connectionURL) {
-
+    public static String getDBConnection(String connectionURL) {
         String secretName = "";
         String DBconnection = "";
         Log.info("Test Environment... "+TestContext.getValues().environment);
         switch (TestContext.getValues().environment) {
-            case "SIT":
-                secretName=getSITSecretName(connectionURL);
-                DBconnection = getSITdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
-                break;
 
-            case "UAT":
-                secretName=getUATSecretName(connectionURL);
-                DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
-                break;
+            case "SIT": secretName=getSITSecretName(connectionURL);
+                        DBconnection = getSITdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
 
-            case "UAT2":
-                secretName=getUAT2SecretName(connectionURL);
-                DBconnection = getUAT2dbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
-                break;
+            case "UAT": secretName=getUATSecretName(connectionURL);Log.info("secrete name => "+secretName);
+                        DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
+
+            case "UAT2":secretName=getUAT2SecretName(connectionURL);
+                        DBconnection = getUAT2dbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
+
             default: throw new IllegalArgumentException("Illegal argument: " +TestContext.getValues().environment);
         }
-
-        /*
-        JSONObject object = getSecretKeyObj("eu-west-1",secretName);
-      switch(TestContext.getValues().environment) {
-            case "SIT": DBconnection = getSITdbConnection(object,connectionURL);break;
-            case "UAT": DBconnection = getUATdbConnection(object,connectionURL);break;
-            case "UAT2":DBconnection = getUAT2dbConnection(object,connectionURL);break;
-            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
-        }
-*/
         return DBconnection;
     }
 
@@ -61,8 +47,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":  return "eph_sit_promis_url";
             case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
             case "EPH_URL":     return "eph_sit_url";
-            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
-        }
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);}
     }
 
     public static String getUATSecretName(String connectionURL){
@@ -70,8 +55,7 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat_url";
-            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
-        }
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);}
     }
 
     public static String getUAT2SecretName(String connectionURL){
@@ -79,26 +63,17 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat2_url";
-            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
-        }
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);}
     }
 
     public static String getSITdbConnection(JSONObject object, String connectionURL){
-        //created by Nishant @ 17 Mar 2021
-        //updated by Nishant @ 30 Dec 2021
+        //created by Nishant @ 17 Mar 2021     //updated by Nishant @ 30 Dec 2021
         String connectionString = "";
         switch (connectionURL) {
-           case "AWS_URL":
-//                return object.getAsString("SIT_AWS_URL");
-//        local profile
-//              connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-//               "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
-
-        //Jenkins profile
-               connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-                       "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-        return connectionString;
-
+           case "AWS_URL":            return object.getAsString("SIT_AWS_URL");//Jenkins profile
+        //  Local profile
+        //              return=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
+        //               "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
@@ -110,15 +85,10 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021
         String connectionString = "";
         switch (connectionURL) {
-            case "AWS_URL":
-//                Local profile
-//                connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
-//                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
-//                 Jenkins profile
-                        connectionString=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
-                        "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.InstanceProfileCredentialsProvider;";
-                return connectionString;
-//                return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
+            case "AWS_URL":           return object.getAsString("UAT_AWS_URL");//Jenkins profile
+        //   Local profile
+        //               return=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
+        //                 "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
@@ -164,9 +134,7 @@ public class SecretsManagerHandler {
 
         JSONParser parser = new JSONParser();
         try {object = (JSONObject) parser.parse(secret);}
-        catch (ParseException e) {e.printStackTrace();
-        }
-
+        catch (ParseException e) {e.printStackTrace();}
         return object;
     }
 
