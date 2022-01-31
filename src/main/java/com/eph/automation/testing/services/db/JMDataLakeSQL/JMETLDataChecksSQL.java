@@ -1777,7 +1777,7 @@ public class JMETLDataChecksSQL {
             "crosstab_data\n" +
             ")\n" +
             "select * from result_data\n" +
-            ") where jm_source_reference in ('%s') ";
+            ") where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
 
     public static String GET_PRODUCT_UPDATES_QUERY ="select * from (with base_data as\n" +
             "(select\n" +
