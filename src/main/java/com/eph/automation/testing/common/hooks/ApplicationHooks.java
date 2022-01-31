@@ -22,7 +22,7 @@ public class ApplicationHooks {
     public void setUp() {
         //Set up the test pre-requisite
         Log.info("Test is starting ...");
-        Log.info("Environment used..."+System.getProperty("ENV"));
+        Log.info("Environment used..."+TestContext.getValues().environment);
         SpecificTasks specificTasks = new SpecificTasks();
         DataQualityContext.DateAndTime = specificTasks.getDateNTime();
 

@@ -23,13 +23,13 @@ public class SecretsManagerHandler {
     public static String getDBConnection(String connectionURL) {
         String secretName = "";
         String DBconnection = "";
-        Log.info("Test Environment... "+TestContext.getValues().environment);
+       // Log.info("Test Environment... "+TestContext.getValues().environment);
         switch (TestContext.getValues().environment) {
 
             case "SIT": secretName=getSITSecretName(connectionURL);
                         DBconnection = getSITdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
 
-            case "UAT": secretName=getUATSecretName(connectionURL);Log.info("secrete name => "+secretName);
+            case "UAT": secretName=getUATSecretName(connectionURL);
                         DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);break;
 
             case "UAT2":secretName=getUAT2SecretName(connectionURL);
@@ -95,6 +95,7 @@ public class SecretsManagerHandler {
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
     }
+
     public static String getUAT2dbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
         String connectionString = "";

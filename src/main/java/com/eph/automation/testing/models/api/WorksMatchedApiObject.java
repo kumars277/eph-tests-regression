@@ -35,7 +35,7 @@ public class WorksMatchedApiObject {
 
     public void verifyWorksReturnedCount(int worksInDB){
         //API count could be higher than DB count as it comes from Elastic search
-        Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" is less than DB count "+worksInDB);}
+        Assert.assertTrue(DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" mismatch with DB count "+worksInDB,totalMatchCount== worksInDB);}
 
 
     public boolean verifyWorkWithIdIsReturned(String workID){
@@ -52,7 +52,7 @@ public class WorksMatchedApiObject {
             }
             i++;
         }
-        Assert.assertTrue(DataQualityContext.breadcrumbMessage + " work id found not  ", found);
+        Assert.assertTrue(DataQualityContext.breadcrumbMessage + " work id not found ", found);
         return found;
     }
 

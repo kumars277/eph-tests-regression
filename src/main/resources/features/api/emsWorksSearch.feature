@@ -77,9 +77,10 @@ Feature: Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
+      | WORK_IDENTIFIER                        |
       | WORK_ID                                |
       | WORK_TITLE                             |
-      | WORK_IDENTIFIER                        |
+
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |
