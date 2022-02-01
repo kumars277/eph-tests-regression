@@ -70,10 +70,14 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021     //updated by Nishant @ 30 Dec 2021
         String connectionString = "";
         switch (connectionURL) {
-           case "AWS_URL":            return object.getAsString("SIT_AWS_URL");//Jenkins profile
-        //  Local profile
-        //              return=  "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;" +
-        //               "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
+           case "AWS_URL":
+                if(true) //jenkins profile
+                { Log.info(object.getAsString("SIT_AWS_URL"));
+                    return object.getAsString("SIT_AWS_URL");}
+                else { //  Local profile
+                  return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;"
+                      + "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
+                       }
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
