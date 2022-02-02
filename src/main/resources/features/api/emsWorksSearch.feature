@@ -30,9 +30,10 @@ Feature: Search API: Works
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
-      | PERSON_ID             |
-      | PEOPLE_HUB_ID         |
       | PERSON_NAME           |
+      | PEOPLE_HUB_ID         |
+      | PERSON_ID             |
+
       | personFullNameCurrent |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
@@ -92,7 +93,7 @@ Feature: Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario: search work by random Person id
-    Given   We get 1 random search ids for person roles
+    Given   We get 10 random search ids for person roles
     Then    the work response count is compared with the count in the DB for Person Id
 
   @searchAPI @workSearchAPI
