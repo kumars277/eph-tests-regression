@@ -181,7 +181,7 @@ public class APIService {
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static WorksMatchedApiObject getWorksByParam(      String queryType, String queryValue) throws AzureOauthTokenFetchingException {
+  public static WorksMatchedApiObject getWorksByParam(String queryType, String queryValue) throws AzureOauthTokenFetchingException {
     Response response =getResponse("/product-hub-works/works?queryType=" + queryType + "&queryValue=" + queryValue);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }

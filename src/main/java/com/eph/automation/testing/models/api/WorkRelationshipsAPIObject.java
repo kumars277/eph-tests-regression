@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -88,6 +89,9 @@ public class WorkRelationshipsAPIObject {
       ArrayList<workChild> list_workChild = new ArrayList<>(Arrays.asList(workChild));
       getWorkRelationshipChildRecordsEPHGD(workId);
       for (int wc = 0; wc < workChild.length; wc++) {
+          //DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+          //Date date = format.parse(list_workChild.get(wc).effectiveEndDate);
+          if(isExpired(list_workChild.get(wc).effectiveEndDate)) continue;
         boolean childFound = false;
         for (int wc2 = 0; wc2 < workChild.length; wc2++) {
           if (list_workChild.get(wc).id.equalsIgnoreCase(dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_CHILD()) &&
@@ -124,11 +128,12 @@ public class WorkRelationshipsAPIObject {
   public boolean isExpired(String date) throws ParseException {
       Boolean endDated = false;
       SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
-
+    if(date!=null){
       Date DateToCmp = dateFormatter.parse(date);
       Date Todate = new Date();
-
       if(Todate.compareTo(DateToCmp)>0){    endDated = true;}
+    }
+
         return endDated;
   }
 

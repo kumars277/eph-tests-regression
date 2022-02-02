@@ -15,6 +15,7 @@ import com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
 
+import com.github.jknack.handlebars.internal.HbsParser;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
@@ -24,6 +25,8 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.Assert;
+
+import javax.security.auth.login.LoginContext;
 
 /*
  * Created by GVLAYKOV on 11/02/2019
@@ -56,13 +59,15 @@ public class ApiWorksSearchSteps {
 
   static String from = "&from=";
   static String size = "&size=";
-  static String activeWorkTypeStatus="&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA";
+  static String activeWorkTypeStatus="&workType=ABS,JBB,JNL,NWL&workStatus=WLA";//,WDA,WTA,WVA";
+
 
   public ApiWorksSearchSteps() {/**/}
 
   @Given("^We get (.*) random search ids for works (.*)$")
   public static void getRandomWorkIds(String numberOfRecords, String workProperty) {
     // updated by Nishant @ 25 May 2021
+
     switch (workProperty) {
       case WPR_ID:
       case WPR_SUMMARYNAME:   sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);        break;
@@ -79,9 +84,9 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
 
-    Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
+    Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-104C24");Log.info("hard coded work ids are : " + ids);
+   // ids.clear();ids.add("EPR-W-11H8BD");Log.info("hard coded work id is : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -98,10 +103,10 @@ public class ApiWorksSearchSteps {
                     .map(m -> (String) m.get(W_ID))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Environment used..." + System.getProperty("ENV"));
-    Log.info("Selected random Journal ids  : " + ids);
+
+    Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102R98");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-114K4C");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -110,6 +115,7 @@ public class ApiWorksSearchSteps {
   @Given("^We get (.*) random search ids for Extended works")
   public static void getRandomExtendedWorkIds(String numberOfRecords) {
     // created by Nishant @ 01 Jul 2020
+
     String dbEnv;
     if (TestContext.getValues().environment.equalsIgnoreCase("UAT")) dbEnv = "uat";
     else dbEnv = "sit";
@@ -120,7 +126,7 @@ public class ApiWorksSearchSteps {
                     .map(m -> (String) m.get(W_ID))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random work ids  : " + ids);
+    Log.info("Selected random work ids  : " + ids+" on "+ TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
     // "ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);"
     DataQualityContext.breadcrumbMessage += "->" + ids;
@@ -130,6 +136,7 @@ public class ApiWorksSearchSteps {
   @Given("^We get (.*) random search ids for Extended manifestation")
   public static void getRandomExtendedManifestationIds(String numberOfRecords) {
     // created by Nishant @ 01 Jul 2020
+
     String dbEnv;
     if (TestContext.getValues().environment.equals("UAT")) dbEnv = "uat";
     else dbEnv = "sit";
@@ -141,7 +148,7 @@ public class ApiWorksSearchSteps {
                     .map(m -> (String) m.get(W_ID))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random extended manifestation ids  : " + manifestaionids);
+    Log.info("Selected random extended manifestation ids  : " + manifestaionids+" on "+TestContext.getValues().environment);
     DataQualityContext.breadcrumbMessage += "->" + manifestaionids;
     verifyListNotEmpty(manifestaionids);
   //  manifestaionids.clear();manifestaionids.add("EPR-M-1251CX");manifestaionids.add("EPR-M-11S7FY");
@@ -156,7 +163,7 @@ public class ApiWorksSearchSteps {
     ids.add("EPR-W-102NHD");
     ids.add("EPR-W-102RRG");
     ids.add("EPR-W-102VF4");
-    Log.info("hard coded work ids are : " + ids);
+    Log.info("hard coded work ids are : " + ids +" on "+ System.getProperty("ENV"));
     DataQualityContext.breadcrumbMessage += "->" + ids;
   }
 
@@ -170,8 +177,8 @@ public class ApiWorksSearchSteps {
                     .map(m -> (BigDecimal) m.get("f_person"))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random person ids  : " + ids);
-    //  "ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);"
+    Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
+     // ids.clear(); ids.add("10290173");  Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage
@@ -324,16 +331,12 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     try{
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-      String searchKeyword =
-              DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0];
+      String searchKeyword = getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+      //String searchKeyword =  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", "").split(" ")[0];
 
       for (int i = 0; i < bound; i++) {
-        Log.info(
-                "search keyword '"
-                        + searchKeyword
-                        + "' and pmcCode '"
-                        + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()
-                        + "'");
+        Log.info("search keyword '"+ searchKeyword+ "' and pmcCode '"
+                        + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()+ "'");
         returnedWorks =
                 APIService.getWorksBySearchWithPMC(
                         searchKeyword, DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
@@ -716,8 +719,8 @@ public class ApiWorksSearchSteps {
 
     for (String id : ids) {
       Log.info("personId to be tested..." + id);
-      returnedWorks = APIService.getWorksByPersonID(id);
-      returnedWorks.verifyWorksAreReturned();
+      returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
+     // returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
       returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs("", id));
     }
@@ -732,8 +735,8 @@ public class ApiWorksSearchSteps {
 
     for (int i = 0; i < ids.size(); i++) {
       String resourceString = "";
-
-      getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      String workId = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
+      getWorkPersonRoleByWorkId(workId);
       getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
 
       Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
@@ -742,7 +745,8 @@ public class ApiWorksSearchSteps {
       switch (personSearchOption) {
         case "PERSON_NAME":
           resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
-                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME()
+                  +activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);
           break;
 
@@ -753,13 +757,13 @@ public class ApiWorksSearchSteps {
           break;
 
         case "PEOPLE_HUB_ID":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID();
+          resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()+activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
           break;
 
         case "PERSON_ID":
         case "personIdCurrent":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+          resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID()+activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
           break;
 
@@ -771,10 +775,19 @@ public class ApiWorksSearchSteps {
       dbCount =getNumberOfWorksByPersonIDs(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
-      if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
-        returnedWorks.verifyWorkWithIdIsReturned(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-        Log.info("verified work present in search result...");
+      //if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
+        if(returnedWorks.verifyWorkWithIdIsReturnedOnly(workId))
+        {
+          returnedWorks.verifyWorkWithIdIsReturned(workId);
+        Log.info("verified intended work in search result...");
       }
+        else
+          {
+        Log.info("intended work "+workId+" is missing in search result");
+            Assert.assertFalse("intended work "+workId+" is missing in search result",true);
+          }
+
+
     }
   }
 
@@ -1207,11 +1220,20 @@ public class ApiWorksSearchSteps {
   }
   public static void printTotalWorkCount(WorksMatchedApiObject returnedWorks )
   {
-    Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
+    Log.info("API total matched count..." + returnedWorks.getTotalMatchCount());
   }
 
   public static void scenarioFailed()
   {Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);}
 
+public static String getSearchKeyword(String title)
+{
+  //created by Nishant @ 31 Jan 2022
+  String keyword = "";
+  String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+  if(arr_title.length>1)keyword=arr_title[1];
+  else keyword=arr_title[0];
 
+return keyword;
+}
 }

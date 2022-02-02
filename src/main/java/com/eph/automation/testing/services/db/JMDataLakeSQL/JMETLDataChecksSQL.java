@@ -1449,7 +1449,7 @@ public class JMETLDataChecksSQL {
             "and     w.notified_date is not null\n" +
             ") where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
 
-    public static String GET_PRODUCT_INSERTS_QUERY ="select * from(\n" +
+    public static String GET_PRODUCT_INSERTS_QUERY ="select * from (\n" +
             "with base_data as\n" +
             "(\n" +
             "select\n" +
@@ -1461,7 +1461,7 @@ public class JMETLDataChecksSQL {
             "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
             "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
             "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-            "base_title,                      -- manifestation name with a suffix of (Print) or (Online). jm does not support short title.\n" +
+            "base_title,                      -- manifestation name with a suffix of (Print) or (Online). JM does not support short title.\n" +
             "w0_journal_number,\n" +
             "m0_journal_number,\n" +
             "w0_chronicle_id,\n" +
@@ -1666,7 +1666,7 @@ public class JMETLDataChecksSQL {
             "    END as separately_saleable_ind,\n" +
             "    trial_allowed_ind,\n" +
             "    launch_date,\n" +
-            "   'S001' as tax_code,\n" +
+            "   'S011' as tax_code,\n" +
             "   'OAA' f_type,\n" +
             "    null m0_manifestation_type,\n" +
             "    CASE\n" +
@@ -1774,7 +1774,10 @@ public class JMETLDataChecksSQL {
             "    dq_err,\n" +
             "    notified_date\n" +
             "from\n" +
-            "crosstab_data) select * from result_data) where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
+            "crosstab_data\n" +
+            ")\n" +
+            "select * from result_data\n" +
+            ") where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
 
     public static String GET_PRODUCT_UPDATES_QUERY ="select * from (with base_data as\n" +
             "(select\n" +

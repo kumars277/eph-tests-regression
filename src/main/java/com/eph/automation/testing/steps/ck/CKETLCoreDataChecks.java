@@ -23,90 +23,65 @@ public class CKETLCoreDataChecks {
     private static String sql;
     private static List<String> ids;
 
-    @Given("^We get the (.*) random CK ids of (.*)$")
-    public static void getRandomidsFromCurrent(String numberOfRecords, String Currenttablename) {
+    //    ETL Data Checks Delta Current to Delta History
+    @Given("^We get the (.*) random CK Delta ids of (.*)$")
+    public static void getRandomidsFromDeltaCurrent(String numberOfRecords, String Currenttablename) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for CK Current Tables....");
         List<Map<?, ?>> randomids;
-        sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT, Currenttablename, numberOfRecords);
+        sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_CURRENT, Currenttablename, numberOfRecords);
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("U_KEY")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(ids.toString());
     }
 
-
-    @When("^We get the CK Current records from (.*)$")
-    public static void getCurrentRecordData(String CurrenttableName) {
-        Log.info("We get the bcs Ingest records...");
-        switch (CurrenttableName) {
-            case "ck_transform_current_package":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_PACKAGE, CurrenttableName, String.join("','", ids));
+    @When("^We get the CK Delta Current Records from (.*)$")
+    public static void getCurrentRecordData(String DeltaCurrenttablename) {
+        Log.info("We get the Delta Current records...");
+        switch (DeltaCurrenttablename) {
+            case "ck_delta_current_package_work":
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_CURRENT_PACKAGE_WORK, DeltaCurrenttablename, String.join("','", ids));
                 break;
-            case "ck_transform_current_subject_area":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_SUBJECT_AREA, CurrenttableName, String.join("','", ids));
-                break;
-            case "ck_transform_current_work":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_WORK, CurrenttableName, String.join("','", ids));
-                break;
-            case "ck_transform_current_package_work":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_PACKAGE_WORK, CurrenttableName, String.join("','", ids));
-                break;
-            case "ck_transform_current_work_subject_area":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_WORK_SUBJECT_AREA, CurrenttableName, String.join("','", ids));
-                break;
-            case "ck_transform_current_package_work_url":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_TRANSFORM_CURRENT_PACKAGE_WORK_URL, CurrenttableName, String.join("','", ids));
+            case "ck_delta_current_work_subject_area":
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_CURRENT_WORK_SUBJECT_AREA, DeltaCurrenttablename, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKCurrentTablesDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @Then("^We get the CK Inbound Source records from (.*)$")
-    public static void getDataforInboundsOURCECheck(String InboundSourcetablename) {
+    @Then("^We get the CK Delta History records from (.*)$")
+    public static void getDataforDeltaHistoryCheck(String InboundSourcetablename) {
         Log.info("We get the records from Current CK Inbound Source table for Inbound Check...");
         switch (InboundSourcetablename) {
-            case "ck_package_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_PACKAGE_FORM_V, InboundSourcetablename, String.join("','", ids));
+            case "ck_delta_history_package_work_part":
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_PACKAGE_WORK, InboundSourcetablename, String.join("','", ids));
                 break;
-            case "ck_subject_area_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_SUBJECT_AREA_FORM_V, InboundSourcetablename, String.join("','", ids));
-                break;
-            case "ck_work_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_WORK_FORM_V, InboundSourcetablename, String.join("','", ids));
-                break;
-                case "ck_package_work_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_PACKAGE_WORK_FORM_V, InboundSourcetablename, String.join("','", ids));
-                break;
-
-            case "ck_work_subject_area_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_WORK_SUBJECT_AREA_FORM_V, InboundSourcetablename, String.join("','", ids));
-                break;
-            case "ck_package_work_url_form_v":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_PACKAGE_WORK_URL_FORM_V, InboundSourcetablename, String.join("','", ids));
+            case "ck_delta_history_work_subject_area_part":
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_WORK_SUBJECT_AREA, InboundSourcetablename, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @And("^Compare CK records in Inbound Source and Current of (.*)$")
-    public void compareInboundSourceandCurrent(String InboundSourcetablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @And("^Compare CK records in Delta Current and Delta History of (.*)$")
+    public void compareDeltaCurrentandDeltaHistory(String DeltaCurrenttablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (CKAccessDLContext.CKCurrentTableDataObjectList.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the ids to compare the records between Inbound Source and current...");
+            Log.info("Sorting the ids to compare the records between Delta History and Delta current...");
             for (int i = 0; i < CKAccessDLContext.CKCurrentTableDataObjectList.size(); i++) {
-                switch (InboundSourcetablename) {
-                    case "ck_package_transform_v":
+                switch (DeltaCurrenttablename) {
+                    case "ck_delta_current_package_work":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
 
-                        String[] TransformCurrPackageCol = {"getu_key", "geteph_package_id", "getck_live_date", "getpackage_acronym", "getpackage_name", "geteph_work_type", "geteph_work_hierarchy_code", "geteph_work_hierarchy_id", "getpackage_start_date", "getpackage_end_date"};
-                        for (String strTemp : TransformCurrPackageCol) {
+                        String[] DeltaCurrentPackageWorkCol = {"getu_key", "geteph_package_id", "getck_live_date", "getpackage_acronym", "getpackage_name", "geteph_work_type", "geteph_work_hierarchy_code", "geteph_work_hierarchy_id", "getpackage_start_date", "getpackage_end_date"};
+                        for (String strTemp : DeltaCurrentPackageWorkCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
@@ -127,13 +102,13 @@ public class CKETLCoreDataChecks {
                             }
                         }
                         break;
-                    case "ck_subject_area_transform_v":
+                    case "ck_delta_current_work_subject_area":
                         Log.info("comparing inbound source and Current records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
 
-                        String[] TransformCurrSubjectAreaCol = {"getu_key","getsubject_area_id","getck_live_date","getsubject_area_name"};
-                        for (String strTemp : TransformCurrSubjectAreaCol) {
+                        String[] DeltaCurrentWorkSubjectAreaCol = {"getu_key", "geteph_work_id", "getsubject_area_id", "gettype","getck_live_date"};
+                        for (String strTemp : DeltaCurrentWorkSubjectAreaCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
@@ -148,115 +123,7 @@ public class CKETLCoreDataChecks {
                                     " InboundSource = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_Subject_Area for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-                        break;
-                    case "ck_work4_transform_v":
-                        Log.info("comparing inbound source and Current records...");
-                        CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
-                        CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
-
-                        String[] TransformCurrWorkCol = {"getu_key","geteph_work_id","getck_live_date","getcmms_issn_isbn","getck_title_start_date","getalternate_title","getsearch_tier","getfinance_tier","getyears_of_coverage","getpdf_suppression"};
-                        for (String strTemp : TransformCurrWorkCol) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            CKCurrentTablesDataObject objectToCompare1 = CKAccessDLContext.CKCurrentTableDataObjectList.get(i);
-                            CKInboundSourceTableDataObject objectToCompare2 = CKAccessDLContext.CKInboundSourceTableDataObjectList.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("U_Key => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key() +
-                                    " " + strTemp + " => Current = " + method.invoke(objectToCompare1) +
-                                    " InboundSource = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_Subject_Area for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-                        break;
-                    case "ck_package_work3_transform_v":
-                        Log.info("comparing inbound source and Current records...");
-                        CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
-                        CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
-
-                        String[] TransformCurrPackageWorkCol = {"getu_key","geteph_package_id","geteph_work_id","getck_live_date"};
-                        for (String strTemp : TransformCurrPackageWorkCol) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            CKCurrentTablesDataObject objectToCompare1 = CKAccessDLContext.CKCurrentTableDataObjectList.get(i);
-                            CKInboundSourceTableDataObject objectToCompare2 = CKAccessDLContext.CKInboundSourceTableDataObjectList.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("U_Key => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key() +
-                                    " " + strTemp + " => Current = " + method.invoke(objectToCompare1) +
-                                    " InboundSource = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_Subject_Area for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-                        break;
-                    case "ck_work_subject_area3_transform_v":
-                        Log.info("comparing inbound source and Current records...");
-                        CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
-                        CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
-
-                        String[] TransformCurrWorkSubjectAreaCol = {"getu_key","geteph_work_id","getsubject_area_id","getck_live_date"};
-                        for (String strTemp : TransformCurrWorkSubjectAreaCol) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            CKCurrentTablesDataObject objectToCompare1 = CKAccessDLContext.CKCurrentTableDataObjectList.get(i);
-                            CKInboundSourceTableDataObject objectToCompare2 = CKAccessDLContext.CKInboundSourceTableDataObjectList.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("U_Key => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key() +
-                                    " " + strTemp + " => Current = " + method.invoke(objectToCompare1) +
-                                    " InboundSource = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_Subject_Area for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-                        break;
-                    case "ck_package_work_url4_transform_v":
-                        Log.info("comparing inbound source and Current records...");
-                        CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
-                        CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
-
-                        String[] TransformCurrPackageWorkUrlCol = {"getu_key","geteph_package_id","geteph_work_id","getdurable_url","getck_live_date"};
-                        for (String strTemp : TransformCurrPackageWorkUrlCol) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            CKCurrentTablesDataObject objectToCompare1 = CKAccessDLContext.CKCurrentTableDataObjectList.get(i);
-                            CKInboundSourceTableDataObject objectToCompare2 = CKAccessDLContext.CKInboundSourceTableDataObjectList.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("U_Key => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key() +
-                                    " " + strTemp + " => Current = " + method.invoke(objectToCompare1) +
-                                    " InboundSource = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_Subject_Area for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transform_current_package for U_Key:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getu_key(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
