@@ -1,5 +1,6 @@
 package com.eph.automation.testing.configuration;
 
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.services.db.sql.GetEPHDBUser;

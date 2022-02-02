@@ -9,10 +9,7 @@
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <repositories>
-        <repository>
-            <id>repo</id>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
+        <repository><id>repo</id><url>file://${project.basedir}/lib</url></repository>
     </repositories>
     <properties>
         <aspectj.version>1.8.5</aspectj.version>
@@ -49,14 +46,10 @@
     <profiles>
         <profile>
             <id>sonar</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <properties>
                 <!-- Optional URL to server. Default value is http://localhost:9000 -->
-                <sonar.host.url>
-                    http://10.183.67.119:9000/
-                </sonar.host.url>
+                <sonar.host.url>http://10.183.67.119:9000/</sonar.host.url>
             </properties>
         </profile>
     </profiles>
@@ -136,12 +129,10 @@
                          </features>-->
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
     <dependencies>
-
         <!-- log 4j dependencies-->
         <dependency><groupId>org.knowm</groupId><artifactId>yank</artifactId><version>3.3.1</version></dependency>
         <dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-api</artifactId><version>2.17.1</version></dependency>
