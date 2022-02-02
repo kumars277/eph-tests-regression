@@ -33,7 +33,6 @@ Feature: Search API: Works
       | PERSON_NAME           |
       | PEOPLE_HUB_ID         |
       | PERSON_ID             |
-
       | personFullNameCurrent |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 

@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-114K4C");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-102V88");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -722,7 +722,7 @@ public class ApiWorksSearchSteps {
       returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
      // returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
-      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs("", id));
+      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("", id));
     }
   }
 
@@ -743,36 +743,35 @@ public class ApiWorksSearchSteps {
       DataQualityContext.breadcrumbMessage +="->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
 
       switch (personSearchOption) {
-        case "PERSON_NAME":
-          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
-                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME()
-                  +activeWorkTypeStatus;
-          returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);
-          break;
+        case "PERSON_NAME": resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);    break;
 
-        case PER_FULLNAME_CURRENT:
-          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+        case PER_FULLNAME_CURRENT:  resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
-          returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);
-          break;
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);    break;
 
-        case "PEOPLE_HUB_ID":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()+activeWorkTypeStatus;
-          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
-          break;
+        case "PEOPLE_HUB_ID":       resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID();
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);       break;
 
         case "PERSON_ID":
-        case "personIdCurrent":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID()+activeWorkTypeStatus;
-          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
-          break;
+        case "personIdCurrent":     resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);       break;
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
 
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
 
-      dbCount =getNumberOfWorksByPersonIDs(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
+     // dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
       //if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
@@ -1052,18 +1051,22 @@ public class ApiWorksSearchSteps {
     return count;
   }
 
-  private static int getNumberOfWorksByPersonIDs(String searchType, String personID) {
+  private static int getNumberOfWorksByPerson(String searchType, String person) {
 
     switch (searchType) {
-      case "personIdCurrent":
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, personID);
-        break;
       case PER_FULLNAME_CURRENT:
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, personID);
-        break;
-      default:
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLVALID, personID);
-        break;
+        //sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, person);break;
+      case "PERSON_NAME":
+        String[] perName = person.split(" ");
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);        break;
+      case "PEOPLE_HUB_ID":
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, person);        break;
+
+      case "PERSON_ID":
+      case "personIdCurrent":
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, person);        break;
+
+      default:throw new IllegalArgumentException();
     }
 
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);

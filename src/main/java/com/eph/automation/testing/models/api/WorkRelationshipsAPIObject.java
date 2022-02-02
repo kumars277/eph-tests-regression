@@ -82,7 +82,7 @@ public class WorkRelationshipsAPIObject {
             break;
           }
         }
-        Assert.assertTrue("Not found, parent "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
+        Assert.assertTrue(dataQualityContext.breadcrumbMessage+" Parent not found, "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
       }
     }
     if (workChild != null) {
@@ -120,7 +120,7 @@ public class WorkRelationshipsAPIObject {
             }
           }
         }
-        Assert.assertTrue("Not found, child "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
+        Assert.assertTrue(dataQualityContext.breadcrumbMessage+" Child not found, "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
       }
     }
   }
@@ -133,7 +133,6 @@ public class WorkRelationshipsAPIObject {
       Date Todate = new Date();
       if(Todate.compareTo(DateToCmp)>0){    endDated = true;}
     }
-
         return endDated;
   }
 
