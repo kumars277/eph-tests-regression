@@ -14,7 +14,7 @@ public class ApiReusableFunctions {
     public WorksMatchedApiObject workByTitle_Iterative(String title, int i) {
         //created by Nishant @ 5 Jan 2022
         int fromCntr = 0;
-        int sizeCntr = 400;
+        int sizeCntr = 500;
         WorksMatchedApiObject returnedWorks = null;
         try {
             returnedWorks = APIService.getWorkByTitle(title+ from + fromCntr + size + sizeCntr);
@@ -44,7 +44,7 @@ public class ApiReusableFunctions {
             }
             else{
                 int fromCntr = 0;
-                int sizeCntr = 450;
+                int sizeCntr = 500;
                 returnedWorks =APIService.getWorksBySearchOption(searcOption+ from+ fromCntr+ size+ sizeCntr);
                 Log.info("Total work found... - " + returnedWorks.getTotalMatchCount());
                 while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
@@ -65,7 +65,7 @@ public class ApiReusableFunctions {
     {
         //created by Nishant @ 19 Jan 2022
         int fromCntr = 0;
-        int sizeCntr = 400;
+        int sizeCntr = 500;
         WorksMatchedApiObject returnedWorks = null;
         try {
             returnedWorks = APIService.getWorksByParam(queryType,queryValue+ from + fromCntr + size + sizeCntr);
