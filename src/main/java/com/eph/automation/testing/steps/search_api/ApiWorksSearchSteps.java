@@ -15,6 +15,7 @@ import com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
 
+import com.github.jknack.handlebars.internal.HbsParser;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
@@ -58,7 +59,8 @@ public class ApiWorksSearchSteps {
 
   static String from = "&from=";
   static String size = "&size=";
-  static String activeWorkTypeStatus="&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA";
+  static String activeWorkTypeStatus="&workType=ABS,JBB,JNL,NWL&workStatus=WLA";//,WDA,WTA,WVA";
+
 
   public ApiWorksSearchSteps() {/**/}
 
@@ -82,7 +84,7 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
 
-    Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
+    Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
    // ids.clear();ids.add("EPR-W-11H8BD");Log.info("hard coded work id is : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
@@ -102,9 +104,9 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
 
-    Log.info("Selected random Journal ids  : " + ids +" on "+ System.getProperty("ENV"));
+    Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102NTF");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-102V88");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     verifyListNotEmpty(ids);
@@ -124,7 +126,7 @@ public class ApiWorksSearchSteps {
                     .map(m -> (String) m.get(W_ID))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random work ids  : " + ids+" on "+ System.getProperty("ENV"));
+    Log.info("Selected random work ids  : " + ids+" on "+ TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
     // "ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);"
     DataQualityContext.breadcrumbMessage += "->" + ids;
@@ -146,7 +148,7 @@ public class ApiWorksSearchSteps {
                     .map(m -> (String) m.get(W_ID))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random extended manifestation ids  : " + manifestaionids+" on "+ System.getProperty("ENV"));
+    Log.info("Selected random extended manifestation ids  : " + manifestaionids+" on "+TestContext.getValues().environment);
     DataQualityContext.breadcrumbMessage += "->" + manifestaionids;
     verifyListNotEmpty(manifestaionids);
   //  manifestaionids.clear();manifestaionids.add("EPR-M-1251CX");manifestaionids.add("EPR-M-11S7FY");
@@ -175,8 +177,8 @@ public class ApiWorksSearchSteps {
                     .map(m -> (BigDecimal) m.get("f_person"))
                     .map(String::valueOf)
                     .collect(Collectors.toList());
-    Log.info("Selected random person ids  : " + ids+" on "+ System.getProperty("ENV"));
-    //  "ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);"
+    Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
+     // ids.clear(); ids.add("10290173");  Log.info("hard coded work ids are : " + ids);
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
             DataQualityContext.breadcrumbMessage
@@ -717,10 +719,10 @@ public class ApiWorksSearchSteps {
 
     for (String id : ids) {
       Log.info("personId to be tested..." + id);
-      returnedWorks = APIService.getWorksByPersonID(id);
-      returnedWorks.verifyWorksAreReturned();
+      returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
+     // returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
-      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs("", id));
+      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("", id));
     }
   }
 
@@ -741,35 +743,35 @@ public class ApiWorksSearchSteps {
       DataQualityContext.breadcrumbMessage +="->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
 
       switch (personSearchOption) {
-        case "PERSON_NAME":
-          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+        case "PERSON_NAME": resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                   + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
-          returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);
-          break;
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);    break;
 
-        case PER_FULLNAME_CURRENT:
-          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+        case PER_FULLNAME_CURRENT:  resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
-          returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);
-          break;
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);    break;
 
-        case "PEOPLE_HUB_ID":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID();
-          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
-          break;
+        case "PEOPLE_HUB_ID":       resourceString = personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID();
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);       break;
 
         case "PERSON_ID":
-        case "personIdCurrent":
-          resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID()+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA";
-          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);
-          break;
+        case "personIdCurrent":     resourceString = personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          resourceString += activeWorkTypeStatus;
+          returnedWorks = apiFun.workByParam_Iterative("personId",resourceString,i);       break;
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
 
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
 
-      dbCount =getNumberOfWorksByPersonIDs(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
+     // dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
       //if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
@@ -1049,18 +1051,22 @@ public class ApiWorksSearchSteps {
     return count;
   }
 
-  private static int getNumberOfWorksByPersonIDs(String searchType, String personID) {
+  private static int getNumberOfWorksByPerson(String searchType, String person) {
 
     switch (searchType) {
-      case "personIdCurrent":
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, personID);
-        break;
       case PER_FULLNAME_CURRENT:
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, personID);
-        break;
-      default:
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLVALID, personID);
-        break;
+        //sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, person);break;
+      case "PERSON_NAME":
+        String[] perName = person.split(" ");
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);        break;
+      case "PEOPLE_HUB_ID":
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, person);        break;
+
+      case "PERSON_ID":
+      case "personIdCurrent":
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, person);        break;
+
+      default:throw new IllegalArgumentException();
     }
 
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);

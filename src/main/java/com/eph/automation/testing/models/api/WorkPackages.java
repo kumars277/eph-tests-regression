@@ -16,6 +16,10 @@ public class WorkPackages {
         public String getId() {return id;}
         public void setId(String id) {this.id = id;}
 
+        private String allocationPercentage;
+        public String getAllocationPercentage() {return allocationPercentage;}
+        public void setAllocationPercentage(String allocationPercentage) {this.allocationPercentage = allocationPercentage;}
+
         private WorkSummary workSummary;
         public WorkSummary getWorkSummary() {return workSummary;}
         public void setWorkSummary(WorkSummary workSummary) {this.workSummary = workSummary;}
