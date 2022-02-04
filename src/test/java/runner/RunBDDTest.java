@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
                 "html:target/cucumber-reports/feature-overview"
                 },
         monochrome = true,
-        tags = {"@stitchingDataAPI"}
+        tags = {"@DLExtViews"}
         )
 
 public class RunBDDTest {
