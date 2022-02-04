@@ -382,6 +382,31 @@ public class APIDataSQL {
           + "and effective_end_date is null "
           + "and gwpr.f_person='%s'";
 
+  public static final String SELET_GD_COUNT_WORK_BY_PERSONNAME =
+      "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+          + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+          + "on gw.work_id =gwpr.f_wwork \n"
+          + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + "and gw.f_status in('WLA')\n"
+          + "and gwpr.f_person in \n"
+          + "(\n"
+          + "select person_id from semarchy_eph_mdm.gd_person gp \n"
+          + "where s_given_name like upper('%s') \n"
+          + "or s_family_name like upper('%s')\n"
+          + ")";
+
+  public static final String SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID =
+      "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+          + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+          + "on gw.work_id =gwpr.f_wwork \n"
+          + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + "and gw.f_status in('WLA')\n"
+          + "and gwpr.f_person in \n"
+          + "(\n"
+          + "select person_id from semarchy_eph_mdm.gd_person gp \n"
+          + "where peoplehub_id ='%s'\n"
+          + ")";
+
   public static final String SELECT_GD_COUNT_WORK_BY_PERSONID_ALL =
       "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
