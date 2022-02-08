@@ -381,6 +381,11 @@ public class APIDataSQL {
           + "where gw.f_type in('ABS','JBB','JNL','NWL')and gw.f_status in('WLA')\n"
           + "and effective_end_date is null "
           + "and gwpr.f_person='%s'";
+  public static final String SELECT_GD_COUNT_WORK_BY_PERSONID_ALL =
+          "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
+                  + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+                  + "on gw.work_id =gwpr.f_wwork \n"
+                  + "where gwpr.f_person='%s'";
 
   public static final String SELET_GD_COUNT_WORK_BY_PERSONNAME =
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
@@ -407,11 +412,13 @@ public class APIDataSQL {
           + "where peoplehub_id ='%s'\n"
           + ")";
 
-  public static final String SELECT_GD_COUNT_WORK_BY_PERSONID_ALL =
+  public static final String SELECT_GD_COUNT_WORK_BY_PERSONID =
       "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
           + "on gw.work_id =gwpr.f_wwork \n"
-          + "where gwpr.f_person='%s'";
+          + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + "and gw.f_status in('WLA')\n"
+          + "and gwpr.f_person='%s'";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PERSONID =
       "select count(*) from (select distinct product_id from semarchy_eph_mdm.gd_product where f_manifestation in"

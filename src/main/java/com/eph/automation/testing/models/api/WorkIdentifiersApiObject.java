@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkIdentifiersApiObject {
     public WorkIdentifiersApiObject() {}
@@ -62,15 +64,15 @@ public class WorkIdentifiersApiObject {
 
                 printLog("work identifier code");
 
-                Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
+                Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
                 printLog("work identifier name");
 
-                Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_START_DATE());
+                Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_START_DATE());
                 printLog("work identifier effectiveStartDate");
 
                 if(effectiveEndDate!=null|DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
                 {
-                    Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE());
+                    Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE());
                     printLog("work identifier effectiveEndtDate");
                 }
 
@@ -78,7 +80,7 @@ public class WorkIdentifiersApiObject {
             }
         }
 
-        Assert.assertTrue(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",identifierMatched);
+        Assert.assertTrue(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",identifierMatched);
 
 
     }

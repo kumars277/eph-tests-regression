@@ -15,6 +15,8 @@ import org.junit.Assert;
 import java.text.ParseException;
 import java.util.*;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+
 /*
 * created by Nishant @ 8 May 2020
 * updated by Nishant @ 29 Jan 2021, EPHD-2747
@@ -162,53 +164,53 @@ public class workCore {
 
     public void compareWithDB(String workId) throws ParseException {
         Log.info("----- Verifying workCore data... " + workId);
-        DataQualityContext.breadcrumbMessage+=" > "+workId;
+        setBreadcrumbMessage(workId);
 
         getWorkDataFromEPHGD(workId);
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - title", title, this.workDataObjectsFromEPHGD_local.get(0).getWORK_TITLE());
+        Assert.assertEquals(getBreadcrumbMessage() + " - title", title, this.workDataObjectsFromEPHGD_local.get(0).getWORK_TITLE());
         printLog("title");
 
         if (!(subTitle == null && this.workDataObjectsFromEPHGD_local.get(0).getWORK_SUBTITLE() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - subTitle", subTitle, this.workDataObjectsFromEPHGD_local.get(0).getWORK_SUBTITLE());
+            Assert.assertEquals(getBreadcrumbMessage() + " - subTitle", subTitle, this.workDataObjectsFromEPHGD_local.get(0).getWORK_SUBTITLE());
             printLog("subTitle");
         }
 
         if (electronicRightsInd != null | this.workDataObjectsFromEPHGD_local.get(0).getELECTRONIC_RIGHTS_IND() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - electronicRightsInd", Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD_local.get(0).getELECTRONIC_RIGHTS_IND()));
+            Assert.assertEquals(getBreadcrumbMessage() + " - electronicRightsInd", Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD_local.get(0).getELECTRONIC_RIGHTS_IND()));
             printLog("electronicRightsInd");
         }
 
         if (!(this.workDataObjectsFromEPHGD_local.get(0).getLANGUAGE_CODE() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - language", language.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLANGUAGE_CODE());
+            Assert.assertEquals(getBreadcrumbMessage() + " - language", language.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLANGUAGE_CODE());
             printLog("language code");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - language", language.get("name"), getLanguageName(language.get("code").toString()));
+            Assert.assertEquals(getBreadcrumbMessage() + " - language", language.get("name"), getLanguageName(language.get("code").toString()));
             printLog("language Name");
 
         }
 
         //subscription type, implemented by Nishant @ 18 May 2021, EPHD-3122
         if (subscriptionType != null | this.workDataObjectsFromEPHGD_local.get(0).getSUBSCRIPTION_TYPE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - subscriptionType", subscriptionType.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSUBSCRIPTION_TYPE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - subscriptionType", subscriptionType.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSUBSCRIPTION_TYPE());
             printLog("subscriptionType");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - subscriptionName", subscriptionType.get("name"), getSubscriptionName(subscriptionType.get("code").toString()));
+            Assert.assertEquals(getBreadcrumbMessage()+ " - subscriptionName", subscriptionType.get("name"), getSubscriptionName(subscriptionType.get("code").toString()));
             printLog("subscriptionName");
 
         }
 
         if (!(editionNumber == null)) {
             int apiEditionNumber = Integer.valueOf(editionNumber);
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - EditionNumber", editionNumber, this.workDataObjectsFromEPHGD_local.get(0).getEDITION_NUMBER());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - EditionNumber", editionNumber, this.workDataObjectsFromEPHGD_local.get(0).getEDITION_NUMBER());
             printLog("EditionNumber");
         }
 
 
         //  int apiVolume =Integer.valueOf(volume);
-        //Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - ", " - ",volume, this.workDataObjectsFromEPHGD_local.get(0).getVOLUME());        printLog("volume");
+        //Assert.assertEquals(getBreadcrumbMessage()+ " - ", " - ",volume, this.workDataObjectsFromEPHGD_local.get(0).getVOLUME());        printLog("volume");
         //if(Integer.parseInt(this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR())!=0) {
 
         if (this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - copyrightYear", copyrightYear, this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - copyrightYear", copyrightYear, this.workDataObjectsFromEPHGD_local.get(0).getCOPYRIGHT_YEAR());
             printLog("copyrightYear");
         }
 
@@ -220,22 +222,22 @@ public class workCore {
             printLog("identifiers");
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workType", type.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_TYPE());
+        Assert.assertEquals(getBreadcrumbMessage()+ " - workType", type.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_TYPE());
         printLog("workType code");
 
         //added by Nishant @ 19 Oct 2021
         if(type.get("code").toString().equalsIgnoreCase("NEB") || type.get("code").toString().equalsIgnoreCase("NEJ"))
         {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - nonElsevierInd", type.get("nonElsevierInd"), true);
+            Assert.assertEquals(getBreadcrumbMessage()+ " - nonElsevierInd", type.get("nonElsevierInd"), true);
             printLog("nonElsevierInd");
         }
         else
         {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - nonElsevierInd", type.get("nonElsevierInd"), false);
+            Assert.assertEquals(getBreadcrumbMessage()+ " - nonElsevierInd", type.get("nonElsevierInd"), false);
             printLog("nonElsevierInd");
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - workStatus", status.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_STATUS());
+        Assert.assertEquals(getBreadcrumbMessage()+ " - workStatus", status.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getWORK_STATUS());
         printLog("workStatus code");
 
 
@@ -248,27 +250,27 @@ public class workCore {
         */
 
         if (plannedLaunchDate != null | this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_LAUNCH_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedLanuchDate", plannedLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_LAUNCH_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - plannedLanuchDate", plannedLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_LAUNCH_DATE());
             printLog("plannedLanuchDate");
         }
 
         if (actualLaunchDate != null | this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_LAUNCH_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualLaunchDate", actualLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_LAUNCH_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - actualLaunchDate", actualLaunchDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_LAUNCH_DATE());
             printLog("actualLaunchDate");
         }
 
         if (plannedDiscontinuationDate != null | this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_DISCONTINUE_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - plannedDiscontinuationDate", plannedDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_DISCONTINUE_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - plannedDiscontinuationDate", plannedDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getPLANNED_DISCONTINUE_DATE());
             printLog("plannedDiscontinuationDate");
         }
 
         if (actualDiscontinuationDate != null | this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_DISCONTINUE_DATE() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - actualDiscontinuationDate", actualDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_DISCONTINUE_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - actualDiscontinuationDate", actualDiscontinuationDate, this.workDataObjectsFromEPHGD_local.get(0).getACTUAL_DISCONTINUE_DATE());
             printLog("actualDiscontinuationDate");
         }
 
         if (!(imprint == null && this.workDataObjectsFromEPHGD_local.get(0).getIMPRINT() == null)) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - imprint", imprint.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getIMPRINT());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - imprint", imprint.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getIMPRINT());
             printLog("imprint code");
         }
 
@@ -286,27 +288,27 @@ public class workCore {
        // changing script accordingly.
 
             if (societyOwnership != null | this.workDataObjectsFromEPHGD_local.get(0).getSOCIETY_OWNERSHIP() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSOCIETY_OWNERSHIP());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getSOCIETY_OWNERSHIP());
             printLog("societyOwnership code");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("name"), getSocietyOwnershipName(societyOwnership.get("code").toString()));
+            Assert.assertEquals(getBreadcrumbMessage()+ " - societyOwnership", societyOwnership.get("name"), getSocietyOwnershipName(societyOwnership.get("code").toString()));
             printLog("societyOwnership Name");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("ownershipRollUp"), getSocietyOwnershipRollUp(societyOwnership.get("code").toString()));
+            Assert.assertEquals(getBreadcrumbMessage()+ " - societyOwnership", societyOwnership.get("ownershipRollUp"), getSocietyOwnershipRollUp(societyOwnership.get("code").toString()));
             printLog("societyOwnership Rollup");
         }
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ",null,societyOwnership);
+        Assert.assertEquals(getBreadcrumbMessage()+" - societyOwnership ",null,societyOwnership);
             printLog("societyOwnership");*/
 
         if (legalOwnership != null | this.workDataObjectsFromEPHGD_local.get(0).getLEGAL_OWNERSHIP() != null) {
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLEGAL_OWNERSHIP());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD_local.get(0).getLEGAL_OWNERSHIP());
             printLog("legalOwnership code");
 
             String[] lov = getLegalOwnershipValue(legalOwnership.get("code").toString());
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("name"), lov[0]);
+            Assert.assertEquals(getBreadcrumbMessage()+ " - legalOwnership", legalOwnership.get("name"), lov[0]);
             printLog("legalOwnership Name");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("ownershipRollUp"), lov[1]);
+            Assert.assertEquals(getBreadcrumbMessage()+ " - legalOwnership", legalOwnership.get("ownershipRollUp"), lov[1]);
             printLog("legalOwnership Rollup");
         }
 
@@ -326,7 +328,7 @@ public class workCore {
             Log.info("verifying workAccessModel...");
             List<Map<String,Object>> workAccessModelsDB = getWorkAccessModelsId(workId);
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workAccessModels count",workAccessModels.length,workAccessModelsDB.size());
+            Assert.assertEquals(getBreadcrumbMessage()+" - workAccessModels count",workAccessModels.length,workAccessModelsDB.size());
 
             ArrayList<WorkAccessModels> accessModel_api = new ArrayList(Arrays.asList(workAccessModels));
 
@@ -338,18 +340,18 @@ public class workCore {
                     if(accessModel_api.get(cnt).getAccessModel().get("code").equals(workAccessModelsDB.get(i).get("f_access_model").toString())) {
 
                         printLog("workAccessModel code "+accessModel_api.get(cnt).getAccessModel().get("code"));
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workAccessModel ",accessModel_api.get(cnt).getAccessModel().get("name"),getWorkAccessModelName(workAccessModelsDB.get(i).get("f_access_model").toString()));
+                        Assert.assertEquals(getBreadcrumbMessage()+" - workAccessModel ",accessModel_api.get(cnt).getAccessModel().get("name"),getWorkAccessModelName(workAccessModelsDB.get(i).get("f_access_model").toString()));
                         printLog("workAccessModel name "+accessModel_api.get(cnt).getAccessModel().get("name"));
 
                          if(accessModel_api.get(cnt).getEffectiveStartDate()!=null)
                          {
-                             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " workAccessModel effective_start_date ",accessModel_api.get(cnt).getEffectiveStartDate(),workAccessModelsDB.get(i).get("effective_start_date").toString());
+                             Assert.assertEquals(getBreadcrumbMessage() + " workAccessModel effective_start_date ",accessModel_api.get(cnt).getEffectiveStartDate(),workAccessModelsDB.get(i).get("effective_start_date").toString());
                              printLog("workAccessModel effective_start_date "+accessModel_api.get(cnt).getAccessModel().get("effective_start_date"));
 
                          }
                         if(accessModel_api.get(cnt).getEffectiveEndDate()!=null)
                         {
-                            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveEndDate ",accessModel_api.get(cnt).getEffectiveEndDate(),workAccessModelsDB.get(i).get("effective_end_date").toString());
+                            Assert.assertEquals(getBreadcrumbMessage() + " workAccessModel effectiveEndDate ",accessModel_api.get(cnt).getEffectiveEndDate(),workAccessModelsDB.get(i).get("effective_end_date").toString());
                             printLog("workAccessModel effectiveEndDate "+accessModel_api.get(cnt).getAccessModel().get("effectiveEndDate"));
                         }
 
@@ -357,7 +359,7 @@ public class workCore {
                         break;
                     }
                 }
-                Assert.assertTrue(DataQualityContext.breadcrumbMessage+" - workAccessModel " +accessModel_api.get(cnt).getAccessModel().get("code")+" found in DB - ",accModelFound);
+                Assert.assertTrue(getBreadcrumbMessage()+" - workAccessModel " +accessModel_api.get(cnt).getAccessModel().get("code")+" found in DB - ",accModelFound);
             }
         }
 
@@ -365,7 +367,7 @@ public class workCore {
             Log.info("verifying workBusinessModels...");
             List<Map<String,Object>> workBusinessModelsDB = getWorkBusinessModelsId(workId);
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModels count",workBusinessModels.length,workBusinessModelsDB.size());
+            Assert.assertEquals(getBreadcrumbMessage()+" - workBusinessModels count",workBusinessModels.length,workBusinessModelsDB.size());
 
             ArrayList<WorkBusinessModels> businessModel_api = new ArrayList(Arrays.asList(workBusinessModels));
 
@@ -377,17 +379,17 @@ public class workCore {
                     if(businessModel_api.get(cnt).getBusinessModel().get("code").equals(workBusinessModelsDB.get(i).get("f_business_model").toString())) {
 
                         printLog("workBusinessModel code"+businessModel_api.get(cnt).getBusinessModel().get("code"));
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModel ", businessModel_api.get(cnt).getBusinessModel().get("name"),getWorkBusinessModelName(workBusinessModelsDB.get(i).get("f_business_model").toString()));
+                        Assert.assertEquals(getBreadcrumbMessage()+" - workBusinessModel ", businessModel_api.get(cnt).getBusinessModel().get("name"),getWorkBusinessModelName(workBusinessModelsDB.get(i).get("f_business_model").toString()));
                         printLog("workBusinessModel name "+businessModel_api.get(cnt).getBusinessModel().get("name"));
 
                         if(businessModel_api.get(cnt).getEffectiveStartDate()!=null)
                         {
-                            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveStartDate(),workBusinessModelsDB.get(i).get("effective_start_date").toString());
+                            Assert.assertEquals(getBreadcrumbMessage()+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveStartDate(),workBusinessModelsDB.get(i).get("effective_start_date").toString());
                             printLog("workBusinessModel effectiveStartDate present");
                         }
                         if(businessModel_api.get(cnt).getEffectiveEndDate()!=null)
                         {
-                            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveEndDate(),workBusinessModelsDB.get(i).get("effective_end_date").toString());
+                            Assert.assertEquals(getBreadcrumbMessage()+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveEndDate(),workBusinessModelsDB.get(i).get("effective_end_date").toString());
                             printLog("workBusinessModel effectiveEndtDate present");
                         }
 
@@ -395,19 +397,19 @@ public class workCore {
                         break;
                     }
                 }
-                Assert.assertTrue(DataQualityContext.breadcrumbMessage+" - workBusinessModel " +businessModel_api.get(cnt).getBusinessModel().get("code")+" found in DB - ",busModelFound);
+                Assert.assertTrue(getBreadcrumbMessage()+" - workBusinessModel " +businessModel_api.get(cnt).getBusinessModel().get("code")+" found in DB - ",busModelFound);
             }
         }
 
-      //  Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",null,openAccessType.get("code"));
+      //  Assert.assertEquals(getBreadcrumbMessage()+ " - openAccessType",null,openAccessType.get("code"));
         //printLog("openAccessType code"); //NA from 9 Jul 2021 after decision made to nullify Open access
 
 
         if(!ignorePMC.contains(type.get("code").toString())){
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD_local.get(0).getPMC());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD_local.get(0).getPMC());
             printLog("pmc code");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD_local.get(0).getPMC()));
+            Assert.assertEquals(getBreadcrumbMessage()+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD_local.get(0).getPMC()));
             printLog("pmg code");
         }
         if (this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product() != null) {
@@ -416,13 +418,13 @@ public class workCore {
             Log.info("verifying accountable product id..." + this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product());
             getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product());
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - getGlProductSegmentCode",accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - getGlProductSegmentCode",accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
             printLog("getGlProductSegmentCode");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - getGlProductSegmentName",accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - getGlProductSegmentName",accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
             printLog("getGlProductSegmentName");
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - getGlProductParentValue",accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
+            Assert.assertEquals(getBreadcrumbMessage()+ " - getGlProductParentValue",accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
             printLog("getGlProductParentValue");
         }
 
@@ -446,7 +448,7 @@ public class workCore {
             boolean subAreaFound = false;
             List<Map<String,Object>> workSubjectAreasDB =  getWorkSubjectAreasByWorkId(workId);
 
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" workSubjectAreas count", workSubjectAreas.length,workSubjectAreasDB.size());
+            Assert.assertEquals(getBreadcrumbMessage()+" workSubjectAreas count", workSubjectAreas.length,workSubjectAreasDB.size());
 
             for(SubjectAreasApiObject subAreas:workSubjectAreas)
             {
@@ -457,7 +459,7 @@ public class workCore {
                     subAreas.compareWithDB(workId);break;
                  }
                 }
-                Assert.assertTrue(DataQualityContext.breadcrumbMessage+" workSubjectArea found",subAreaFound);
+                Assert.assertTrue(getBreadcrumbMessage()+" workSubjectArea found",subAreaFound);
             }
         }
 

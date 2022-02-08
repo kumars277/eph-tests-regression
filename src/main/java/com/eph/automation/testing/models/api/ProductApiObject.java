@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.randomIdsData;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -90,8 +91,8 @@ public class ProductApiObject {
            updatedDate = updatedDate.replace("T", " ").replace("Z", "");
 
 
-           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", createdDate.substring(0, 21), this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0, 21));
-           // Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
+           Assert.assertEquals(getBreadcrumbMessage() + " - ", createdDate.substring(0, 21), this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0, 21));
+           // Assert.assertEquals(getBreadcrumbMessage() + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
 
            //1. ProductCore comparison
            productCore.compareWithDB(this.id);
@@ -137,7 +138,7 @@ public class ProductApiObject {
            //5. pricingExtended comparison
            //implemented by Nishant @ 8 May 2020
            if (work != null) {
-            //   DataQualityContext.breadcrumbMessage += "->" + work.getId();
+            //   getBreadcrumbMessage() += "->" + work.getId();
                work.getWorkCore().compareWithDB(work.getId());
                if (work.getWorkExtended() != null) {
                    WorkApiObject workApiObject = new WorkApiObject();
@@ -150,7 +151,7 @@ public class ProductApiObject {
        {
            e.getMessage();
 
-           Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
+           Assert.assertFalse(getBreadcrumbMessage() +" e.message>"+e.getMessage()+ " scenario Failed ", true);
         //   DataQualityContext.api_response.prettyPrint();
        }*/
 

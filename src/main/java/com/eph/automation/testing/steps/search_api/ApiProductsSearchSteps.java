@@ -119,7 +119,7 @@ public class ApiProductsSearchSteps {
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
-    setBreadcrumbMessage(ids.toString());// DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());// getBreadcrumbMessage() += "->" + ids;
 
     Assert.assertFalse(getBreadcrumbMessage() + " Verify list with random ids is not empty.",ids.isEmpty());
   }

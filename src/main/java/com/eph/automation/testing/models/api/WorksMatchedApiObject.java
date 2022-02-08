@@ -10,6 +10,8 @@ import org.junit.Assert;
 
 import java.text.ParseException;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorksMatchedApiObject {
 
@@ -35,7 +37,7 @@ public class WorksMatchedApiObject {
 
     public void verifyWorksReturnedCount(int worksInDB){
         //API count could be higher than DB count as it comes from Elastic search
-        Assert.assertTrue(DataQualityContext.breadcrumbMessage + " API count "+totalMatchCount+" mismatch with DB count "+worksInDB,totalMatchCount== worksInDB);}
+        Assert.assertTrue(getBreadcrumbMessage() + " API count "+totalMatchCount+" mismatch with DB count "+worksInDB,totalMatchCount== worksInDB);}
 
 
     public boolean verifyWorkWithIdIsReturned(String workID){
@@ -52,7 +54,7 @@ public class WorksMatchedApiObject {
             }
             i++;
         }
-        Assert.assertTrue(DataQualityContext.breadcrumbMessage + " work id not found ", found);
+        Assert.assertTrue(getBreadcrumbMessage() + " work id not found ", found);
         return found;
     }
 
@@ -106,7 +108,7 @@ public class WorksMatchedApiObject {
             i++;
         }
         //activePerson+=extendedPerson.length;
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ",found);
+            Assert.assertFalse(getBreadcrumbMessage() + " scenario Failed ",found);
     }
     }
 
