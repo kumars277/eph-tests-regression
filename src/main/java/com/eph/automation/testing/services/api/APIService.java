@@ -25,8 +25,6 @@ public class APIService {
       "/product-hub-works/works?queryType=title&queryValue=";
 
   public APIService() {setApiEndpoint(); }
-
-
   // by Nishant - updated for search API v2 - complete as of 27 Nov 2019
   // updated by Nishant @ 28 Apr 2020 for data model changes
 

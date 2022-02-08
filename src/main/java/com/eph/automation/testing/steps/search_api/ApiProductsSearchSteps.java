@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+import static com.eph.automation.testing.models.contexts.DataQualityContext.setBreadcrumbMessage;
 import static com.eph.automation.testing.services.api.APIService.*;
 import static com.eph.automation.testing.services.api.APIService.getProductsBySearch;
 
@@ -114,13 +115,13 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10KBWS"); Log.info("hard coded product ids are : " + ids);
+     // ids.clear(); ids.add("EPR-11CR3R"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());// DataQualityContext.breadcrumbMessage += "->" + ids;
 
-    Assert.assertFalse(DataQualityContext.breadcrumbMessage + " Verify list with random ids is not empty.",ids.isEmpty());
+    Assert.assertFalse(getBreadcrumbMessage() + " Verify list with random ids is not empty.",ids.isEmpty());
   }
 
 
@@ -139,11 +140,9 @@ public class ApiProductsSearchSteps {
             .map(String::valueOf)
             .collect(Collectors.toList());
     Log.info("Selected random work ids  : " + ids);
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());
 
-    Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
-            + " Verify That list with random person ids is not empty.",
+    Assert.assertFalse(getBreadcrumbMessage()+ " Verify That list with random person ids is not empty.",
         ids.isEmpty());
   }
 
@@ -164,9 +163,10 @@ public class ApiProductsSearchSteps {
 
    //   packageIds.clear();    packageIds.add("EPR-10MYVR"); Log.info("hard coded id is " +  packageIds);
 
-    DataQualityContext.breadcrumbMessage += "->" + packageIds;
+    //DataQualityContext.breadcrumbMessage += "->" + packageIds;
+    setBreadcrumbMessage(packageIds.toString());
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage + " Verify That list with random ids is not empty.",
+            getBreadcrumbMessage() + " Verify That list with random ids is not empty.",
         packageIds.isEmpty());
   }
 
@@ -188,9 +188,10 @@ public class ApiProductsSearchSteps {
             + ids.toString()
             + " from package ids  : "
             + packageIds.toString());
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    //DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage + " Verify That list with random ids is not empty.",
+            getBreadcrumbMessage() + " Verify That list with random ids is not empty.",
         ids.isEmpty());
   }
 
@@ -202,7 +203,7 @@ public class ApiProductsSearchSteps {
         DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     productDataObjects.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify That product objects list from DB is not empty.",
         productDataObjects.isEmpty());
   }
@@ -233,7 +234,7 @@ else{
     DataQualityContext.workDataObjectsFromEPHGD.sort(
         Comparator.comparing(WorkDataObject::getWORK_ID));
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify that list with work objects from DB is not empty",
         DataQualityContext.workDataObjectsFromEPHGD.isEmpty());
   }
@@ -282,29 +283,24 @@ else{
           break;
         case PRW_ACPRODUCT:
           getWorksDataFromEPHGD(productDataObject.getF_PRODUCT_WORK());
-          accountableProductSegmentCode =
-              getSegmentCode(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+          accountableProductSegmentCode =getSegmentCode(DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
           returnedProducts = getProductsByAccountableProduct(accountableProductSegmentCode);
           break;
         case "PRODUCT_MANIFESTATION_WORK_ACCOUNTABLE_PRODUCT":
           getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-          accountableProductSegmentCode =
-              getSegmentCode(
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+          accountableProductSegmentCode =getSegmentCode(DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
           returnedProducts = getProductsByAccountableProduct(accountableProductSegmentCode);
           break;
         default:
           throw new IllegalArgumentException(accounableProductType);
       }
       Log.info("accountableProduct segmentcode is: " + accountableProductSegmentCode);
+      //breadcrumbMessage += accountableProductSegmentCode;
+      setBreadcrumbMessage(accountableProductSegmentCode);
       assert returnedProducts != null;
-      Log.info(
-          "\n product count in API by accountableProduct is : "
-              + returnedProducts.getTotalMatchCount());
+      Log.info(" product count in API by accountableProduct is : "+ returnedProducts.getTotalMatchCount());
       returnedProducts.verifyProductsAreReturned();
-      returnedProducts.verifyAPIReturnedProductsCount(
-          getCount("getProductCountByAccountableProducts", accountableProductSegmentCode));
+      returnedProducts.verifyAPIReturnedProductsCount(getCount("getProductCountByAccountableProducts", accountableProductSegmentCode));
     }
   }
 
@@ -579,7 +575,7 @@ else{
 
           Log.info("Total product found search... - "+ returnedProducts.getTotalMatchCount());
           while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID())
-                  && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()) {
+                  && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()&&(fromCntr+sizeCntr)<1000) {
 
             Log.info("scanned product from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
             fromCntr += sizeCntr;
@@ -594,12 +590,12 @@ else{
             else
             {
               Log.info("intetended product not found till scan from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
-          //  Assert.assertTrue(DataQualityContext.breadcrumbMessage + "- scenned "+(fromCntr+ sizeCntr)+ "records...",false);
+            Assert.assertTrue(getBreadcrumbMessage() + "- scenned "+(fromCntr+ sizeCntr)+ "records...",false);
             }
         }
       }
     } catch (Exception e) {
-      Assert.assertFalse(DataQualityContext.breadcrumbMessage + " " + e.getMessage(), true);
+      Assert.assertFalse(getBreadcrumbMessage() + " " + e.getMessage(), true);
     }
   }
 
@@ -721,7 +717,7 @@ else{
             .map(String::valueOf)
             .collect(Collectors.toList());
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify That list with work ids by pmc is not empty.",
         ids.isEmpty());
   }
@@ -735,7 +731,7 @@ else{
             .map(String::valueOf)
             .collect(Collectors.toList());
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify That list with work ids by pmc is not empty.",
         ids.isEmpty());
   }
@@ -750,7 +746,7 @@ else{
             .map(String::valueOf)
             .collect(Collectors.toList());
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify That list with manifestation ids by work ids is not empty.",
         ids.isEmpty());
   }
@@ -776,7 +772,7 @@ else{
     personWorkRoleDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify person role by work id successfully extracted from EPH DB",
         personWorkRoleDataObjectsFromEPHGD.isEmpty());
   }
@@ -788,7 +784,7 @@ else{
     personProductRoleDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " Verify person role by product id successfully extracted from EPH DB",
         personProductRoleDataObjectsFromEPHGD.isEmpty());
   }
@@ -799,7 +795,7 @@ else{
     personDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
             + " verify person Data by person id extracted from EPH DB",
         personDataObjectsFromEPHGD.isEmpty());
   }
@@ -816,7 +812,7 @@ else{
       String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0]).toUpperCase();
       switch (paramKey) {
         case "productStatus":
-          DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
+          setBreadcrumbMessage(productDataObjects.get(0).getF_STATUS());
 
           productCountDB =
               getCount(
@@ -828,7 +824,7 @@ else{
                   defaultSearch, paramKey, productDataObjects.get(0).getF_STATUS());
           break;
         case "productType":
-          DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_TYPE();
+          setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
 
           returnedProducts =
                   getProductByParam(
@@ -841,8 +837,7 @@ else{
           break;
         case "workType":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-          DataQualityContext.breadcrumbMessage +=
-              "->" + DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE();
+          setBreadcrumbMessage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
 
           returnedProducts =
                   getProductByParam(
@@ -857,8 +852,7 @@ else{
           break;
         case "manifestationType":
           getManifestationByID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-          DataQualityContext.breadcrumbMessage +=
-              "->" + manifestationDataObjects.get(0).getF_TYPE();
+          setBreadcrumbMessage(manifestationDataObjects.get(0).getF_TYPE());
           returnedProducts =
                   getProductByParam(
                   defaultSearch, paramKey, manifestationDataObjects.get(0).getF_TYPE());
@@ -870,7 +864,7 @@ else{
           break;
         case "pmcCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-          DataQualityContext.breadcrumbMessage +="->" + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
+          setBreadcrumbMessage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           returnedProducts =getProductByParam(searchTerm,paramKey,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           productCountDB =getCount("getProductCountByPMCCode",searchTerm,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           break;
@@ -879,7 +873,7 @@ else{
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           String pmgCode =
               getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
-          DataQualityContext.breadcrumbMessage += "->" + pmgCode;
+          setBreadcrumbMessage(pmgCode);
           returnedProducts = getProductByParam(searchTerm, paramKey, pmgCode);
           productCountDB = getCount("getProductCountByPMGCode", searchTerm, pmgCode);
           break;
@@ -903,7 +897,7 @@ else{
     ProductsMatchedApiObject returnedProducts = new ProductsMatchedApiObject();
 
     if (paramKey.equalsIgnoreCase("productStatus")) {
-      DataQualityContext.breadcrumbMessage += "-> product status " + productDataObjects.get(0).getF_STATUS();
+      setBreadcrumbMessage(" product status " + productDataObjects.get(0).getF_STATUS());
       productCountDB =getCount(productCountByProductStatus, defaultSearch, productDataObjects.get(0).getF_STATUS());
 
       returnedProducts =getProductByParam(defaultSearch + from + fromCntr + size + sizeCntr,paramKey,productDataObjects.get(0).getF_STATUS());
@@ -1059,6 +1053,5 @@ else{
         DBManager.getDBResultMap(sql, Constants.EPH_URL);
     return ((Long) countByProductStatus.get(0).get(count)).intValue();
   }
-
 
 }

@@ -104,7 +104,11 @@ public class DataQualityContext {
     public static ArrayList<String> RowData;
     public static ArrayList<String> DataToWrite = new ArrayList<>();
     public static ArrayList<ArrayList<String>> dataFileRowColumn = new ArrayList<>();
+
     public static String breadcrumbMessage = "";
+    public static String getBreadcrumbMessage() {return breadcrumbMessage;}
+    public static void setBreadcrumbMessage(String data) {breadcrumbMessage += " >" + data;}
+
     public static Response api_response;
     public static String resultFileName;
 
