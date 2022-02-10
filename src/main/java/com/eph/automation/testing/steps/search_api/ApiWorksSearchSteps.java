@@ -86,7 +86,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-    //ids.clear();ids.add("EPR-W-101YBW");Log.info("hard coded work id is : " + ids);
+   // ids.clear();ids.add("EPR-W-101YBW");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -105,7 +105,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   //ids.clear();    ids.add("EPR-W-102W49");  Log.info("hard coded work ids are : " + ids);
+  // ids.clear();    ids.add("EPR-W-102TR2");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -301,15 +301,15 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-          String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-        searchKeyword =
+          String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
+        /*searchKeyword =
                 DataQualityContext
                         .workDataObjectsFromEPHGD
                         .get(0)
                         .getWORK_TITLE()
                         .replaceAll("[^a-zA-Z0-9]", " ")
                         .split(" ")[0]
-                        .toUpperCase();
+                        .toUpperCase();*/
         String ManifestationType =
                 DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
         Log.info("searchKeyword and ManifestationType: " + searchKeyword + " - " + ManifestationType);
@@ -1050,22 +1050,19 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByPerson(String searchType, String person) {
-
+    String[] perName = person.split(" ");
     switch (searchType) {
-      case PER_FULLNAME_CURRENT:
-       // sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, person);break;
       case "PERSON_NAME":
-        String[] perName = person.split(" ");
-        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);        break;
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);     break;
+
+      case PER_FULLNAME_CURRENT:
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, perName[0],perName[1]);break;
+
       case "PEOPLE_HUB_ID":
         sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, person);        break;
 
-      case "PERSON_ID":
-      case "personIdCurrent":
-        case "":
+      default:
         sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID, person);        break;
-
-      default:throw new IllegalArgumentException();
     }
 
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -1233,8 +1230,9 @@ public static String getSearchKeyword(String title)
   //created by Nishant @ 31 Jan 2022
   String keyword = "";
   String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-  if(arr_title.length>1)keyword=arr_title[1];
-  else keyword=arr_title[0];
+  keyword=arr_title[1];
+  //if(arr_title.length>1)keyword+=" "+arr_title[1];
+
 
 return keyword;
 }

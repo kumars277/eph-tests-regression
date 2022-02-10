@@ -387,8 +387,22 @@ public class APIDataSQL {
                   + "on gw.work_id =gwpr.f_wwork \n"
                   + "where gwpr.f_person='%s'";
 
+  public static final String SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT =
+          "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+                  + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+                  + "on gw.work_id =gwpr.f_wwork \n"
+                  + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+                  + "and gw.f_status in('WLA')\n"
+                  + "and gwpr.f_person in \n"
+                  + "(\n"
+                  + "select person_id from semarchy_eph_mdm.gd_person gp \n"
+                  + "where s_given_name like upper('%s') \n"
+                  + "AND s_family_name like upper('%s')\n"
+                  + ")";
+
+
   public static final String SELET_GD_COUNT_WORK_BY_PERSONNAME =
-      "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+      "select COUNT(distinct work_id) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
           + "on gw.work_id =gwpr.f_wwork \n"
           + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
@@ -413,7 +427,7 @@ public class APIDataSQL {
           + ")";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PERSONID =
-      "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
+      "select count(distinct work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
           + "on gw.work_id =gwpr.f_wwork \n"
           + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
@@ -465,6 +479,14 @@ public class APIDataSQL {
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
       "select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_type='%s'";
 
+   /*By Nishant @ 10 Feb 2022
+   this also searches the following fields (not just the work title).
+  Work title
+  Manifestation title
+  Product summary name
+  Manifestation product summary name
+  then need to modify your query to accommodate all of those as well
+  */
   public static final String SELECT_GD_COUNT_WORK_BY_MANIFESTATIONTPYE_WITHSEARCH =
       "select count(*) from (select distinct w.work_id "
           + "from semarchy_eph_mdm.gd_wwork w inner join semarchy_eph_mdm.gd_manifestation m "
