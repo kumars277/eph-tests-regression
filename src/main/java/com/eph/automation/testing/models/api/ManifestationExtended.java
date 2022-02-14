@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ManifestationExtended {
     private String journalProdSiteCode;
@@ -122,7 +124,7 @@ public class ManifestationExtended {
                         ignore.add(cnt);break;
                     }
                 }
-                Assert.assertTrue(DataQualityContext.breadcrumbMessage + " - manifestationExtendedPageCounts-> "+mpc+" not found in DB",extPageFound);
+                Assert.assertTrue(getBreadcrumbMessage() + " - manifestationExtendedPageCounts-> "+mpc+" not found in DB",extPageFound);
 
             }
         }

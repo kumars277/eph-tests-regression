@@ -8,6 +8,8 @@ import org.junit.Assert;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductsMatchedApiObject {
 
@@ -39,7 +41,7 @@ public class ProductsMatchedApiObject {
 
   public void verifyAPIReturnedProductsCount(int productsInDB) {
     Assert.assertEquals(
-        DataQualityContext.breadcrumbMessage
+        getBreadcrumbMessage()
             + " Verify returned products count match with database",
         totalMatchCount,
         productsInDB);
@@ -72,7 +74,7 @@ public class ProductsMatchedApiObject {
       }
       i++;
     }
-    Assert.assertTrue(DataQualityContext.breadcrumbMessage + "id not found in response", found);
+    Assert.assertTrue(getBreadcrumbMessage() + "id not found in response", found);
     return found;
   }
 
@@ -104,7 +106,7 @@ public class ProductsMatchedApiObject {
             if (items[i].getWork() != null) {  Log.info(items[i].getWork().getWorkCore().getTitle().toString());}
           }
 
-          Assert.assertFalse(DataQualityContext.breadcrumbMessage + " product/manifestation title does not contain searchKey "+ searchKey, notFound);
+          Assert.assertFalse(getBreadcrumbMessage() + " product/manifestation title does not contain searchKey "+ searchKey, notFound);
       }
       i++;
     }

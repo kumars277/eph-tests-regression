@@ -21,6 +21,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkRelationshipsAPIObject {
 
@@ -82,7 +84,7 @@ public class WorkRelationshipsAPIObject {
             break;
           }
         }
-        Assert.assertTrue(dataQualityContext.breadcrumbMessage+" Parent not found, "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
+        Assert.assertTrue(getBreadcrumbMessage()+" Parent not found, "+list_workParent.get(wp).id+" parent code "+list_workParent.get(wp).type.get("code"), parentFound);
       }
     }
     if (workChild != null) {
@@ -120,7 +122,7 @@ public class WorkRelationshipsAPIObject {
             }
           }
         }
-        Assert.assertTrue(dataQualityContext.breadcrumbMessage+" Child not found, "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
+        Assert.assertTrue(getBreadcrumbMessage()+" Child not found, "+list_workChild.get(wc).id+" child code "+list_workChild.get(wc).type.get("code"), childFound);
       }
     }
   }

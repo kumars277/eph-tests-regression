@@ -14,6 +14,9 @@ import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 /*
 * created by Nishant @ 8 May 2020
 * */
@@ -68,32 +71,32 @@ public class ProductCore
         Log.info("verifying productCode data ..."+productId);
     //    Log.info("\n-name\n-shortName\n-separatelySaleableInd\n-trialAllowedInd\n-launchDate\n-product type code\n-product status code\n" +
     //            "-revenueModel code\n-etaxProductCode code\n");
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - name", name, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+       Assert.assertEquals(getBreadcrumbMessage() + " - name", name, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
       printLog("name");
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - shortName", shortName, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_SHORT_NAME());
+       Assert.assertEquals(getBreadcrumbMessage() + " - shortName", shortName, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_SHORT_NAME());
         printLog("shortName");
         if(separatelySaleableInd!=null){
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - separatelySaleableInd", separatelySaleableInd,this.productDataObjectsFromEPHGD.get(0).getBoolSEPARATELY_SALEABLE_IND());
+       Assert.assertEquals(getBreadcrumbMessage() + " - separatelySaleableInd", separatelySaleableInd,this.productDataObjectsFromEPHGD.get(0).getBoolSEPARATELY_SALEABLE_IND());
         printLog("separatelySaleableInd");}
         if(trialAllowedInd!=null) {
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - trialAllowedInd", trialAllowedInd, this.productDataObjectsFromEPHGD.get(0).getBoolTRIAL_ALLOWED_IND());
+       Assert.assertEquals(getBreadcrumbMessage() + " - trialAllowedInd", trialAllowedInd, this.productDataObjectsFromEPHGD.get(0).getBoolTRIAL_ALLOWED_IND());
         printLog("trialAllowedInd");
         }
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - launchDate", launchDate, this.productDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());
+       Assert.assertEquals(getBreadcrumbMessage() + " - launchDate", launchDate, this.productDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());
         printLog("launchDate");
 
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - product type", type.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_TYPE());
+       Assert.assertEquals(getBreadcrumbMessage() + " - product type", type.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_TYPE());
         printLog("product type");
 
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - product status", status.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_STATUS());
+       Assert.assertEquals(getBreadcrumbMessage() + " - product status", status.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_STATUS());
         printLog("product status");
 
         if(!(revenueModel==null && this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL()==null)) {
-           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - revenueModel code", revenueModel.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL());
+           Assert.assertEquals(getBreadcrumbMessage() + " - revenueModel code", revenueModel.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL());
         printLog("revenueModel");}
 
         if(!(etaxProductCode==null)&&!(this.productDataObjectsFromEPHGD.get(0).getTAX_CODE()==null)) {
-           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - etaxProductCode", etaxProductCode.get("code"), this.productDataObjectsFromEPHGD.get(0).getTAX_CODE());
+           Assert.assertEquals(getBreadcrumbMessage() + " - etaxProductCode", etaxProductCode.get("code"), this.productDataObjectsFromEPHGD.get(0).getTAX_CODE());
             printLog("etaxProductCode");
         }
         //validation for packages - EPR-11BBFJ, EPR-11BBFK

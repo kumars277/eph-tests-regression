@@ -86,10 +86,9 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-11H8BD");Log.info("hard coded work id is : " + ids);
-    DataQualityContext.breadcrumbMessage += "->" + ids;
-    Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
+   // ids.clear();ids.add("EPR-W-101YBW");Log.info("hard coded work id is : " + ids);
+    setBreadcrumbMessage(ids.toString());
+    Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
   }
 
@@ -106,9 +105,8 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-102V88");  Log.info("hard coded work ids are : " + ids);
-
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+  // ids.clear();    ids.add("EPR-W-102TR2");  Log.info("hard coded work ids are : " + ids);
+    setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
 
@@ -129,7 +127,7 @@ public class ApiWorksSearchSteps {
     Log.info("Selected random work ids  : " + ids+" on "+ TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
     // "ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);"
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
 
@@ -149,7 +147,7 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
     Log.info("Selected random extended manifestation ids  : " + manifestaionids+" on "+TestContext.getValues().environment);
-    DataQualityContext.breadcrumbMessage += "->" + manifestaionids;
+    setBreadcrumbMessage(manifestaionids.toString());
     verifyListNotEmpty(manifestaionids);
   //  manifestaionids.clear();manifestaionids.add("EPR-M-1251CX");manifestaionids.add("EPR-M-11S7FY");
   }
@@ -164,7 +162,7 @@ public class ApiWorksSearchSteps {
     ids.add("EPR-W-102RRG");
     ids.add("EPR-W-102VF4");
     Log.info("hard coded work ids are : " + ids +" on "+ System.getProperty("ENV"));
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());
   }
 
   @Given("^We get (.*) random search ids for person roles")
@@ -179,9 +177,9 @@ public class ApiWorksSearchSteps {
                     .collect(Collectors.toList());
     Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
      // ids.clear(); ids.add("10290173");  Log.info("hard coded work ids are : " + ids);
-    DataQualityContext.breadcrumbMessage += "->" + ids;
+    setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify That list with random person roles is not empty.",
             ids.isEmpty());
   }
@@ -199,7 +197,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.workDataObjectsFromEPHGD.sort(
             Comparator.comparing(WorkDataObject::getWORK_ID));
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify that list with work objects from DB is not empty",
             DataQualityContext.workDataObjectsFromEPHGD.isEmpty());
   }
@@ -303,18 +301,18 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-        String searchKeyword =
+          String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
+        /*searchKeyword =
                 DataQualityContext
                         .workDataObjectsFromEPHGD
                         .get(0)
                         .getWORK_TITLE()
                         .replaceAll("[^a-zA-Z0-9]", " ")
                         .split(" ")[0]
-                        .toUpperCase();
+                        .toUpperCase();*/
         String ManifestationType =
                 DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
-        Log.info(
-                "searchKeyword and ManifestationType: " + searchKeyword + " - " + ManifestationType);
+        Log.info("searchKeyword and ManifestationType: " + searchKeyword + " - " + ManifestationType);
         returnedWorks =
                 APIService.getWorksByManifestationType(searchKeyword, ManifestationType);
         printTotalWorkCount(returnedWorks);
@@ -740,7 +738,7 @@ public class ApiWorksSearchSteps {
       getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
 
       Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
-      DataQualityContext.breadcrumbMessage +="->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
+      setBreadcrumbMessage(personDataObjectsFromEPHGD.get(0).getPERSON_ID());
 
       switch (personSearchOption) {
         case "PERSON_NAME": resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
@@ -1052,21 +1050,19 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByPerson(String searchType, String person) {
-
+    String[] perName = person.split(" ");
     switch (searchType) {
-      case PER_FULLNAME_CURRENT:
-        //sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, person);break;
       case "PERSON_NAME":
-        String[] perName = person.split(" ");
-        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);        break;
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);     break;
+
+      case PER_FULLNAME_CURRENT:
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, perName[0],perName[1]);break;
+
       case "PEOPLE_HUB_ID":
         sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, person);        break;
 
-      case "PERSON_ID":
-      case "personIdCurrent":
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, person);        break;
-
-      default:throw new IllegalArgumentException();
+      default:
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID, person);        break;
     }
 
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -1102,7 +1098,7 @@ public class ApiWorksSearchSteps {
                     .collect(Collectors.toList());
     Log.info("Manifestation ids for the work: " + ids);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify that manifestation ids can be successfully extracted from db by work ids",
             ids.isEmpty());
     return ids;
@@ -1115,7 +1111,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.productDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify that product by manifestation id is extracted successfully from the DB",
             DataQualityContext.productDataObjectsFromEPHGD.isEmpty());
   }
@@ -1126,7 +1122,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.productDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + " - Verify that product by work id is extracted successfully from the DB",
             productDataObjectsFromEPHGD.isEmpty());
   }
@@ -1137,7 +1133,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.personWorkRoleDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify person role by work id successfully extracted from EPH DB",
             personWorkRoleDataObjectsFromEPHGD.isEmpty());
   }
@@ -1166,7 +1162,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.manifestationDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> Verify that manifestaion by work id is extracted successfully from the DB",
             manifestationDataObjectsFromEPHGD.isEmpty());
   }
@@ -1176,7 +1172,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.personDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> verify person Data by person id extracted from EPH DB",
             personDataObjectsFromEPHGD.isEmpty());
   }
@@ -1188,7 +1184,7 @@ public class ApiWorksSearchSteps {
     DataQualityContext.personDataObjectsFromEPHGD.sort(
             Comparator.comparing(PersonDataObject::getPERSON_ID));
     Assert.assertFalse(
-            DataQualityContext.breadcrumbMessage
+            getBreadcrumbMessage()
                     + "-> verify person Data by person id extracted from EPH DB",
             personDataObjectsFromEPHGD.isEmpty());
   }
@@ -1219,7 +1215,7 @@ public class ApiWorksSearchSteps {
 
   public static void verifyListNotEmpty(List<String> ids)
   {
-    Assert.assertFalse(DataQualityContext.breadcrumbMessage + "-> Verify That list with random ids is not empty.",ids.isEmpty());
+    Assert.assertFalse(getBreadcrumbMessage() + "-> Verify That list with random ids is not empty.",ids.isEmpty());
   }
   public static void printTotalWorkCount(WorksMatchedApiObject returnedWorks )
   {
@@ -1227,15 +1223,16 @@ public class ApiWorksSearchSteps {
   }
 
   public static void scenarioFailed()
-  {Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);}
+  {Assert.assertFalse(getBreadcrumbMessage() + " scenario Failed ", true);}
 
 public static String getSearchKeyword(String title)
 {
   //created by Nishant @ 31 Jan 2022
   String keyword = "";
   String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-  if(arr_title.length>1)keyword=arr_title[1];
-  else keyword=arr_title[0];
+  keyword=arr_title[1];
+  //if(arr_title.length>1)keyword+=" "+arr_title[1];
+
 
 return keyword;
 }

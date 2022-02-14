@@ -12,6 +12,8 @@ import org.junit.Assert;
 
 import java.util.*;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 /*
 * created by Nishant @ 13 May 2020
 * */
@@ -52,7 +54,7 @@ public class ManifestationCore {
 
 
     if (internationalEditionInd != null || DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG() != null) {
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+">manifestationCore>internationalEditionInd>",Boolean.valueOf(internationalEditionInd),
+        Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>internationalEditionInd>",Boolean.valueOf(internationalEditionInd),
                 Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG()));
         printLog("internationalEditionInd");
     }

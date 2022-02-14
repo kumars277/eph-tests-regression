@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
+
 /**
  * created by Nishant @ 19 Jun 2020
  * for jrbi data reflect in APIv3 work extended, person extended and manifestation extended
@@ -201,133 +203,133 @@ public class WorkExtended {
             List<Integer> ignore = new ArrayList<>();
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - getJournalElsComInd",
+                    getBreadcrumbMessage() + " - getJournalElsComInd",
                     journalElsComInd,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd());
             printLog("getJournalElsComInd");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - getJournalAimsScope",
+                    getBreadcrumbMessage() + " - getJournalAimsScope",
                     journalAimsScope,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope());
             printLog("getJournalAimsScope");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - journalProdSiteCode",
+                    getBreadcrumbMessage() + " - journalProdSiteCode",
                     journalProdSiteCode,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode());
             printLog("journalProdSiteCode");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - primarySiteSystem",
+                    getBreadcrumbMessage() + " - primarySiteSystem",
                     primarySiteSystem,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
             printLog("primarySiteSystem");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - primarySiteAcronym",
+                    getBreadcrumbMessage() + " - primarySiteAcronym",
                     primarySiteAcronym,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
             printLog("primarySiteAcronym");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - primarySiteSupportLevel",
+                    getBreadcrumbMessage() + " - primarySiteSupportLevel",
                     primarySiteSupportLevel,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
             printLog("primarySiteSupportLevel");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - issueProdTypeCode",
+                    getBreadcrumbMessage() + " - issueProdTypeCode",
                     issueProdTypeCode,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
             printLog("issueProdTypeCode");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - catalogueVolumesQty",
+                    getBreadcrumbMessage() + " - catalogueVolumesQty",
                     catalogueVolumesQty,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
             printLog("catalogueVolumesQty");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - imageFileRef",
+                    getBreadcrumbMessage() + " - imageFileRef",
                     imageFileRef,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
             printLog("imageFileRef");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - masterISBN",
+                    getBreadcrumbMessage() + " - masterISBN",
                     masterISBN,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getMasterISBN());
             printLog("masterISBN");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - authorByLineText",
+                    getBreadcrumbMessage() + " - authorByLineText",
                     authorByLineText,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getAuthorByLineText());
             printLog("authorByLineText");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - internalElsDiv",
+                    getBreadcrumbMessage() + " - internalElsDiv",
                     internalElsDiv,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getInternalElsDiv());
             printLog("internalElsDiv");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - profitCentre",
+                    getBreadcrumbMessage() + " - profitCentre",
                     profitCentre,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getProfitCentre());
             printLog("profitCentre");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - textRefTrade",
+                    getBreadcrumbMessage() + " - textRefTrade",
                     textRefTrade,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getTextRefTrade());
             printLog("textRefTrade");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - catalogueIssuesQty",
+                    getBreadcrumbMessage() + " - catalogueIssuesQty",
                     catalogueIssuesQty,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
             printLog("catalogueIssuesQty");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - catalogueVolumeFrom",
+                    getBreadcrumbMessage() + " - catalogueVolumeFrom",
                     catalogueVolumeFrom,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
             printLog("catalogueVolumeFrom");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - catalogueVolumeTo",
+                    getBreadcrumbMessage() + " - catalogueVolumeTo",
                     catalogueVolumeTo,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
             printLog("catalogueVolumeTo");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - rfIssuesQty",
+                    getBreadcrumbMessage() + " - rfIssuesQty",
                     rfIssuesQty,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
             printLog("rfIssuesQty");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - rfTotalPagesQty",
+                    getBreadcrumbMessage() + " - rfTotalPagesQty",
                     rfTotalPagesQty,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
             printLog("rfTotalPagesQty");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - rfFvi",
+                    getBreadcrumbMessage() + " - rfFvi",
                     rfFvi,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
             printLog("rfFvi");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - rfLvi",
+                    getBreadcrumbMessage() + " - rfLvi",
                     rfLvi,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
             printLog("rfLvi");
 
             Assert.assertEquals(
-                    DataQualityContext.breadcrumbMessage + " - ptsBusinessUnitDesc",
+                    getBreadcrumbMessage() + " - ptsBusinessUnitDesc",
                     ptsBusinessUnitDesc,
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
             printLog("ptsBusinessUnitDesc");
@@ -338,7 +340,7 @@ public class WorkExtended {
                         DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedPersons.clone();
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtendedPersons-> count",
+                        getBreadcrumbMessage() + " - workExtendedPersons-> count",
                         wep.length,
                         wepDB.length);
                 printLog("workExtendedPersons count " + wep.length);
@@ -367,55 +369,55 @@ public class WorkExtended {
                         }
 
                         if (extPersonFound) {
-                            //   Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole
+                            //   Assert.assertEquals(getBreadcrumbMessage() + " - extendedRole
                             // name", wep[cnt].getExtendedRole().get("code"),
                             // wepDB[i].getExtendedRole().get("code"));
                             printLog("extendedRole code" + i);
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedRole name",
+                                    getBreadcrumbMessage() + " - extendedRole name",
                                     wep[cnt].getExtendedRole().get("name"),
                                     wepDB[i].getExtendedRole().get("name"));
                             printLog("extendedRole name");
 
-                            //    Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson
+                            //    Assert.assertEquals(getBreadcrumbMessage() + " - extendedPerson
                             // firstName", wep[cnt].getExtendedPerson().get("firstName"),
                             // wepDB[i].getExtendedPerson().get("firstName"));
                             printLog("extendedPerson firstName");
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson lastName",
+                                    getBreadcrumbMessage() + " - extendedPerson lastName",
                                     wep[cnt].getExtendedPerson().get("lastName"),
                                     wepDB[i].getExtendedPerson().get("lastName"));
                             printLog("extendedPerson lastName");
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson peoplehubId",
+                                    getBreadcrumbMessage() + " - extendedPerson peoplehubId",
                                     wep[cnt].getExtendedPerson().get("peoplehubId"),
                                     wepDB[i].getExtendedPerson().get("peoplehubId"));
                             printLog("extendedPerson peoplehubId");
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson email",
+                                    getBreadcrumbMessage() + " - extendedPerson email",
                                     wep[cnt].getExtendedPerson().get("email"),
                                     wepDB[i].getExtendedPerson().get("email"));
                             printLog("extendedPerson email");
 
                             // added by Nishant @ 8 Jun 2021
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson lastName",
+                                    getBreadcrumbMessage() + " - extendedPerson lastName",
                                     wep[cnt].getExtendedPerson().get("notes"),
                                     wepDB[i].getExtendedPerson().get("notes"));
                             printLog("extendedPerson notes");
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson lastName",
+                                    getBreadcrumbMessage() + " - extendedPerson lastName",
                                     wep[cnt].getExtendedPerson().get("affiliation"),
                                     wepDB[i].getExtendedPerson().get("affiliation"));
                             printLog("extendedPerson affiliation");
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson lastName",
+                                    getBreadcrumbMessage() + " - extendedPerson lastName",
                                     wep[cnt].getExtendedPerson().get("imageUrl"),
                                     wepDB[i].getExtendedPerson().get("imageUrl"));
                             printLog("extendedPerson imageUrl");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - extendedPerson sequenceNumber",
+                                    getBreadcrumbMessage() + " - extendedPerson sequenceNumber",
                                     wep[cnt].getSequenceNumber(),
                                     wepDB[i].getSequenceNumber());
                             printLog("extendedPerson sequenceNumber");
@@ -426,7 +428,7 @@ public class WorkExtended {
                     }
 
                     Assert.assertTrue(
-                            DataQualityContext.breadcrumbMessage + "workExtendedPersons " + i + " found in DB",
+                            getBreadcrumbMessage() + "workExtendedPersons " + i + " found in DB",
                             extPersonFound);
                 }
             }
@@ -442,7 +444,7 @@ public class WorkExtended {
                         DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedEditorialBoard;
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> count",
+                        getBreadcrumbMessage() + " - workExtendedEditorialBoard-> count",
                         weeb.length,
                         weebDB.length);
                 printLog("workExtendedEditorialBoard count " + weeb.length);
@@ -497,7 +499,7 @@ public class WorkExtended {
                                 printLog("workExtendedEditorialBoard extendedBoardMember lastName");
 
                                 Assert.assertEquals(
-                                        DataQualityContext.breadcrumbMessage
+                                        getBreadcrumbMessage()
                                                 + " - workExtendedEditorialBoard-> extendedBoardMember-> affiliation",
                                         weeb[i].extendedBoardMember.get("affiliation"),
                                         weebDB[cnt].extendedBoardMember.get("affiliation"));
@@ -507,7 +509,7 @@ public class WorkExtended {
 
 
                             Assert.assertTrue(
-                                    DataQualityContext.breadcrumbMessage
+                                    getBreadcrumbMessage()
                                             + " - workExtendedEditorialBoard-> extendedBoardRole "
                                             + i
                                             + " not found in DB",
@@ -516,14 +518,14 @@ public class WorkExtended {
                         }
 
 
-                        Assert.assertEquals(                  DataQualityContext.breadcrumbMessage
+                        Assert.assertEquals(                  getBreadcrumbMessage()
                                         + " - workExtendedEditorialBoard-> groupNumber",
                                 weeb[i].groupNumber,
                                 weebDB[cnt].groupNumber);
                         printLog("workExtendedEditorialBoard groupNumber");
 
                         Assert.assertEquals(
-                                DataQualityContext.breadcrumbMessage
+                                getBreadcrumbMessage()
                                         + " - workExtendedEditorialBoard-> sequenceNumber",
                                 weeb[i].sequenceNumber,
                                 weebDB[cnt].sequenceNumber);
@@ -548,7 +550,7 @@ public class WorkExtended {
                         DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedSubjectAreas;
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> count",
+                        getBreadcrumbMessage() + " - workExtendedSubjectAreas-> count",
                         wesa.length,
                         wesaDB.length);
                 printLog("workExtendedSubjectAreas count " + wesa.length);
@@ -567,7 +569,7 @@ public class WorkExtended {
                             printLog("workExtendedSubjectAreas extendedSubjectArea code " + i);
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage
+                                    getBreadcrumbMessage()
                                             + " - workExtendedSubjectAreas-> extendedSubjectArea-> name "
                                             + i,
                                     wesa[i].getExtendedSubjectArea().getName(),
@@ -575,7 +577,7 @@ public class WorkExtended {
                             printLog("workExtendedSubjectAreas extendedSubjectArea name ");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage
+                                    getBreadcrumbMessage()
                                             + " - workExtendedSubjectAreas-> extendedSubjectArea-> Type-> code "
                                             + i,
                                     wesa[i].getExtendedSubjectArea().getType().get("code"),
@@ -583,7 +585,7 @@ public class WorkExtended {
                             printLog("workExtendedSubjectAreas extendedSubjectArea Type code ");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage
+                                    getBreadcrumbMessage()
                                             + " - workExtendedSubjectAreas-> extendedSubjectArea-> Type-> name "
                                             + i,
                                     wesa[i].getExtendedSubjectArea().getType().get("name"),
@@ -591,7 +593,7 @@ public class WorkExtended {
                             printLog("workExtendedSubjectAreas extendedSubjectArea Type name ");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage
+                                    getBreadcrumbMessage()
                                             + " - workExtendedSubjectAreas-> extendedSubjectArea-> priority "
                                             + i,
                                     wesa[i].getExtendedSubjectArea().getPriority(),
@@ -602,7 +604,7 @@ public class WorkExtended {
                         }
                     }
                     Assert.assertTrue(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtendedSubjectAreas-> extendedSubjectArea "
                                     + i
                                     + " found in DB ",
@@ -619,7 +621,7 @@ public class WorkExtended {
                         DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls;
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> count",
+                        getBreadcrumbMessage() + " - workExtendedUrls-> count",
                         weu.length,
                         weuDB.length);
                 printLog("workExtendedUrls count " + weu.length);
@@ -635,13 +637,13 @@ public class WorkExtended {
                             printLog("workExtendedUrls url ");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> code " + i,
+                                    getBreadcrumbMessage() + " - workExtendedUrls-> code " + i,
                                     weu[i].extendedUrl.getType().get("code"),
                                     weuDB[cnt].extendedUrl.getType().get("code"));
                             printLog("workExtendedUrls code " + i);
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> name " + i,
+                                    getBreadcrumbMessage() + " - workExtendedUrls-> name " + i,
                                     weu[i].extendedUrl.getType().get("name"),
                                     weuDB[cnt].extendedUrl.getType().get("name"));
                             printLog("workExtendedUrls name ");
@@ -649,7 +651,7 @@ public class WorkExtended {
                             if (weu[i].extendedUrl.getUrlTitle() != null
                                     | weuDB[cnt].extendedUrl.getUrlTitle() != null) {
                                 Assert.assertEquals(
-                                        DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> urlTitle " + i,
+                                        getBreadcrumbMessage() + " - workExtendedUrls-> urlTitle " + i,
                                         weu[i].extendedUrl.getUrlTitle(),
                                         weuDB[cnt].extendedUrl.getUrlTitle());
                                 printLog("workExtendedUrls urlTitle ");
@@ -659,7 +661,7 @@ public class WorkExtended {
                         }
                     }
                     Assert.assertTrue(
-                            DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> url " + i + " found",
+                            getBreadcrumbMessage() + " - workExtendedUrls-> url " + i + " found",
                             exUrlFound);
                 }
             }
@@ -674,7 +676,7 @@ public class WorkExtended {
                         DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedMetrics;
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> count",
+                        getBreadcrumbMessage() + " - workExtendedMetrics-> count",
                         wem.length,
                         wemDB.length);
                 printLog("workExtendedMetrics count " + wem.length);
@@ -694,13 +696,13 @@ public class WorkExtended {
                             printLog("workExtendedMetrics code " + i);
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> name " + i,
+                                    getBreadcrumbMessage() + " - workExtendedMetrics-> name " + i,
                                     wem[i].getExtendedMetric().getType().get("name"),
                                     wemDB[cnt].getExtendedMetric().getType().get("name"));
                             printLog("workExtendedMetrics name ");
 
                             Assert.assertEquals(
-                                    DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> metric " + i,
+                                    getBreadcrumbMessage() + " - workExtendedMetrics-> metric " + i,
                                     wem[i].getExtendedMetric().getMetric(),
                                     wemDB[cnt].getExtendedMetric().getMetric());
                             printLog("workExtendedMetrics metric ");
@@ -708,7 +710,7 @@ public class WorkExtended {
                             if (wem[i].getExtendedMetric().getMetricUrl() != null
                                     | wemDB[cnt].getExtendedMetric().getMetricUrl() != null) {
                                 Assert.assertEquals(
-                                        DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> metric " + i,
+                                        getBreadcrumbMessage() + " - workExtendedMetrics-> metric " + i,
                                         wem[i].getExtendedMetric().getMetricUrl(),
                                         wemDB[cnt].getExtendedMetric().getMetricUrl());
                                 printLog("workExtendedMetrics metricUrl ");
@@ -717,7 +719,7 @@ public class WorkExtended {
                             if (wem[i].getExtendedMetric().getMetricYear() != null
                                     | wemDB[cnt].getExtendedMetric().getMetricYear() != null) {
                                 Assert.assertEquals(
-                                        DataQualityContext.breadcrumbMessage
+                                        getBreadcrumbMessage()
                                                 + " - workExtendedMetrics-> metricYear"
                                                 + i,
                                         wem[i].getExtendedMetric().getMetricYear(),
@@ -729,7 +731,7 @@ public class WorkExtended {
                         }
                     }
                     Assert.assertTrue(
-                            DataQualityContext.breadcrumbMessage + " - workExtendedMetrics " + i + " found in DB",
+                            getBreadcrumbMessage() + " - workExtendedMetrics " + i + " found in DB",
                             exMetricFound);
                 }
             }
@@ -747,32 +749,32 @@ public class WorkExtended {
                                 .getExtendedSibling();
 
                 Assert.assertEquals(
-                        DataQualityContext.breadcrumbMessage + " - workExtRelationships-> count",
+                        getBreadcrumbMessage() + " - workExtRelationships-> count",
                         wer.length,
                         werDB.length);
                 printLog("workExtRelationships count " + wer.length);
 
                 for (int i = 0; i < wer.length; i++) {
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage + " - workExtRelationships-> Typecode " + i,
+                            getBreadcrumbMessage() + " - workExtRelationships-> Typecode " + i,
                             wer[i].getType().get("code"),
                             werDB[i].getType().get("code"));
                     printLog("workExtRelationships Typecode " + i);
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage + " - workExtRelationships-> Typecode " + i,
+                            getBreadcrumbMessage() + " - workExtRelationships-> Typecode " + i,
                             wer[i].getType().get("name"),
                             werDB[i].getType().get("name"));
                     printLog("workExtRelationships TypeName ");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage + " - workExtRelationships-> id " + i,
+                            getBreadcrumbMessage() + " - workExtRelationships-> id " + i,
                             wer[i].getId(),
                             werDB[i].getId());
                     printLog("workExtRelationships id ");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->Title "
                                     + i,
                             wer[i].getWorkExtendedSummary().getTitle(),
@@ -780,7 +782,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary title ");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->type code "
                                     + i,
                             wer[i].getWorkExtendedSummary().getType().get("code"),
@@ -788,7 +790,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary typeCode");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->type name "
                                     + i,
                             wer[i].getWorkExtendedSummary().getType().get("name"),
@@ -796,7 +798,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary typeName");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->typeRollUp "
                                     + i,
                             wer[i].getWorkExtendedSummary().getType().get("typeRollUp"),
@@ -804,7 +806,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary typeRollUp");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->extendedStatus code"
                                     + i,
                             wer[i].getWorkExtendedSummary().getExtendedStatus().get("code"),
@@ -812,7 +814,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary extendedStatus code");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->extendedStatus name"
                                     + i,
                             wer[i].getWorkExtendedSummary().getExtendedStatus().get("name"),
@@ -820,7 +822,7 @@ public class WorkExtended {
                     printLog("workExtRelationships getWorkExtendedSummary extendedStatus name");
 
                     Assert.assertEquals(
-                            DataQualityContext.breadcrumbMessage
+                            getBreadcrumbMessage()
                                     + " - workExtRelationships-> getWorkExtendedSummary->extendedStatus statusRollUp"
                                     + i,
                             wer[i].getWorkExtendedSummary().getExtendedStatus().get("statusRollUp"),
@@ -832,7 +834,7 @@ public class WorkExtended {
         } catch (Exception e) {
             Log.info(e.getCause().getMessage());
             Assert.assertFalse(
-                    DataQualityContext.breadcrumbMessage
+                    getBreadcrumbMessage()
                             + " e.message>"
                             + e.getMessage()
                             + " scenario Failed ",

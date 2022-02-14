@@ -107,8 +107,9 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared by <type>
     Examples:
       | type                                           |
-      | PRODUCT_WORK_ACCOUNTABLE_PRODUCT               |
       | PRODUCT_MANIFESTATION_WORK_ACCOUNTABLE_PRODUCT |
+      | PRODUCT_WORK_ACCOUNTABLE_PRODUCT               |
+
       #|PRODUCT_ACCOUNTABLE_PRODUCT| NA as per Lujiang on 13 May 2020
 
   @searchAPI @productSearchAPI

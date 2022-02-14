@@ -25,8 +25,6 @@ public class APIService {
       "/product-hub-works/works?queryType=title&queryValue=";
 
   public APIService() {setApiEndpoint(); }
-
-
   // by Nishant - updated for search API v2 - complete as of 27 Nov 2019
   // updated by Nishant @ 28 Apr 2020 for data model changes
 
@@ -226,7 +224,7 @@ public class APIService {
 
   public static WorksMatchedApiObject getWorksByManifestationType(      String searchKeyword, String manifestationType) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =getResponse(worksBySearchResource + searchKeyword + "&manifestationType=" + manifestationType);
+    Response response =getResponse(worksByTitleResource + searchKeyword + "&manifestationType=" + manifestationType);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -238,7 +236,7 @@ public class APIService {
 
   public static WorksMatchedApiObject getWorksBySearchWithPMG(      String searchKeyword, String pmgCode) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
-    Response response =getResponse(worksBySearchResource + searchKeyword + "&pmgCode=" + pmgCode);
+    Response response =getResponse(worksByTitleResource + searchKeyword + "&pmgCode=" + pmgCode);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 

@@ -572,8 +572,8 @@ jQuery.cookie = function(name, value, options) {
 <body>
 <div id="container">
 <div id="header">
-<div class="time" xmlns="">8 ms</div>
-<h1>RunBDDTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">186 total, </span><span class="failed">1 failed, </span><span class="ignored">1 ignored, </span><span class="passed">184 passed</span></strong>
+<div class="time" xmlns="">25 ms</div>
+<h1>RunBDDTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">285 total, </span><span class="error">2 error, </span><span class="failed">3 failed, </span><span class="passed">280 passed</span></strong>
 </h1>
 <div id="treecontrol">
 <ul>
@@ -588,58 +588,54 @@ jQuery.cookie = function(name, value, options) {
 </div>
 </div>
 <div id="content">
-<ul id="tree">&amp;quot;C:\Program Files\AdoptOpenJDK\jdk-8.0.202.08\bin\java.exe&amp;quot; -ea -Dbrowser=chrome &amp;quot;-DencryptionPasswordEOAS=EOAS Secret Password&amp;quot; -Didea.test.cyclic.buffer.size=1048576 &amp;quot;-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1\lib\idea_rt.jar=60576:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1\bin&amp;quot; -Dfile.encoding=UTF-8 -classpath C:\Users\Chitren\AppData\Local\Temp\classpath1138342137.jar com.intellij.rt.execution.junit.JUnitStarter -ideVersion5 -junit4 runner.RunBDDTest
+<ul id="tree">&amp;quot;C:\Program Files\AdoptOpenJDK\jdk-8.0.202.08\bin\java.exe&amp;quot; -ea -Dbrowser=chrome &amp;quot;-DencryptionPasswordEOAS=EOAS Secret Password&amp;quot; -Didea.test.cyclic.buffer.size=1048576 &amp;quot;-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1\lib\idea_rt.jar=56824:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1\bin&amp;quot; -Dfile.encoding=UTF-8 -classpath C:\Users\Chitren\AppData\Local\Temp\classpath628173792.jar com.intellij.rt.execution.junit.JUnitStarter -ideVersion5 -junit4 runner.RunBDDTest
 Feature: Product Finder production smoke tests
   @PFProd @UI @PFRegressionSuite
-  Scenario Outline: When no product is found &amp;quot;There are no results that match your search&amp;quot; is displayed 
-# ui/productfinder/ProductFinderProduction.feature:4
-    
-Given 
-user is on Product/Journal Finder search page &amp;lt;ui&amp;gt;
-    
-When 
-user is searching for &amp;quot;&amp;lt;keyword&amp;gt;&amp;quot;
-    
-Then 
-No results message is displayed for &amp;quot;&amp;lt;keyword&amp;gt;&amp;quot;
+  Scenario Outline: When no product is found &amp;quot;There are no results that match your search&amp;quot; is displayed # ui/productfinder/pfProduction.feature:4
+    Given user is on Product/Journal Finder search page &amp;lt;ui&amp;gt;
+    When user is searching for &amp;quot;&amp;lt;keyword&amp;gt;&amp;quot;
+    Then No results message is displayed for &amp;quot;&amp;lt;keyword&amp;gt;&amp;quot;
     Examples: 
-2021-05-04 11:13:15 INFO  Test is starting ...
+2022-02-10 13:46:47 INFO  Test is starting ...
+ 2022-02-10 13:46:47 INFO  Environment used...null
 SLF4J: Failed to load class &amp;quot;org.slf4j.impl.StaticLoggerBinder&amp;quot;.
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-Starting ChromeDriver 84.0.4147.30 (48b3e868b4cc0aa7e8149519690b6f6949e110a8-refs/branch-heads/4147@{#310}) on port 22306
+Starting ChromeDriver 84.0.4147.30 (48b3e868b4cc0aa7e8149519690b6f6949e110a8-refs/branch-heads/4147@{#310}) on port 22683
 Only local connections are allowed.
 Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
 ChromeDriver was started successfully.
-May 04, 2021 11:13:21 AM org.openqa.selenium.remote.ProtocolHandshake createSession
+Feb 10, 2022 1:46:56 PM org.openqa.selenium.remote.ProtocolHandshake createSession
 INFO: Detected dialect: W3C
- 2021-05-04 11:13:49 INFO  
+ 2022-02-10 13:47:25 INFO  signed in to https://sit.productfinder.elsevier.net
+ 2022-02-10 13:47:32 INFO  https://sit.productfinder.elsevier.net/
+ 2022-02-10 13:47:32 INFO  
 home page loaded...
  
 Process finished with exit code -1
 <li xmlns="" class="level top failed open">
 <span><em class="time">
-<div class="time">8 ms</div>
+<div class="time">21 ms</div>
 </em>Feature: Product Finder production smoke tests</span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>Scenario Outline: When no product is found "There are no results that match your search" is displayed</span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>Examples: </span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>| PF | abcdefg1234567890 |</span>
 <ul>
 <li class="level test">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em><em class="status">passed</em>| PF | abcdefg1234567890 |.Given user is on Product/Journal Finder search page PF</span>
 </li>
 <li class="level test">
@@ -770,12 +766,12 @@ Process finished with exit code -1
 </li>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>Scenario Outline: verify search Suggestion displayed</span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>Examples: </span>
 <ul>
 <li class="level suite open">
@@ -868,12 +864,12 @@ Process finished with exit code -1
 </li>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em>| JF | Amercan | american |</span>
 <ul>
 <li class="level test">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">0 ms</div>
 </em><em class="status">passed</em>| JF | Amercan | american |.Given user is on Product/Journal Finder search page JF</span>
 </li>
 <li class="level test">
@@ -1074,7 +1070,7 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| Cell | Book |.And Filter the Search Result by "Book"</span>
+</em><em class="status">passed</em>| Cell | Book |.And Filter Search Result for workType "Book"</span>
 </li>
 <li class="level test">
 <span><em class="time">
@@ -1111,7 +1107,7 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| neuro | Journal |.And Filter the Search Result by "Journal"</span>
+</em><em class="status">passed</em>| neuro | Journal |.And Filter Search Result for workType "Journal"</span>
 </li>
 <li class="level test">
 <span><em class="time">
@@ -1134,14 +1130,14 @@ Process finished with exit code -1
 </li>
 </ul>
 </li>
-<li class="level suite open">
+<li class="level suite failed open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">19 ms</div>
 </em>Scenario Outline: Search and filter them with Work Statuses and Types</span>
 <ul>
-<li class="level suite open">
+<li class="level suite failed open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">19 ms</div>
 </em>Examples: </span>
 <ul>
 <li class="level suite open">
@@ -1162,12 +1158,7 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| clinical | Launched | Journal |.And Filter the Search Result by "Launched"</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| clinical | Launched | Journal |.And Filter the Search Result by "Journal"</span>
+</em><em class="status">passed</em>| clinical | Launched | Journal |.And Filter Search Result with workType "Journal" and workStatus "clinical"</span>
 </li>
 <li class="level test">
 <span><em class="time">
@@ -1187,13 +1178,13 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| clinical | Launched | Journal |.Then Verify the Work Status is "Launched"</span>
+</em><em class="status">passed</em>| clinical | Launched | Journal |.Then Verify the Work Status</span>
 </li>
 </ul>
 </li>
-<li class="level suite open">
+<li class="level suite failed open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">19 ms</div>
 </em>| surgical | Planned | Book |</span>
 <ul>
 <li class="level test">
@@ -1209,12 +1200,7 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| surgical | Planned | Book |.And Filter the Search Result by "Planned"</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| surgical | Planned | Book |.And Filter the Search Result by "Book"</span>
+</em><em class="status">passed</em>| surgical | Planned | Book |.And Filter Search Result with workType "Book" and workStatus "surgical"</span>
 </li>
 <li class="level test">
 <span><em class="time">
@@ -1231,135 +1217,113 @@ Process finished with exit code -1
 <div class="time">0 ms</div>
 </em><em class="status">passed</em>| surgical | Planned | Book |.Then Verify the Work id Type is "Book"</span>
 </li>
-<li class="level test">
+<li class="level test failed open">
 <span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| surgical | Planned | Book |.Then Verify the Work Status is "Planned"</span>
-</li>
-</ul>
+<div class="time">19 ms</div>
+</em><em class="status">failed</em>| surgical | Planned | Book |.Then Verify the Work Status</span>
+<ul>
+<li class="text">
+<span class="stderr">java.lang.AssertionError: The given work Id is successfully filtered by the Work Status and verified by DB: Never Published<br/><br/>	at org.junit.Assert.fail(Assert.java:88)<br/>	at org.junit.Assert.assertTrue(Assert.java:41)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verify_the_Work_Status(ProductFinderUISteps.java:563)<br/>	at ✽.Then Verify the Work Status(ui/productfinder/pfProduction.feature:58)<br/></span>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| blood |  | Journal |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.Given user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.And Searches for given blood</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.And Filter Search Result with workType "Journal" and workStatus "blood"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.Then Search items are listed and click an id from the result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.And Verify user is forwarded to the searched work page from Search Result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.Then Verify the Work id Type is "Journal"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| blood |  | Journal |.Then Verify the Work Status</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
 <span><em class="time">
 <div class="time">0 ms</div>
 </em>Scenario Outline: Search and filter with Work Status</span>
 <ul>
-<li class="level suite open">
+<li class="level suite failed open">
 <span><em class="time">
 <div class="time">0 ms</div>
 </em>Examples: </span>
 <ul>
-<li class="level suite open">
+<li class="level suite failed open">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em>| PF | math | Launched |</span>
+</em>| JF | clinic | Planned |</span>
 <ul>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.Given user is on Product/Journal Finder search page PF</span>
+</em><em class="status">passed</em>| JF | clinic | Planned |.Given user is on Product/Journal Finder search page JF</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.And Searches for given math</span>
+</em><em class="status">passed</em>| JF | clinic | Planned |.And Searches for given clinic</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.And Filter the Search Result by "Launched"</span>
+</em><em class="status">passed</em>| JF | clinic | Planned |.And Filter the Search Result for workStatus "clinic"</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.Then Search items are listed and click an id from the result</span>
+</em><em class="status">passed</em>| JF | clinic | Planned |.Then Search items are listed and click an id from the result</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.And Verify user is forwarded to the searched work page from Search Result</span>
+</em><em class="status">passed</em>| JF | clinic | Planned |.And Verify user is forwarded to the searched work page from Search Result</span>
 </li>
-<li class="level test">
+<li class="level test failed open">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | math | Launched |.Then Verify the Work Status is "Launched"</span>
+</em><em class="status">failed</em>| JF | clinic | Planned |.Then Verify the Work Status</span>
+<ul>
+<li class="text">
+<span class="stderr">java.lang.AssertionError: The given work Id is successfully filtered by the Work Status and verified by DB: Transfer Approved<br/><br/>	at org.junit.Assert.fail(Assert.java:88)<br/>	at org.junit.Assert.assertTrue(Assert.java:41)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verify_the_Work_Status(ProductFinderUISteps.java:563)<br/>	at ✽.Then Verify the Work Status(ui/productfinder/pfProduction.feature:72)<br/></span>
 </li>
 </ul>
-</li>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>| PF | clinic | Planned |</span>
-<ul>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.Given user is on Product/Journal Finder search page PF</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.And Searches for given clinic</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.And Filter the Search Result by "Planned"</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.Then Search items are listed and click an id from the result</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.And Verify user is forwarded to the searched work page from Search Result</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | Planned |.Then Verify the Work Status is "Planned"</span>
-</li>
-</ul>
-</li>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>| PF | clinic | No Longer Published |</span>
-<ul>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.Given user is on Product/Journal Finder search page PF</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Searches for given clinic</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Filter the Search Result by "No Longer Published"</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.Then Search items are listed and click an id from the result</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Verify user is forwarded to the searched work page from Search Result</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic | No Longer Published |.Then Verify the Work Status is "No Longer Published"</span>
 </li>
 </ul>
 </li>
@@ -1381,7 +1345,7 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| JF | math | Launched |.And Filter the Search Result by "Launched"</span>
+</em><em class="status">passed</em>| JF | math | Launched |.And Filter the Search Result for workStatus "math"</span>
 </li>
 <li class="level test">
 <span><em class="time">
@@ -1396,56 +1360,88 @@ Process finished with exit code -1
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| JF | math | Launched |.Then Verify the Work Status is "Launched"</span>
+</em><em class="status">passed</em>| JF | math | Launched |.Then Verify the Work Status</span>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="level suite failed open">
+<li class="level suite open">
 <span><em class="time">
-<div class="time">6 ms</div>
-</em>Scenario Outline: Search and filter with Product Status or Product Type</span>
-<ul>
-<li class="level suite failed open">
-<span><em class="time">
-<div class="time">6 ms</div>
-</em>Examples: </span>
-<ul>
-<li class="level suite failed open">
-<span><em class="time">
-<div class="time">6 ms</div>
-</em>| PF | Physics | Product Status |  |</span>
+<div class="time">0 ms</div>
+</em>| PF | math | Launched |</span>
 <ul>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Physics | Product Status |  |.Given user is on Product/Journal Finder search page PF</span>
+</em><em class="status">passed</em>| PF | math | Launched |.Given user is on Product/Journal Finder search page PF</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Physics | Product Status |  |.When Search for given Physics and switch to Products and Packages tab</span>
+</em><em class="status">passed</em>| PF | math | Launched |.And Searches for given math</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | math | Launched |.And Filter the Search Result for workStatus "math"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | math | Launched |.Then Search items are listed and click an id from the result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | math | Launched |.And Verify user is forwarded to the searched work page from Search Result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | math | Launched |.Then Verify the Work Status</span>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| PF | clinic | No Longer Published |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | clinic | No Longer Published |.Given user is on Product/Journal Finder search page PF</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Searches for given clinic</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Filter the Search Result for workStatus "clinic"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | clinic | No Longer Published |.Then Search items are listed and click an id from the result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | clinic | No Longer Published |.And Verify user is forwarded to the searched work page from Search Result</span>
 </li>
 <li class="level test failed open">
 <span><em class="time">
-<div class="time">6 ms</div>
-</em><em class="status">failed</em>| PF | Physics | Product Status |  |.And Filter the Search Result by filter "Product Status" and value "" and click first id</span>
+<div class="time">0 ms</div>
+</em><em class="status">failed</em>| PF | clinic | No Longer Published |.Then Verify the Work Status</span>
 <ul>
 <li class="text">
-<span class="stderr">java.lang.AssertionError: at leaset one id present on page <br/><br/>	at org.junit.Assert.fail(Assert.java:88)<br/>	at org.junit.Assert.assertTrue(Assert.java:41)<br/>	at com.eph.automation.testing.web.steps.ProductFinderUISteps.getFirstIdOnPage(ProductFinderUISteps.java:862)<br/>	at com.eph.automation.testing.web.steps.ProductFinderUISteps.filter_Search_Result_and_clickFirstId(ProductFinderUISteps.java:447)<br/>	at ✽.And Filter the Search Result by filter &quot;Product Status&quot; and value &quot;&quot; and click first id(ui/productfinder/ProductFinderProduction.feature:84)<br/></span>
+<span class="stderr">java.lang.AssertionError: The given work Id is successfully filtered by the Work Status and verified by DB: Never Published<br/><br/>	at org.junit.Assert.fail(Assert.java:88)<br/>	at org.junit.Assert.assertTrue(Assert.java:41)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verify_the_Work_Status(ProductFinderUISteps.java:563)<br/>	at ✽.Then Verify the Work Status(ui/productfinder/pfProduction.feature:72)<br/></span>
 </li>
 </ul>
 </li>
-<li class="level test ignored open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">ignored</em>| PF | Physics | Product Status |  |.Then Verify the Product filter is "Product Status"</span>
-<ul>
-<li class="text">
-<span class="stdout">Test ignored.<br/></span>
+</ul>
 </li>
 </ul>
 </li>
@@ -1454,27 +1450,64 @@ Process finished with exit code -1
 <li class="level suite open">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em>| PF | Chemistry | Product Type |  |</span>
+</em>Scenario Outline: Search and filter with Product Status or Product Type</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| PF | Physics | Product Status | Available |</span>
 <ul>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Chemistry | Product Type |  |.Given user is on Product/Journal Finder search page PF</span>
+</em><em class="status">passed</em>| PF | Physics | Product Status | Available |.Given user is on Product/Journal Finder search page PF</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Chemistry | Product Type |  |.When Search for given Chemistry and switch to Products and Packages tab</span>
+</em><em class="status">passed</em>| PF | Physics | Product Status | Available |.When Search for given Physics and switch to Products and Packages tab</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Chemistry | Product Type |  |.And Filter the Search Result by filter "Product Type" and value "" and click first id</span>
+</em><em class="status">passed</em>| PF | Physics | Product Status | Available |.And Filter the Search Result by filter "Product Status" and value "Available" and click first id</span>
 </li>
 <li class="level test">
 <span><em class="time">
 <div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | Chemistry | Product Type |  |.Then Verify the Product filter is "Product Type"</span>
+</em><em class="status">passed</em>| PF | Physics | Product Status | Available |.Then Verify the Product filter is "Product Status"</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| PF | Chemistry | Product Type | Subscription |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | Chemistry | Product Type | Subscription |.Given user is on Product/Journal Finder search page PF</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | Chemistry | Product Type | Subscription |.When Search for given Chemistry and switch to Products and Packages tab</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | Chemistry | Product Type | Subscription |.And Filter the Search Result by filter "Product Type" and value "Subscription" and click first id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| PF | Chemistry | Product Type | Subscription |.Then Verify the Product filter is "Product Type"</span>
 </li>
 </ul>
 </li>
@@ -1590,64 +1623,6 @@ Process finished with exit code -1
 <span><em class="time">
 <div class="time">0 ms</div>
 </em><em class="status">passed</em>| PF | clinic | Product Type | Package | Product Status | No Longer Published |.Then Verify the Product filter is "Product Status"</span>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>Scenario Outline: Verify on search result page Works, Products&amp;Packages, Manifestation tab</span>
-<ul>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>Examples: </span>
-<ul>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>| JF | math |  |</span>
-<ul>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| JF | math |  |.Given user is on Product/Journal Finder search page JF</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| JF | math |  |.And Searches for given math</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| JF | math |  |.Then verify Works, Products&amp;Packages, Manifestation tab</span>
-</li>
-</ul>
-</li>
-<li class="level suite open">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em>| PF | clinic |  |</span>
-<ul>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic |  |.Given user is on Product/Journal Finder search page PF</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic |  |.And Searches for given clinic</span>
-</li>
-<li class="level test">
-<span><em class="time">
-<div class="time">0 ms</div>
-</em><em class="status">passed</em>| PF | clinic |  |.Then verify Works, Products&amp;Packages, Manifestation tab</span>
 </li>
 </ul>
 </li>
@@ -1783,17 +1758,17 @@ Process finished with exit code -1
 </li>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">2 ms</div>
 </em>Scenario Outline: Verify any broken link on PF</span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">2 ms</div>
 </em>Examples: </span>
 <ul>
 <li class="level suite open">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">2 ms</div>
 </em>| PF | math |</span>
 <ul>
 <li class="level test">
@@ -1833,7 +1808,7 @@ Process finished with exit code -1
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">0 ms</div>
+<div class="time">2 ms</div>
 </em><em class="status">passed</em>| PF | math |.When Searches for given math</span>
 </li>
 <li class="level test">
@@ -1991,11 +1966,759 @@ Process finished with exit code -1
 </li>
 </ul>
 </li>
+<li class="level top failed open">
+<span><em class="time">
+<div class="time">4 ms</div>
+</em>Feature: Product Finder Selenium tests</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: search work by multiple options</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Id |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Given get 1 random work id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And Search works by Id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Then The searched work is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And User is forwarded to the searched works page from DB</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Title |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Given get 1 random work id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And Search works by Title</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Then The searched work is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And User is forwarded to the searched works page from DB</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Keyword |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.Given get 1 random work id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And Search works by Keyword</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.Then The searched work is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And User is forwarded to the searched works page from DB</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: search product by multiple options</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Id |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Given get 1 random product id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And We get the product search data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And Search product by Id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Then The searched product is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And User is forwarded to the searched product page from DB</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Title |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Given get 1 random product id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And We get the product search data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And Search product by Title</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Then The searched product is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And User is forwarded to the searched product page from DB</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Keyword |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.Given get 1 random product id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And We get the product search data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And Search product by Keyword</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.Then The searched product is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Keyword |.And User is forwarded to the searched product page from DB</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: search manifestation by multiple options</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Id |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Given get 1 random manifestation id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And We get the manifestation data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And Search manifestation by Id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.Then The searched manifestation is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Id |.And User is forwarded to the searched manifestation page from DB</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Title |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Given get 1 random manifestation id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And We get the manifestation data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And Search manifestation by Title</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.Then The searched manifestation is listed and clicked</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Title |.And User is forwarded to the searched manifestation page from DB</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: Search the work and filter them with one Work Type</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Book |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Book |.Given Get the available Work Types from the DB "Book"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Book |.Then Get a Work Id for each Work Types available in the DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Book |.Given user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Book |.And Search for the Work by Work Ids Filter workType and verify the work Type is "Book"</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| Journal |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Journal |.Given Get the available Work Types from the DB "Journal"</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Journal |.Then Get a Work Id for each Work Types available in the DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Journal |.Given user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| Journal |.And Search for the Work by Work Ids Filter workType and verify the work Type is "Journal"</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: Search the Product Finder and verify all 3 tabs</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| 1 |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.Given get 1 random work id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And Searches work by id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.Then Search items are listed and click the workid from result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And Verify user is forwarded to the searched work page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And get Extended Data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.Then Verify PF/JF UI work overview values</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| 2 |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.Given get 1 random work id from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.When user is on Product Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And Searches work by id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.Then Search items are listed and click the workid from result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And Verify user is forwarded to the searched work page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And get Extended Data from DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.Then Verify PF/JF UI work overview values</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">4 ms</div>
+</em>Scenario Outline: Search the Journal Finder and verify all 5 tabs</span>
+<ul>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">4 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">4 ms</div>
+</em>| 1 |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.Given We get 1 random journal ids for search</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And user is on Journal Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And Searches work by id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.Then Search items are listed and click the workid from result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And Verify user is forwarded to the searched work page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 1 |.And get Extended Data from DB</span>
+</li>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">4 ms</div>
+</em><em class="status">error</em>| 1 |.Then Verify PF/JF UI work overview values</span>
+<ul>
+<li class="text">
+<span class="stderr">java.lang.NullPointerException<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.validateSubjectArea(ProductFinderUISteps.java:1450)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verifyWorkOverviewInformationUI(ProductFinderUISteps.java:970)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verifyPFJFUIWorkOverviewValues(ProductFinderUISteps.java:937)<br/>	at ✽.Then Verify PF/JF UI work overview values(ui/productfinder/pfUI.feature:84)<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite failed open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| 2 |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.Given We get 1 random journal ids for search</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And user is on Journal Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And Searches work by id</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.Then Search items are listed and click the workid from result</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And Verify user is forwarded to the searched work page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| 2 |.And get Extended Data from DB</span>
+</li>
+<li class="level test failed open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">error</em>| 2 |.Then Verify PF/JF UI work overview values</span>
+<ul>
+<li class="text">
+<span class="stderr">java.lang.NullPointerException<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.validateSubjectArea(ProductFinderUISteps.java:1450)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verifyWorkOverviewInformationUI(ProductFinderUISteps.java:970)<br/>	at com.eph.automation.testing.steps.specific.ProductFinderUISteps.verifyPFJFUIWorkOverviewValues(ProductFinderUISteps.java:937)<br/>	at ✽.Then Verify PF/JF UI work overview values(ui/productfinder/pfUI.feature:84)<br/></span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: Search the Journal by person</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| personFullNameCurrent |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| personFullNameCurrent |.Given We get 5 random search ids for person roles</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| personFullNameCurrent |.And get person data from EPH DB</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| personFullNameCurrent |.And user is on Journal Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| personFullNameCurrent |.And Searches journal work by person personFullNameCurrent</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Scenario Outline: Search the Journal by PMC</span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>Examples: </span>
+<ul>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| pmgCode |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmgCode |.Given We get 5 random journal ids for search</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmgCode |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmgCode |.And user is on Journal Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmgCode |.And Searches journal by pmc pmgCode</span>
+</li>
+</ul>
+</li>
+<li class="level suite open">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em>| pmcCode |</span>
+<ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmcCode |.Given We get 5 random journal ids for search</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmcCode |.And We get the work search data from EPH GD</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmcCode |.And user is on Journal Finder search page</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">0 ms</div>
+</em><em class="status">passed</em>| pmcCode |.And Searches journal by pmc pmcCode</span>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="footer">
-<p>Generated by IntelliJ IDEA on 5/4/21 12:02 PM</p>
+<p>Generated by IntelliJ IDEA on 2/11/22 3:00 PM</p>
 </div>
 </body>
 </html>
