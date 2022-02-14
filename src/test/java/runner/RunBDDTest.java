@@ -14,8 +14,7 @@ import org.junit.runner.RunWith;
         features = "src/main/resources/features",
         plugin = {"pretty", "json:target/cucumber-reports/cucumber.json",
                            "junit:target/cucumber-reports/Cucumber.xml",
-                            "html:target/cucumber-reports/feature-overview"
-                },
+                            "html:target/cucumber-reports/feature-overview"},
         monochrome = true,
         tags = {"@stitchingDataAPI"}
         )
