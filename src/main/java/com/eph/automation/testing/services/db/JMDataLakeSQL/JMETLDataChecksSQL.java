@@ -381,319 +381,185 @@ public class JMETLDataChecksSQL {
 
     public static String GET_WWORK_DQ_QUERY ="select * from (\n" +
             "WITH\n" +
-            "-- this is to assist with the legal ownership case statement without having a separate view\n" +
-            "   coowned_journals AS (\n" +
-            "   SELECT DISTINCT co.f_work, co.legal_owner_type\n" +
-            "   FROM   " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership co\n" +
-            "   WHERE (((co.notified_date IS NOT NULL)\n" +
-            "       AND (co.journal_ownership_type = 'CO'))\n" +
-            "       AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
-            ")\n" +
-            "-- New Journals\n" +
-            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
-            "        wc.chronicle_scenario_code as   scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "            when 'N' then 'Insert'\n" +
-            "            when 'Y' then 'Update'\n" +
-            "            else 'Update'\n" +
-            "        END) as                         upsert,\n" +
-            "       'J0'||w.elsevier_journal_number  jm_source_reference,\n" +
-            "        w.eph_work_id as                eph_work_id,\n" +
-            "        w.work_title as                 work_title,\n" +
-            "        w.work_subtitle as              work_subtitle,\n" +
-            "        CAST (null as boolean)          electro_rights_indicator,\n" +
-            "        0    as                         volume,\n" +
-            "        CAST (null as integer)          copyright_year,\n" +
-            "        CAST (null as integer)          edition_number,\n" +
-            "        w.launch_date as                planned_launch_date,\n" +
-            "        CAST (null as date)             planned_termination_date,\n" +
-            "        'JNL' as                        f_type,\n" +
-            "        'WAP' as                        f_status,\n" +
-            "        CAST (null as integer)          f_accountable_product,\n" +
-            "        CAST (null as varchar)          pmc_old,                    -- for inserts set null\n" +
-            "        w.pmc_code as                   pmc_new,                    -- for inserts just take w.pmc_code\n" +
-            "       (CASE\n" +
-            "            when (w.open_accesstype_code = 'SM5')                                                                                         then 'F'\n" +
-            "            when (w.open_accesstype_code = 'SM6')                                                                                         then 'S'\n" +
-            "            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4')                                                  then 'H'\n" +
-            "            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4SO')                                                then 'N'\n" +
-            "--            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4' and w.manifestation_personal_model_type = 'SM2P') then 'H'\n" +
-            "--            when (w.open_accesstype_code is null and w.manifestation_types_code is null and w.manifestation_personal_model_type = 'SM2P') then '?'\n" +
-            "            ELSE null\n" +
-            "        END) as                         f_oa_type,\n" +
-            "        w.imprint_code as               f_imprint,\n" +
-            "        w.opco_r12_id as                opco,\n" +
-            "--      in place of deprecated f_society_ownership we are now sending f_legal_ownership.\n" +
-            "--      the following case statement is EPH Ownership Level 1, values JVE/ELS/SOC/COM/UNI\n" +
-            "--      The first condition is testing for Joint Venture, the second for fully-owned, the last three for co-owned.\n" +
-            "--      The Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
-            "--      Note, business rules declare there should be only ONE co-owned legal owner type per journal\n" +
-            "       (CASE\n" +
-            "            when (w.joint_venture_indicator = 'Y')     then 'JVE'\n" +
-            "            when (fo.legal_owner_type is not null)     then  fo.legal_owner_type\n" +
-            "            when (co_soc.legal_owner_type is not null) then  co_soc.legal_owner_type\n" +
-            "            when (co_com.legal_owner_type is not null) then  co_com.legal_owner_type\n" +
-            "            when (co_uni.legal_owner_type is not null) then  co_uni.legal_owner_type\n" +
-            "        ELSE                                                'ELS'\n" +
-            "        END) as                         f_legal_ownership,\n" +
-            "       (CASE\n" +
-            "            when (m.subscription_type = 'Calendar Year') then 'FY'\n" +
-            "            when (m.subscription_type = 'Rolling Year')  then 'RY'\n" +
-            "            when (m.subscription_type = 'Both')          then 'RY'\n" +
-            "            ELSE null\n" +
-            "        END) as                         subscription_type,\n" +
-            "        w.responsibility_centre_code as resp_centre,\n" +
-            "        COALESCE\n" +
-            "           ((CASE WHEN (w.main_language_code = 'English')    then 'EN'\n" +
-            "                  WHEN (w.main_language_code is null)        then 'EN'\n" +
-            "                  WHEN (w.main_language_code = 'French')     then 'FR'\n" +
-            "                  WHEN (w.main_language_code = 'German')     then 'DE'\n" +
-            "                  WHEN (w.main_language_code = 'Spanish')    then 'ES'\n" +
-            "                  WHEN (w.main_language_code = 'Catalan')    then 'CA'\n" +
-            "                  WHEN (w.main_language_code = 'Italian')    then 'IT'\n" +
-            "                  WHEN (w.main_language_code = 'Polish')     then 'PL'\n" +
-            "                  WHEN (w.main_language_code = 'Portuguese') then 'PT'\n" +
-            "             END),w.main_language_code) language_code,\n" +
-            "       'N'  as                          dq_err,\n" +
-            "        w.notified_date as              notified_date\n" +
-            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work                 w\n" +
-            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join      " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
-            "                                    and fo.journal_ownership_type = 'FO'\n" +
-            "--        manifestation (below) becomes a left join because there are a few single-manifestation exceptions where ISSN <> ISSN-L\n" +
-            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
-            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
-            "                                     and (wo1.journal_ownership_type = 'FO'))\n" +
-            "--        Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
-            "--        business rules declare there to be only one legal owner type per journal\n" +
-            "left join coowned_journals co_soc on co_soc.f_work = w.work_id\n" +
-            "                                 and co_soc.legal_owner_type = 'SOC'\n" +
-            "left join coowned_journals co_com on co_com.f_work = w.work_id\n" +
-            "                                 and co_com.legal_owner_type = 'COM'\n" +
-            "left join coowned_journals co_uni on co_uni.f_work = w.work_id\n" +
-            "                                 and co_uni.legal_owner_type = 'UNI'\n" +
-            "where w.work_journey_identifier = 'A1'\n" +
-            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "and   w.notified_date is not null\n" +
-            "UNION\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "--  RENAME\n" +
-            "--  Title updates to work level. This is RN (Rename).\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
-            "        wc.chronicle_scenario_code as   scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "            when 'N' then 'Insert'\n" +
-            "            when 'Y' then 'Update'\n" +
-            "            else 'Update'\n" +
-            "        END) as                         upsert,\n" +
-            "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
-            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
-            "        w1.work_title as                work_title,                 -- the TITLE UPDATE\n" +
-            "        CAST (null as varchar) as       work_subtitle,              -- JM does not master subtitle.\n" +
-            "        CAST (null as boolean) as       electro_rights_indicator,\n" +
-            "        CAST (null as integer) as       volume,                     -- for inserts was set 0\n" +
-            "        CAST (null as integer) as       copyright_year,\n" +
-            "        CAST (null as integer) as       edition_number,\n" +
-            "        CAST (null as date) as          planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
-            "        CAST (null as date) as          planned_termination_date,   -- for inserts will be null\n" +
-            "       'JNL' as                         f_type,\n" +
-            "        CAST (null as varchar) as       f_status,                   -- For renames set status to null, then the value in EPH golden will persist.\n" +
-            "        CAST (null as integer) as       f_accountable_product,\n" +
-            "        CAST (null as varchar) as       pmc_old,                    -- for renames set pmc_old to null.\n" +
-            "        CAST (null as varchar) as       pmc_new,                    -- for renames set pmc_new to null.\n" +
-            "        CAST (null as varchar) as       f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
-            "        CAST (null as varchar) as       f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
-            "        CAST (null as varchar) as       opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
-            "        CAST (null as varchar) as       f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
-            "        CAST (null as varchar) as       subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
-            "        CAST (null as varchar) as       resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
-            "        CAST (null as varchar) as       language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
-            "       (CASE\n" +
-            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
-            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
-            "            else 'N'\n" +
-            "        END) as                         dq_err,\n" +
-            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                       w0\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
-            "                                          and  (w1.work_journey_identifier = 'A1')))\n" +
-            "where  wc.chronicle_scenario_code = 'RN'\n" +
-            "and    w0.work_journey_identifier = 'A0'\n" +
-            "and    w1.notified_date is not null\n" +
-            "and    w0.work_title is not null\n" +
-            "and    w1.work_title is not null\n" +
-            "and    w1.work_title <> w0.work_title\n" +
-            "UNION\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- UPDATE PMC  - PMC UPDATES EPH_WWORK\n" +
-            "-- this is CAR - Change Allocated Resource - where changes to PMC will go to EPH WWORK.\n" +
-            "-- take from JMF_WORK, from the merge with family resource details.\n" +
-            "--\n" +
-            "-- Change of PMC\n" +
-            "--  A number of journals under a given PMG are assigned to a new PMC. Write a wwork update.\n" +
-            "--  The new PMC Code will be held on jmf_family_resource_details for the given journal where Resource_Key = 'PMC', in field NEW_VALUE.\n" +
-            "--  For info, the old PMC code will be in INITIAL_VALUE.\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
-            "        wc.chronicle_scenario_code as   scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "            when 'N' then 'Insert'\n" +
-            "            when 'Y' then 'Update'\n" +
-            "            else 'Update'\n" +
-            "        END) as                         upsert,\n" +
-            "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as jm_source_reference,\n" +
-            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
-            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
-            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
-            "        CAST (null as boolean)          electro_rights_indicator,\n" +
-            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
-            "        CAST (null as integer)          copyright_year,\n" +
-            "        CAST (null as integer)          edition_number,\n" +
-            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
-            "        CAST (null as date) as          planned_termination_date,   -- the same field is used for both discontinues and transfers (a journal is never both)\n" +
-            "        'JNL' as                        f_type,\n" +
-            "        CAST (null as varchar)          f_status,                   -- For PMC changes, CAR (Change Allocated Resource), set status to null, then the current value in EPH gd_wwork will persist (normally 'WLA' or 'WPL')\n" +
-            "        CAST (null as integer)          f_accountable_product,\n" +
-            "        w1.pmc_old as                   pmc_old,                    -- pmc_old/new are found on CAR updates on the A1 record.\n" +
-            "        w1.pmc_new as                   pmc_new,                    -- pmc_old/new are found on CAR updates on the A1 record.\n" +
-            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
-            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
-            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
-            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
-            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
-            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
-            "        CAST (null as varchar)          language_code,               -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
-            "       (CASE\n" +
-            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
-            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
-            "            else 'N'\n" +
-            "        END) as                         dq_err,\n" +
-            "        w1.notified_date as             notified_date\n" +
-            "from " + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
-            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
-            "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-            "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
-            "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
-            "                               and w1.work_journey_identifier = 'A1'\n" +
-            "where   w0.work_journey_identifier = 'A0'\n" +
-            "and     wc.chronicle_scenario_code = 'CA'\n" +
-            "and     w1.pmc_family_resource_details_id is not null\n" +
-            "and     w1.pmc_old is not null\n" +
-            "and     w1.pmc_new is not null\n" +
-            "and     w1.pmc_new <> w1.pmc_old\n" +
-            "and     w1.notified_date is not null\n" +
-            "UNION\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- UPDATE - DISCONTINUE\n" +
-            "-- Discontinue is taken from JMF_WORK.\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "--\n" +
-            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
-            "        wc.chronicle_scenario_code as   scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "            when 'N' then 'Insert'\n" +
-            "            when 'Y' then 'Update'\n" +
-            "            else 'Update'\n" +
-            "        END) as                         upsert,\n" +
-            "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
-            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
-            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
-            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
-            "        CAST (null as boolean)          electro_rights_indicator,\n" +
-            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
-            "        CAST (null as integer)          copyright_year,\n" +
-            "        CAST (null as integer)          edition_number,\n" +
-            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
-            "        w1.discontinue_date as          planned_termination_date,   -- populated on A1 Discontinue records\n" +
-            "        'JNL' as                        f_type,\n" +
-            "        'WDA' as                        f_status,                   -- set status to 'WDA' (DISCONTINUE APPROVED).\n" +
-            "        CAST (null as integer)          f_accountable_product,\n" +
-            "        CAST (null as varchar)          pmc_old,                    -- don't change PMC code with discontinues\n" +
-            "        CAST (null as varchar)          pmc_new,                    -- don't change PMC code with discontinues\n" +
-            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
-            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
-            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
-            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
-            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
-            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
-            "        CAST (null as varchar)          language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
-            "       (CASE\n" +
-            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
-            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
-            "            else 'N'\n" +
-            "        END) as                         dq_err,\n" +
-            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
-            "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
-            "where  w0.work_journey_identifier = 'A0'\n" +
-            "and    wc.chronicle_scenario_code = 'DC'\n" +
-            "and    w0.notified_date is not null\n" +
-            "UNION\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- UPDATE - TRANSFER\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- EPHD-2915 set WTA determined by 'Society' as well as 'Third Party'\n" +
-            "--           transfer_date is collected from A1\n" +
-            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
-            "        wc.chronicle_scenario_code as   scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "            when 'N' then 'Insert'\n" +
-            "            when 'Y' then 'Update'\n" +
-            "            else 'Update'\n" +
-            "        END) as                         upsert,\n" +
-            "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as jm_source_reference,\n" +
-            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
-            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
-            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
-            "        CAST (null as boolean)          electro_rights_indicator,\n" +
-            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
-            "        CAST (null as integer)          copyright_year,\n" +
-            "        CAST (null as integer)          edition_number,\n" +
-            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
-            "        w1.transfer_date as             planned_termination_date,   -- transfer_date populated on A1 Transfer records.\n" +
-            "        'JNL' as                        f_type,\n" +
-            "       (CASE\n" +
-            "            when lower(w1.ownership_brand_type) = 'elsevier'    then 'WVA' -- for 'Elsevier'      set work status to 'WVA' (DiVestment Approved) EPHD-2915\n" +
-            "            when lower(w1.ownership_brand_type) = 'third party' then 'WTA' -- for 'Third Parties' set work status to 'WTA' (Transfer Approved)   EPHD-2915\n" +
-            "            when lower(w1.ownership_brand_type) = 'society'     then 'WTA' -- for 'Society'       set work status to 'WTA' (Transfer Approved)   EPHD-2915\n" +
-            "            else                                                     'WVA' -- else set work status to 'WVA' (Divestment Approved)\n" +
-            "        END) as                         f_status,\n" +
-            "        CAST (null as integer)          f_accountable_product,\n" +
-            "        CAST (null as varchar)          pmc_old,                    -- don't change PMC code with transfers\n" +
-            "        CAST (null as varchar)          pmc_new,                    -- don't change PMC code with transfers\n" +
-            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
-            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
-            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
-            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
-            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
-            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
-            "        CAST (null as varchar)          language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
-            "       (CASE\n" +
-            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
-            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
-            "            else 'N'\n" +
-            "        END) as                         dq_err,\n" +
-            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
-            "from  (((" + GetJMDLDBUser.getJMDB() + ".jmf_work                     w0\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
-            "         left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
-            "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
-            "where  w0.work_journey_identifier = 'A0'\n" +
-            "and    wc.chronicle_scenario_code = 'TR'\n" +
-            "and    w0.notified_date is not null\n" +
-            "order by notified_date, jm_source_reference) where jm_source_reference in ('%s')\n" +
+            "  coowned_journals AS (\n" +
+            "   SELECT DISTINCT\n" +
+            "     co.f_work\n" +
+            "   , co.legal_owner_type\n" +
+            "   FROM\n" +
+            "     "+ GetJMDLDBUser.getJMDB()+".jmf_work_ownership co\n" +
+            "   WHERE (((co.notified_date IS NOT NULL) AND (co.journal_ownership_type = 'CO')) AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
+            ") \n" +
+            "SELECT\n" +
+            "  cs.chronicle_scenario_name scenario_name\n" +
+            ", wc.chronicle_scenario_code scenario_code\n" +
+            ", (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            ", \"concat\"('J0', w.elsevier_journal_number) jm_source_reference\n" +
+            ", w.eph_work_id eph_work_id\n" +
+            ", w.work_title work_title\n" +
+            ", w.work_subtitle work_subtitle\n" +
+            ", CAST(null AS boolean) electro_rights_indicator\n" +
+            ", 0 volume\n" +
+            ", CAST(null AS integer) copyright_year\n" +
+            ", CAST(null AS integer) edition_number\n" +
+            ", w.launch_date planned_launch_date\n" +
+            ", CAST(null AS date) planned_termination_date\n" +
+            ", 'JNL' f_type\n" +
+            ", 'WAP' f_status\n" +
+            ", CAST(null AS integer) f_accountable_product\n" +
+            ", CAST(null AS varchar) pmc_old\n" +
+            ", w.pmc_code pmc_new\n" +
+            ", w.imprint_code f_imprint\n" +
+            ", w.opco_r12_id opco\n" +
+            ", (CASE WHEN (w.joint_venture_indicator = 'Y') THEN 'JVE' WHEN (fo.legal_owner_type IS NOT NULL) THEN fo.legal_owner_type WHEN (co_soc.legal_owner_type IS NOT NULL) THEN co_soc.legal_owner_type WHEN (co_com.legal_owner_type IS NOT NULL) THEN co_com.legal_owner_type WHEN (co_uni.legal_owner_type IS NOT NULL) THEN co_uni.legal_owner_type ELSE 'ELS' END) f_legal_ownership\n" +
+            ", (CASE WHEN (m.subscription_type = 'Calendar Year') THEN 'FY' WHEN (m.subscription_type = 'Rolling Year') THEN 'RY' WHEN (m.subscription_type = 'Both') THEN 'RY' ELSE null END) subscription_type\n" +
+            ", w.responsibility_centre_code resp_centre\n" +
+            ", COALESCE((CASE WHEN (w.main_language_code = 'English') THEN 'EN' WHEN (w.main_language_code IS NULL) THEN 'EN' WHEN (w.main_language_code = 'French') THEN 'FR' WHEN (w.main_language_code = 'German') THEN 'DE' WHEN (w.main_language_code = 'Spanish') THEN 'ES' WHEN (w.main_language_code = 'Catalan') THEN 'CA' WHEN (w.main_language_code = 'Italian') THEN 'IT' WHEN (w.main_language_code = 'Polish') THEN 'PL' WHEN (w.main_language_code = 'Portuguese') THEN 'PT' END), w.main_language_code) language_code\n" +
+            ", 'N' dq_err\n" +
+            ", w.notified_date notified_date\n" +
+            "FROM\n" +
+            "  (((((((("+ GetJMDLDBUser.getJMDB() +".jmf_work w\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_chronicle wc ON (wc.work_chronicle_id = w.work_chronicle_id))\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_chronicle_scenario cs ON (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_ownership fo ON ((fo.f_work = w.work_id) AND (fo.journal_ownership_type = 'FO')))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_manifestation m ON ((m.f_work = w.work_id) AND (m.issn = w.issn_l)))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_ownership wo1 ON ((wo1.f_work = w.work_id) AND (wo1.journal_ownership_type = 'FO')))\n" +
+            "LEFT JOIN coowned_journals co_soc ON ((co_soc.f_work = w.work_id) AND (co_soc.legal_owner_type = 'SOC')))\n" +
+            "LEFT JOIN coowned_journals co_com ON ((co_com.f_work = w.work_id) AND (co_com.legal_owner_type = 'COM')))\n" +
+            "LEFT JOIN coowned_journals co_uni ON ((co_uni.f_work = w.work_id) AND (co_uni.legal_owner_type = 'UNI')))\n" +
+            "WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) AND (w.notified_date IS NOT NULL))\n" +
+            "UNION SELECT\n" +
+            "  cs.chronicle_scenario_name scenario_name\n" +
+            ", wc.chronicle_scenario_code scenario_code\n" +
+            ", (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            ", \"concat\"('J0', COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number)) jm_source_reference\n" +
+            ", COALESCE(w1.eph_work_id, w0.eph_work_id) eph_work_id\n" +
+            ", w1.work_title work_title\n" +
+            ", CAST(null AS varchar) work_subtitle\n" +
+            ", CAST(null AS boolean) electro_rights_indicator\n" +
+            ", CAST(null AS integer) volume\n" +
+            ", CAST(null AS integer) copyright_year\n" +
+            ", CAST(null AS integer) edition_number\n" +
+            ", CAST(null AS date) planned_launch_date\n" +
+            ", CAST(null AS date) planned_termination_date\n" +
+            ", 'JNL' f_type\n" +
+            ", CAST(null AS varchar) f_status\n" +
+            ", CAST(null AS integer) f_accountable_product\n" +
+            ", CAST(null AS varchar) pmc_old\n" +
+            ", CAST(null AS varchar) pmc_new\n" +
+            ", CAST(null AS varchar) f_imprint\n" +
+            ", CAST(null AS varchar) opco\n" +
+            ", CAST(null AS varchar) f_legal_ownership\n" +
+            ", CAST(null AS varchar) subscription_type\n" +
+            ", CAST(null AS varchar) resp_centre\n" +
+            ", CAST(null AS varchar) language_code\n" +
+            ", (CASE WHEN ((w0.eph_work_id IS NULL) AND (w1.eph_work_id IS NULL)) THEN 'Y' WHEN ((w0.elsevier_journal_number IS NULL) AND (w1.elsevier_journal_number IS NULL)) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            ", COALESCE(w1.notified_date, w0.notified_date) notified_date\n" +
+            "FROM\n" +
+            "  ((("+ GetJMDLDBUser.getJMDB() +".jmf_work w0\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_chronicle wc ON (wc.work_chronicle_id = w0.work_chronicle_id))\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_chronicle_scenario cs ON (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work w1 ON ((w1.work_chronicle_id = w0.work_chronicle_id) AND (w1.work_journey_identifier = 'A1')))\n" +
+            "WHERE ((((((wc.chronicle_scenario_code = 'RN') AND (w0.work_journey_identifier = 'A0')) AND (w1.notified_date IS NOT NULL)) AND (w0.work_title IS NOT NULL)) AND (w1.work_title IS NOT NULL)) AND (w1.work_title <> w0.work_title))\n" +
+            "UNION SELECT\n" +
+            "  cs.chronicle_scenario_name scenario_name\n" +
+            ", wc.chronicle_scenario_code scenario_code\n" +
+            ", (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            ", \"concat\"('J0', COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number)) jm_source_reference\n" +
+            ", COALESCE(w1.eph_work_id, w0.eph_work_id) eph_work_id\n" +
+            ", CAST(null AS varchar) work_title\n" +
+            ", CAST(null AS varchar) work_subtitle\n" +
+            ", CAST(null AS boolean) electro_rights_indicator\n" +
+            ", CAST(null AS integer) volume\n" +
+            ", CAST(null AS integer) copyright_year\n" +
+            ", CAST(null AS integer) edition_number\n" +
+            ", CAST(null AS date) planned_launch_date\n" +
+            ", CAST(null AS date) planned_termination_date\n" +
+            ", 'JNL' f_type\n" +
+            ", CAST(null AS varchar) f_status\n" +
+            ", CAST(null AS integer) f_accountable_product\n" +
+            ", w1.pmc_old pmc_old\n" +
+            ", w1.pmc_new pmc_new\n" +
+            ", CAST(null AS varchar) f_imprint\n" +
+            ", CAST(null AS varchar) opco\n" +
+            ", CAST(null AS varchar) f_legal_ownership\n" +
+            ", CAST(null AS varchar) subscription_type\n" +
+            ", CAST(null AS varchar) resp_centre\n" +
+            ", CAST(null AS varchar) language_code\n" +
+            ", (CASE WHEN ((w0.eph_work_id IS NULL) AND (w1.eph_work_id IS NULL)) THEN 'Y' WHEN ((w0.elsevier_journal_number IS NULL) AND (w1.elsevier_journal_number IS NULL)) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            ", w1.notified_date notified_date\n" +
+            "FROM\n" +
+            "  ((("+ GetJMDLDBUser.getJMDB() +".jmf_work w0\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_chronicle wc ON (wc.work_chronicle_id = w0.work_chronicle_id))\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_chronicle_scenario cs ON (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work w1 ON (((w1.work_chronicle_id = w0.work_chronicle_id) AND (w1.elsevier_journal_number = w0.elsevier_journal_number)) AND (w1.work_journey_identifier = 'A1')))\n" +
+            "WHERE (((((((w0.work_journey_identifier = 'A0') AND (wc.chronicle_scenario_code = 'CA')) AND (w1.pmc_family_resource_details_id IS NOT NULL)) AND (w1.pmc_old IS NOT NULL)) AND (w1.pmc_new IS NOT NULL)) AND (w1.pmc_new <> w1.pmc_old)) AND (w1.notified_date IS NOT NULL))\n" +
+            "UNION SELECT\n" +
+            "  cs.chronicle_scenario_name scenario_name\n" +
+            ", wc.chronicle_scenario_code scenario_code\n" +
+            ", (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            ", \"concat\"('J0', COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number)) jm_source_reference\n" +
+            ", COALESCE(w1.eph_work_id, w0.eph_work_id) eph_work_id\n" +
+            ", CAST(null AS varchar) work_title\n" +
+            ", CAST(null AS varchar) work_subtitle\n" +
+            ", CAST(null AS boolean) electro_rights_indicator\n" +
+            ", CAST(null AS integer) volume\n" +
+            ", CAST(null AS integer) copyright_year\n" +
+            ", CAST(null AS integer) edition_number\n" +
+            ", CAST(null AS date) planned_launch_date\n" +
+            ", w1.discontinue_date planned_termination_date\n" +
+            ", 'JNL' f_type\n" +
+            ", 'WDA' f_status\n" +
+            ", CAST(null AS integer) f_accountable_product\n" +
+            ", CAST(null AS varchar) pmc_old\n" +
+            ", CAST(null AS varchar) pmc_new\n" +
+            ", CAST(null AS varchar) f_imprint\n" +
+            ", CAST(null AS varchar) opco\n" +
+            ", CAST(null AS varchar) f_legal_ownership\n" +
+            ", CAST(null AS varchar) subscription_type\n" +
+            ", CAST(null AS varchar) resp_centre\n" +
+            ", CAST(null AS varchar) language_code\n" +
+            ", (CASE WHEN ((w0.eph_work_id IS NULL) AND (w1.eph_work_id IS NULL)) THEN 'Y' WHEN ((w0.elsevier_journal_number IS NULL) AND (w1.elsevier_journal_number IS NULL)) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            ", COALESCE(w1.notified_date, w0.notified_date) notified_date\n" +
+            "FROM\n" +
+            "  ((("+ GetJMDLDBUser.getJMDB() +".jmf_work w0\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_chronicle wc ON (wc.work_chronicle_id = w0.work_chronicle_id))\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_chronicle_scenario cs ON (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work w1 ON ((w1.work_chronicle_id = w0.work_chronicle_id) AND (w1.work_journey_identifier = 'A1')))\n" +
+            "WHERE (((w0.work_journey_identifier = 'A0') AND (wc.chronicle_scenario_code = 'DC')) AND (w0.notified_date IS NOT NULL))\n" +
+            "UNION SELECT\n" +
+            "  cs.chronicle_scenario_name scenario_name\n" +
+            ", wc.chronicle_scenario_code scenario_code\n" +
+            ", (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            ", \"concat\"('J0', COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number)) jm_source_reference\n" +
+            ", COALESCE(w1.eph_work_id, w0.eph_work_id) eph_work_id\n" +
+            ", CAST(null AS varchar) work_title\n" +
+            ", CAST(null AS varchar) work_subtitle\n" +
+            ", CAST(null AS boolean) electro_rights_indicator\n" +
+            ", CAST(null AS integer) volume\n" +
+            ", CAST(null AS integer) copyright_year\n" +
+            ", CAST(null AS integer) edition_number\n" +
+            ", CAST(null AS date) planned_launch_date\n" +
+            ", w1.transfer_date planned_termination_date\n" +
+            ", 'JNL' f_type\n" +
+            ", (CASE WHEN (\"lower\"(w1.ownership_brand_type) = 'elsevier') THEN 'WVA' WHEN (\"lower\"(w1.ownership_brand_type) = 'third party') THEN 'WTA' WHEN (\"lower\"(w1.ownership_brand_type) = 'society') THEN 'WTA' ELSE 'WVA' END) f_status\n" +
+            ", CAST(null AS integer) f_accountable_product\n" +
+            ", CAST(null AS varchar) pmc_old\n" +
+            ", CAST(null AS varchar) pmc_new\n" +
+            ", CAST(null AS varchar) f_imprint\n" +
+            ", CAST(null AS varchar) opco\n" +
+            ", CAST(null AS varchar) f_legal_ownership\n" +
+            ", CAST(null AS varchar) subscription_type\n" +
+            ", CAST(null AS varchar) resp_centre\n" +
+            ", CAST(null AS varchar) language_code\n" +
+            ", (CASE WHEN ((w0.eph_work_id IS NULL) AND (w1.eph_work_id IS NULL)) THEN 'Y' WHEN ((w0.elsevier_journal_number IS NULL) AND (w1.elsevier_journal_number IS NULL)) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            ", COALESCE(w1.notified_date, w0.notified_date) notified_date\n" +
+            "FROM\n" +
+            "  ((("+ GetJMDLDBUser.getJMDB() +".jmf_work w0\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work_chronicle wc ON (wc.work_chronicle_id = w0.work_chronicle_id))\n" +
+            "INNER JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_chronicle_scenario cs ON (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work w1 ON ((w1.work_chronicle_id = w0.work_chronicle_id) AND (w1.work_journey_identifier = 'A1')))\n" +
+            "WHERE (((w0.work_journey_identifier = 'A0') AND (wc.chronicle_scenario_code = 'TR')) AND (w0.notified_date IS NOT NULL))\n" +
+            "ORDER BY notified_date ASC, jm_source_reference ASC) where jm_source_reference in ('%s')\n" +
             "order by jm_source_reference, work_title, scenario_name,pmc_old,eph_work_id desc";
 
     public static String GET_WORK_IDENTIFIER_DQ_QUERY ="select * from (select cs.chronicle_scenario_name as                                      scenario_name,\n" +
@@ -1233,891 +1099,668 @@ public class JMETLDataChecksSQL {
 
     public static String GET_PRODUCT_PART1_QUERY ="select * from \n" +
             "(\n" +
-            "select  cs.chronicle_scenario_name as                             scenario_name,\n" +
-            "        cs.chronicle_scenario_code as                             scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "             when 'N' then 'Insert'\n" +
-            "             when 'Y' then 'Update'\n" +
-            "             else 'Update'\n" +
-            "        END) as                                                   upsert,\n" +
-            "        m.manifestation_type||'-J0'||w.elsevier_journal_number as jm_source_reference,             -- format E-J012345 or P-J012345\n" +
-            "        w.eph_work_id as                                          eph_work_id,                     -- format EPR-W-xxxxxx\n" +
-            "        m.eph_manifestation_id as                                 eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
-            "        CAST(null as varchar)                                     eph_product_id,                  -- format EPR-xxxxxx the finest grain. set null for new journals.\n" +
-            "       (CASE m.manifestation_type\n" +
-            "             when 'E' then m.manifestation_title||' (Online)'\n" +
-            "             else          m.manifestation_title||' (Print)'\n" +
-            "        END) as                                                   base_title,                      -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
-            "        w.elsevier_journal_number                                 w0_journal_number,\n" +
-            "        m.elsevier_journal_number                                 m0_journal_number,\n" +
-            "        w.work_chronicle_id as                                    w0_chronicle_id,\n" +
-            "        w.work_journey_identifier as                              w0_journey_identifier,\n" +
-            "        m.manifestation_type as                                   m0_manifestation_type,           -- (P)rint or (E)lectronic\n" +
-            "        CAST (1 as boolean) as                                    separately_saleable_ind,         -- set TRUE for all new journal products.\n" +
-            "        CAST (0 as boolean) as                                    trial_allowed_ind,               -- set FALSE for all new journal products.\n" +
-            "        CAST(w.launch_date as date)                               launch_date,\n" +
-            "       (CASE m.manifestation_type\n" +
-            "             when 'P' then 'G003'\n" +
-            "             else          'S001'\n" +
-            "        END) as                                                   tax_code,                         -- for print set = 'G003', for electronic set = 'S001'\n" +
-            "       (CASE when (w.open_accesstype_code = 'SM5')                                          then 'F'\n" +
-            "             when (w.open_accesstype_code = 'SM6')                                          then 'S'\n" +
-            "             when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4')   then 'H'\n" +
-            "             when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4SO') then 'N'\n" +
-            "             else null\n" +
-            "        END) as                                                   open_access_journal_type,        -- build as (F)ull-10, (H)ybrid-11, (S)ubsidised-12, (N)one-2, null.\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') in ('SM5','SM6')) then 'N'\n" +
-            "             else                                                                 'Y'\n" +
-            "        END) as                                                   subscription,                    -- set N for (Full/10/SM5 or Subsidised/12/SM6)\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') not in ('SM5','SM6') and m.manifestation_type = 'P') then 'Y'\n" +
-            "             else                                                                                                    'N'\n" +
-            "        END) as                                                   bulk_sales,                      -- set Y for Print manifestations which aren't (Full/SM5 or Subsidised/SM6)\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') not in ('SM5','SM6') and m.manifestation_type = 'E') then 'Y'\n" +
-            "             else                                                                                                    'N'\n" +
-            "        END) as                                                   back_files,                      -- set Y for Print manifestations which aren't (Full/SM5 or Subsidised/SM6)\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') in ('SM5','SM6'))              then 'Y'\n" +
-            "             when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4') then 'Y'\n" +
-            "             else                                                                              'N'\n" +
-            "        END) as                                                   open_access,                     -- set Y when oatc in (F,H,S) else N.\n" +
-            "       (CASE m.manifestation_type\n" +
-            "             when 'P' then 'Y'\n" +
-            "             else 'N'\n" +
-            "        END) as                                                   reprints,                        -- yes, print manifestations can be reprinted.\n" +
-            "        CAST('Y' as varchar) as                                   author_charges,                  -- set 'Y' for new journal inserts\n" +
-            "        CAST('N' as varchar) as                                   one_off_access,                  -- set N for new journals\n" +
-            "        CAST('N' as varchar) as                                   packages,                        -- set N for new journals\n" +
-            "        CAST('PPL' as varchar) as                                 availability_status,             -- for new journals set to product, planned 'PPL'\n" +
-            "        CAST('PPL' as varchar) as                                 work_status,                     -- for new journals set to product, planned 'PPL'\n" +
-            "        w.work_title as                                           work_title,                      -- w.work_title\n" +
-            "        CAST('JOURNAL' as varchar) as                             work_type,                       -- set 'JOURNAL'.\n" +
-            "        lower(wpr.email_address) as                               internal_email_new,              -- to be used by etl_product_person_role_dq_v -- EPHD-2847\n" +
-            "        CAST(null as varchar) as                                  internal_email_old,              -- not used for insert\n" +
-            "        wpr.peoplehub_id as                                       employee_number_new,             -- to be used by etl_product_person_role_dq_v\n" +
-            "        CAST(null as varchar) as                                  employee_number_old,             -- not used for insert\n" +
-            "       (CASE when (w.elsevier_journal_number is null) then 'Y'\n" +
-            "             when (m.elsevier_journal_number is null) then 'Y'\n" +
-            "             when (m.manifestation_type      is null) then 'Y'\n" +
-            "             when (wpr.email_address         is null) then 'Y'\n" +
-            "             when (wpr.peoplehub_id          is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build jm references are missing\n" +
-            "             else                                          'N'                                     -- or when email or peoplehub_id are missing.\n" +
-            "        END) as                                                   dq_err,\n" +
-            "        m.notified_date as                                        notified_date\n" +
-            "from ((((" + GetJMDLDBUser.getJMDB() + ".jmf_manifestation            m\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w   on  (m.f_work   = w.work_id))\n" +
-            "    left join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr on ((wpr.f_work = w.work_id)\n" +
-            "                                          and (wpr.party_role_type in ('PPC','PU'))))\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on  (w.work_chronicle_id        = wc.work_chronicle_id))\n" +
-            "         join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on  (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
-            "where w.work_journey_identifier = 'A1'\n" +
-            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "and   m.notified_date is not null\n" +
-            "--       the grouping was a necessary step for updates, handling both A0 & A1s, to handle duplicate manifestation primary keys in SIT. Harmless to include here, too.\n" +
-            "group by cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind,\n" +
-            "         w.work_chronicle_id, w.elsevier_journal_number, w.work_journey_identifier, w.open_accesstype_code, w.manifestation_types_code,\n" +
-            "         m.manifestation_id, w.launch_date, m.manifestation_type, m.elsevier_journal_number, m.manifestation_title,\n" +
-            "         w.eph_work_id, w.work_title, m.eph_manifestation_id, m.notified_date, wpr.email_address, wpr.peoplehub_id\n" +
-            "UNION\n" +
-            "select  cs.chronicle_scenario_name as                             scenario_name,\n" +
-            "        cs.chronicle_scenario_code as                             scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "             when 'N' then 'Insert'\n" +
-            "             when 'Y' then 'Update'\n" +
-            "             else 'Update'\n" +
-            "        END) as                                                   upsert,\n" +
-            "        m0.manifestation_type||'-J0'||w0.elsevier_journal_number as jm_source_reference,           -- format E-J012345 or P-J012345\n" +
-            "        w0.eph_work_id                                            eph_work_id,                     -- from A0 work\n" +
-            "        m0.eph_manifestation_id                                   eph_manifestation_id,            -- from A0 manifestation\n" +
-            "        CAST(null as varchar)                                     eph_product_id,                  -- format EPR-xxxxxx the finest grain. jm does not have this detail. set null.\n" +
-            "       (CASE m0.manifestation_type\n" +
-            "             when 'E' then m0.manifestation_title||' (Online)'\n" +
-            "             else          m0.manifestation_title||' (Print)'\n" +
-            "        END) as                                                   base_title,                      -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
-            "        w0.elsevier_journal_number                                w0_journal_number,\n" +
-            "        m0.elsevier_journal_number                                m0_journal_number,\n" +
-            "        w0.work_chronicle_id as                                   w0_chronicle_id,\n" +
-            "        w0.work_journey_identifier as                             w0_journey_identifier,\n" +
-            "        m0.manifestation_type as                                  m0_manifestation_type,           -- (P)rint or (E)lectronic\n" +
-            "        CAST (null as boolean) as                                 separately_saleable_ind,\n" +
-            "        CAST (null as boolean) as                                 trial_allowed_ind,\n" +
-            "        CAST (null as date) as                                    launch_date,\n" +
-            "        CAST (null as varchar) as                                 tax_code,\n" +
-            "        CAST (null as varchar) as                                 open_access_journal_type,\n" +
-            "       (CASE when (COALESCE (w0.open_accesstype_code,'XYZ') in ('SM5','SM6')) then 'N'\n" +
-            "             else                                                                  'Y'\n" +
-            "        END) as                                                   subscription,                    -- set N for (Full/10/SM5 or Subsidised/12/SM6)\n" +
-            "       (CASE when (COALESCE (w0.open_accesstype_code,'XYZ') not in ('SM5','SM6') and m0.manifestation_type = 'P') then 'Y'\n" +
-            "             else                                                                                                      'N'\n" +
-            "        END) as                                                   bulk_sales,                      -- set Y for Print manifestations which aren't (Full/SM5 or Subsidised/SM6)\n" +
-            "       (CASE when (COALESCE (w0.open_accesstype_code,'XYZ') not in ('SM5','SM6') and m0.manifestation_type = 'E') then 'Y'\n" +
-            "             else                                                                                                      'N'\n" +
-            "        END) as                                                   back_files,                      -- set Y for Print manifestations which aren't (Full/SM5 or Subsidised/SM6)\n" +
-            "       (CASE when (COALESCE (w0.open_accesstype_code,'XYZ') in ('SM5','SM6'))               then 'Y'\n" +
-            "             when (w0.open_accesstype_code is null and w0.manifestation_types_code = 'SM4') then 'Y'\n" +
-            "             else                                                                                'N'\n" +
-            "        END) as                                                   open_access,                     -- set Y when oatc in (F,H,S) else N.\n" +
-            "       (CASE m0.manifestation_type\n" +
-            "             when 'P' then 'Y'\n" +
-            "             else 'N'\n" +
-            "        END) as                                                   reprints,                        -- yes, print manifestations can be reprinted.\n" +
-            "        CAST('Y' as varchar) as                                   author_charges,\n" +
-            "        CAST('N' as varchar) as                                   one_off_access,                  -- set N for new journals\n" +
-            "        CAST('N' as varchar) as                                   packages,                        -- set N for new journals\n" +
-            "        CAST(null as varchar) as                                  availability_status,\n" +
-            "        CAST(null as varchar) as                                  work_status,                     -- for new journals set to product, planned 'PPL'\n" +
-            "        w0.work_title as                                          w0_work_title,                   -- w.work_title\n" +
-            "        CAST('JOURNAL' as varchar) as                             work_type,                       -- set 'JOURNAL'.\n" +
-            "        CAST(null as varchar) as                                  internal_email_new,               -- set to null as not used for rename\n" +
-            "        CAST(null as varchar) as                                  internal_email_old,               -- set to null as not used for rename\n" +
-            "        CAST(null as varchar) as                                  employee_number_new,              -- set to null as not used for rename\n" +
-            "        CAST(null as varchar) as                                  employee_number_old,              -- set to null as not used for rename\n" +
-            "       (CASE when (w0.elsevier_journal_number is null) then 'Y'\n" +
-            "             when (m0.elsevier_journal_number is null) then 'Y'\n" +
-            "             when (m0.manifestation_type      is null) then 'Y'\n" +
-            "             else                                           'N'                                    -- or when email or peoplehub_id are missing?\n" +
-            "        END) as                                                   dq_err,\n" +
-            "        m0.notified_date as                                       notified_date\n" +
-            "--      the joins and where clause select all rename manifestations, A0 'before', both p & e.\n" +
-            "--      the grouping is a necessary step to handle duplicate manifestation primary keys in SIT.\n" +
-            "from ((((" + GetJMDLDBUser.getJMDB() + ".jmf_manifestation           m0\n" +
-            "         join " + GetJMDLDBUser.getJMDB() + ".jmf_work               w0 on ((m0.f_work = w0.work_id)\n" +
-            "                                        and (w0.work_journey_identifier = 'A0')))\n" +
-            "    left join " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role  wpr on ((wpr.f_work = w0.work_id)\n" +
-            "                                        and (wpr.party_role_type in ('PPC','PU'))))\n" +
-            "         join " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on ((w0.work_chronicle_id       = wc.work_chronicle_id)\n" +
-            "                                        and (w0.work_journey_identifier = 'A0')))\n" +
-            "         join " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on  (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
-            "where    wc.chronicle_scenario_code = 'RN'\n" +
-            "and      m0.notified_date is not null\n" +
-            "group by cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind,\n" +
-            "         w0.work_chronicle_id, w0.elsevier_journal_number, w0.work_journey_identifier, w0.open_accesstype_code, w0.manifestation_types_code,\n" +
-            "         m0.manifestation_id, m0.manifestation_type, m0.elsevier_journal_number, m0.manifestation_title,\n" +
-            "         w0.eph_work_id, w0.work_title, m0.eph_manifestation_id, m0.notified_date, wpr.email_address, wpr.peoplehub_id\n" +
-            "UNION\n" +
-            "select  cs.chronicle_scenario_name as                             scenario_name,\n" +
-            "        cs.chronicle_scenario_code as                             scenario_code,\n" +
-            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-            "             when 'N' then 'Insert'\n" +
-            "             when 'Y' then 'Update'\n" +
-            "             else 'Update'\n" +
-            "        END) as                                                   upsert,\n" +
-            "        'J0'||w.elsevier_journal_number as                        jm_source_reference,             -- manifestation-level not available for PU changes\n" +
-            "        w.eph_work_id as                                          eph_work_id,                     -- format EPR-W-xxxxxx\n" +
-            "        CAST(null as varchar)                                     eph_manifestation_id,            -- manifestation-level not available for PU changes\n" +
-            "        CAST(null as varchar)                                     eph_product_id,                  -- product-level not available in jm\n" +
-            "        w.work_title as                                           base_title,                      -- should be (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
-            "        w.elsevier_journal_number                                 w0_journal_number,\n" +
-            "        CAST(null as varchar)                                     m0_journal_number,\n" +
-            "        w.work_chronicle_id as                                    w0_chronicle_id,\n" +
-            "        w.work_journey_identifier as                              w0_journey_identifier,\n" +
-            "        CAST(null as varchar) as                                  m0_manifestation_type,           -- manifestation-level not available for PU changes\n" +
-            "        CAST (null as boolean) as                                 separately_saleable_ind,\n" +
-            "        CAST (null as boolean) as                                 trial_allowed_ind,\n" +
-            "        CAST (null as date)                                       launch_date,\n" +
-            "        CAST(null as varchar) as                                  tax_code,\n" +
-            "        CAST(null as varchar) as                                  open_access_journal_type,\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') in ('SM5','SM6')) then 'N'\n" +
-            "             else                                                                 'Y'\n" +
-            "        END) as                                                   subscription,\n" +
-            "        CAST('N' as varchar)                                      bulk_sales,\n" +
-            "        CAST('N' as varchar)                                      back_files,\n" +
-            "       (CASE when (COALESCE (w.open_accesstype_code,'XYZ') in ('SM5','SM6')) then 'Y'\n" +
-            "             else                                                                 'N'\n" +
-            "        END) as                                                   open_access,                     -- set Y when oatc in (F,H,S) else N.\n" +
-            "        CAST('Y' as varchar)                                      reprints,\n" +
-            "        CAST('N' as varchar) as                                   author_charges,                  -- set 'N' for updates.\n" +
-            "        CAST('N' as varchar) as                                   one_off_access,\n" +
-            "        CAST('N' as varchar) as                                   packages,\n" +
-            "        CAST(null as varchar) as                                  availability_status,\n" +
-            "        CAST(null as varchar) as                                  work_status,\n" +
-            "        w.work_title as                                           work_title,                      -- w.work_title\n" +
-            "        CAST('JOURNAL' as varchar) as                             work_type,                       -- set 'JOURNAL'.\n" +
-            "        lower(w.pu_email_new) as                                  internal_email_new,               -- to be used by etl_product_person_role_dq_v -- EPHD-2847\n" +
-            "        lower(w.pu_email_old) as                                  internal_email_old,               -- to be used by etl_product_person_role_dq_v -- EPHD-2847\n" +
-            "        w.pu_peoplehubid_new as                                   employee_number_new,              -- to be used by etl_product_person_role_dq_v\n" +
-            "        w.pu_peoplehubid_old as                                   employee_number_old,              -- to be used by etl_product_person_role_dq_v\n" +
-            "       (CASE when (w.elsevier_journal_number is null) then 'Y'\n" +
-            "             when (w.pu_email_new            is null) then 'Y'\n" +
-            "             when (w.pu_peoplehubid_new      is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build jm references are missing\n" +
-            "             else                                          'N'                                     -- or when email or peoplehub_id are missing.\n" +
-            "        END) as                                                   dq_err,\n" +
-            "        w.notified_date as                                        notified_date\n" +
-            "from  ((" + GetJMDLDBUser.getJMDB() + ".jmf_work                      w\n" +
-            "        join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc  on (w.work_chronicle_id        = wc.work_chronicle_id))\n" +
-            "        join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
-            "where   w.work_journey_identifier  = 'A1'\n" +
-            "and     wc.chronicle_scenario_code = 'CA'\n" +
-            "and     w.notified_date is not null\n" +
-            ") where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
+            "WITH\n" +
+            "  work_business_model AS (\n" +
+            "   SELECT\n" +
+            "     w.work_id\n" +
+            "   , \"max\"((CASE WHEN (wbm.business_model_code = 'SBS') THEN 'Y' ELSE 'N' END)) SBS\n" +
+            "   , \"max\"((CASE WHEN (wbm.business_model_code = 'APC') THEN 'Y' ELSE 'N' END)) APC\n" +
+            "   , \"max\"((CASE WHEN (wbm.business_model_code = 'SBD') THEN 'Y' ELSE 'N' END)) SBD\n" +
+            "   FROM\n" +
+            "     ("+ GetJMDLDBUser.getJMDB()+".jmf_work w\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_business_model wbm ON ((wbm.f_work = w.work_id) AND (wbm.notified_date IS NOT NULL)))\n" +
+            "   GROUP BY w.work_id\n" +
+            ") \n" +
+            "(\n" +
+            "   SELECT\n" +
+            "     cs.chronicle_scenario_name scenario_name\n" +
+            "   , cs.chronicle_scenario_code scenario_code\n" +
+            "   , (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            "   , \"concat\"(\"concat\"(m.manifestation_type, '-J0'), w.elsevier_journal_number) jm_source_reference\n" +
+            "   , w.eph_work_id eph_work_id\n" +
+            "   , m.eph_manifestation_id eph_manifestation_id\n" +
+            "   , CAST(null AS varchar) eph_product_id\n" +
+            "   , (CASE m.manifestation_type WHEN 'E' THEN \"concat\"(m.manifestation_title, ' (Online)') ELSE \"concat\"(m.manifestation_title, ' (Print)') END) base_title\n" +
+            "   , w.elsevier_journal_number w0_journal_number\n" +
+            "   , m.elsevier_journal_number m0_journal_number\n" +
+            "   , w.work_chronicle_id w0_chronicle_id\n" +
+            "   , w.work_journey_identifier w0_journey_identifier\n" +
+            "   , m.manifestation_type m0_manifestation_type\n" +
+            "   , CAST(1 AS boolean) separately_saleable_ind\n" +
+            "   , CAST(0 AS boolean) trial_allowed_ind\n" +
+            "   , CAST(w.launch_date AS date) launch_date\n" +
+            "   , (CASE m.manifestation_type WHEN 'P' THEN 'G003' ELSE 'S001' END) tax_code\n" +
+            "   , (CASE WHEN (wbm.SBS = 'Y') THEN 'Y' ELSE 'N' END) subscription\n" +
+            "   , (CASE WHEN ((wbm.SBS = 'Y') AND (m.manifestation_type = 'P')) THEN 'Y' ELSE 'N' END) bulk_sales\n" +
+            "   , (CASE WHEN ((wbm.SBS = 'Y') AND (m.manifestation_type = 'E')) THEN 'Y' ELSE 'N' END) back_files\n" +
+            "   , (CASE WHEN ((wbm.APC = 'Y') OR (wbm.SBD = 'Y')) THEN 'Y' ELSE 'N' END) open_access\n" +
+            "   , (CASE m.manifestation_type WHEN 'P' THEN 'Y' ELSE 'N' END) reprints\n" +
+            "   , CAST('Y' AS varchar) author_charges\n" +
+            "   , CAST('N' AS varchar) one_off_access\n" +
+            "   , CAST('N' AS varchar) packages\n" +
+            "   , CAST('PPL' AS varchar) availability_status\n" +
+            "   , CAST('PPL' AS varchar) work_status\n" +
+            "   , w.work_title work_title\n" +
+            "   , CAST('JOURNAL' AS varchar) work_type\n" +
+            "   , (CASE WHEN (w.elsevier_journal_number IS NULL) THEN 'Y' WHEN (m.elsevier_journal_number IS NULL) THEN 'Y' WHEN (m.manifestation_type IS NULL) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            "   , m.notified_date notified_date\n" +
+            "   FROM\n" +
+            "     (((("+ GetJMDLDBUser.getJMDB()+".jmf_manifestation m\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work w ON (m.f_work = w.work_id))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (w.work_chronicle_id = wc.work_chronicle_id))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
+            "   LEFT JOIN work_business_model wbm ON (wbm.work_id = w.work_id))\n" +
+            "   WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) AND (m.notified_date IS NOT NULL))\n" +
+            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w.work_chronicle_id, w.elsevier_journal_number, w.work_journey_identifier, wbm.SBS, wbm.APC, wbm.SBD, m.manifestation_id, w.launch_date, m.manifestation_type, m.elsevier_journal_number, m.manifestation_title, w.eph_work_id, w.work_title, m.eph_manifestation_id, m.notified_date\n" +
+            "UNION    SELECT\n" +
+            "     cs.chronicle_scenario_name scenario_name\n" +
+            "   , cs.chronicle_scenario_code scenario_code\n" +
+            "   , (CASE cs.chronicle_scenario_evolutionary_ind WHEN 'N' THEN 'Insert' WHEN 'Y' THEN 'Update' ELSE 'Update' END) upsert\n" +
+            "   , \"concat\"(\"concat\"(m0.manifestation_type, '-J0'), w0.elsevier_journal_number) jm_source_reference\n" +
+            "   , w0.eph_work_id eph_work_id\n" +
+            "   , m0.eph_manifestation_id eph_manifestation_id\n" +
+            "   , CAST(null AS varchar) eph_product_id\n" +
+            "   , (CASE m0.manifestation_type WHEN 'E' THEN \"concat\"(m0.manifestation_title, ' (Online)') ELSE \"concat\"(m0.manifestation_title, ' (Print)') END) base_title\n" +
+            "   , w0.elsevier_journal_number w0_journal_number\n" +
+            "   , m0.elsevier_journal_number m0_journal_number\n" +
+            "   , w0.work_chronicle_id w0_chronicle_id\n" +
+            "   , w0.work_journey_identifier w0_journey_identifier\n" +
+            "   , m0.manifestation_type m0_manifestation_type\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , (CASE WHEN (wbm0.SBS = 'Y') THEN 'Y' ELSE 'N' END) subscription\n" +
+            "   , (CASE WHEN ((wbm0.SBS = 'Y') AND (m0.manifestation_type = 'P')) THEN 'Y' ELSE 'N' END) bulk_sales\n" +
+            "   , (CASE WHEN ((wbm0.SBS = 'Y') AND (m0.manifestation_type = 'E')) THEN 'Y' ELSE 'N' END) back_files\n" +
+            "   , (CASE WHEN ((wbm0.APC = 'Y') OR (wbm0.SBD = 'Y')) THEN 'Y' ELSE 'N' END) open_access\n" +
+            "   , (CASE m0.manifestation_type WHEN 'P' THEN 'Y' ELSE 'N' END) reprints\n" +
+            "   , CAST('Y' AS varchar) author_charges\n" +
+            "   , CAST('N' AS varchar) one_off_access\n" +
+            "   , CAST('N' AS varchar) packages\n" +
+            "   , CAST(null AS varchar) availability_status\n" +
+            "   , CAST(null AS varchar) work_status\n" +
+            "   , w0.work_title w0_work_title\n" +
+            "   , CAST('JOURNAL' AS varchar) work_type\n" +
+            "   , (CASE WHEN (w0.elsevier_journal_number IS NULL) THEN 'Y' WHEN (m0.elsevier_journal_number IS NULL) THEN 'Y' WHEN (m0.manifestation_type IS NULL) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            "   , m0.notified_date notified_date\n" +
+            "   FROM\n" +
+            "     (((("+ GetJMDLDBUser.getJMDB()+".jmf_manifestation m0\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work w0 ON ((m0.f_work = w0.work_id) AND (w0.work_journey_identifier = 'A0')))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON ((w0.work_chronicle_id = wc.work_chronicle_id) AND (w0.work_journey_identifier = 'A0')))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
+            "   LEFT JOIN work_business_model wbm0 ON (wbm0.work_id = w0.work_id))\n" +
+            "   WHERE ((wc.chronicle_scenario_code = 'RN') AND (m0.notified_date IS NOT NULL))\n" +
+            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w0.work_chronicle_id, w0.elsevier_journal_number, w0.work_journey_identifier, wbm0.SBS, wbm0.APC, wbm0.SBD, m0.manifestation_id, m0.manifestation_type, m0.elsevier_journal_number, m0.manifestation_title, w0.eph_work_id, w0.work_title, m0.eph_manifestation_id, m0.notified_date\n" +
+            ") ORDER BY upsert ASC, scenario_name ASC, notified_date DESC, jm_source_reference ASC) where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
 
     public static String GET_PRODUCT_INSERTS_QUERY ="select * from (\n" +
-            "with base_data as\n" +
-            "(\n" +
-            "select\n" +
-            "scenario_name,                   -- scenario NAME  New Proprietary, etc\n" +
-            "scenario_code,                   -- scenario CODE  NP, NS, AC, MI, etc\n" +
-            "upsert,                          -- 'Insert'\n" +
-            "jm_source_reference,             -- used to build jm_source_reference (manifestation)\n" +
-            "concat('J0',w0_journal_number) as ult_work_ref, --work reference\n" +
-            "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
-            "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
-            "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-            "base_title,                      -- manifestation name with a suffix of (Print) or (Online). JM does not support short title.\n" +
-            "w0_journal_number,\n" +
-            "m0_journal_number,\n" +
-            "w0_chronicle_id,\n" +
-            "w0_journey_identifier,\n" +
-            "m0_manifestation_type,           -- (P)rint or (E)lectronic\n" +
-            "separately_saleable_ind,         -- set TRUE for all new journal products.\n" +
-            "trial_allowed_ind,               -- set FALSE for all new journal products.\n" +
-            "launch_date,                     -- w.launch_date\n" +
-            "tax_code,                        -- yes, hard-code based on manifestation_type\n" +
-            "open_access_journal_type,        -- build as (F)ull-10, (H)ybrid-11, (S)ubsidised-12, (N)one-2, null.\n" +
-            "subscription,                    -- CASE oa jnl type not in (F,S).\n" +
-            "bulk_sales,                      -- CASE oa jnl type not in (F,S) and manifestation type\n" +
-            "back_files,                      -- CASE oa jnl type not in (F,S) and manifestation type\n" +
-            "open_access,                     -- CASE oa jnl type, set Y when (F,H,S) else N.\n" +
-            "reprints,                        -- yes, CASE based on manifestation type\n" +
-            "author_charges,                  -- set 'Y' for new journals, 'N' for updates.\n" +
-            "one_off_access,                  -- 'N' for new journals\n" +
-            "packages,                        -- 'N' for new journals\n" +
-            "availability_status,             -- for new journals set to planned available 'PPL'\n" +
-            "work_status,                     -- for new journals set to planned available 'PPL'\n" +
-            "work_title,                      -- w.product_work_title\n" +
-            "work_type,                       -- set 'JOURNAL'\n" +
-            "internal_email_old,              -- will be used by etl_product_person_role_dq_v\n" +
-            "internal_email_new,              -- will be used by etl_product_person_role_dq_v\n" +
-            "employee_number_old,             -- will be used by etl_product_person_role_dq_v\n" +
-            "employee_number_new,             -- will be used by etl_product_person_role_dq_v\n" +
-            "dq_err,                          -- default 'N', but set 'Y' (yes error) when PU email or PU peoplehub_id are missing.\n" +
-            "notified_date\n" +
-            "from  " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v\n" +
-            "where notified_date is not null\n" +
-            ")\n" +
-            "-- select * from base_data\n" +
-            ", crosstab_data as\n" +
-            "(\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-SUB'      as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    base_title||' Subscription'      as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    tax_code,\n" +
-            "    'SUB' f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PSTB' then 'PST'\n" +
-            "        else availability_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert       = 'Insert'\n" +
-            "and   subscription = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-JBS' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    base_title||' Bulk Sales'        as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    tax_code,\n" +
-            "    'JBS' f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PSTB' then 'PST'\n" +
-            "        else availability_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert     = 'Insert'\n" +
-            "and   bulk_sales = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-BKF' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    base_title||' Back Files'        as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    tax_code,\n" +
-            "    'BKF' f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PSTB' then 'PAS'\n" +
-            "        else availability_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert     = 'Insert'\n" +
-            "and   back_files = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-RPR' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    base_title||' Reprints'          as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    tax_code,\n" +
-            "    'RPR' f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PSTB' then 'PAS'\n" +
-            "        else availability_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert   = 'Insert'\n" +
-            "and   reprints = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-OOA' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    base_title||' Purchase'          as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    tax_code,\n" +
-            "   'OOA' f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PSTB' then 'PST'\n" +
-            "        else availability_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert         = 'Insert'\n" +
-            "and   one_off_access = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    \"concat\"('J0',\"w0_journal_number\",'-OAA') as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    cast (null as varchar) as eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title||' Article Publishing Charge' as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "   'S011' as tax_code,\n" +
-            "   'OAA' f_type,\n" +
-            "    null m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when work_status = 'PSTB' then 'PST'\n" +
-            "        else work_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    cast(null as varchar) as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert      = 'Insert'\n" +
-            "and   open_access = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    \"concat\"('J0',\"w0_journal_number\",'-JAS') as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    cast (null as varchar) as eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title||' Author Charges' as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "   'S001' as tax_code,\n" +
-            "   'JAS' f_type,\n" +
-            "    null as m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when work_status = 'PSTB' then 'PST'\n" +
-            "        else work_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    cast(null as varchar) as manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert         = 'Insert'\n" +
-            "and   author_charges = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    substr(jm_source_reference,3,7)||'-PKG' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title                as \"name\",\n" +
-            "    CASE\n" +
-            "        when availability_status = 'PNS' then false\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    null as tax_code,\n" +
-            "    'PKG' f_type,\n" +
-            "    null as m0_manifestation_type,\n" +
-            "    CASE\n" +
-            "        when work_status = 'PSTB' then 'PST'\n" +
-            "        else work_status\n" +
-            "    END as f_status,\n" +
-            "    work_type,\n" +
-            "    jm_source_reference as manifestation_ref,\n" +
-            "    substr(jm_source_reference,3,7) as ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from base_data\n" +
-            "where upsert   = 'Insert'\n" +
-            "and   packages = 'Y'\n" +
-            ")\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            ",result_data as\n" +
-            "(\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_ref as jm_source_reference,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    name,\n" +
-            "    CASE when separately_saleable_ind is null then false else separately_saleable_ind END as separately_saleable_ind,\n" +
-            "    CASE when trial_allowed_ind   is null then false else trial_allowed_ind END as trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    f_type,\n" +
-            "    f_status,\n" +
-            "    case\n" +
-            "        when (f_type in ('OOA', 'JAS', 'JBS', 'JBF', 'RPR'))                   then 'ONE'\n" +
-            "        when (f_type = 'OAA' or (f_type = 'SUB' and m0_manifestation_type = 'P')) then 'EVE'\n" +
-            "        else 'SUB'\n" +
-            "    end as f_revenue_model,\n" +
-            "    tax_code,\n" +
-            "    work_type,\n" +
-            "    manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from\n" +
-            "crosstab_data\n" +
-            ")\n" +
-            "select * from result_data\n" +
-            ") where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
+            "WITH\n" +
+            "  base_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , jm_source_reference\n" +
+            "   , \"concat\"('J0', w0_journal_number) ult_work_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , base_title\n" +
+            "   , w0_journal_number\n" +
+            "   , m0_journal_number\n" +
+            "   , w0_chronicle_id\n" +
+            "   , w0_journey_identifier\n" +
+            "   , m0_manifestation_type\n" +
+            "   , separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , subscription\n" +
+            "   , bulk_sales\n" +
+            "   , back_files\n" +
+            "   , open_access\n" +
+            "   , reprints\n" +
+            "   , author_charges\n" +
+            "   , one_off_access\n" +
+            "   , packages\n" +
+            "   , availability_status\n" +
+            "   , work_status\n" +
+            "   , work_title\n" +
+            "   , work_type\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     etl_product_part1_v\n" +
+            "   WHERE (notified_date IS NOT NULL)\n" +
+            ") \n" +
+            ", crosstab_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-SUB') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(base_title, ' Subscription') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , 'SUB' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , (CASE WHEN (availability_status = 'PSTB') THEN 'PST' ELSE availability_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (subscription = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-JBS') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(base_title, ' Bulk Sales') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , 'JBS' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , (CASE WHEN (availability_status = 'PSTB') THEN 'PST' ELSE availability_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (bulk_sales = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-BKF') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(base_title, ' Back Files') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , 'BKF' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , (CASE WHEN (availability_status = 'PSTB') THEN 'PAS' ELSE availability_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (back_files = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-RPR') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(base_title, ' Reprints') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , 'RPR' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , (CASE WHEN (availability_status = 'PSTB') THEN 'PAS' ELSE availability_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (reprints = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-OOA') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(base_title, ' Purchase') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , 'OOA' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , (CASE WHEN (availability_status = 'PSTB') THEN 'PST' ELSE availability_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (one_off_access = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"('J0', \"w0_journal_number\", '-OAA') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , CAST(null AS varchar) eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(work_title, ' Article Publishing Charge') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , 'S011' tax_code\n" +
+            "   , 'OAA' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , (CASE WHEN (work_status = 'PSTB') THEN 'PST' ELSE work_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (open_access = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"('J0', \"w0_journal_number\", '-JAS') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , CAST(null AS varchar) eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(work_title, ' Author Charges') \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , 'S001' tax_code\n" +
+            "   , 'JAS' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , (CASE WHEN (work_status = 'PSTB') THEN 'PST' ELSE work_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (author_charges = 'Y'))\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(\"substr\"(jm_source_reference, 3, 7), '-PKG') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , work_title \"name\"\n" +
+            "   , (CASE WHEN (availability_status = 'PNS') THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , null tax_code\n" +
+            "   , 'PKG' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , (CASE WHEN (work_status = 'PSTB') THEN 'PST' ELSE work_status END) f_status\n" +
+            "   , work_type\n" +
+            "   , jm_source_reference manifestation_ref\n" +
+            "   , \"substr\"(jm_source_reference, 3, 7) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     base_data\n" +
+            "   WHERE ((upsert = 'Insert') AND (packages = 'Y'))\n" +
+            ") \n" +
+            ", result_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , jm_source_ref jm_source_reference\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , name\n" +
+            "   , (CASE WHEN (separately_saleable_ind IS NULL) THEN false ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , (CASE WHEN (trial_allowed_ind IS NULL) THEN false ELSE trial_allowed_ind END) trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , f_type\n" +
+            "   , f_status\n" +
+            "   , (CASE WHEN (f_type IN ('OOA', 'JAS', 'JBS', 'JBF', 'RPR')) THEN 'ONE' WHEN ((f_type = 'OAA') OR ((f_type = 'SUB') AND (m0_manifestation_type = 'P'))) THEN 'EVE' ELSE 'SUB' END) f_revenue_model\n" +
+            "   , tax_code\n" +
+            "   , work_type\n" +
+            "   , manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     crosstab_data\n" +
+            ") \n" +
+            "SELECT *\n" +
+            "FROM\n" +
+            "  result_data) where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
 
-    public static String GET_PRODUCT_UPDATES_QUERY ="select * from (with base_data as\n" +
-            "(select\n" +
-            "scenario_name,\n" +
-            "scenario_code,\n" +
-            "upsert,\n" +
-            "jm_source_reference,\n" +
-            "eph_work_id,\n" +
-            "eph_manifestation_id,\n" +
-            "eph_product_id,\n" +
-            "base_title,\n" +
-            "w0_journal_number,\n" +
-            "m0_journal_number,\n" +
-            "w0_chronicle_id,\n" +
-            "w0_journey_identifier,\n" +
-            "m0_manifestation_type,\n" +
-            "separately_saleable_ind,\n" +
-            "trial_allowed_ind,\n" +
-            "launch_date,\n" +
-            "tax_code,\n" +
-            "open_access_journal_type,\n" +
-            "subscription,\n" +
-            "bulk_sales,\n" +
-            "back_files,\n" +
-            "open_access,\n" +
-            "reprints,\n" +
-            "author_charges,\n" +
-            "one_off_access,\n" +
-            "packages,\n" +
-            "availability_status,\n" +
-            "work_status,\n" +
-            "work_title,\n" +
-            "work_type,\n" +
-            "-- pu_internal_email,         -- to be used by etl_product_person_role_dq_v\n" +
-            "-- pu_employee_number,        -- to be used by etl_product_person_role_dq_v\n" +
-            "dq_err,\n" +
-            "notified_date\n" +
-            "from  " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v\n" +
-            "where notified_date is not null\n" +
-            ")\n" +
-            "--                                   -- = select * from base_data\n" +
-            ", title_renames as\n" +
-            "(\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "-- title renames selection here - ** SELECT scenario Rename/RN Updates only **\n" +
-            "-- only populate the field which has changed - in this case product title\n" +
-            "-- join base data m0, w0, to w1.\n" +
-            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "select  bd.scenario_name                                                  scenario_name,                 -- 'Rename'\n" +
-            "        bd.scenario_code                                                  scenario_code,                 -- 'Rename'\n" +
-            "        bd.upsert                                                         upsert,                   -- 'Update'\n" +
-            "        bd.jm_source_reference                                            jm_source_reference,\n" +
-            "        COALESCE(bd.eph_work_id, w1.eph_work_id) as                       eph_work_id,               -- format EPR-W-XXXXXX new journals: null. The owning work\n" +
-            "        COALESCE(bd.eph_manifestation_id, m1.eph_manifestation_id) as     eph_manifestation_id,      -- format EPR-M-xxxxxx new journals: null\n" +
-            "        bd.eph_product_id                                                 eph_product_id,            -- null\n" +
-            "        bd.w0_journal_number as                                           w0_journal_number,\n" +
-            "        bd.m0_journal_number as                                           m0_journal_number,\n" +
-            "        bd.w0_chronicle_id                                                w0_chronicle_id,\n" +
-            "        bd.w0_journey_identifier                                          w0_journey_identifier,\n" +
-            "        bd.m0_manifestation_type                                          m0_manifestation_type,\n" +
-            "        bd.base_title as                                                  m0_base_title,                 -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
-            "       (CASE m1.manifestation_type\n" +
-            "             when 'E' then m1.manifestation_title||' (Online)'\n" +
-            "             else          m1.manifestation_title||' (Print)'\n" +
-            "        END) as                                                           m1_base_title,                 -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
-            "        bd.separately_saleable_ind                                        separately_saleable_ind,\n" +
-            "        bd.trial_allowed_ind                                              trial_allowed_ind,\n" +
-            "        bd.launch_date                                                    launch_date,\n" +
-            "        bd.tax_code                                                       tax_code,\n" +
-            "        bd.open_access_journal_type                                       open_access_journal_type,\n" +
-            "        bd.subscription                                                   subscription,\n" +
-            "        bd.bulk_sales                                                     bulk_sales,\n" +
-            "        bd.back_files                                                     back_files,\n" +
-            "        bd.open_access                                                    open_access,\n" +
-            "        bd.reprints                                                       reprints,\n" +
-            "        bd.author_charges                                                 author_charges,\n" +
-            "        bd.one_off_access                                                 one_off_access,\n" +
-            "        bd.packages                                                       packages,\n" +
-            "        bd.availability_status                                            availability_status,\n" +
-            "        bd.work_status                                                    work_status,\n" +
-            "        w1.work_title                                                     work_title,\n" +
-            "        bd.work_type                                                      work_type,\n" +
-            "       (CASE\n" +
-            "            when (bd.eph_work_id          is null and w1.eph_work_id          is null) then 'Y'\n" +
-            "            when (bd.eph_manifestation_id is null and m1.eph_manifestation_id is null) then 'Y'\n" +
-            "            else 'N'\n" +
-            "        END) as                                                           dq_err,\n" +
-            "        m1.notified_date as                                               notified_date\n" +
-            "from (((base_data               bd\n" +
-            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on ((w1.work_chronicle_id       = bd.w0_chronicle_id)\n" +
-            "                                   and (w1.elsevier_journal_number = bd.w0_journal_number)\n" +
-            "                                   and (w1.work_journey_identifier = 'A1')))                   -- we've definitely got one work, the A1.\n" +
-            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
-            "                                   and (w1.work_journey_identifier = 'A1')\n" +
-            "                                   and (wc.chronicle_scenario_code = 'RN')))\n" +
-            "        join " + GetJMDLDBUser.getJMDB() + ".jmf_manifestation  m1 on ((m1.f_work = w1.work_id)\n" +
-            "                                   and (m1.elsevier_journal_number = bd.m0_journal_number)\n" +
-            "                                   and (m1.manifestation_type      = bd.m0_manifestation_type)))\n" +
-            "where m1.notified_date is not null\n" +
-            "and   bd.scenario_code = 'RN'\n" +
-            "and   bd.upsert   = 'Update'\n" +
-            "and   bd.base_title is not null\n" +
-            "and   m1.manifestation_title    is not null\n" +
-            "and   m1.manifestation_title <> bd.base_title\n" +
-            "group by bd.m0_manifestation_type, m1.manifestation_type,\n" +
-            "         bd.scenario_code, bd.scenario_name, bd.upsert, bd.jm_source_reference,\n" +
-            "         bd.m0_journal_number, bd.w0_chronicle_id, bd.w0_journey_identifier,\n" +
-            "         bd.eph_work_id, bd.eph_manifestation_id, bd.eph_product_id,\n" +
-            "         bd.base_title, m1.manifestation_title, m1.notified_date,\n" +
-            "         w1.eph_work_id, bd.w0_journal_number, w1.elsevier_journal_number,\n" +
-            "         bd.eph_manifestation_id, m1.eph_manifestation_id,\n" +
-            "         bd.separately_saleable_ind, bd.trial_allowed_ind, bd.launch_date, bd.tax_code, bd.open_access_journal_type,\n" +
-            "         bd.subscription, bd.bulk_sales, bd.back_files, bd.open_access, bd.reprints, bd.author_charges, bd.one_off_access,bd.packages,\n" +
-            "         bd.availability_status, bd.work_status, w1.work_title, bd.work_type\n" +
-            "order by bd.eph_work_id, w1.eph_work_id, bd.m0_manifestation_type, m1.manifestation_title, m1.notified_date\n" +
-            ")\n" +
-            ", crosstab_data as\n" +
-            "(\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-SUB' as   jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    m1_base_title||' Subscription' as \"name\",\n" +
-            "    CAST (null as boolean) as        separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as        trial_allowed_ind,\n" +
-            "    CAST (null as date) as           launch_date,\n" +
-            "    CAST (null as varchar) as        tax_code,\n" +
-            "    'SUB' as                         f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as        f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where subscription = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-JBS' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    m1_base_title||' Bulk Sales' as \"name\",\n" +
-            "    CAST (null as boolean) as       separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as       trial_allowed_ind,\n" +
-            "    CAST (null as date) as          launch_date,\n" +
-            "    CAST (null as varchar) as       tax_code,\n" +
-            "    'JBS' as                        f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as       f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where bulk_sales = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-BKF' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    m1_base_title||' Back Files' as \"name\",\n" +
-            "    CAST (null as boolean) as       separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as       trial_allowed_ind,\n" +
-            "    CAST (null as date) as          launch_date,\n" +
-            "    CAST (null as varchar) as       tax_code,\n" +
-            "    'BKF' as                        f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as       f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where back_files = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-RPR' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    m1_base_title||' Reprints' as \"name\",\n" +
-            "    CAST (null as boolean) as     separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as     trial_allowed_ind,\n" +
-            "    CAST (null as date) as        launch_date,\n" +
-            "    CAST (null as varchar) as     tax_code,\n" +
-            "    'RPR' as                      f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as     f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where reprints = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_reference||'-OOA' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    m1_base_title||' Purchase' as  \"name\",\n" +
-            "    CAST (null as boolean) as      separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as      trial_allowed_ind,\n" +
-            "    CAST (null as date) as         launch_date,\n" +
-            "    CAST (null as varchar) as      tax_code,\n" +
-            "   'OOA' as                        f_type,\n" +
-            "    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as      f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where one_off_access = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    \"concat\"('J0',\"w0_journal_number\", '-OAA') as   jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    cast (null as varchar) as eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title||' Article Publishing Charge' as \"name\",\n" +
-            "    CAST (null as boolean) as                       separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as                       trial_allowed_ind,\n" +
-            "    CAST (null as date) as                          launch_date,\n" +
-            "    CAST (null as varchar) as                       tax_code,\n" +
-            "   'OAA' as                                         f_type,\n" +
-            "    null as                                         m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as                       f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where open_access = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    \"concat\"('J0',\"w0_journal_number\",'-JAS') as      jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    cast (null as varchar) as eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title||' Author Charges' as \"name\",\n" +
-            "    CAST (null as boolean) as           separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as           trial_allowed_ind,\n" +
-            "    CAST (null as date) as              launch_date,\n" +
-            "    CAST (null as varchar) as           tax_code,\n" +
-            "   'JAS' as                             f_type,\n" +
-            "    null as                             m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as           f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where author_charges = 'Y'\n" +
-            "UNION\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    substr(jm_source_reference,3,7)||'-PKG' as jm_source_ref,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    work_title             as \"name\",\n" +
-            "    CAST (null as boolean) as  separately_saleable_ind,\n" +
-            "    CAST (null as boolean) as  trial_allowed_ind,\n" +
-            "    CAST (null as date) as     launch_date,\n" +
-            "    CAST (null as varchar) as  tax_code,\n" +
-            "    'PKG' as                   f_type,\n" +
-            "    null as                    m0_manifestation_type,\n" +
-            "    CAST (null as varchar) as  f_status,\n" +
-            "    work_type,\n" +
-            "    cast (null as varchar) manifestation_ref,\n" +
-            "    cast (null as varchar) as  ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from title_renames\n" +
-            "where packages = 'Y'\n" +
-            ")\n" +
-            ",result_data as\n" +
-            "(\n" +
-            "select\n" +
-            "    scenario_name,\n" +
-            "    scenario_code,\n" +
-            "    upsert,\n" +
-            "    jm_source_ref as jm_source_reference,\n" +
-            "    eph_work_id,\n" +
-            "    eph_manifestation_id,\n" +
-            "    eph_product_id,\n" +
-            "    name,\n" +
-            "    CASE\n" +
-            "        when separately_saleable_ind is null then true\n" +
-            "        else separately_saleable_ind\n" +
-            "    END as separately_saleable_ind,\n" +
-            "    trial_allowed_ind,\n" +
-            "    launch_date,\n" +
-            "    f_type,\n" +
-            "    f_status,\n" +
-            "    CAST (null as varchar) as f_revenue_model,\n" +
-            "    tax_code,\n" +
-            "    work_type,\n" +
-            "    manifestation_ref,\n" +
-            "    ult_work_ref,\n" +
-            "    dq_err,\n" +
-            "    notified_date\n" +
-            "from\n" +
-            "crosstab_data\n" +
-            ")\n" +
-            "select * from result_data) where jm_source_reference in ('%s') order by jm_source_reference desc, name desc, dq_err desc, name desc";
+    public static String GET_PRODUCT_UPDATES_QUERY ="select * from (" +
+            "WITH\n" +
+            "  base_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , jm_source_reference\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , base_title\n" +
+            "   , w0_journal_number\n" +
+            "   , m0_journal_number\n" +
+            "   , w0_chronicle_id\n" +
+            "   , w0_journey_identifier\n" +
+            "   , m0_manifestation_type\n" +
+            "   , separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , tax_code\n" +
+            "   , subscription\n" +
+            "   , bulk_sales\n" +
+            "   , back_files\n" +
+            "   , open_access\n" +
+            "   , reprints\n" +
+            "   , author_charges\n" +
+            "   , one_off_access\n" +
+            "   , packages\n" +
+            "   , availability_status\n" +
+            "   , work_status\n" +
+            "   , work_title\n" +
+            "   , work_type\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     "+ GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
+            "   WHERE (notified_date IS NOT NULL)\n" +
+            ") \n" +
+            ", title_renames AS (\n" +
+            "   SELECT\n" +
+            "     bd.scenario_name scenario_name\n" +
+            "   , bd.scenario_code scenario_code\n" +
+            "   , bd.upsert upsert\n" +
+            "   , bd.jm_source_reference jm_source_reference\n" +
+            "   , COALESCE(bd.eph_work_id, w1.eph_work_id) eph_work_id\n" +
+            "   , COALESCE(bd.eph_manifestation_id, m1.eph_manifestation_id) eph_manifestation_id\n" +
+            "   , bd.eph_product_id eph_product_id\n" +
+            "   , bd.w0_journal_number w0_journal_number\n" +
+            "   , bd.m0_journal_number m0_journal_number\n" +
+            "   , bd.w0_chronicle_id w0_chronicle_id\n" +
+            "   , bd.w0_journey_identifier w0_journey_identifier\n" +
+            "   , bd.m0_manifestation_type m0_manifestation_type\n" +
+            "   , bd.base_title m0_base_title\n" +
+            "   , (CASE m1.manifestation_type WHEN 'E' THEN \"concat\"(m1.manifestation_title, ' (Online)') ELSE \"concat\"(m1.manifestation_title, ' (Print)') END) m1_base_title\n" +
+            "   , bd.separately_saleable_ind separately_saleable_ind\n" +
+            "   , bd.trial_allowed_ind trial_allowed_ind\n" +
+            "   , bd.launch_date launch_date\n" +
+            "   , bd.tax_code tax_code\n" +
+            "   , bd.subscription subscription\n" +
+            "   , bd.bulk_sales bulk_sales\n" +
+            "   , bd.back_files back_files\n" +
+            "   , bd.open_access open_access\n" +
+            "   , bd.reprints reprints\n" +
+            "   , bd.author_charges author_charges\n" +
+            "   , bd.one_off_access one_off_access\n" +
+            "   , bd.packages packages\n" +
+            "   , bd.availability_status availability_status\n" +
+            "   , bd.work_status work_status\n" +
+            "   , w1.work_title work_title\n" +
+            "   , bd.work_type work_type\n" +
+            "   , (CASE WHEN ((bd.eph_work_id IS NULL) AND (w1.eph_work_id IS NULL)) THEN 'Y' WHEN ((bd.eph_manifestation_id IS NULL) AND (m1.eph_manifestation_id IS NULL)) THEN 'Y' ELSE 'N' END) dq_err\n" +
+            "   , m1.notified_date notified_date\n" +
+            "   FROM\n" +
+            "     (((base_data bd\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work w1 ON (((w1.work_chronicle_id = bd.w0_chronicle_id) AND (w1.elsevier_journal_number = bd.w0_journal_number)) AND (w1.work_journey_identifier = 'A1')))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (((w1.work_chronicle_id = wc.work_chronicle_id) AND (w1.work_journey_identifier = 'A1')) AND (wc.chronicle_scenario_code = 'RN')))\n" +
+            "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation m1 ON (((m1.f_work = w1.work_id) AND (m1.elsevier_journal_number = bd.m0_journal_number)) AND (m1.manifestation_type = bd.m0_manifestation_type)))\n" +
+            "   WHERE ((((((m1.notified_date IS NOT NULL) AND (bd.scenario_code = 'RN')) AND (bd.upsert = 'Update')) AND (bd.base_title IS NOT NULL)) AND (m1.manifestation_title IS NOT NULL)) AND (m1.manifestation_title <> bd.base_title))\n" +
+            "   GROUP BY bd.m0_manifestation_type, m1.manifestation_type, bd.scenario_code, bd.scenario_name, bd.upsert, bd.jm_source_reference, bd.m0_journal_number, bd.w0_chronicle_id, bd.w0_journey_identifier, bd.eph_work_id, bd.eph_manifestation_id, bd.eph_product_id, bd.base_title, m1.manifestation_title, m1.notified_date, w1.eph_work_id, bd.w0_journal_number, w1.elsevier_journal_number, bd.eph_manifestation_id, m1.eph_manifestation_id, bd.separately_saleable_ind, bd.trial_allowed_ind, bd.launch_date, bd.tax_code, bd.subscription, bd.bulk_sales, bd.back_files, bd.open_access, bd.reprints, bd.author_charges, bd.one_off_access, bd.packages, bd.availability_status, bd.work_status, w1.work_title, bd.work_type\n" +
+            "   ORDER BY bd.eph_work_id ASC, w1.eph_work_id ASC, bd.m0_manifestation_type ASC, m1.manifestation_title ASC, m1.notified_date ASC\n" +
+            ") \n" +
+            ", crosstab_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-SUB') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(m1_base_title, ' Subscription') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'SUB' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (subscription = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-JBS') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(m1_base_title, ' Bulk Sales') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'JBS' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (bulk_sales = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-BKF') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(m1_base_title, ' Back Files') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'BKF' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (back_files = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-RPR') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(m1_base_title, ' Reprints') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'RPR' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (reprints = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(jm_source_reference, '-OOA') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(m1_base_title, ' Purchase') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'OOA' f_type\n" +
+            "   , m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (one_off_access = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"('J0', \"w0_journal_number\", '-OAA') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , CAST(null AS varchar) eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(work_title, ' Article Publishing Charge') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'OAA' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (open_access = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"('J0', \"w0_journal_number\", '-JAS') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , CAST(null AS varchar) eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , \"concat\"(work_title, ' Author Charges') \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'JAS' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (author_charges = 'Y')\n" +
+            "UNION    SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , \"concat\"(\"substr\"(jm_source_reference, 3, 7), '-PKG') jm_source_ref\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , work_title \"name\"\n" +
+            "   , CAST(null AS boolean) separately_saleable_ind\n" +
+            "   , CAST(null AS boolean) trial_allowed_ind\n" +
+            "   , CAST(null AS date) launch_date\n" +
+            "   , CAST(null AS varchar) tax_code\n" +
+            "   , 'PKG' f_type\n" +
+            "   , null m0_manifestation_type\n" +
+            "   , CAST(null AS varchar) f_status\n" +
+            "   , work_type\n" +
+            "   , CAST(null AS varchar) manifestation_ref\n" +
+            "   , CAST(null AS varchar) ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     title_renames\n" +
+            "   WHERE (packages = 'Y')\n" +
+            ") \n" +
+            ", result_data AS (\n" +
+            "   SELECT\n" +
+            "     scenario_name\n" +
+            "   , scenario_code\n" +
+            "   , upsert\n" +
+            "   , jm_source_ref jm_source_reference\n" +
+            "   , eph_work_id\n" +
+            "   , eph_manifestation_id\n" +
+            "   , eph_product_id\n" +
+            "   , name\n" +
+            "   , (CASE WHEN (separately_saleable_ind IS NULL) THEN true ELSE separately_saleable_ind END) separately_saleable_ind\n" +
+            "   , trial_allowed_ind\n" +
+            "   , launch_date\n" +
+            "   , f_type\n" +
+            "   , f_status\n" +
+            "   , CAST(null AS varchar) f_revenue_model\n" +
+            "   , tax_code\n" +
+            "   , work_type\n" +
+            "   , manifestation_ref\n" +
+            "   , ult_work_ref\n" +
+            "   , dq_err\n" +
+            "   , notified_date\n" +
+            "   FROM\n" +
+            "     crosstab_data\n" +
+            ") \n" +
+            "SELECT *\n" +
+            "FROM\n" +
+            "  result_data\n) where jm_source_reference in ('%s') order by jm_source_reference desc, name desc, dq_err desc, name desc";
 
     public static String GET_PRODUCT_DQ_QUERY ="select * from("+
             "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v\n" +
@@ -2519,44 +2162,49 @@ public class JMETLDataChecksSQL {
             "-- and      w.elsevier_journal_number > '31434'\n" +
             ") where work_external_ref in ('%s') order by work_external_ref desc, legalowner_external_ref desc";
 
-    public static String GET_WORK_BUSINESS_MODEL_DQ_QUERY ="select * from (select  cs.chronicle_scenario_name as                                   scenario_name,\n" +
-            "        cs.chronicle_scenario_code as                                   scenario_code,\n" +
-            "        'J0'||w.elsevier_journal_number as                               external_work_ref,\n" +
-            "       'J0'||w.elsevier_journal_number||'-'||wbm.business_model_code as external_reference,\n" +
-            "        CAST (null as integer) as                                       eph_work_id,\n" +
-            "        wbm.business_model_code as                                      business_model_code,\n" +
-            "        wbm.business_model_description as                               business_model_description,\n" +
-            "        wbm.notified_date as                                            notified_date\n" +
-            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work_business_model wbm\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_work                  w on w.work_id = wbm.f_work\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".eph_business_model_v     bm on bm.code   = wbm.business_model_code\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
-            "where   w.work_journey_identifier = 'A1'\n" +
-            "and     wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "and     w.notified_date is not null\n" +
-            "-- and     w.elsevier_journal_number > '31434'\n" +
-            "order by w.elsevier_journal_number) where external_reference in ('%s') order by external_reference desc, external_work_ref desc ";
+    public static String GET_WORK_BUSINESS_MODEL_DQ_QUERY =
+            "select * from (" +
+                    "SELECT\n" +
+                    "  cs.chronicle_scenario_name scenario_name\n" +
+                    ", cs.chronicle_scenario_code scenario_code\n" +
+                    ", \"concat\"('J0', w.elsevier_journal_number) external_work_ref\n" +
+                    ", \"concat\"(\"concat\"(\"concat\"('J0', w.elsevier_journal_number), '-'), wbm.business_model_code) external_reference\n" +
+                    ", CAST(null AS integer) eph_work_id\n" +
+                    ", wbm.business_model_code business_model_code\n" +
+                    ", wbm.business_model_description business_model_description\n" +
+                    ", wbm.notified_date notified_date\n" +
+                    ", wbm.effective_start_date effective_start_date\n" +
+                    ", wbm.effective_end_date effective_end_date\n" +
+                    "FROM\n" +
+                    "  (((("+ GetJMDLDBUser.getJMDB()+".jmf_work_business_model wbm\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work w ON (w.work_id = wbm.f_work))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".eph_business_model_v bm ON (bm.code = wbm.business_model_code))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (wc.work_chronicle_id = w.work_chronicle_id))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
+                    "WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) OR (((wc.chronicle_scenario_code IN ('CBM')) AND (wbm.row_change_type IN ('I', 'U'))) AND (w.notified_date IS NOT NULL)))\n" +
+                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by external_reference desc, external_work_ref desc ";
 
-    public static String GET_WORK_ACCESS_MODEL_DQ_QUERY="select * from (\n" +
-            "select  cs.chronicle_scenario_name as                                 scenario_name,\n" +
-            "        cs.chronicle_scenario_code as                                 scenario_code,\n" +
-            "       'J0'||w.elsevier_journal_number as                             external_work_ref,\n" +
-            "       'J0'||w.elsevier_journal_number||'-'||wam.access_model_code as external_reference,\n" +
-            "        CAST (null as integer) as                                     eph_work_id,\n" +
-            "        wam.access_model_code as                                      access_model_code,\n" +
-            "        wam.access_model_description as                               access_model_description,\n" +
-            "        wam.notified_date as                                          notified_date\n" +
-            "from    " + GetJMDLDBUser.getJMDB() + ".jmf_work_access_model   wam\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_work                  w on w.work_id = wam.f_work\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".eph_access_model_v       am on am.code   = wam.access_model_code\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle       wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-            "join    " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs  on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
-            "where   w.work_journey_identifier = 'A1'\n" +
-            "and     wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-            "and     w.notified_date is not null\n" +
-            "-- and     w.elsevier_journal_number > '31434'\n" +
-            "order by w.elsevier_journal_number) where external_reference in ('%s')";
+    public static String GET_WORK_ACCESS_MODEL_DQ_QUERY=
+            "select * from (\n" +
+                    "SELECT\n" +
+                    "  cs.chronicle_scenario_name scenario_name\n" +
+                    ", cs.chronicle_scenario_code scenario_code\n" +
+                    ", \"concat\"('J0', w.elsevier_journal_number) external_work_ref\n" +
+                    ", \"concat\"(\"concat\"(\"concat\"('J0', w.elsevier_journal_number), '-'), wam.access_model_code) external_reference\n" +
+                    ", CAST(null AS integer) eph_work_id\n" +
+                    ", wam.access_model_code access_model_code\n" +
+                    ", wam.access_model_description access_model_description\n" +
+                    ", wam.notified_date notified_date\n" +
+                    ", wam.effective_start_date effective_start_date\n" +
+                    ", wam.effective_end_date effective_end_date\n" +
+                    "FROM\n" +
+                    "  (((("+ GetJMDLDBUser.getJMDB()+".jmf_work_access_model wam\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work w ON (w.work_id = wam.f_work))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".eph_access_model_v am ON (am.code = wam.access_model_code))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (wc.work_chronicle_id = w.work_chronicle_id))\n" +
+                    "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
+                    "WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) OR (((wc.chronicle_scenario_code IN ('CBM')) AND (wam.row_change_type IN ('I', 'U'))) AND (w.notified_date IS NOT NULL)))\n" +
+                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by external_reference desc, external_work_ref desc";
 
     public static String GET_ACCOUNTABLE_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_accountable_product_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, work_title desc";
     public static String GET_WWORK_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_wwork_dq where jm_source_reference in ('%s') order by jm_source_reference, work_title, scenario_name,pmc_old,eph_work_id desc";

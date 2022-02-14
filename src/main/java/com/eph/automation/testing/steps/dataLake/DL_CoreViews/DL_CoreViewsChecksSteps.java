@@ -713,7 +713,8 @@ public class DL_CoreViewsChecksSteps {
                             "getVOLUME","getCOPYRIGHTYEAR","getEDITIONNO","getF_PMC","getF_TYPE","getF_STATUS",
                             "getF_IMPRINT","getF_SOCIETY_OWNERSHIP","getRESP_CENTRE","getOPCO","getLANGUAGECODE","getSUBSCRIPTIONTYPE",
                             "getPLANNED_LAUNCH_DATE","getACTUAL_LAUNCH_DATE","getPLANNED_TERMINATION_DATE","getACTUAL_TERMINATION_DATE",
-                            "getDQ_ERR","getUPDATE_TYPE","getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIOCODE","getSCENARIONAME","getf_legal_ownership"};
+                            "getDQ_ERR","getUPDATE_TYPE","getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIOCODE",
+                            "getSCENARIONAME","getf_legal_ownership"};
                     for (String strTemp : all_work_v) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
@@ -769,7 +770,7 @@ public class DL_CoreViewsChecksSteps {
                     dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
 
                     String[] all_work_access_model_v = {"getEXTERNALREFERENCE","getWORKSOURCEREF","getaccess_model_code","getaccess_model_description","getDQ_ERR",
-                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM"};
+                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE"};
                     for (String strTemp : all_work_access_model_v) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
@@ -797,7 +798,7 @@ public class DL_CoreViewsChecksSteps {
                     dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
 
                     String[] all_work_business_model_v = {"getEXTERNALREFERENCE","getWORKSOURCEREF","getbusiness_model_code","getbusiness_model_description","getDQ_ERR",
-                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM"};
+                            "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE"};
                     for (String strTemp : all_work_business_model_v) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;

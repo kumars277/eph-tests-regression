@@ -2016,149 +2016,151 @@ public class DL_CoreViewChecksSQL {
 
     public static String GET_BCS_JM_CORE_WORK_COUNT =
             "select count(*) as Source_Count from(\n" +
-                    "SELECT\n" +
-                    "  w.eph_work_id epr\n" +
-                    ", w.jm_source_reference external_reference\n" +
-                    ", w.work_title work_title\n" +
-                    ", w.work_subtitle work_subtitle\n" +
-                    ", w.electro_rights_indicator electro_rights_indicator\n" +
-                    ", CAST(w.volume AS varchar) volume\n" +
-                    ", CAST(copyright_year AS integer) copyright_year\n" +
-                    ", w.edition_number edition_number\n" +
-                    ", CAST(pmc_new AS varchar) f_pmc\n" +
-                    ", w.f_oa_type f_oa_journal_type\n" +
-                    ", COALESCE(f_type, 'UNK') f_type\n" +
-                    ", COALESCE(f_status, 'UNK') f_status\n" +
-                    ", w.f_imprint f_imprint\n" +
-                    ", w.f_legal_ownership f_legal_ownership\n" +
-                    ", w.resp_centre resp_centre\n" +
-                    ", w.opco opco\n" +
-                    ", w.language_code language_code\n" +
-                    ", w.subscription_type subscription_type\n" +
-                    ", w.planned_launch_date planned_launch_date\n" +
-                    ", CAST(null AS date) actual_launch_date\n" +
-                    ", w.planned_termination_date planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", w.dq_err dq_err\n" +
-                    ", w.notified_date last_updated_date\n" +
-                    ", w.upsert update_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", w.scenario_code scenario_code\n" +
-                    ", w.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
+                   "SELECT\n" +
+                    "  \"w\".\"eph_work_id\" \"epr\"\n" +
+                    ", \"w\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"w\".\"work_title\" \"work_title\"\n" +
+                    ", \"w\".\"work_subtitle\" \"work_subtitle\"\n" +
+                    ", \"w\".\"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", CAST(\"w\".\"volume\" AS varchar) \"volume\"\n" +
+                    ", CAST(\"copyright_year\" AS integer) \"copyright_year\"\n" +
+                    ", \"w\".\"edition_number\" \"edition_number\"\n" +
+                    ", CAST(\"pmc_new\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", \"w\".\"f_imprint\" \"f_imprint\"\n" +
+                    ", \"w\".\"f_legal_ownership\" \"f_legal_ownership\"\n" +
+                    ", \"w\".\"resp_centre\" \"resp_centre\"\n" +
+                    ", \"w\".\"opco\" \"opco\"\n" +
+                    ", \"w\".\"language_code\" \"language_code\"\n" +
+                    ", \"w\".\"subscription_type\" \"subscription_type\"\n" +
+                    ", \"w\".\"planned_launch_date\" \"planned_launch_date\"\n" +
+                    ", CAST(null AS date) \"actual_launch_date\"\n" +
+                    ", \"w\".\"planned_termination_date\" \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", \"w\".\"dq_err\" \"dq_err\"\n" +
+                    ", \"w\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", \"w\".\"upsert\" \"update_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"w\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"w\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = w.notified_date) AND (maxw.scenario_code = w.scenario_code)) AND (maxw.jm_source_reference = w.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  CAST(null AS varchar) epr\n" +
-                    ", sourceref external_reference\n" +
-                    ", title work_title\n" +
-                    ", subtitle work_subtitle\n" +
-                    ", electro_rights_indicator electro_rights_indicator\n" +
-                    ", volumeno volume\n" +
-                    ", CAST(copyrightyear AS integer) copyright_year\n" +
-                    ", editionno edition_number\n" +
-                    ", CAST(pmc AS varchar) f_pmc\n" +
-                    ", f_oa_journal_type f_oa_journal_type\n" +
-                    ", COALESCE(work_type, 'UNK') f_type\n" +
-                    ", COALESCE(statuscode, 'UNK') f_status\n" +
-                    ", imprintcode f_imprint\n" +
-                    ", f_society_ownership f_society_ownership\n" +
-                    ", resp_centre resp_centre\n" +
-                    ", opco opco\n" +
-                    ", languagecode language_code\n" +
-                    ", subscription_type subscription_type\n" +
-                    ", planned_pubdate planned_launch_date\n" +
-                    ", actual_pubdate actual_launch_date\n" +
-                    ", CAST(null AS date) planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)\n";
+                    "  CAST(null AS varchar) \"epr\"\n" +
+                    ", \"sourceref\" \"external_reference\"\n" +
+                    ", \"title\" \"work_title\"\n" +
+                    ", \"subtitle\" \"work_subtitle\"\n" +
+                    ", \"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", \"volumeno\" \"volume\"\n" +
+                    ", CAST(\"copyrightyear\" AS integer) \"copyright_year\"\n" +
+                    ", \"editionno\" \"edition_number\"\n" +
+                    ", CAST(\"pmc\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"work_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"statuscode\", 'UNK') \"f_status\"\n" +
+                    ", \"imprintcode\" \"f_imprint\"\n" +
+                    ", CAST(null AS varchar) \"f_legal_ownership\"\n" +
+                    ", \"resp_centre\" \"resp_centre\"\n" +
+                    ", \"opco\" \"opco\"\n" +
+                    ", \"languagecode\" \"language_code\"\n" +
+                    ", \"subscription_type\" \"subscription_type\"\n" +
+                    ", planned_pubdate \"planned_launch_date\"\n" +
+                    ", actual_pubdate \"actual_launch_date\"\n" +
+                    ", CAST(null AS date) \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)\n";
 
     public static String GET_BCS_JM_CORE_WORK_RAND_ID =
             "select external_reference as id from(\n" +
                     "SELECT\n" +
-                    "  w.eph_work_id epr\n" +
-                    ", w.jm_source_reference external_reference\n" +
-                    ", w.work_title work_title\n" +
-                    ", w.work_subtitle work_subtitle\n" +
-                    ", w.electro_rights_indicator electro_rights_indicator\n" +
-                    ", CAST(w.volume AS varchar) volume\n" +
-                    ", CAST(copyright_year AS integer) copyright_year\n" +
-                    ", w.edition_number edition_number\n" +
-                    ", CAST(pmc_new AS varchar) f_pmc\n" +
-                    ", w.f_oa_type f_oa_journal_type\n" +
-                    ", COALESCE(f_type, 'UNK') f_type\n" +
-                    ", COALESCE(f_status, 'UNK') f_status\n" +
-                    ", w.f_imprint f_imprint\n" +
-                    ", w.f_legal_ownership f_legal_ownership\n" +
-                    ", w.resp_centre resp_centre\n" +
-                    ", w.opco opco\n" +
-                    ", w.language_code language_code\n" +
-                    ", w.subscription_type subscription_type\n" +
-                    ", w.planned_launch_date planned_launch_date\n" +
-                    ", CAST(null AS date) actual_launch_date\n" +
-                    ", w.planned_termination_date planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", w.dq_err dq_err\n" +
-                    ", w.notified_date last_updated_date\n" +
-                    ", w.upsert update_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", w.scenario_code scenario_code\n" +
-                    ", w.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
+                    "  \"w\".\"eph_work_id\" \"epr\"\n" +
+                    ", \"w\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"w\".\"work_title\" \"work_title\"\n" +
+                    ", \"w\".\"work_subtitle\" \"work_subtitle\"\n" +
+                    ", \"w\".\"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", CAST(\"w\".\"volume\" AS varchar) \"volume\"\n" +
+                    ", CAST(\"copyright_year\" AS integer) \"copyright_year\"\n" +
+                    ", \"w\".\"edition_number\" \"edition_number\"\n" +
+                    ", CAST(\"pmc_new\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", \"w\".\"f_imprint\" \"f_imprint\"\n" +
+                    ", \"w\".\"f_legal_ownership\" \"f_legal_ownership\"\n" +
+                    ", \"w\".\"resp_centre\" \"resp_centre\"\n" +
+                    ", \"w\".\"opco\" \"opco\"\n" +
+                    ", \"w\".\"language_code\" \"language_code\"\n" +
+                    ", \"w\".\"subscription_type\" \"subscription_type\"\n" +
+                    ", \"w\".\"planned_launch_date\" \"planned_launch_date\"\n" +
+                    ", CAST(null AS date) \"actual_launch_date\"\n" +
+                    ", \"w\".\"planned_termination_date\" \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", \"w\".\"dq_err\" \"dq_err\"\n" +
+                    ", \"w\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", \"w\".\"upsert\" \"update_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"w\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"w\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = w.notified_date) AND (maxw.scenario_code = w.scenario_code)) AND (maxw.jm_source_reference = w.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  CAST(null AS varchar) epr\n" +
-                    ", sourceref external_reference\n" +
-                    ", title work_title\n" +
-                    ", subtitle work_subtitle\n" +
-                    ", electro_rights_indicator electro_rights_indicator\n" +
-                    ", volumeno volume\n" +
-                    ", CAST(copyrightyear AS integer) copyright_year\n" +
-                    ", editionno edition_number\n" +
-                    ", CAST(pmc AS varchar) f_pmc\n" +
-                    ", f_oa_journal_type f_oa_journal_type\n" +
-                    ", COALESCE(work_type, 'UNK') f_type\n" +
-                    ", COALESCE(statuscode, 'UNK') f_status\n" +
-                    ", imprintcode f_imprint\n" +
-                    ", f_society_ownership f_society_ownership\n" +
-                    ", resp_centre resp_centre\n" +
-                    ", opco opco\n" +
-                    ", languagecode language_code\n" +
-                    ", subscription_type subscription_type\n" +
-                    ", planned_pubdate planned_launch_date\n" +
-                    ", actual_pubdate actual_launch_date\n" +
-                    ", CAST(null AS date) planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)order by rand() limit %s \n";
+                    "  CAST(null AS varchar) \"epr\"\n" +
+                    ", \"sourceref\" \"external_reference\"\n" +
+                    ", \"title\" \"work_title\"\n" +
+                    ", \"subtitle\" \"work_subtitle\"\n" +
+                    ", \"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", \"volumeno\" \"volume\"\n" +
+                    ", CAST(\"copyrightyear\" AS integer) \"copyright_year\"\n" +
+                    ", \"editionno\" \"edition_number\"\n" +
+                    ", CAST(\"pmc\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"work_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"statuscode\", 'UNK') \"f_status\"\n" +
+                    ", \"imprintcode\" \"f_imprint\"\n" +
+                    ", CAST(null AS varchar) \"f_legal_ownership\"\n" +
+                    ", \"resp_centre\" \"resp_centre\"\n" +
+                    ", \"opco\" \"opco\"\n" +
+                    ", \"languagecode\" \"language_code\"\n" +
+                    ", \"subscription_type\" \"subscription_type\"\n" +
+                    ", planned_pubdate \"planned_launch_date\"\n" +
+                    ", actual_pubdate \"actual_launch_date\"\n" +
+                    ", CAST(null AS date) \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)order by rand() limit %s \n";
 
     public static String GET_BCS_JM_CORE_WORK_REC=
             "select external_reference as EXTERNALREFERENCE" +
@@ -2170,7 +2172,6 @@ public class DL_CoreViewChecksSQL {
                     ",copyright_year as COPYRIGHTYEAR" +
                     ",edition_number as EDITIONNO" +
                     ",f_pmc as F_PMC" +
-                    ",f_oa_journal_type as F_OA_JOURNAL_TYPE" +
                     ",f_type as F_TYPE" +
                     ",f_status as F_STATUS" +
                     ",f_imprint as F_IMPRINT" +
@@ -2190,83 +2191,78 @@ public class DL_CoreViewChecksSQL {
                     ",source_system as SOURCESYSTEM" +
                     ",scenario_code as SCENARIOCODE" +
                     ",scenario_name as SCENARIONAME" +
-                   // ",external_reference as EXTERNALREFERENCE" +
-                 //   ",parent_work_source_ref as PARENTWORKSOURCEREF" +
-                  //  ",child_work_source_ref as CHILDWORKSOURCEREF" +
-                   // ",f_relation_type as F_RELATIONTYPEREF" +
-                    //",effective_start_date as EFFECTIVE_START_DATE" +
-                    //",effective_end_date as EFFECTIVE_END_DATE"+
                     " from(\n" +
                     "SELECT\n" +
-                    "  w.eph_work_id epr\n" +
-                    ", w.jm_source_reference external_reference\n" +
-                    ", w.work_title work_title\n" +
-                    ", w.work_subtitle work_subtitle\n" +
-                    ", w.electro_rights_indicator electro_rights_indicator\n" +
-                    ", CAST(w.volume AS varchar) volume\n" +
-                    ", CAST(copyright_year AS integer) copyright_year\n" +
-                    ", w.edition_number edition_number\n" +
-                    ", CAST(pmc_new AS varchar) f_pmc\n" +
-                    ", w.f_oa_type f_oa_journal_type\n" +
-                    ", COALESCE(f_type, 'UNK') f_type\n" +
-                    ", COALESCE(f_status, 'UNK') f_status\n" +
-                    ", w.f_imprint f_imprint\n" +
-                    ", w.f_legal_ownership f_legal_ownership\n" +
-                    ", w.resp_centre resp_centre\n" +
-                    ", w.opco opco\n" +
-                    ", w.language_code language_code\n" +
-                    ", w.subscription_type subscription_type\n" +
-                    ", w.planned_launch_date planned_launch_date\n" +
-                    ", CAST(null AS date) actual_launch_date\n" +
-                    ", w.planned_termination_date planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", w.dq_err dq_err\n" +
-                    ", w.notified_date last_updated_date\n" +
-                    ", w.upsert update_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", w.scenario_code scenario_code\n" +
-                    ", w.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
+                    "  \"w\".\"eph_work_id\" \"epr\"\n" +
+                    ", \"w\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"w\".\"work_title\" \"work_title\"\n" +
+                    ", \"w\".\"work_subtitle\" \"work_subtitle\"\n" +
+                    ", \"w\".\"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", CAST(\"w\".\"volume\" AS varchar) \"volume\"\n" +
+                    ", CAST(\"copyright_year\" AS integer) \"copyright_year\"\n" +
+                    ", \"w\".\"edition_number\" \"edition_number\"\n" +
+                    ", CAST(\"pmc_new\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", \"w\".\"f_imprint\" \"f_imprint\"\n" +
+                    ", \"w\".\"f_legal_ownership\" \"f_legal_ownership\"\n" +
+                    ", \"w\".\"resp_centre\" \"resp_centre\"\n" +
+                    ", \"w\".\"opco\" \"opco\"\n" +
+                    ", \"w\".\"language_code\" \"language_code\"\n" +
+                    ", \"w\".\"subscription_type\" \"subscription_type\"\n" +
+                    ", \"w\".\"planned_launch_date\" \"planned_launch_date\"\n" +
+                    ", CAST(null AS date) \"actual_launch_date\"\n" +
+                    ", \"w\".\"planned_termination_date\" \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", \"w\".\"dq_err\" \"dq_err\"\n" +
+                    ", \"w\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", \"w\".\"upsert\" \"update_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"w\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"w\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq w\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_wwork_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = w.notified_date) AND (maxw.scenario_code = w.scenario_code)) AND (maxw.jm_source_reference = w.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  CAST(null AS varchar) epr\n" +
-                    ", sourceref external_reference\n" +
-                    ", title work_title\n" +
-                    ", subtitle work_subtitle\n" +
-                    ", electro_rights_indicator electro_rights_indicator\n" +
-                    ", volumeno volume\n" +
-                    ", CAST(copyrightyear AS integer) copyright_year\n" +
-                    ", editionno edition_number\n" +
-                    ", CAST(pmc AS varchar) f_pmc\n" +
-                    ", f_oa_journal_type f_oa_journal_type\n" +
-                    ", COALESCE(work_type, 'UNK') f_type\n" +
-                    ", COALESCE(statuscode, 'UNK') f_status\n" +
-                    ", imprintcode f_imprint\n" +
-                    ", f_society_ownership f_society_ownership\n" +
-                    ", resp_centre resp_centre\n" +
-                    ", opco opco\n" +
-                    ", languagecode language_code\n" +
-                    ", subscription_type subscription_type\n" +
-                    ", planned_pubdate planned_launch_date\n" +
-                    ", actual_pubdate actual_launch_date\n" +
-                    ", CAST(null AS date) planned_termination_date\n" +
-                    ", CAST(null AS date) actual_termination_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)" +
+                    "  CAST(null AS varchar) \"epr\"\n" +
+                    ", \"sourceref\" \"external_reference\"\n" +
+                    ", \"title\" \"work_title\"\n" +
+                    ", \"subtitle\" \"work_subtitle\"\n" +
+                    ", \"electro_rights_indicator\" \"electro_rights_indicator\"\n" +
+                    ", \"volumeno\" \"volume\"\n" +
+                    ", CAST(\"copyrightyear\" AS integer) \"copyright_year\"\n" +
+                    ", \"editionno\" \"edition_number\"\n" +
+                    ", CAST(\"pmc\" AS varchar) \"f_pmc\"\n" +
+                    ", COALESCE(\"work_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"statuscode\", 'UNK') \"f_status\"\n" +
+                    ", \"imprintcode\" \"f_imprint\"\n" +
+                    ", CAST(null AS varchar) \"f_legal_ownership\"\n" +
+                    ", \"resp_centre\" \"resp_centre\"\n" +
+                    ", \"opco\" \"opco\"\n" +
+                    ", \"languagecode\" \"language_code\"\n" +
+                    ", \"subscription_type\" \"subscription_type\"\n" +
+                    ", planned_pubdate \"planned_launch_date\"\n" +
+                    ", actual_pubdate \"actual_launch_date\"\n" +
+                    ", CAST(null AS date) \"planned_termination_date\"\n" +
+                    ", CAST(null AS date) \"actual_termination_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)" +
                     " where external_reference in ('%s') order by external_reference desc \n";
 
     public static String GET_DL_CORE_ALL_WORK_VIEW_REC =
@@ -2299,12 +2295,6 @@ public class DL_CoreViewChecksSQL {
                     ",source_system as SOURCESYSTEM" +
                     ",scenario_code as SCENARIOCODE" +
                     ",scenario_name as SCENARIONAME" +
-//                    ",external_reference as EXTERNALREFERENCE" +
-//                    ",parent_work_source_ref as PARENTWORKSOURCEREF" +
-//                    ",child_work_source_ref as CHILDWORKSOURCEREF" +
-//                    ",f_relation_type as F_RELATIONTYPEREF" +
-//                    ",effective_start_date as EFFECTIVE_START_DATE" +
-//                    ",effective_end_date as EFFECTIVE_END_DATE"+
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_v" +
                     " where external_reference in ('%s') \n" +
                     "order by external_reference desc \n";
@@ -2378,6 +2368,8 @@ public class DL_CoreViewChecksSQL {
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
                     ", 'JM' source_system \n" +
+                    ",  effective_start_date\n" +
+                    ",  effective_end_date\n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_access_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_RAND_ID =
@@ -2391,6 +2383,8 @@ public class DL_CoreViewChecksSQL {
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
                     ", 'JM' source_system \n" +
+                    ", effective_start_date\n" +
+                    ", effective_end_date\n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_access_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_REC =
@@ -2402,6 +2396,8 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",effective_start_date as EFFECTIVE_START_DATE" +
+                    ",effective_end_date as EFFECTIVE_END_DATE" +
                     " from(\n" +
                     "SELECT\n" +
                     "external_work_ref work_source_reference\n" +
@@ -2411,7 +2407,9 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'JM' source_system" +
+                    ",  effective_start_date \n" +
+                    ",  effective_end_date\n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_access_model_dq_v)where external_reference in ('%s') order by external_reference desc ";
 
     public static String GET_DL_CORE_ALL_WORK_ACCESS_MODEL_REC =
@@ -2423,33 +2421,41 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",effective_start_date as EFFECTIVE_START_DATE" +
+                    ",effective_end_date as EFFECTIVE_END_DATE" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_access_model_v where external_reference in ('%s') order by external_reference desc\n";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_COUNT =
             "select count(*) as Source_Count from(\n" +
-                    "SELECT\n" +
-                    "external_work_ref work_source_reference\n" +
-                    ", external_reference\n" +
-                    ", business_model_code\n" +
-                    ", business_model_description\n" +
-                    ", 'N' dq_err \n" +
-                    ", false delete_flag\n" +
-                    ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
-                    " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)";
+                   "SELECT\n" +
+                    "  \"external_work_ref\" \"work_source_reference\"\n" +
+                    ", \"external_reference\"\n" +
+                    ", \"business_model_code\"\n" +
+                    ", \"business_model_description\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"notified_date\" \"last_updated_date\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", effective_start_date\n" +
+                    ", effective_end_date\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_RAND_ID =
             "select external_reference as id from(\n" +
                     "SELECT\n" +
-                    "external_work_ref work_source_reference\n" +
-                    ", external_reference\n" +
-                    ", business_model_code\n" +
-                    ", business_model_description\n" +
-                    ", 'N' dq_err \n" +
-                    ", false delete_flag\n" +
-                    ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
-                    " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)order by rand() limit %s";
+                    "  \"external_work_ref\" \"work_source_reference\"\n" +
+                    ", \"external_reference\"\n" +
+                    ", \"business_model_code\"\n" +
+                    ", \"business_model_description\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"notified_date\" \"last_updated_date\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", effective_start_date\n" +
+                    ", effective_end_date\n" +
+                    "FROM\n" +
+                    " "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_REC =
             "select external_reference as EXTERNALREFERENCE" +
@@ -2460,17 +2466,22 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",effective_start_date as EFFECTIVE_START_DATE" +
+                    ",effective_end_date as EFFECTIVE_END_DATE" +
                     " from(\n" +
                     "SELECT\n" +
-                    "external_work_ref work_source_reference\n" +
-                    ", external_reference\n" +
-                    ", business_model_code\n" +
-                    ", business_model_description\n" +
-                    ", 'N' dq_err \n" +
-                    ", false delete_flag\n" +
-                    ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
-                    " from "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)where external_reference in ('%s') order by external_reference desc\n";
+                    "  \"external_work_ref\" \"work_source_reference\"\n" +
+                    ", \"external_reference\"\n" +
+                    ", \"business_model_code\"\n" +
+                    ", \"business_model_description\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"notified_date\" \"last_updated_date\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", effective_start_date\n" +
+                    ", effective_end_date\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)where external_reference in ('%s') order by external_reference desc\n";
 
     public static String GET_DL_CORE_ALL_WORK_BUSINESS_MODEL_REC =
             "select external_reference as EXTERNALREFERENCE" +
@@ -2481,6 +2492,8 @@ public class DL_CoreViewChecksSQL {
                     ",last_updated_date as LASTUPDATEDDATE" +
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
+                    ",effective_start_date as EFFECTIVE_START_DATE" +
+                    ",effective_end_date as EFFECTIVE_END_DATE" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_business_model_v where external_reference in ('%s') order by external_reference desc\n";
 
 

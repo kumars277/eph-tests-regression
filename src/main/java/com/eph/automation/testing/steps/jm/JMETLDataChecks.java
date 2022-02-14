@@ -1301,7 +1301,11 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_WworkDQColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","getwork_title","getwork_subtitle","getplanned_launch_date","getplanned_termination_date","getf_type","getf_status","getf_accountable_product","getpmc_old","getpmc_new","getf_oa_type","getf_imprint","getopco","getsubscription_type","getresp_centre"};
+                        String[] JMF_WworkDQColumnName = {"getscenario_name","getscenario_code","getupsert",
+                                "getjm_source_reference","geteph_work_id","getwork_title","getwork_subtitle",
+                                "getplanned_launch_date","getplanned_termination_date","getf_type","getf_status",
+                                "getf_accountable_product","getpmc_old","getpmc_new","getf_oa_type","getf_imprint",
+                                "getopco","getsubscription_type","getresp_centre","getnotified_date"};
 
                         for (String strTemp : JMF_WworkDQColumnName) {
 
@@ -1446,7 +1450,13 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_ProductPart1ColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","geteph_manifestation_id","geteph_product_id","getbase_title","getw0_journal_number","getm0_journal_number","getw0_chronicle_id","getw0_journey_identifier","getm0_manifestation_type","getseparately_saleable_ind","gettrial_allowed_ind","getlaunch_date","gettax_code","getopen_access_journal_type","getsubscription","getbulk_sales","getback_files","getopen_access","getreprints","getauthor_charges","getone_off_access","getpackages","getavailability_status","getwork_status","getwork_title","getwork_type","getinternal_email_new","getinternal_email_old","getemployee_number_new","getemployee_number_old","getdq_err"};
+                        String[] JMF_ProductPart1ColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","geteph_manifestation_id","geteph_product_id"
+                                ,"getbase_title","getw0_journal_number","getm0_journal_number","getw0_chronicle_id","getw0_journey_identifier"
+                                ,"getm0_manifestation_type","getseparately_saleable_ind","gettrial_allowed_ind","getlaunch_date"
+                                ,"gettax_code","getopen_access_journal_type","getsubscription","getbulk_sales","getback_files","getopen_access"
+                                ,"getreprints","getauthor_charges","getone_off_access","getpackages","getavailability_status","getwork_status"
+                                ,"getwork_title","getwork_type","getinternal_email_new","getinternal_email_old","getemployee_number_new"
+                                ,"getemployee_number_old","getdq_err","getnotified_date"};
 
                         for (String strTemp : JMF_ProductPart1ColumnName) {
 
@@ -1475,7 +1485,7 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_ProductInsertsColumnName = {"getscenario", "getupsert", "getjm_source_reference", "geteph_work_id", "geteph_manifestation_id", "geteph_product_id", "getname", "getseparately_saleable_ind", "gettrial_allowed_ind", "getlaunch_date", "getf_type", "getf_status", "getf_revenue_model", "gettax_code", "getwork_type", "getdq_err"};
+                        String[] JMF_ProductInsertsColumnName = {"getscenario_name","getscenario_code", "getupsert", "getjm_source_reference", "geteph_work_id", "geteph_manifestation_id", "geteph_product_id", "getname", "getseparately_saleable_ind", "gettrial_allowed_ind", "getlaunch_date", "getf_type", "getf_status", "getf_revenue_model", "gettax_code", "getwork_type","getmanifestation_ref","getult_work_ref", "getdq_err"};
 
                         for (String strTemp : JMF_ProductInsertsColumnName) {
 
@@ -1504,7 +1514,8 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_ProductUpdatesColumnName = {"getscenario", "getupsert", "getjm_source_reference", "geteph_work_id", "geteph_manifestation_id", "geteph_product_id", "getname", "getlaunch_date", "getf_type", "getf_status", "getf_revenue_model", "gettax_code", "getwork_type", "getult_work_ref", "getdq_err"};
+                        String[] JMF_ProductUpdatesColumnName = {"getscenario_name","getscenario_code", "getupsert", "getjm_source_reference", "geteph_work_id", "geteph_manifestation_id",
+                                "geteph_product_id", "getname","getseparately_saleable_ind","gettrial_allowed_ind", "getlaunch_date", "getf_type", "getf_status", "getf_revenue_model", "gettax_code", "getwork_type", "getult_work_ref", "getdq_err","getnotified_date"};
 
                         for (String strTemp : JMF_ProductUpdatesColumnName) {
 
@@ -1533,7 +1544,7 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_ProductDQColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","geteph_manifestation_id","geteph_product_id","getname","getseparately_saleable_ind","gettrial_allowed_ind","getlaunch_date","getf_type","getf_status","getf_revenue_model","gettax_code","getwork_type","getmanifestation_ref","getult_work_ref","getdq_err"};
+                        String[] JMF_ProductDQColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","geteph_manifestation_id","geteph_product_id","getname","getseparately_saleable_ind","gettrial_allowed_ind","getlaunch_date","getf_type","getf_status","getf_revenue_model","gettax_code","getwork_type","getmanifestation_ref","getult_work_ref","getdq_err","getnotified_date"};
 
                         for (String strTemp : JMF_ProductDQColumnName) {
 
@@ -1707,7 +1718,8 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference));
 
-                        String[] JMF_WorkBusinessModelDQColumnName = {"getscenario_name","getscenario_code","getexternal_work_ref","getexternal_reference","geteph_work_id","getaccess_model_code","getaccess_model_description"};
+                        String[] JMF_WorkBusinessModelDQColumnName = {"getscenario_name","getscenario_code","getexternal_work_ref",
+                                "getexternal_reference","geteph_work_id","getBUSINESS_MODEL_CODE","getBUSINESS_MODEL_DESCRIPTION","getnotified_date","geteffective_start_date","geteffective_end_date"};
 
                         for (String strTemp : JMF_WorkBusinessModelDQColumnName) {
 
@@ -1736,7 +1748,8 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference));
 
-                        String[] JMF_WorkAccessModelDQColumnName = {"getscenario_name","getscenario_code","getexternal_work_ref","getexternal_reference","geteph_work_id","getaccess_model_code","getaccess_model_description"};
+                        String[] JMF_WorkAccessModelDQColumnName = {"getscenario_name","getscenario_code",
+                                "getexternal_work_ref","getexternal_reference","geteph_work_id","getACCESS_MODEL_CODE","getACCESS_MODEL_DESCRIPTION","getnotified_date","geteffective_start_date","geteffective_end_date"};
 
                         for (String strTemp : JMF_WorkAccessModelDQColumnName) {
 

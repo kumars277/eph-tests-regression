@@ -508,10 +508,14 @@ public class JMETLObject {
     private String PUBLICATION_STATUS_ANZ;
     private String AVAILABILITY_FORMAT;
     private String leadIndicator;
+    private String effective_end_date;
 
 
     public String getleadIndicator() { return leadIndicator; }
     public void setleadIndicator(String leadIndicator) { this.leadIndicator = leadIndicator; }
+
+    public String geteffective_end_date() { return effective_end_date; }
+    public void seteffective_end_date(String effective_end_date) { this.effective_end_date = effective_end_date; }
 
     public String getAVAILABILITY_FORMAT() { return AVAILABILITY_FORMAT; }
     public void setAVAILABILITY_FORMAT(String AVAILABILITY_FORMAT) { this.AVAILABILITY_FORMAT = AVAILABILITY_FORMAT; }
