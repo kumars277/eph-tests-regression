@@ -42,6 +42,26 @@ Feature:Validate data for Promis between transform tables
       | 50               |promis_transform_current_urls         |promis_transform_file_history_urls_part           |
       | 50               |promis_transform_current_work_rels    |promis_transform_file_history_work_rels_part      |
 
+  @PROMISETL
+  Scenario Outline: Verify that all Promis data is transferred between Latest query and Latest tables
+    Given We know the number of Promis <tablename> data for latest query
+    Then Get the count for Promis <Latesttablename> latest
+    And Compare the Promis count for <Latesttablename> table between Latest query and Latest
+    Given We get the <numberOfRecords> random Promis Latest Query ids of <Latesttablename>
+    When We get Promis Latest Query records from <tablename>
+    Then We get the Promis Latest records from <Latesttablename>
+    And Compare Promis records for Latest query and Latest tables of <tablename>
+    Examples:
+      |numberOfRecords  |tablename      |Latesttablename                     |
+      | 50               |subject_areas  |promis_transform_latest_subject_areas |
+      | 50               |pricing        |promis_transform_latest_pricing       |
+      | 50               |person_roles   |promis_transform_latest_person_roles  |
+      | 50               |works          |promis_transform_latest_works         |
+      | 50               |metrics        |promis_transform_latest_metrics       |
+      | 50               |urls           |promis_transform_latest_urls          |
+      | 50               |work_rels      |promis_transform_latest_work_rels     |
+
+###################################3
 @notUsed
   Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables
     Given We know the number of Promis <DeltaQueryTable> data for the Delta Query
@@ -81,24 +101,7 @@ Feature:Validate data for Promis between transform tables
       | 5               |urls           |promis_transform_history_urls_excl_delta_v          |
       | 5               |work_rels      |promis_transform_history_work_rels_excl_delta_v     |
 
-  @PROMISETL
-  Scenario Outline: Verify that all Promis data is transferred between Latest query and Latest tables
-    Given We know the number of Promis <tablename> data for latest query
-    Then Get the count for Promis <Latesttablename> latest
-    And Compare the Promis count for <Latesttablename> table between Latest query and Latest
-    Given We get the <numberOfRecords> random Promis Latest Query ids of <Latesttablename>
-    When We get Promis Latest Query records from <tablename>
-    Then We get the Promis Latest records from <Latesttablename>
-    And Compare Promis records for Latest query and Latest tables of <tablename>
-    Examples:
-      |numberOfRecords  |tablename      |Latesttablename                     |
-      | 50               |subject_areas  |promis_transform_latest_subject_areas |
-      | 50               |pricing        |promis_transform_latest_pricing       |
-      | 50               |person_roles   |promis_transform_latest_person_roles  |
-      | 50               |works          |promis_transform_latest_works         |
-      | 50               |metrics        |promis_transform_latest_metrics       |
-      | 50               |urls           |promis_transform_latest_urls          |
-      | 50               |work_rels      |promis_transform_latest_work_rels     |
+
 
 
 

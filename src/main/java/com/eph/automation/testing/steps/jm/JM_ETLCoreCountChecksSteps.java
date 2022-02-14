@@ -26,11 +26,9 @@ public class JM_ETLCoreCountChecksSteps {
             case "etl_accountable_product_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_ACCOUNTABLE_PRODUCT;
                 break;
-
             case "etl_wwork_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK;
                 break;
-
             case "etl_work_identifier_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_WORK_IDENTIFIER;
                 break;
