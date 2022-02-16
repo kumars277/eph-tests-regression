@@ -1196,7 +1196,6 @@ public class JMETLDataChecks {
         }
         Log.info(sql);
         JMContext.JMTransformObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.AWS_URL);
-        System.out.println(JMContext.JMTransformObjectsFromDL.size());
     }
 
     @Then("^We get the JM ETL records from (.*)$")
