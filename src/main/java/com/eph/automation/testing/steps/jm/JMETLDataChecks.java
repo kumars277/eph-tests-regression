@@ -1290,7 +1290,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake " +
+                                                "for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1324,7 +1325,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found " +
+                                                "in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1353,7 +1355,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " +
+                                                "Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_ref_new(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1382,7 +1385,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " +
+                                                "Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1411,7 +1415,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for W0_CHRONICLE_ID => " + JMContext.JMObjectsFromDL.get(i).getw0_chronicle_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1440,7 +1445,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_ref_new(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1475,7 +1481,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1504,7 +1511,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found " +
+                                                "in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1534,7 +1542,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found " +
+                                                "in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1563,7 +1572,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in " +
+                                                "Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1592,7 +1602,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for JM_SOURCE_REFERENCE => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1621,7 +1632,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for SA_ID => " + JMContext.JMObjectsFromDL.get(i).getsa_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1650,7 +1662,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in" +
+                                                " Data Lake for jm_source_reference => " + JMContext.JMObjectsFromDL.get(i).getjm_source_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1679,7 +1692,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found " +
+                                                "in Data Lake for work_external_ref => " + JMContext.JMObjectsFromDL.get(i).getwork_external_ref(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1738,7 +1752,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake for jm Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1768,7 +1783,8 @@ public class JMETLDataChecks {
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not " +
+                                                "found in Data Lake jm Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
