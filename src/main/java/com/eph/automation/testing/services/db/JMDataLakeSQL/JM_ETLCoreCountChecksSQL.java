@@ -1277,7 +1277,7 @@ public class JM_ETLCoreCountChecksSQL {
             "   , dq_err\n" +
             "   , notified_date\n" +
             "   FROM\n" +
-            "     etl_product_part1_v\n" +
+            "     "+GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
             "   WHERE (notified_date IS NOT NULL)\n" +
             ") \n" +
             ", crosstab_data AS (\n" +

@@ -377,7 +377,7 @@ public class JMETLDataChecksSQL {
         "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
         "and   w.notified_date is not null\n" +
         ")where jm_source_reference in ('%s') \n" +
-        "order by jm_source_reference desc";
+        "order by jm_source_reference desc,notified_date desc";
 
     public static String GET_WWORK_DQ_QUERY ="select * from (\n" +
             "WITH\n" +
@@ -560,7 +560,7 @@ public class JMETLDataChecksSQL {
             "LEFT JOIN "+ GetJMDLDBUser.getJMDB() +".jmf_work w1 ON ((w1.work_chronicle_id = w0.work_chronicle_id) AND (w1.work_journey_identifier = 'A1')))\n" +
             "WHERE (((w0.work_journey_identifier = 'A0') AND (wc.chronicle_scenario_code = 'TR')) AND (w0.notified_date IS NOT NULL))\n" +
             "ORDER BY notified_date ASC, jm_source_reference ASC) where jm_source_reference in ('%s')\n" +
-            "order by jm_source_reference, work_title, scenario_name,pmc_old,eph_work_id desc";
+            "order by jm_source_reference desc, work_title desc, scenario_name desc,pmc_old desc,eph_work_id desc,notified_date desc";
 
     public static String GET_WORK_IDENTIFIER_DQ_QUERY ="select * from (select cs.chronicle_scenario_name as                                      scenario_name,\n" +
             "       wc.chronicle_scenario_code as                                      scenario_code,\n" +
@@ -709,7 +709,8 @@ public class JMETLDataChecksSQL {
             "and    w0.journal_acronym_pts is not null\n" +
             "and    w1.journal_acronym_pts is not null\n" +
             "and    w1.journal_acronym_pts <> w0.journal_acronym_pts\n" +
-            ") where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, scenario_name desc, effective_start_date desc";
+            ") where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, " +
+            "eph_work_id desc, scenario_name desc, effective_start_date desc, notified_date desc";
 
     public static String GET_WORK_SUBJECT_AREA_DQ_QUERY ="select * from \n" +
             "(select  cs.chronicle_scenario_name as    scenario_name,\n" +
@@ -969,7 +970,7 @@ public class JMETLDataChecksSQL {
             "and      ppa.notified_date >= ppj.jnl_created_date\n" +
             "  )\n" +
             "order by notified_date, jm_source_ref_new\n" +
-            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new, eph_work_id, start_date, scenario_name asc";
+            ")where jm_source_ref_new in ('%s') order by order by jm_source_ref_new, eph_work_id, start_date, scenario_name asc, notified_date desc";
 
     public static String GET_MANIFESTATION_UPDATES1_QUERY ="select * from\n" +
             "(select cs.chronicle_scenario_name as               scenario_name,           -- 'Rename'\n" +
@@ -1004,7 +1005,7 @@ public class JMETLDataChecksSQL {
             "         m0.manifestation_id, m0.manifestation_type, m0.elsevier_journal_number, m0.manifestation_title, m0.issn, w0.issn_l, w0.eph_work_id, m0.eph_manifestation_id, m0.notified_date\n" +
             "order by w0.work_chronicle_id, w0.elsevier_journal_number, w0.work_journey_identifier,\n" +
             "         m0.manifestation_type, m0.elsevier_journal_number, m0.notified_date\n" +
-            ") where w0_chronicle_id in (%s)";
+            ") where w0_chronicle_id in (%s) order by w0_chronicle_id desc, m0_notified_date desc";
 
     public static String GET_MANIFESTATION_IDENTIFIER_DQ_QUERY ="select * from \n" +
             "(select  cs.chronicle_scenario_name as scenario_name,\n" +
@@ -1095,7 +1096,8 @@ public class JMETLDataChecksSQL {
             "         mu1.scenario_name, mu1.scenario_code, mu1.upsert, mu1.w0_journal_number, mu1.w0_eph_work_id,\n" +
             "         mu1.m0_eph_manifestation_id, m2.eph_manifestation_id, mu1.m0_issn, m2.issn, m2.notified_date,\n" +
             "         w1.eph_work_id, m2.eph_manifestation_id\n" +
-            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, effective_start_date desc";
+            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, " +
+            "effective_start_date desc, notified_date desc";
 
     public static String GET_PRODUCT_PART1_QUERY ="select * from \n" +
             "(\n" +
@@ -1192,7 +1194,9 @@ public class JMETLDataChecksSQL {
             "   LEFT JOIN work_business_model wbm0 ON (wbm0.work_id = w0.work_id))\n" +
             "   WHERE ((wc.chronicle_scenario_code = 'RN') AND (m0.notified_date IS NOT NULL))\n" +
             "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w0.work_chronicle_id, w0.elsevier_journal_number, w0.work_journey_identifier, wbm0.SBS, wbm0.APC, wbm0.SBD, m0.manifestation_id, m0.manifestation_type, m0.elsevier_journal_number, m0.manifestation_title, w0.eph_work_id, w0.work_title, m0.eph_manifestation_id, m0.notified_date\n" +
-            ") ORDER BY upsert ASC, scenario_name ASC, notified_date DESC, jm_source_reference ASC) where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
+            ") ORDER BY upsert ASC, scenario_name ASC, notified_date DESC, jm_source_reference ASC) where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc, " +
+            "notified_date desc";
 
     public static String GET_PRODUCT_INSERTS_QUERY ="select * from (\n" +
             "WITH\n" +
@@ -1231,7 +1235,7 @@ public class JMETLDataChecksSQL {
             "   , dq_err\n" +
             "   , notified_date\n" +
             "   FROM\n" +
-            "     etl_product_part1_v\n" +
+            "     "+GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
             "   WHERE (notified_date IS NOT NULL)\n" +
             ") \n" +
             ", crosstab_data AS (\n" +
@@ -1455,7 +1459,8 @@ public class JMETLDataChecksSQL {
             ") \n" +
             "SELECT *\n" +
             "FROM\n" +
-            "  result_data) where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
+            "  result_data) where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc, name desc, notified_date desc";
 
     public static String GET_PRODUCT_UPDATES_QUERY ="select * from (" +
             "WITH\n" +
@@ -1760,12 +1765,14 @@ public class JMETLDataChecksSQL {
             ") \n" +
             "SELECT *\n" +
             "FROM\n" +
-            "  result_data\n) where jm_source_reference in ('%s') order by jm_source_reference desc, name desc, dq_err desc, name desc";
+            "  result_data\n) where jm_source_reference in ('%s') order by jm_source_reference desc, " +
+            "name desc, dq_err desc, name desc,notified_date desc";
 
     public static String GET_PRODUCT_DQ_QUERY ="select * from("+
             "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v\n" +
             "UNION\n" +
-            "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v)where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc";
+            "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v)where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc";
 
     public static String GET_PRODUCT_PERSON_ROLE_DQ_QUERY ="select * from (\n" +
             "with base_data as\n" +
@@ -2140,7 +2147,10 @@ public class JMETLDataChecksSQL {
             "         mu1.m0_eph_manifestation_id, m1.eph_manifestation_id, m1.manifestation_title, m1.notified_date,\n" +
             "         w1.eph_work_id, w1.elsevier_journal_number, m1.eph_manifestation_id\n" +
             ")\n" +
-            "where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id desc,scenario_name desc, online_launch_date desc, manifestaton_key_title desc, effective_start_date";
+            "where jm_source_reference in ('%s') order by " +
+            "jm_source_reference desc, " +
+            "eph_work_id desc,scenario_name desc, online_launch_date desc, manifestaton_key_title desc, " +
+            "effective_start_date desc,notified_date desc";
 
     public static String GET_WORK_LEGAL_OWNER_DQ_QUERY ="select * from (select 'J0'||w.elsevier_journal_number as                             work_external_ref,\n" +
             "        lo.external_reference as                                      legalowner_external_ref,\n" +
@@ -2182,7 +2192,8 @@ public class JMETLDataChecksSQL {
                     "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (wc.work_chronicle_id = w.work_chronicle_id))\n" +
                     "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
                     "WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) OR (((wc.chronicle_scenario_code IN ('CBM')) AND (wbm.row_change_type IN ('I', 'U'))) AND (w.notified_date IS NOT NULL)))\n" +
-                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by external_reference desc, external_work_ref desc ";
+                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by " +
+                    "external_reference desc, external_work_ref desc, notified_date desc ";
 
     public static String GET_WORK_ACCESS_MODEL_DQ_QUERY=
             "select * from (\n" +
@@ -2204,25 +2215,33 @@ public class JMETLDataChecksSQL {
                     "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc ON (wc.work_chronicle_id = w.work_chronicle_id))\n" +
                     "INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
                     "WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) OR (((wc.chronicle_scenario_code IN ('CBM')) AND (wam.row_change_type IN ('I', 'U'))) AND (w.notified_date IS NOT NULL)))\n" +
-                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by external_reference desc, external_work_ref desc";
+                    "ORDER BY w.elsevier_journal_number ASC) where external_reference in ('%s') order by external_reference desc, external_work_ref desc, notified_date desc";
 
-    public static String GET_ACCOUNTABLE_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_accountable_product_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, work_title desc";
-    public static String GET_WWORK_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_wwork_dq where jm_source_reference in ('%s') order by jm_source_reference, work_title, scenario_name,pmc_old,eph_work_id desc";
-    public static String GET_WORK_IDENTIFIER_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_identifier_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, jm_source_ref_old desc, eph_work_id desc, scenario_name desc, effective_start_date desc";
-    public static String GET_WORK_PERSON_ROLE_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_person_role_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new, eph_work_id, start_date, scenario_name asc";
+    public static String GET_ACCOUNTABLE_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_accountable_product_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, work_title desc,notified_date desc";
+    public static String GET_WWORK_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_wwork_dq where jm_source_reference in ('%s') order by jm_source_reference desc, work_title desc, scenario_name desc,pmc_old desc,eph_work_id desc,notified_date desc";
+    public static String GET_WORK_IDENTIFIER_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_identifier_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new desc,eph_work_id desc, scenario_name desc, effective_start_date desc, notified_date desc";
+    public static String GET_WORK_PERSON_ROLE_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_person_role_dq_v where jm_source_ref_new in ('%s') order by " +
+            "jm_source_ref_new, eph_work_id, start_date, scenario_name asc, notified_date desc";
     public static String GET_WORK_SUBJECT_AREA_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_subject_area_dq_v where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id";
-    public static String GET_MANIFESTATION_UPDATES1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_updates1_v where w0_chronicle_id in (%s)";
-    public static String GET_MANIFESTATION_IDENTIFIER ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_identifier_dq_v where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, effective_start_date desc";
-    public static String GET_PRODUCT_PART1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
-    public static String GET_PRODUCT_INSERTS ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, name desc";
-    public static String GET_PRODUCT_UPDATES ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v where jm_source_reference in ('%s') order by jm_source_reference desc, name desc, dq_err desc, name desc";
-    public static String GET_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc";
+    public static String GET_MANIFESTATION_UPDATES1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_updates1_v where w0_chronicle_id in (%s) order by w0_chronicle_id desc,m0_notified_date desc";
+    public static String GET_MANIFESTATION_IDENTIFIER ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_identifier_dq_v where jm_source_ref_new in ('%s') " +
+            "order by jm_source_ref_new desc, eph_work_id desc,effective_start_date desc, notified_date desc";
+    public static String GET_PRODUCT_PART1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v " +
+            "where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
+    public static String GET_PRODUCT_INSERTS ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc, name desc, notified_date desc";
+    public static String GET_PRODUCT_UPDATES ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, name desc, dq_err desc, name desc, notified_date desc";
+    public static String GET_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_dq_v where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc";
     public static String GET_PRODUCT_PERSON_ROLE_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_person_role_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, start_date desc";
     public static String GET_SD_SUBJECT_AREAS ="select * from " + GetJMDLDBUser.getJMDB() + ".sd_subject_areas_v where sa_id in (%s)";
-    public static String GET_MANIFESTATION_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_dq_v where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id desc,scenario_name desc, online_launch_date desc, manifestaton_key_title desc, effective_start_date";
+    public static String GET_MANIFESTATION_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_dq_v where jm_source_reference in ('%s') " +
+            "order by jm_source_reference desc, eph_work_id desc,scenario_name desc, online_launch_date desc, manifestaton_key_title desc, effective_start_date desc,notified_date desc";
     public static String GET_WORK_LEGAL_OWNER_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_legal_owner_dq_V where work_external_ref in ('%s') order by work_external_ref desc, legalowner_external_ref desc";
-    public static String GET_WORK_BUSINESS_MODEL_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_business_model_dq_V where external_reference in ('%s') order by external_reference desc, external_work_ref desc";
-    public static String GET_WORK_ACCESS_MODEL_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_access_model_dq_V where external_reference in ('%s') order by external_reference desc, external_work_ref desc";
+    public static String GET_WORK_BUSINESS_MODEL_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_business_model_dq_V where external_reference in ('%s') order by external_reference desc, external_work_ref desc, notified_date desc";
+    public static String GET_WORK_ACCESS_MODEL_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_access_model_dq_V where external_reference in ('%s') " +
+            "order by external_reference desc, external_work_ref desc, notified_date desc";
 
 // Semarchy DB get core ID's
 
