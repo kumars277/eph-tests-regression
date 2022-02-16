@@ -509,10 +509,15 @@ public class JMETLObject {
     private String AVAILABILITY_FORMAT;
     private String leadIndicator;
     private String effective_end_date;
+    private String m0_notified_date;
 
 
     public String getleadIndicator() { return leadIndicator; }
     public void setleadIndicator(String leadIndicator) { this.leadIndicator = leadIndicator; }
+
+    public String getm0_notified_date() { return m0_notified_date; }
+    public void setm0_notified_date(String m0_notified_date) { this.m0_notified_date = m0_notified_date; }
+
 
     public String geteffective_end_date() { return effective_end_date; }
     public void seteffective_end_date(String effective_end_date) { this.effective_end_date = effective_end_date; }
