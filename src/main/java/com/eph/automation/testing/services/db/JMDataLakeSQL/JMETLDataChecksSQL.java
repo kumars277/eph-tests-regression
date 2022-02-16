@@ -970,7 +970,7 @@ public class JMETLDataChecksSQL {
             "and      ppa.notified_date >= ppj.jnl_created_date\n" +
             "  )\n" +
             "order by notified_date, jm_source_ref_new\n" +
-            ")where jm_source_ref_new in ('%s') order by order by jm_source_ref_new, eph_work_id, start_date, scenario_name asc, notified_date desc";
+            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new, eph_work_id, start_date, scenario_name asc, notified_date desc";
 
     public static String GET_MANIFESTATION_UPDATES1_QUERY ="select * from\n" +
             "(select cs.chronicle_scenario_name as               scenario_name,           -- 'Rename'\n" +

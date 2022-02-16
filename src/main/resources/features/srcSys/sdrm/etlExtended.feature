@@ -27,7 +27,7 @@ Feature:Validate data between SDRM ETL Tables
     And we compare the records of SDRM current product and SDRM transform product file history
     Examples:
       | tableName                                               |    countOfRandomIds|
-      |sdrm_transform_current_product_availability              |50               |
+        |sdrm_transform_current_product_availability              |50               |
 
   @SDRM
   Scenario Outline: Verify Data for SDRM transform latest product availability tables are transferred from SDRM delta current product table and SDRM history excl delta table
