@@ -800,148 +800,154 @@ public class DL_CoreViewChecksSQL {
     public static String GET_BCS_JM_CORE_PRODUCT_COUNT =
             "select count(*) as Source_Count from(\n" +
                     "SELECT\n" +
-                    "  p.eph_product_id product_id\n" +
-                    ", p.jm_source_reference external_reference\n" +
-                    ", p.name name\n" +
-                    ", null short_name\n" +
-                    ", p.separately_saleable_ind separately_sale_indicator\n" +
-                    ", p.trial_allowed_ind trial_allowed_indicator\n" +
-                    ", CAST(null AS boolean) restricted_sale_indicator\n" +
-                    ", p.launch_date launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(p.f_type, 'UNK') f_type\n" +
-                    ", COALESCE(p.f_status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", p.tax_code f_tax_code\n" +
-                    ", p.f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", p.eph_work_id f_wwork\n" +
-                    ", null work_reference\n" +
-                    ", p.eph_manifestation_id f_manifestation\n" +
-                    ", null manifestation_reference\n" +
-                    ", p.notified_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", p.upsert update_type\n" +
-                    ", 'JOURNAL' work_roll_up_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", p.scenario_code scenario_code\n" +
-                    ", p.scenario_name scenario_name\n" +
-                    "FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
+                    "  \"p\".\"eph_product_id\" \"product_id\"\n" +
+                    ", \"p\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"p\".\"name\" \"name\"\n" +
+                    ", null \"short_name\"\n" +
+                    ", \"p\".\"separately_saleable_ind\" \"separately_sale_indicator\"\n" +
+                    ", \"p\".\"trial_allowed_ind\" \"trial_allowed_indicator\"\n" +
+                    ", CAST(null AS boolean) \"restricted_sale_indicator\"\n" +
+                    ", \"p\".\"launch_date\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"p\".\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"p\".\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"p\".\"tax_code\" \"f_tax_code\"\n" +
+                    ", \"p\".\"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", \"p\".\"eph_work_id\" \"f_wwork\"\n" +
+                    ", \"p\".\"ult_work_ref\" \"work_reference\"\n" +
+                    ", \"p\".\"eph_manifestation_id\" \"f_manifestation\"\n" +
+                    ", \"p\".\"manifestation_ref\" \"manifestation_reference\"\n" +
+                    ", \"p\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"p\".\"upsert\" \"update_type\"\n" +
+                    ", 'JOURNAL' \"work_roll_up_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"p\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"p\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = p.notified_date) AND (maxw.scenario_code = p.scenario_code)) AND (maxw.jm_source_reference = p.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  null product_id\n" +
-                    ", concat(u_key, '-', product_type) external_reference\n" +
-                    ", name name\n" +
-                    ", shorttitle short_name\n" +
-                    ", separately_sale_indicator separately_sale_indicator\n" +
-                    ", trial_allowed_indicator trial_allowed_indicator\n" +
-                    ", restricted_sale_indicator restricted_sale_indicator\n" +
-                    ", launchdate launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(product_type, 'UNK') f_type\n" +
-                    ", COALESCE(status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", taxcode f_tax_code\n" +
-                    ", f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", null f_wwork\n" +
-                    ", worksource work_reference\n" +
-                    ", null f_manifestation\n" +
-                    ", manifestationref manifestation_reference\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", 'BOOK' work_roll_up_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)\n";
+                    "  null \"product_id\"\n" +
+                    ", \"concat\"(\"u_key\", '-', \"product_type\") \"external_reference\"\n" +
+                    ", \"name\" \"name\"\n" +
+                    ", \"shorttitle\" \"short_name\"\n" +
+                    ", \"separately_sale_indicator\" \"separately_sale_indicator\"\n" +
+                    ", \"trial_allowed_indicator\" \"trial_allowed_indicator\"\n" +
+                    ", \"restricted_sale_indicator\" \"restricted_sale_indicator\"\n" +
+                    ", \"launchdate\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"product_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"taxcode\" \"f_tax_code\"\n" +
+                    ", \"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", null \"f_wwork\"\n" +
+                    ", \"worksource\" \"work_reference\"\n" +
+                    ", null \"f_manifestation\"\n" +
+                    ", \"manifestationref\" \"manifestation_reference\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", 'BOOK' \"work_roll_up_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)\n";
 
     public static String GET_BCS_JM_CORE_PRODUCT_RAND_ID =
             "select external_reference as id from(\n" +
                     "SELECT\n" +
-                    "  p.eph_product_id product_id\n" +
-                    ", p.jm_source_reference external_reference\n" +
-                    ", p.name name\n" +
-                    ", null short_name\n" +
-                    ", p.separately_saleable_ind separately_sale_indicator\n" +
-                    ", p.trial_allowed_ind trial_allowed_indicator\n" +
-                    ", CAST(null AS boolean) restricted_sale_indicator\n" +
-                    ", p.launch_date launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(p.f_type, 'UNK') f_type\n" +
-                    ", COALESCE(p.f_status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", p.tax_code f_tax_code\n" +
-                    ", p.f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", p.eph_work_id f_wwork\n" +
-                    ", null work_reference\n" +
-                    ", p.eph_manifestation_id f_manifestation\n" +
-                    ", null manifestation_reference\n" +
-                    ", p.notified_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", p.upsert update_type\n" +
-                    ", 'JOURNAL' work_roll_up_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", p.scenario_code scenario_code\n" +
-                    ", p.scenario_name scenario_name\n" +
-                    "FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
+                    "  \"p\".\"eph_product_id\" \"product_id\"\n" +
+                    ", \"p\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"p\".\"name\" \"name\"\n" +
+                    ", null \"short_name\"\n" +
+                    ", \"p\".\"separately_saleable_ind\" \"separately_sale_indicator\"\n" +
+                    ", \"p\".\"trial_allowed_ind\" \"trial_allowed_indicator\"\n" +
+                    ", CAST(null AS boolean) \"restricted_sale_indicator\"\n" +
+                    ", \"p\".\"launch_date\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"p\".\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"p\".\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"p\".\"tax_code\" \"f_tax_code\"\n" +
+                    ", \"p\".\"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", \"p\".\"eph_work_id\" \"f_wwork\"\n" +
+                    ", \"p\".\"ult_work_ref\" \"work_reference\"\n" +
+                    ", \"p\".\"eph_manifestation_id\" \"f_manifestation\"\n" +
+                    ", \"p\".\"manifestation_ref\" \"manifestation_reference\"\n" +
+                    ", \"p\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"p\".\"upsert\" \"update_type\"\n" +
+                    ", 'JOURNAL' \"work_roll_up_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"p\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"p\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = p.notified_date) AND (maxw.scenario_code = p.scenario_code)) AND (maxw.jm_source_reference = p.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  null product_id\n" +
-                    ", concat(u_key, '-', product_type) external_reference\n" +
-                    ", name name\n" +
-                    ", shorttitle short_name\n" +
-                    ", separately_sale_indicator separately_sale_indicator\n" +
-                    ", trial_allowed_indicator trial_allowed_indicator\n" +
-                    ", restricted_sale_indicator restricted_sale_indicator\n" +
-                    ", launchdate launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(product_type, 'UNK') f_type\n" +
-                    ", COALESCE(status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", taxcode f_tax_code\n" +
-                    ", f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", null f_wwork\n" +
-                    ", worksource work_reference\n" +
-                    ", null f_manifestation\n" +
-                    ", manifestationref manifestation_reference\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", 'BOOK' work_roll_up_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)order by rand() limit %s \n";
+                    "  null \"product_id\"\n" +
+                    ", \"concat\"(\"u_key\", '-', \"product_type\") \"external_reference\"\n" +
+                    ", \"name\" \"name\"\n" +
+                    ", \"shorttitle\" \"short_name\"\n" +
+                    ", \"separately_sale_indicator\" \"separately_sale_indicator\"\n" +
+                    ", \"trial_allowed_indicator\" \"trial_allowed_indicator\"\n" +
+                    ", \"restricted_sale_indicator\" \"restricted_sale_indicator\"\n" +
+                    ", \"launchdate\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"product_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"taxcode\" \"f_tax_code\"\n" +
+                    ", \"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", null \"f_wwork\"\n" +
+                    ", \"worksource\" \"work_reference\"\n" +
+                    ", null \"f_manifestation\"\n" +
+                    ", \"manifestationref\" \"manifestation_reference\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", 'BOOK' \"work_roll_up_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)order by rand() limit %s \n";
 
 
     public static String GET_BCS_JM_CORE_PRODUCT_REC =
@@ -975,76 +981,79 @@ public class DL_CoreViewChecksSQL {
                     ",scenario_name as SCENARIONAME" +
                     " from(\n" +
                     "SELECT\n" +
-                    "  p.eph_product_id product_id\n" +
-                    ", p.jm_source_reference external_reference\n" +
-                    ", p.name name\n" +
-                    ", null short_name\n" +
-                    ", p.separately_saleable_ind separately_sale_indicator\n" +
-                    ", p.trial_allowed_ind trial_allowed_indicator\n" +
-                    ", CAST(null AS boolean) restricted_sale_indicator\n" +
-                    ", p.launch_date launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(p.f_type, 'UNK') f_type\n" +
-                    ", COALESCE(p.f_status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", p.tax_code f_tax_code\n" +
-                    ", p.f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", p.eph_work_id f_wwork\n" +
-                    ", null work_reference\n" +
-                    ", p.eph_manifestation_id f_manifestation\n" +
-                    ", null manifestation_reference\n" +
-                    ", p.notified_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", p.upsert update_type\n" +
-                    ", 'JOURNAL' work_roll_up_type\n" +
-                    ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
-                    ", p.scenario_code scenario_code\n" +
-                    ", p.scenario_name scenario_name\n" +
-                    "FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
+                    "  \"p\".\"eph_product_id\" \"product_id\"\n" +
+                    ", \"p\".\"jm_source_reference\" \"external_reference\"\n" +
+                    ", \"p\".\"name\" \"name\"\n" +
+                    ", null \"short_name\"\n" +
+                    ", \"p\".\"separately_saleable_ind\" \"separately_sale_indicator\"\n" +
+                    ", \"p\".\"trial_allowed_ind\" \"trial_allowed_indicator\"\n" +
+                    ", CAST(null AS boolean) \"restricted_sale_indicator\"\n" +
+                    ", \"p\".\"launch_date\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"p\".\"f_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"p\".\"f_status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"p\".\"tax_code\" \"f_tax_code\"\n" +
+                    ", \"p\".\"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", \"p\".\"eph_work_id\" \"f_wwork\"\n" +
+                    ", \"p\".\"ult_work_ref\" \"work_reference\"\n" +
+                    ", \"p\".\"eph_manifestation_id\" \"f_manifestation\"\n" +
+                    ", \"p\".\"manifestation_ref\" \"manifestation_reference\"\n" +
+                    ", \"p\".\"notified_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", \"p\".\"upsert\" \"update_type\"\n" +
+                    ", 'JOURNAL' \"work_roll_up_type\"\n" +
+                    ", false \"delete_flag\"\n" +
+                    ", 'JM' \"source_system\"\n" +
+                    ", \"p\".\"scenario_code\" \"scenario_code\"\n" +
+                    ", \"p\".\"scenario_name\" \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq p\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
+                    "   , \"max\"(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_product_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxw ON (((maxw.max_notified_date = p.notified_date) AND (maxw.scenario_code = p.scenario_code)) AND (maxw.jm_source_reference = p.jm_source_reference)))\n" +
                     "UNION ALL SELECT\n" +
-                    "  null product_id\n" +
-                    ", concat(u_key, '-', product_type) external_reference\n" +
-                    ", name name\n" +
-                    ", shorttitle short_name\n" +
-                    ", separately_sale_indicator separately_sale_indicator\n" +
-                    ", trial_allowed_indicator trial_allowed_indicator\n" +
-                    ", restricted_sale_indicator restricted_sale_indicator\n" +
-                    ", launchdate launch_date\n" +
-                    ", CAST(null AS date) content_from_date\n" +
-                    ", CAST(null AS date) content_to_date\n" +
-                    ", CAST(null AS integer) content_date_offset\n" +
-                    ", COALESCE(product_type, 'UNK') f_type\n" +
-                    ", COALESCE(status, 'UNK') f_status\n" +
-                    ", CAST(null AS integer) f_accountable_product\n" +
-                    ", taxcode f_tax_code\n" +
-                    ", f_revenue_model f_revenue_model\n" +
-                    ", CAST(null AS varchar) f_revenue_account\n" +
-                    ", null f_wwork\n" +
-                    ", worksource work_reference\n" +
-                    ", null f_manifestation\n" +
-                    ", manifestationref manifestation_reference\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", 'N' dq_err\n" +
-                    ", CAST(null AS varchar) update_type\n" +
-                    ", 'BOOK' work_roll_up_type\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'BCS' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)" +
-                    "where external_reference in ('%s') order by external_reference desc \n";
+                    "  null \"product_id\"\n" +
+                    ", \"concat\"(\"u_key\", '-', \"product_type\") \"external_reference\"\n" +
+                    ", \"name\" \"name\"\n" +
+                    ", \"shorttitle\" \"short_name\"\n" +
+                    ", \"separately_sale_indicator\" \"separately_sale_indicator\"\n" +
+                    ", \"trial_allowed_indicator\" \"trial_allowed_indicator\"\n" +
+                    ", \"restricted_sale_indicator\" \"restricted_sale_indicator\"\n" +
+                    ", \"launchdate\" \"launch_date\"\n" +
+                    ", CAST(null AS date) \"content_from_date\"\n" +
+                    ", CAST(null AS date) \"content_to_date\"\n" +
+                    ", CAST(null AS integer) \"content_date_offset\"\n" +
+                    ", COALESCE(\"product_type\", 'UNK') \"f_type\"\n" +
+                    ", COALESCE(\"status\", 'UNK') \"f_status\"\n" +
+                    ", CAST(null AS integer) \"f_accountable_product\"\n" +
+                    ", \"taxcode\" \"f_tax_code\"\n" +
+                    ", \"f_revenue_model\" \"f_revenue_model\"\n" +
+                    ", CAST(null AS varchar) \"f_revenue_account\"\n" +
+                    ", null \"f_wwork\"\n" +
+                    ", \"worksource\" \"work_reference\"\n" +
+                    ", null \"f_manifestation\"\n" +
+                    ", \"manifestationref\" \"manifestation_reference\"\n" +
+                    ", \"last_updated_date\" \"last_updated_date\"\n" +
+                    ", 'N' \"dq_err\"\n" +
+                    ", CAST(null AS varchar) \"update_type\"\n" +
+                    ", 'BOOK' \"work_roll_up_type\"\n" +
+                    ", \"delete_flag\" \"delete_flag\"\n" +
+                    ", 'BCS' \"source_system\"\n" +
+                    ", CAST(null AS varchar) \"scenario_code\"\n" +
+                    ", CAST(null AS varchar) \"scenario_name\"\n" +
+                    "FROM\n" +
+                    "  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest_v)" +
+                    " where external_reference in ('%s') order by external_reference desc,work_reference desc \n";
 
 
     public static String GET_DL_CORE_ALL_PRODUCT_VIEW_REC =
@@ -1078,7 +1087,7 @@ public class DL_CoreViewChecksSQL {
                     ",scenario_name as SCENARIONAME" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_product_v" +
                     " where external_reference in ('%s') \n" +
-                    "order by external_reference desc \n";
+                    "order by external_reference desc,work_reference desc \n";
 
     public static String GET_BCS_JM_CORE_PRODUCT_REL_PKG_VIEW_COUNT =
             "select count(*) as Source_Count from(\n" +
