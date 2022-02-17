@@ -21,7 +21,7 @@ public class SDRMDataChecksSQL {
             "ON src.isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Product'\n" +
             "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
             "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
-            "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
+            "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
             "WHERE crf.epr is not null and src.ismobi = '1'\n" +
             "UNION\n" +
             "SELECT\n" +
@@ -39,7 +39,7 @@ public class SDRMDataChecksSQL {
             "ON src.isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Product'\n" +
             "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
             "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
-            "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
+            "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
             "WHERE crf.epr is not null and src.isepub = '1'\n" +
             "UNION\n" +
             "SELECT\n" +
@@ -57,7 +57,7 @@ public class SDRMDataChecksSQL {
             "ON src.isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Product'\n" +
             "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
             "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
-            "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
+            "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
             "WHERE crf.epr is not null and src.ispdf = '1') where inbound_ts = (select max(inbound_ts) from "+ GetSdrmDbUser.getSDRMDataBase()+".sdrm_inbound_part) order by rand() limit %s";
 
     public static final String GET_SDRM_SOURCE_INBOUND_DATA="select isbn,sku,title,rendition_format as rednitionFormat,inbound_ts as inboundTs,production_date as productionDate,epr_id as eprId,product_type as productType, u_key as uKey " +
@@ -94,7 +94,7 @@ public class SDRMDataChecksSQL {
             "ON src.isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Product'\n" +
             "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
             "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
-            "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
+            "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
             "WHERE crf.epr is not null and src.isepub = '1'\n" +
             "UNION\n" +
             "SELECT\n" +
@@ -250,7 +250,7 @@ public class SDRMDataChecksSQL {
                     "ON src.isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Product'\n" +
                     "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
                     "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
-                    "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
+                    "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
                     "WHERE crf.epr is not null and src.isepub = '1'\n" +
                     "UNION\n" +
                     "SELECT\n" +
