@@ -25,6 +25,7 @@ Feature:Validate data for GD Tables
       | 5               |all_work_business_model_v          |gd_work_business_model      |
       | 5               |all_accountable_product_v          |gd_accountable_product      |
 
+    @coreToGd
     Scenario Outline: Check for the Duplicates in the GD tables
       Given We get the duplicate count from the <SemarchyTable>
       Then Verify the duplicate count from the <SemarchyTable> is 0.
