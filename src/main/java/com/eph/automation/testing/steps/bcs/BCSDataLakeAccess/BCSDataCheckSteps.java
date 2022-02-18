@@ -92,7 +92,7 @@ public class BCSDataCheckSteps {
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
        //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
-        setBreadcrumbMessage(ids.toString());
+        setBreadcrumbMessage(Ids.toString());
     }
 
     @When("Get the data records from initial ingest for (.*)")
