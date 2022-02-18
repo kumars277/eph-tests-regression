@@ -27,7 +27,9 @@ public class JMETLDataChecks {
     private static String dlAllCoreSQLViewCount;
     private static int DLAllCoreViewCount;
     private static String gdSQLViewCount;
+    private static String gdSQLDupCount;
     private static int gdCount;
+    private static int gdDupCount;
 
 
     private static String sqlDL;
@@ -3282,4 +3284,35 @@ public class JMETLDataChecks {
         Assert.assertEquals("The counts between " + tableName + " is not equal", JMCount, DLJMCount);
         Log.info("The count for " + tableName + " table between MYSQL: " + JMCount + " and DL: " + DLJMCount + " is equal");
     }
-}
+
+
+    @Given("^We get the duplicate count from the (.*)$")
+    public void getDuplicateCountGdTables(String SemarchyTable) {
+        switch (SemarchyTable) {
+            case "gd_manifestation_identifier":
+                gdSQLDupCount = JMETLDataChecksSQL.GET_GD_MANIFESTATION_IDENTIFIER_DUP_COUNT;
+                break;
+        }
+        Log.info(gdSQLDupCount);
+        List<Map<String, Object>> gdDuplicateCount = DBManager.getDBResultMap(gdSQLDupCount, Constants.EPH_URL);
+        gdDupCount = ((Long) gdDuplicateCount.get(0).get("duplicateCount")).intValue();
+    }
+
+
+    @Then("^Verify the duplicate count from the (.*) is 0.$")
+    public void checkForDuplicates(String SemarchyTable) {
+        switch (SemarchyTable) {
+            case "gd_manifestation_identifier":
+                Log.info("The Duplicate count for identifiers in "+SemarchyTable+" => " + gdDupCount);
+                if(gdDupCount>0){
+                    sql = String.format(JMETLDataChecksSQL.GET_GD_MANIFESTATION_IDENTIFIER_DUPLICATES);
+                    List<Map<?, ?>> duplicateIdentifier = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                    Ids = duplicateIdentifier.stream().map(m -> (String) m.get("identifier")).map(String::valueOf).collect(Collectors.toList());
+                    Log.info(sql);
+                    Log.info(Ids.toString());
+                    }
+                Assert.assertEquals("There are Duplicate Count of identifiers in "+SemarchyTable,0,gdDupCount);
+                break;
+            }
+        }
+ }
