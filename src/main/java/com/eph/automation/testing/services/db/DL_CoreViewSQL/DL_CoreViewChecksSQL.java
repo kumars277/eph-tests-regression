@@ -2490,7 +2490,7 @@ public class DL_CoreViewChecksSQL {
                     ", effective_start_date\n" +
                     ", effective_end_date\n" +
                     "FROM\n" +
-                    "  "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)where external_reference in ('%s') order by external_reference desc\n";
+                    "  "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_work_business_model_dq_v)where external_reference in ('%s') order by external_reference desc,last_updated_date desc\n";
 
     public static String GET_DL_CORE_ALL_WORK_BUSINESS_MODEL_REC =
             "select external_reference as EXTERNALREFERENCE" +
@@ -2503,7 +2503,7 @@ public class DL_CoreViewChecksSQL {
                     ",source_system as SOURCESYSTEM" +
                     ",effective_start_date as EFFECTIVE_START_DATE" +
                     ",effective_end_date as EFFECTIVE_END_DATE" +
-                    " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_business_model_v where external_reference in ('%s') order by external_reference desc\n";
+                    " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_business_model_v where external_reference in ('%s') order by external_reference desc,last_updated_date desc\n";
 
 
     public static String GET_BCS_JM_CORE_Acc_Prod_Ext_Ref_Null_count =
@@ -2545,7 +2545,3 @@ public class DL_CoreViewChecksSQL {
             "select count(*) as Null_COunt from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_business_model_v where external_reference is null";
 
 }
-
-
-
-

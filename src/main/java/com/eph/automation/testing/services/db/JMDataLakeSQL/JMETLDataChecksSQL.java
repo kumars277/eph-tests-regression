@@ -2336,6 +2336,7 @@ public class JMETLDataChecksSQL {
     public static String GET_GD_WORK_ACCESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_access_model";
     public static String GET_GD_WORK_BUSINESS_MODEL = "select * from semarchy_eph_mdm.gd_work_business_model where external_reference in ('%s') order by external_reference";
     public static String GET_GD_WORK_BUSINESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_business_model";
+<<<<<<< HEAD
 
     public static String GET_GD_MANIFESTATION_IDENTIFIER_DUP_COUNT =
             "select count(*) as duplicateCount from(\n" +
@@ -2366,3 +2367,6 @@ public class JMETLDataChecksSQL {
                     ")\n" +
                     "select identifier from dupl_isbns except select identifier from dupls_with_invalid_mans order by identifier";
 }
+=======
+}
+>>>>>>> 69487796ee8d4b525fe1422a041503b54c8a998d
