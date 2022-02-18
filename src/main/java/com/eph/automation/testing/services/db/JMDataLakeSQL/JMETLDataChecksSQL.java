@@ -2336,4 +2336,33 @@ public class JMETLDataChecksSQL {
     public static String GET_GD_WORK_ACCESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_access_model";
     public static String GET_GD_WORK_BUSINESS_MODEL = "select * from semarchy_eph_mdm.gd_work_business_model where external_reference in ('%s') order by external_reference";
     public static String GET_GD_WORK_BUSINESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_business_model";
+
+    public static String GET_GD_MANIFESTATION_IDENTIFIER_DUP_COUNT =
+            "select count(*) as duplicateCount from(\n" +
+                    "with dupl_isbns as (\n" +
+                    "select identifier, count(*) from semarchy_eph_mdm.gd_manifestation_identifier gmi\n" +
+                    "where f_type = 'ISBN' and effective_end_date is null\n" +
+                    "group by identifier\n" +
+                    "having count(*) > 1),\n" +
+                    "dupls_with_invalid_mans as (\n" +
+                    "select identifier from semarchy_eph_mdm.gd_manifestation_identifier mi\n" +
+                    "join semarchy_eph_mdm.gd_manifestation gm2 on gm2.manifestation_id = mi.f_manifestation\n" +
+                    "where identifier in (select identifier from dupl_isbns)\n" +
+                    "and gm2.f_status = 'NVM'\n" +
+                    ")\n" +
+                    "select identifier from dupl_isbns except select identifier from dupls_with_invalid_mans order by identifier) dup";
+
+    public static String GET_GD_MANIFESTATION_IDENTIFIER_DUPLICATES =
+            "with dupl_isbns as (\n" +
+                    "select identifier, count(*) from semarchy_eph_mdm.gd_manifestation_identifier gmi\n" +
+                    "where f_type = 'ISBN' and effective_end_date is null\n" +
+                    "group by identifier\n" +
+                    "having count(*) > 1),\n" +
+                    "dupls_with_invalid_mans as (\n" +
+                    "select identifier from semarchy_eph_mdm.gd_manifestation_identifier mi\n" +
+                    "join semarchy_eph_mdm.gd_manifestation gm2 on gm2.manifestation_id = mi.f_manifestation\n" +
+                    "where identifier in (select identifier from dupl_isbns)\n" +
+                    "and gm2.f_status = 'NVM'\n" +
+                    ")\n" +
+                    "select identifier from dupl_isbns except select identifier from dupls_with_invalid_mans order by identifier";
 }
