@@ -1772,7 +1772,7 @@ public class JMETLDataChecksSQL {
             "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v\n" +
             "UNION\n" +
             "select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v)where jm_source_reference in ('%s') " +
-            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc";
+            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc,dq_err desc";
 
     public static String GET_PRODUCT_PERSON_ROLE_DQ_QUERY ="select * from (\n" +
             "with base_data as\n" +
@@ -2233,7 +2233,7 @@ public class JMETLDataChecksSQL {
     public static String GET_PRODUCT_UPDATES ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_updates_v where jm_source_reference in ('%s') " +
             "order by jm_source_reference desc, name desc, dq_err desc, name desc, notified_date desc";
     public static String GET_PRODUCT_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_dq_v where jm_source_reference in ('%s') " +
-            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc";
+            "order by jm_source_reference desc, eph_work_id desc, scenario_name desc, name desc, notified_date desc,dq_err desc";
     public static String GET_PRODUCT_PERSON_ROLE_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_person_role_dq_v where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, start_date desc";
     public static String GET_SD_SUBJECT_AREAS ="select * from " + GetJMDLDBUser.getJMDB() + ".sd_subject_areas_v where sa_id in (%s)";
     public static String GET_MANIFESTATION_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_dq_v where jm_source_reference in ('%s') " +
