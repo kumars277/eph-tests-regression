@@ -31,9 +31,9 @@ Feature: Search API: Works
     Examples:
       | options               |
       | PERSON_ID             |
+      | PEOPLE_HUB_ID         |
       | PERSON_NAME           |
       | personFullNameCurrent |
-      | PEOPLE_HUB_ID         |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI
@@ -80,7 +80,6 @@ Feature: Search API: Works
       | WORK_IDENTIFIER                        |
       | WORK_ID                                |
       | WORK_TITLE                             |
-
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |

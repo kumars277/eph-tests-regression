@@ -105,7 +105,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-  // ids.clear();    ids.add("EPR-W-102TR2");  Log.info("hard coded work ids are : " + ids);
+  // ids.clear();    ids.add("EPR-W-102SK4");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -1053,7 +1053,7 @@ public class ApiWorksSearchSteps {
     String[] perName = person.split(" ");
     switch (searchType) {
       case "PERSON_NAME":
-        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);     break;
+        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1],perName[0],perName[1]);     break;
 
       case PER_FULLNAME_CURRENT:
         sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, perName[0],perName[1]);break;

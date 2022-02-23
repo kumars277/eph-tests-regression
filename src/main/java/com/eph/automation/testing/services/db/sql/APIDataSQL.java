@@ -409,9 +409,11 @@ public class APIDataSQL {
           + "and gw.f_status in('WLA')\n"
           + "and gwpr.f_person in \n"
           + "(\n"
-          + "select person_id from semarchy_eph_mdm.gd_person gp \n"
-          + "where s_given_name like upper('%s') \n"
-          + "or s_family_name like upper('%s')\n"
+          + "select person_id from semarchy_eph_mdm.gd_person gp \n"+
+              "where given_name  ~*'\\m%s\\M'\n" +
+                      "or given_name  ~*'\\m%s\\M'\n" +
+                      "or family_name ~*'\\m%s\\M'\n" +
+                      "or family_name ~*'\\m%s\\M'"
           + ")";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID =
