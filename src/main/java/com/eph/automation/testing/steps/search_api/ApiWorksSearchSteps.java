@@ -86,7 +86,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-101YBW");Log.info("hard coded work id is : " + ids);
+   // ids.clear();ids.add("EPR-W-103BK9");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -246,13 +246,15 @@ public class ApiWorksSearchSteps {
   public void compareWorksByWorkStatusWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
 
-        String searchKeyword =DataQualityContext.workDataObjectsFromEPHGD.get(0)
+        String searchKeyword =getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                /*DataQualityContext.workDataObjectsFromEPHGD.get(0)
                         .getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ")
-                .split(" ")[0].toUpperCase();
+                .split(" ")[0].toUpperCase();*/
+
+
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
         Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
 
@@ -272,14 +274,10 @@ public class ApiWorksSearchSteps {
    // try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        String searchKeyword =
-                DataQualityContext
-                        .workDataObjectsFromEPHGD
-                        .get(0)
-                        .getWORK_TITLE()
-                        .split(" ")[0]
-                        .toUpperCase();
+        String searchKeyword = getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+
         String workType = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
+
         Log.info("searchKeyword and workType: " + searchKeyword + " - " + workType);
 
         returnedWorks = APIService.getWorksByWorkType(searchKeyword, workType);
@@ -287,11 +285,6 @@ public class ApiWorksSearchSteps {
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkType(searchKeyword, workType));
       }
-
-  /*  } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }*/
   }
 
   @Then("^the work details are retrieved by manifestationType and compared$")
@@ -977,7 +970,7 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByWorkStatus(String searchKeyword, String workStatus) {
-    sql =String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword, workStatus);
+    sql =String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword.toUpperCase(), workStatus);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
@@ -987,7 +980,7 @@ public class ApiWorksSearchSteps {
   private static int getNumberOfWorksByWorkType(String searchKeyword, String workType) {
     sql =
             String.format(
-                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword, workType);
+                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword.toUpperCase(), workType);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
