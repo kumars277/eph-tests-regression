@@ -105,7 +105,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-  // ids.clear();    ids.add("EPR-W-102SK4");  Log.info("hard coded work ids are : " + ids);
+  // ids.clear();    ids.add("EPR-W-102SH2");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -625,7 +625,10 @@ public class ApiWorksSearchSteps {
       returnedWorks = apiFun.workBySeachOption_Iterative(searchOption,i,shouldResultOnTop);
       assert returnedWorks != null;
       //returnedWorks.verifyWorksAreReturned();
+      if(returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()))
+      {
       returnedWorks.verifyWorkWithIdIsReturned(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      }
     }
   }
 
@@ -772,19 +775,19 @@ public class ApiWorksSearchSteps {
      // dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
-      //if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
+      if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
         if(returnedWorks.verifyWorkWithIdIsReturnedOnly(workId))
         {
           returnedWorks.verifyWorkWithIdIsReturned(workId);
-        Log.info("verified intended work in search result...");
-      }
+          Log.info("verified intended work in search result...");
+        }
         else
-          {
-        Log.info("intended work "+workId+" is missing in search result");
-            Assert.assertFalse("intended work "+workId+" is missing in search result",true);
-          }
+        {
+          Log.info("intended work "+workId+" is missing in search result");
+          Assert.assertFalse("intended work "+workId+" is missing in search result",true);
+        }
 
-
+      }
     }
   }
 

@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-11CR3R"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10VXKT"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -504,7 +504,7 @@ else{
       for (ProductDataObject productDataObject : productDataObjects) {
 
         int fromCntr = 0;
-        int sizeCntr = 450;
+        int sizeCntr = 500;
         String apiResource = "";
         ProductsMatchedApiObject returnedProducts;
 
@@ -560,7 +560,7 @@ else{
         }
 
         returnedProducts = getProductsBySearch(apiResource+from + fromCntr + size + sizeCntr);
-
+        Log.info("scanned product from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
 
         if (searchOption.equalsIgnoreCase(PR_IDENTIFIER)) {
           returnedProducts.verifyNoProductReturned();
@@ -575,13 +575,13 @@ else{
 
           Log.info("Total product found search... - "+ returnedProducts.getTotalMatchCount());
           while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID())
-                  && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()&&(fromCntr+sizeCntr)<1000) {
+                  && fromCntr + sizeCntr < returnedProducts.getTotalMatchCount()&&(fromCntr+sizeCntr)<10000) {
 
-            Log.info("scanned product from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
             fromCntr += sizeCntr;
             returnedProducts = getProductsBySearch(apiResource+from + fromCntr + size + sizeCntr);
-
+            Log.info("scanned product from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
           }
+
             if(returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()))
             {
               Log.info("intetended product found for scan from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
@@ -589,8 +589,14 @@ else{
             }
             else
             {
-              Log.info("intetended product not found till scan from "+ fromCntr+ " to "+ (fromCntr+ sizeCntr)+ "records...");
-            Assert.assertTrue(getBreadcrumbMessage() + "- scenned "+(fromCntr+ sizeCntr)+ "records...",false);
+            if ((fromCntr + sizeCntr) < 10000) {
+              Log.info("intetended product not found, scanned " + (fromCntr + sizeCntr) + "records...");
+              Assert.assertTrue(getBreadcrumbMessage() + "- scenned " + (fromCntr + sizeCntr) + "records...",false);
+            }
+            else //due to api limitation, we can not scan records beyond 10000. Hence abord scanning
+            {
+              Log.info("Total scanned "+ (fromCntr+ sizeCntr)+ "records...");
+            }
             }
         }
       }

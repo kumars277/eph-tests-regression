@@ -48,7 +48,8 @@ public class ApiReusableFunctions {
                 returnedWorks =APIService.getWorksBySearchOption(searcOption+ from+ fromCntr+ size+ sizeCntr);
                 Log.info("Total work found... - " + returnedWorks.getTotalMatchCount());
                 while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
-                        && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
+                        && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()
+                        &&(fromCntr+sizeCntr)<10000) {
 
                     fromCntr += sizeCntr;
                     Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
