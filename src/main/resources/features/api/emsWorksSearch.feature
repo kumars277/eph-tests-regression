@@ -12,7 +12,7 @@ Feature: Search API: Works
    #new search fields included as part of Journal Finder #EPR-W-108TJK
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: Search journal by search option
-    Given  We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search <option>
     And    We get the work search data from EPH GD
     Then   the journal by search <option> details are retrieved and compared
     Examples:

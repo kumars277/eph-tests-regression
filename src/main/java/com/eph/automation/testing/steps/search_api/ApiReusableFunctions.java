@@ -62,8 +62,7 @@ public class ApiReusableFunctions {
         return returnedWorks;
     }
 
-    public WorksMatchedApiObject workByParam_Iterative(String queryType,String queryValue,int i)
-    {
+    public WorksMatchedApiObject workByParam_Iterative(String queryType,String queryValue,int i){
         //created by Nishant @ 19 Jan 2022
         int fromCntr = 0;
         int sizeCntr = 500;
@@ -82,6 +81,15 @@ public class ApiReusableFunctions {
             e.printStackTrace();
         }
         return returnedWorks;
+    }
+
+    public static String getSearchKeyword(String title)
+    {
+        //created by Nishant @ 28 Feb 2022
+        String keyword = "";
+        String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+        keyword=arr_title[arr_title.length-1];
+        return keyword;
     }
 
 }

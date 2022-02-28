@@ -205,13 +205,14 @@ public class APIDataSQL {
   // created by Nishant @ 9 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMC_WITHSEARCH =
       "select count(a.product_id) from "
-          + "(select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
-          + "where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
-          + "union \n"
-          + "select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
-          + "inner join semarchy_eph_mdm.gd_wwork w on "
-          + "p.f_wwork=w.work_id)a "
-          + "where upper(a.name) like '%%%s%%' and a.f_pmc='%s'";
+          + "( select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
+          + " where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
+          + " union \n"
+          + " select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
+          + " inner join semarchy_eph_mdm.gd_wwork w on "
+          + " p.f_wwork=w.work_id)a "
+          + " where a.name ~*'\\m%s\\M'"
+          + " and a.f_pmc='%s'";
 
   // created by Nishant @ 20 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG_WITHSEARCH =
@@ -233,7 +234,8 @@ public class APIDataSQL {
           + " inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id"
           + " inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc"
           + " )a"
-          + " where upper(a.name) like '%%%s%%' and a.f_pmg='%s'";
+          + " where a.name ~*'\\m%s\\M'"
+          + " and a.f_pmg='%s'";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG =
       "select count(a.product_id) from ( "

@@ -11,9 +11,10 @@ import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
+import static com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
+//import static com.eph.automation.testing.steps.search_api.ApiReusableFunctions.getSearchKeyword;
 
 import com.github.jknack.handlebars.internal.HbsParser;
 import com.google.common.base.Joiner;
@@ -256,7 +257,7 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
 
-        String searchKeyword =getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
         Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
 
@@ -276,7 +277,7 @@ public class ApiWorksSearchSteps {
    // try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        String searchKeyword = getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        String searchKeyword = ApiReusableFunctions.getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
 
         String workType = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
 
@@ -296,7 +297,7 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-          String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
+          String searchKeyword =  ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
 
         String ManifestationType =
                 DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
@@ -318,7 +319,7 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     try{
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-      String searchKeyword = getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+      String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
       //String searchKeyword =  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", "").split(" ")[0];
 
       for (int i = 0; i < bound; i++) {
@@ -1229,16 +1230,13 @@ public class ApiWorksSearchSteps {
 
   public static void scenarioFailed()
   {Assert.assertFalse(getBreadcrumbMessage() + " scenario Failed ", true);}
-
-public static String getSearchKeyword(String title)
-{
-  //created by Nishant @ 31 Jan 2022
-  String keyword = "";
-  String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-  keyword=arr_title[arr_title.length-1];
-  //if(arr_title.length>1)keyword+=" "+arr_title[1];
-
-
-return keyword;
-}
+/*
+  public static String getSearchKeyword(String title)
+  {
+    //created by Nishant @ 31 Jan 2022
+    String keyword = "";
+    String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+    keyword=arr_title[arr_title.length-1];
+    return keyword;
+  }*/
 }

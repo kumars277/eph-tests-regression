@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10VXKT"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10V088"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -815,10 +815,10 @@ else{
     String defaultSearch = "CELL";
     int productCountDB = 0;
 
-      String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().replaceAll("[^a-zA-Z0-9]", " ").split(" ")[0]).toUpperCase();
+      String searchTerm = ApiReusableFunctions.getSearchKeyword(productDataObjects.get(0).getPRODUCT_NAME());
+
       switch (paramKey) {
-        case "productStatus":
-          setBreadcrumbMessage(productDataObjects.get(0).getF_STATUS());
+        case "productStatus":  setBreadcrumbMessage(productDataObjects.get(0).getF_STATUS());
 
           productCountDB =
               getCount(
@@ -829,8 +829,7 @@ else{
                   getProductByParam(
                   defaultSearch, paramKey, productDataObjects.get(0).getF_STATUS());
           break;
-        case "productType":
-          setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
+        case "productType":   setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
 
           returnedProducts =
                   getProductByParam(
@@ -877,8 +876,7 @@ else{
 
         case "pmgCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-          String pmgCode =
-              getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          String pmgCode =getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           setBreadcrumbMessage(pmgCode);
           returnedProducts = getProductByParam(searchTerm, paramKey, pmgCode);
           productCountDB = getCount("getProductCountByPMGCode", searchTerm, pmgCode);
