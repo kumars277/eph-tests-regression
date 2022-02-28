@@ -86,7 +86,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-103BK9");Log.info("hard coded work id is : " + ids);
+   // ids.clear();ids.add("EPR-W-105G73");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -105,7 +105,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-  // ids.clear();    ids.add("EPR-W-102SH2");  Log.info("hard coded work ids are : " + ids);
+  // ids.clear();    ids.add("EPR-W-102S05");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -1226,7 +1226,7 @@ public static String getSearchKeyword(String title)
   //created by Nishant @ 31 Jan 2022
   String keyword = "";
   String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-  keyword=arr_title[1];
+  keyword=arr_title[arr_title.length-1];
   //if(arr_title.length>1)keyword+=" "+arr_title[1];
 
 

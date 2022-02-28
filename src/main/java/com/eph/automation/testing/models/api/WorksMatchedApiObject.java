@@ -33,7 +33,7 @@ public class WorksMatchedApiObject {
     public WorkApiObject[] getItems() {return items;}
     public void setItems(WorkApiObject[] items) {this.items = items;}
 
-    public void verifyWorksAreReturned(){Assert.assertNotEquals("Verify more than 0 items returned from API", 0, totalMatchCount);}
+    public void verifyWorksAreReturned(){Assert.assertNotEquals(getBreadcrumbMessage() +"Verify more than 0 items returned from API", 0, totalMatchCount);}
 
     public void verifyWorksReturnedCount(int worksInDB){
         //API count could be higher than DB count as it comes from Elastic search
