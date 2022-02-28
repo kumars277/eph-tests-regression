@@ -5,6 +5,9 @@ import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
+import org.junit.Assert;
+
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
 
 public class ApiReusableFunctions {
 
@@ -71,15 +74,20 @@ public class ApiReusableFunctions {
             returnedWorks = APIService.getWorksByParam(queryType,queryValue+ from + fromCntr + size + sizeCntr);
 
             Log.info("Total work found by "+queryType+" - "+ returnedWorks.getTotalMatchCount());
-            while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()) &&
-                    fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-                fromCntr += sizeCntr;
-                Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
-                returnedWorks =APIService.getWorksByParam(queryType,queryValue+ from + fromCntr + size + sizeCntr);
+      if (returnedWorks.getTotalMatchCount() > 0) {
+        while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
+            && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
+          fromCntr += sizeCntr;
+          Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
+          returnedWorks =  APIService.getWorksByParam(queryType, queryValue + from + fromCntr + size + sizeCntr);
+        }
             }
         } catch (AzureOauthTokenFetchingException e) {
+             Assert.assertFalse(getBreadcrumbMessage()+"API error",true );
             e.printStackTrace();
         }
+
         return returnedWorks;
     }
 

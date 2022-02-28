@@ -11,23 +11,16 @@ import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import static com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
-//import static com.eph.automation.testing.steps.search_api.ApiReusableFunctions.getSearchKeyword;
-
-import com.github.jknack.handlebars.internal.HbsParser;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
-import com.jayway.restassured.RestAssured;
 import cucumber.api.java.en.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.Assert;
-
-import javax.security.auth.login.LoginContext;
 
 /*
  * Created by GVLAYKOV on 11/02/2019
@@ -87,7 +80,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-12TB98");Log.info("hard coded work id is : " + ids);
+    //ids.clear();ids.add("EPR-W-1052VJ");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -113,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-  // ids.clear();    ids.add("EPR-W-102S05");  Log.info("hard coded work ids are : " + ids);
+  // ids.clear();    ids.add("EPR-W-102TS8");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -184,7 +177,7 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
     Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
-     // ids.clear(); ids.add("10290173");  Log.info("hard coded work ids are : " + ids);
+    //  ids.clear(); ids.add("10088889");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(
             getBreadcrumbMessage()
@@ -259,7 +252,7 @@ public class ApiWorksSearchSteps {
 
         String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
-        Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
+        Log.info("searchKeyword - workStatus: " + searchKeyword +" - " + workStatus);
 
         returnedWorks = APIService.getWorksByWorkStatus(searchKeyword, workStatus);
         printTotalWorkCount(returnedWorks);
@@ -713,7 +706,8 @@ public class ApiWorksSearchSteps {
       returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
      // returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
-      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("",id, id));
+      Assert.assertEquals("personId:"+id,returnedWorks.getTotalMatchCount(),getNumberOfWorksByPerson("",id));
+      //returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("",id));
     }
   }
 
@@ -803,6 +797,7 @@ public class ApiWorksSearchSteps {
       printTotalWorkCount(returnedWorks);
       returnedWorks.verifyWorksReturnedCount(
               getNumberOfWorksByHasWorkComponents(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+
     }
 
   }
