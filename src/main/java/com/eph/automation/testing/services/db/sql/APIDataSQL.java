@@ -466,7 +466,7 @@ public class APIDataSQL {
           "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_component ='%S'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_ISINPACKAGE =
-      "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_package_owner ='%S'";
+      "select count(distinct f_component) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_package_owner ='%S'";
 
   public static final String SELECT_GD_PMG_BY_PMC =
       "select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";

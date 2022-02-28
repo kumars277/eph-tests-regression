@@ -86,7 +86,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-105G73");Log.info("hard coded work id is : " + ids);
+   // ids.clear();ids.add("EPR-W-12TB98");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -257,11 +257,6 @@ public class ApiWorksSearchSteps {
       for (int i = 0; i < bound; i++) {
 
         String searchKeyword =getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-                /*DataQualityContext.workDataObjectsFromEPHGD.get(0)
-                        .getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ")
-                .split(" ")[0].toUpperCase();*/
-
-
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
         Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
 
@@ -302,17 +297,11 @@ public class ApiWorksSearchSteps {
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
-        /*searchKeyword =
-                DataQualityContext
-                        .workDataObjectsFromEPHGD
-                        .get(0)
-                        .getWORK_TITLE()
-                        .replaceAll("[^a-zA-Z0-9]", " ")
-                        .split(" ")[0]
-                        .toUpperCase();*/
+
         String ManifestationType =
                 DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
         Log.info("searchKeyword and ManifestationType: " + searchKeyword + " - " + ManifestationType);
+        setBreadcrumbMessage("searchKeyword-ManifestationType: " + searchKeyword + " - " + ManifestationType);
         returnedWorks =
                 APIService.getWorksByManifestationType(searchKeyword, ManifestationType);
         printTotalWorkCount(returnedWorks);
@@ -822,13 +811,10 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
-      returnedWorks =
-              getWorkByIsInPackage(
-                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      returnedWorks =getWorkByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       returnedWorks.verifyWorksAreReturned();
       printTotalWorkCount(returnedWorks);
-      returnedWorks.verifyWorksReturnedCount(
-              getNumberOfWorksByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
     }
 
   }
