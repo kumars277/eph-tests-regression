@@ -25,16 +25,17 @@ Feature: Search API: Works
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
-    Given  We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search <options>
     And    We get the work search data from EPH GD
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
-      | PERSON_ID             |
       | personFullNameCurrent |
+      | PERSON_NAME           |
+      | PERSON_ID             |
       | PEOPLE_HUB_ID         |
 
-      | PERSON_NAME           |
+
 
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 

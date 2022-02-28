@@ -6,6 +6,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Verify;
+import com.poiji.internal.annotation.ExcelCell;
 import org.junit.Assert;
 
 import java.text.ParseException;
@@ -50,6 +51,7 @@ public class WorksMatchedApiObject {
                     items[i].compareWithDB();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                    Assert.assertFalse(getBreadcrumbMessage(),true);
                 }
             }
             i++;
@@ -63,9 +65,15 @@ public class WorksMatchedApiObject {
     public boolean verifyWorkWithIdIsReturnedOnly(String workID){
         int i=0;
         boolean found=false;
+       try{
         while(i<items.length&&!found){
             if(items[i].getId().equals(workID))found=true;
             i++; }
+        }
+       catch (Exception e)
+       {
+           Assert.assertFalse(getBreadcrumbMessage(),true);
+       }
         return found;
     }
 

@@ -125,6 +125,16 @@ public class APIDataSQL {
           + "where f_type in('ABS','JBB','JNL','NWL')and "
           + "f_status in('WLA') order by random() limit %s";
 
+
+  public static final String SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent =
+      "select work_id from semarchy_eph_mdm.gd_wwork gw\n"
+          + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+          + "on gw.work_id =gwpr.f_wwork \n"
+          + " where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + " and gw.f_status in('WLA')\n"
+          + " and gwpr.effective_end_date is null" +
+              " order by random() limit %s";
+
   public static final String SELECT_RANDOM_EXTENDED_WORK_ID =
       "SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %s";
 
