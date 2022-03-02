@@ -59,12 +59,12 @@ public class ManifestationCore {
         printLog("internationalEditionInd");
     }
 
-    Assert.assertEquals(firstPubDate, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());    printLog("firstPubDate");
+    Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>firstPubDate",firstPubDate, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());    printLog("firstPubDate");
 
     if(lastPubDate!=null)
     {
         printLog("lastPubDate present, need to write validation rule...");
-        Assert.assertTrue(false);
+        Assert.assertTrue(getBreadcrumbMessage()+">manifestationCore>lastPubDate",false);
     }
 
     if (identifiers != null) {
@@ -74,10 +74,10 @@ public class ManifestationCore {
         printLog("identifiers");
     }
 
-    Assert.assertEquals(type.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE());
+    Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>type",type.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE());
     printLog("manifestation type");
 
-    Assert.assertEquals(status.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_STATUS());
+    Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>status"+status.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_STATUS());
     printLog("manifestation status code");
 }
     //}

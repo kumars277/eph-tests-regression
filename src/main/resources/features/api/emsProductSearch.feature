@@ -55,8 +55,9 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
-      | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_PERSONS_FULLNAME                    |
+      | PRODUCT_WORK_PERSONS_FULLNAME               |
+
       | PRODUCT_ID                                  |
       | PRODUCT_TITLE                               |
  #    | PRODUCT_IDENTIFIER                          |
