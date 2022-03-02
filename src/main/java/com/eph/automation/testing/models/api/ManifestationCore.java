@@ -50,7 +50,7 @@ public class ManifestationCore {
 
     public void compareWithDB(String manifestationId) {
         Log.info("----- verifying ManifestationCore data...");
-        Assert.assertEquals(keyTitle, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());        printLog("manifestation keyTitle");
+        Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>keyTitle>",keyTitle, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());        printLog("manifestation keyTitle");
 
 
     if (internationalEditionInd != null || DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getINTER_EDITION_FLAG() != null) {
@@ -77,7 +77,7 @@ public class ManifestationCore {
     Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>type",type.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE());
     printLog("manifestation type");
 
-    Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>status"+status.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_STATUS());
+    Assert.assertEquals(getBreadcrumbMessage()+">manifestationCore>status",status.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_STATUS());
     printLog("manifestation status code");
 }
     //}
