@@ -492,7 +492,7 @@ public class APIDataSQL {
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'\\m%s\\M' and f_type='%s'";
+      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s\\M' and f_type='%s'";
 
    /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
