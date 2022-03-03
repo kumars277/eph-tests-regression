@@ -5,6 +5,9 @@ import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
+import org.junit.Assert;
+
+import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
 
 public class ApiReusableFunctions {
 
@@ -48,7 +51,8 @@ public class ApiReusableFunctions {
                 returnedWorks =APIService.getWorksBySearchOption(searcOption+ from+ fromCntr+ size+ sizeCntr);
                 Log.info("Total work found... - " + returnedWorks.getTotalMatchCount());
                 while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
-                        && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
+                        && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()
+                        &&(fromCntr+sizeCntr)<10000) {
 
                     fromCntr += sizeCntr;
                     Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
@@ -61,8 +65,7 @@ public class ApiReusableFunctions {
         return returnedWorks;
     }
 
-    public WorksMatchedApiObject workByParam_Iterative(String queryType,String queryValue,int i)
-    {
+    public WorksMatchedApiObject workByParam_Iterative(String queryType,String queryValue,int i){
         //created by Nishant @ 19 Jan 2022
         int fromCntr = 0;
         int sizeCntr = 500;
@@ -71,16 +74,35 @@ public class ApiReusableFunctions {
             returnedWorks = APIService.getWorksByParam(queryType,queryValue+ from + fromCntr + size + sizeCntr);
 
             Log.info("Total work found by "+queryType+" - "+ returnedWorks.getTotalMatchCount());
-            while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()) &&
-                    fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
-                fromCntr += sizeCntr;
-                Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
-                returnedWorks =APIService.getWorksByParam(queryType,queryValue+ from + fromCntr + size + sizeCntr);
+      if (returnedWorks.getTotalMatchCount() > 0) {
+        while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
+            && fromCntr + sizeCntr < returnedWorks.getTotalMatchCount()) {
+          fromCntr += sizeCntr;
+          Log.info("scanned productID from record " + (fromCntr - sizeCntr) + " to " + fromCntr);
+          returnedWorks =  APIService.getWorksByParam(queryType, queryValue + from + fromCntr + size + sizeCntr);
+        }
             }
         } catch (AzureOauthTokenFetchingException e) {
+             Assert.assertFalse(getBreadcrumbMessage()+"API error",true );
             e.printStackTrace();
         }
+
         return returnedWorks;
+    }
+
+    public static String getSearchKeyword(String title)
+    {
+        //created by Nishant @ 28 Feb 2022
+        String keyword = "";
+        String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+        keyword=arr_title[arr_title.length-1];
+        /*ngram filter in API splits the title into all the combinations
+        of consecutive characters between 3 and 50 characters long.
+        Because the minimum length is 3, CD isn’t a valid match.
+        hence valid keyword should be more than 2 characters*/
+        if(keyword.length()<3)keyword = arr_title[arr_title.length-2];
+        return keyword;
     }
 
 }

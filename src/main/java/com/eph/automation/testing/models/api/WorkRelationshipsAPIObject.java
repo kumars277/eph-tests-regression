@@ -68,18 +68,18 @@ public class WorkRelationshipsAPIObject {
              parentFound = true;
             Log.info("verifying workParent " + list_workParent.get(wp).id+", code "+list_workParent.get(wp).type.get("code"));
 
-            Assert.assertEquals(workId + " - parent effectiveStartDate",list_workParent.get(wp).effectiveStartDate,dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - parent effectiveStartDate",list_workParent.get(wp).effectiveStartDate,dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE());
             printLog("effectiveStartDate");
 
             getWorksDataFromEPHGD(list_workParent.get(wp).id);
 
-            Assert.assertEquals(workId + " - parent work Title",list_workParent.get(wp).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - parent work Title",list_workParent.get(wp).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             printLog("work Title");
 
-            Assert.assertEquals(workId + " - parent work Type",list_workParent.get(wp).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - parent work Type",list_workParent.get(wp).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
             printLog("work Type");
 
-            Assert.assertEquals(workId + " -parent work Status",list_workParent.get(wp).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " -parent work Status",list_workParent.get(wp).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
             printLog("work Status");
             break;
           }
@@ -102,18 +102,18 @@ public class WorkRelationshipsAPIObject {
              childFound=true;
             Log.info("verifying workChild " + list_workChild.get(wc).id+", child "+list_workChild.get(wc).type.get("code"));
 
-            Assert.assertEquals(workId + " - child effectiveStartDate",list_workChild.get(wc).effectiveStartDate,dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getEFFECTIVE_START_DATE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - child effectiveStartDate",list_workChild.get(wc).effectiveStartDate,dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getEFFECTIVE_START_DATE());
             printLog("effectiveStartDate");
 
             getWorksDataFromEPHGD(list_workChild.get(wc).id);
 
-            Assert.assertEquals(workId + " - child work Title",list_workChild.get(wc).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - child work Title",list_workChild.get(wc).workSummary.title,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             printLog("work Title");
 
-            Assert.assertEquals(workId + " - child work Type",list_workChild.get(wc).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - child work Type",list_workChild.get(wc).workSummary.type.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
             printLog("work Type");
 
-            Assert.assertEquals(workId + " - child work Status",list_workChild.get(wc).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+            Assert.assertEquals(getBreadcrumbMessage()+workId + " - child work Status",list_workChild.get(wc).workSummary.status.get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
             printLog("work Status");
 
             if (list_workChild.get(wc).effectiveEndDate != null) {Assert.assertEquals(workId + " - child effectiveStartDate",list_workChild.get(wc).effectiveEndDate,

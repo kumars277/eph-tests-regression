@@ -12,7 +12,7 @@ Feature: Search API: Works
    #new search fields included as part of Journal Finder #EPR-W-108TJK
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: Search journal by search option
-    Given  We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search <option>
     And    We get the work search data from EPH GD
     Then   the journal by search <option> details are retrieved and compared
     Examples:
@@ -25,14 +25,15 @@ Feature: Search API: Works
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
-    Given  We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search <options>
     And    We get the work search data from EPH GD
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
-      | PERSON_ID             |
       | PERSON_NAME           |
       | personFullNameCurrent |
+
+      | PERSON_ID             |
       | PEOPLE_HUB_ID         |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
@@ -80,7 +81,6 @@ Feature: Search API: Works
       | WORK_IDENTIFIER                        |
       | WORK_ID                                |
       | WORK_TITLE                             |
-
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |

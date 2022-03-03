@@ -480,8 +480,7 @@ public class workCore {
             }
         }
 
-        if(workHierarchies!=null)
-        {
+        if(workHierarchies!=null){
             //need to write validation rule
             Assert.assertFalse(true);
         }

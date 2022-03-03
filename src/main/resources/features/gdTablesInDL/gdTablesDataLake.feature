@@ -3,10 +3,10 @@ Feature:Validate data for GD Tables in DataLake from PostgreSQL
   @gdDL
   Scenario Outline: Verify that GD tables in the PostgreSQL and DL
 
-   # Given We get the count <SourceTable> from postgreSQL
-   # Then Get the count of <SourceTable> from the DataLake
-   # And we compare both the counts are identical for the table <SourceTable>
-    Given Get <numberOfRecords> random ids of <SourceTable> from the postgreSQL
+    Given We get the count <SourceTable> from postgreSQL
+    Then Get the count of <SourceTable> from the DataLake
+    And we compare both the counts are identical for the table <SourceTable>
+   # Given Get <numberOfRecords> random ids of <SourceTable> from the postgreSQL
     #When We get the records for <SourceTable> from postgreSQL
     #Then Get the records for <SourceTable> from the DataLake
     #And Compare the records of <SourceTable> from postgreSQL and DataLake
