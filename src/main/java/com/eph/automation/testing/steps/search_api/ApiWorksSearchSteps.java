@@ -11,22 +11,16 @@ import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.eph.automation.testing.steps.search_api.ApiReusableFunctions.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
-
-import com.github.jknack.handlebars.internal.HbsParser;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
-import com.jayway.restassured.RestAssured;
 import cucumber.api.java.en.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.Assert;
-
-import javax.security.auth.login.LoginContext;
 
 /*
  * Created by GVLAYKOV on 11/02/2019
@@ -86,16 +80,23 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   // ids.clear();ids.add("EPR-W-101YBW");Log.info("hard coded work id is : " + ids);
+   //ids.clear();ids.add("EPR-W-101BSN");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
   }
 
-  @Given("^We get (.*) random journal ids for search")
-  public static void getRandomJournalIds(String numberOfRecords) { // created by Nishant @ 25 Jun 2020
+  @Given("^We get (.*) random journal ids to search (.*)")
+  public static void getRandomJournalIds(String numberOfRecords,String searchType) { // created by Nishant @ 25 Jun 2020
 
-    sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID, numberOfRecords);
+    switch(searchType)
+    {
+      case "personFullNameCurrent":
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent, numberOfRecords);
+        break;
+      default: sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID, numberOfRecords);break;
+    }
+
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
             randomProductSearchIds.stream()
@@ -105,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-  // ids.clear();    ids.add("EPR-W-102TR2");  Log.info("hard coded work ids are : " + ids);
+//ids.clear();    ids.add("EPR-W-102VH8");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -176,7 +177,7 @@ public class ApiWorksSearchSteps {
                     .map(String::valueOf)
                     .collect(Collectors.toList());
     Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
-     // ids.clear(); ids.add("10290173");  Log.info("hard coded work ids are : " + ids);
+    //  ids.clear(); ids.add("10088889");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(
             getBreadcrumbMessage()
@@ -246,15 +247,12 @@ public class ApiWorksSearchSteps {
   public void compareWorksByWorkStatusWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
 
-        String searchKeyword =DataQualityContext.workDataObjectsFromEPHGD.get(0)
-                        .getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ")
-                .split(" ")[0].toUpperCase();
+        String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
-        Log.info("searchKeyword and workStatus: " + searchKeyword +" - " + workStatus);
+        Log.info("searchKeyword - workStatus: " + searchKeyword +" - " + workStatus);
 
         returnedWorks = APIService.getWorksByWorkStatus(searchKeyword, workStatus);
         printTotalWorkCount(returnedWorks);
@@ -272,14 +270,10 @@ public class ApiWorksSearchSteps {
    // try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        String searchKeyword =
-                DataQualityContext
-                        .workDataObjectsFromEPHGD
-                        .get(0)
-                        .getWORK_TITLE()
-                        .split(" ")[0]
-                        .toUpperCase();
+        String searchKeyword = ApiReusableFunctions.getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+
         String workType = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
+
         Log.info("searchKeyword and workType: " + searchKeyword + " - " + workType);
 
         returnedWorks = APIService.getWorksByWorkType(searchKeyword, workType);
@@ -287,11 +281,6 @@ public class ApiWorksSearchSteps {
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkType(searchKeyword, workType));
       }
-
-  /*  } catch (Exception e) {
-      e.getMessage();
-      scenarioFailed();
-    }*/
   }
 
   @Then("^the work details are retrieved by manifestationType and compared$")
@@ -301,18 +290,12 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-          String searchKeyword =  getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
-        /*searchKeyword =
-                DataQualityContext
-                        .workDataObjectsFromEPHGD
-                        .get(0)
-                        .getWORK_TITLE()
-                        .replaceAll("[^a-zA-Z0-9]", " ")
-                        .split(" ")[0]
-                        .toUpperCase();*/
+          String searchKeyword =  ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
+
         String ManifestationType =
                 DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
         Log.info("searchKeyword and ManifestationType: " + searchKeyword + " - " + ManifestationType);
+        setBreadcrumbMessage("searchKeyword-ManifestationType: " + searchKeyword + " - " + ManifestationType);
         returnedWorks =
                 APIService.getWorksByManifestationType(searchKeyword, ManifestationType);
         printTotalWorkCount(returnedWorks);
@@ -329,7 +312,7 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     try{
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-      String searchKeyword = getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+      String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
       //String searchKeyword =  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", "").split(" ")[0];
 
       for (int i = 0; i < bound; i++) {
@@ -625,7 +608,10 @@ public class ApiWorksSearchSteps {
       returnedWorks = apiFun.workBySeachOption_Iterative(searchOption,i,shouldResultOnTop);
       assert returnedWorks != null;
       //returnedWorks.verifyWorksAreReturned();
+      if(returnedWorks.verifyWorkWithIdIsReturnedOnly(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()))
+      {
       returnedWorks.verifyWorkWithIdIsReturned(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      }
     }
   }
 
@@ -720,7 +706,8 @@ public class ApiWorksSearchSteps {
       returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
      // returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
-      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("", id));
+      Assert.assertEquals("personId:"+id,returnedWorks.getTotalMatchCount(),getNumberOfWorksByPerson("",id));
+      //returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("",id));
     }
   }
 
@@ -743,13 +730,15 @@ public class ApiWorksSearchSteps {
       switch (personSearchOption) {
         case "PERSON_NAME": resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                   + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
-          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME(),
+                  DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME());
           resourceString += activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);    break;
 
         case PER_FULLNAME_CURRENT:  resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
-          dbCount =getNumberOfWorksByPerson(personSearchOption,resourceString);
+          dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME(),
+                  DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME());
           resourceString += activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personFullNameCurrent",resourceString,i);    break;
 
@@ -766,25 +755,23 @@ public class ApiWorksSearchSteps {
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
-
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
 
-     // dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
-      //if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
+      if (!personSearchOption.equalsIgnoreCase(PER_FULLNAME_CURRENT)) {
         if(returnedWorks.verifyWorkWithIdIsReturnedOnly(workId))
         {
           returnedWorks.verifyWorkWithIdIsReturned(workId);
-        Log.info("verified intended work in search result...");
-      }
+          Log.info("verified intended work in search result...");
+        }
         else
-          {
-        Log.info("intended work "+workId+" is missing in search result");
-            Assert.assertFalse("intended work "+workId+" is missing in search result",true);
-          }
+        {
+          Log.info("intended work "+workId+" is missing in search result");
+          Assert.assertFalse("intended work "+workId+" is missing in search result",true);
+        }
 
-
+      }
     }
   }
 
@@ -810,6 +797,7 @@ public class ApiWorksSearchSteps {
       printTotalWorkCount(returnedWorks);
       returnedWorks.verifyWorksReturnedCount(
               getNumberOfWorksByHasWorkComponents(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+
     }
 
   }
@@ -819,13 +807,10 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
-      returnedWorks =
-              getWorkByIsInPackage(
-                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      returnedWorks =getWorkByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       returnedWorks.verifyWorksAreReturned();
       printTotalWorkCount(returnedWorks);
-      returnedWorks.verifyWorksReturnedCount(
-              getNumberOfWorksByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+      returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByIsInPackage(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
     }
 
   }
@@ -974,7 +959,7 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByWorkStatus(String searchKeyword, String workStatus) {
-    sql =String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword, workStatus);
+    sql =String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword.toUpperCase(), workStatus);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
@@ -984,7 +969,7 @@ public class ApiWorksSearchSteps {
   private static int getNumberOfWorksByWorkType(String searchKeyword, String workType) {
     sql =
             String.format(
-                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword, workType);
+                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword.toUpperCase(), workType);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
@@ -1049,24 +1034,40 @@ public class ApiWorksSearchSteps {
     return count;
   }
 
-  private static int getNumberOfWorksByPerson(String searchType, String person) {
-    String[] perName = person.split(" ");
+  private static int getNumberOfWorksByPerson(String searchType, String fName,String lName) {
+
+    int count =0;
     switch (searchType) {
-      case "PERSON_NAME":
-        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, perName[0],perName[1]);     break;
+      case PER_FULLNAME_CURRENT:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, fName,lName);break;
+      default:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, fName,lName,fName,lName);     break;    }
 
-      case PER_FULLNAME_CURRENT:
-        sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, perName[0],perName[1]);break;
-
-      case "PEOPLE_HUB_ID":
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, person);        break;
-
-      default:
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID, person);        break;
+    try
+    {
+      List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+      count = ((Long) getCount.get(0).get("count")).intValue();
     }
+    catch(Exception e )
+    {
+      Assert.assertFalse(getBreadcrumbMessage(),true);
+    }
+    Log.info("EPH work count..." + count);
+    return count;
+  }
 
-    List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-    int count = ((Long) getCount.get(0).get("count")).intValue();
+  private static int getNumberOfWorksByPerson(String searchType, String personId) {
+    int count =0;
+    switch (searchType) {
+      case "PEOPLE_HUB_ID":sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID, personId);        break;
+      default:        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID, personId);        break;
+    }
+    try{
+      List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+      count = ((Long) getCount.get(0).get("count")).intValue();
+    }
+    catch(Exception e )
+    {
+      Assert.assertFalse(getBreadcrumbMessage(),true);
+    }
     Log.info("EPH work count..." + count);
     return count;
   }
@@ -1224,16 +1225,13 @@ public class ApiWorksSearchSteps {
 
   public static void scenarioFailed()
   {Assert.assertFalse(getBreadcrumbMessage() + " scenario Failed ", true);}
-
-public static String getSearchKeyword(String title)
-{
-  //created by Nishant @ 31 Jan 2022
-  String keyword = "";
-  String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-  keyword=arr_title[1];
-  //if(arr_title.length>1)keyword+=" "+arr_title[1];
-
-
-return keyword;
-}
+/*
+  public static String getSearchKeyword(String title)
+  {
+    //created by Nishant @ 31 Jan 2022
+    String keyword = "";
+    String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+    keyword=arr_title[arr_title.length-1];
+    return keyword;
+  }*/
 }

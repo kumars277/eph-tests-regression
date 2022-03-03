@@ -125,6 +125,16 @@ public class APIDataSQL {
           + "where f_type in('ABS','JBB','JNL','NWL')and "
           + "f_status in('WLA') order by random() limit %s";
 
+
+  public static final String SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent =
+      "select work_id from semarchy_eph_mdm.gd_wwork gw\n"
+          + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
+          + "on gw.work_id =gwpr.f_wwork \n"
+          + " where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + " and gw.f_status in('WLA')\n"
+          + " and gwpr.effective_end_date is null" +
+              " order by random() limit %s";
+
   public static final String SELECT_RANDOM_EXTENDED_WORK_ID =
       "SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %s";
 
@@ -195,13 +205,14 @@ public class APIDataSQL {
   // created by Nishant @ 9 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMC_WITHSEARCH =
       "select count(a.product_id) from "
-          + "(select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
-          + "where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
-          + "union \n"
-          + "select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
-          + "inner join semarchy_eph_mdm.gd_wwork w on "
-          + "p.f_wwork=w.work_id)a "
-          + "where upper(a.name) like '%%%s%%' and a.f_pmc='%s'";
+          + "( select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
+          + " where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
+          + " union \n"
+          + " select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
+          + " inner join semarchy_eph_mdm.gd_wwork w on "
+          + " p.f_wwork=w.work_id)a "
+          + " where a.name ~*'\\m%s\\M'"
+          + " and a.f_pmc='%s'";
 
   // created by Nishant @ 20 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG_WITHSEARCH =
@@ -223,7 +234,8 @@ public class APIDataSQL {
           + " inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id"
           + " inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc"
           + " )a"
-          + " where upper(a.name) like '%%%s%%' and a.f_pmg='%s'";
+          + " where a.name ~*'\\m%s\\M'"
+          + " and a.f_pmg='%s'";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG =
       "select count(a.product_id) from ( "
@@ -388,16 +400,17 @@ public class APIDataSQL {
                   + "where gwpr.f_person='%s'";
 
   public static final String SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT =
-          "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+          "select COUNT(distinct work_id) from semarchy_eph_mdm.gd_wwork gw\n"
                   + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
                   + "on gw.work_id =gwpr.f_wwork \n"
-                  + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
-                  + "and gw.f_status in('WLA')\n"
-                  + "and gwpr.f_person in \n"
+                  + " where gw.f_type in('ABS','JBB','JNL','NWL') \n"
+                  + " and gw.f_status in('WLA')\n"
+                  + " and gwpr.effective_end_date is null\n"
+                  + " and gwpr.f_person in \n"
                   + "(\n"
-                  + "select person_id from semarchy_eph_mdm.gd_person gp \n"
-                  + "where s_given_name like upper('%s') \n"
-                  + "AND s_family_name like upper('%s')\n"
+                  + " select person_id from semarchy_eph_mdm.gd_person gp \n"
+                  + " where given_name ~*'\\m%s\\M' \n"
+                  + " AND family_name ~*'\\m%s\\M'\n"
                   + ")";
 
 
@@ -409,13 +422,15 @@ public class APIDataSQL {
           + "and gw.f_status in('WLA')\n"
           + "and gwpr.f_person in \n"
           + "(\n"
-          + "select person_id from semarchy_eph_mdm.gd_person gp \n"
-          + "where s_given_name like upper('%s') \n"
-          + "or s_family_name like upper('%s')\n"
+          + "select person_id from semarchy_eph_mdm.gd_person gp \n"+
+              "where given_name  ~*'\\m%s\\M'\n" +
+                 "or given_name  ~*'\\m%s\\M'\n" +
+                 "or family_name ~*'\\m%s\\M'\n" +
+                 "or family_name ~*'\\m%s\\M'"
           + ")";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PEOPLEHUBID =
-      "select COUNT(*) from semarchy_eph_mdm.gd_wwork gw\n"
+      "select COUNT(distinct work_id) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
           + "on gw.work_id =gwpr.f_wwork \n"
           + "where gw.f_type in('ABS','JBB','JNL','NWL') \n"
@@ -453,7 +468,7 @@ public class APIDataSQL {
           "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_component ='%S'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_ISINPACKAGE =
-      "select count(*) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_package_owner ='%S'";
+      "select count(distinct f_component) from semarchy_eph_mdm.gd_work_rel_package gwrp where f_package_owner ='%S'";
 
   public static final String SELECT_GD_PMG_BY_PMC =
       "select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";
@@ -471,13 +486,13 @@ public class APIDataSQL {
           + "select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in ('%s'))";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_status = '%s'";
+      "select count(work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_status = '%s'";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_type='%s'";
+      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_type='%s'";
 
    /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
