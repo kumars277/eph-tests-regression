@@ -3,10 +3,10 @@ Feature:Validate data for GD Tables in DataLake from PostgreSQL
   @gdDL
   Scenario Outline: Verify that GD tables in the PostgreSQL and DL
 
-    Given We get the count <SourceTable> from postgreSQL
-    Then Get the count of <SourceTable> from the DataLake
-    And we compare both the counts are identical for the table <SourceTable>
-    #Given Get <numberOfRecords> random ids of <SourceTable> from the postgreSQL
+   # Given We get the count <SourceTable> from postgreSQL
+   # Then Get the count of <SourceTable> from the DataLake
+   # And we compare both the counts are identical for the table <SourceTable>
+    Given Get <numberOfRecords> random ids of <SourceTable> from the postgreSQL
     #When We get the records for <SourceTable> from postgreSQL
     #Then Get the records for <SourceTable> from the DataLake
     #And Compare the records of <SourceTable> from postgreSQL and DataLake
@@ -21,12 +21,9 @@ Feature:Validate data for GD Tables in DataLake from PostgreSQL
       | 5               |gd_price                    |
       | 5               |gd_product                   |
       | 5               |gd_product_financial_attribs |
-      | 5               |gd_product_hierarchy      |
-      | 5               |gd_product_line      |
+      | 5               |gd_product_identifier      |
       | 5               |gd_product_person_role      |
-      | 5               |gd_product_product_hchy_link      |
       | 5               |gd_product_rel_package      |
-      | 5               |gd_product_relationship      |
       | 5               |gd_subject_area      |
       | 5               |gd_work_access_model      |
       | 5               |gd_work_business_model      |
