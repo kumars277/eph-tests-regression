@@ -61,6 +61,20 @@ Feature:Validate data for Promis between transform tables
       | 50               |urls           |promis_transform_latest_urls          |
       | 50               |work_rels      |promis_transform_latest_work_rels     |
 
+    @PROMISETL
+  Scenario Outline: Verify Duplicate Entry for JRBI in transform latest tables
+    Given we Get the Duplicate count in the PROMIS <Latesttablename> table
+    Then Check the count should be Zero <Latesttablename>
+    Examples:
+     |Latesttablename                     |
+     |promis_transform_latest_subject_areas |
+     |promis_transform_latest_pricing       |
+     |promis_transform_latest_person_roles  |
+     |promis_transform_latest_works         |
+     |promis_transform_latest_metrics       |
+     |promis_transform_latest_urls          |
+     |promis_transform_latest_work_rels     |
+
 ###################################3
 @notUsed
   Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables

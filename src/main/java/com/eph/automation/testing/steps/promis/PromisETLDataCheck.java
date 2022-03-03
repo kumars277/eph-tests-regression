@@ -26,6 +26,8 @@ public class PromisETLDataCheck {
     public PromisContext PromisDataContext;
     private static String sql;
     private static List<String> Ids;
+    private static String promisDuplicateLatestSQLCount;
+    private static int promisDuplicateLatestCount;
 
     @Given("^We get the (.*) random Promis ids of (.*)$")
     public void getRandomPromisIds(String numberOfRecords, String Currenttablename) {
@@ -1813,13 +1815,46 @@ public class PromisETLDataCheck {
                         break;
                 }
 
-
-
-
             }
         }
     }
 
+    @Given("^we Get the Duplicate count in the PROMIS (.*) table$")
+    public static void getDuplicateCounts(String tableName){
+        switch (tableName){
+            case "promis_transform_latest_subject_areas":
+                promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATES_COUNT_SUBJ_AREA;
+                break;
+            case "promis_transform_latest_pricing":
+                promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATE_COUNT_PRICING;
+                break;
+            case "promis_transform_latest_person_roles":
+                promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATE_COUNT_PERSON_ROLE;
+                break;
+            case "promis_transform_latest_metrics":
+                promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATE_COUNT_METRICS;
+                break;
+            case "promis_transform_latest_urls":
+                promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATE_COUNT_URL;
+                break;
+            case "promis_transform_latest_work_rels":
+                    promisDuplicateLatestSQLCount = PromisETLDataCheckSQL.GET_PROMIS_DUPLICATE_COUNT_WORK_RELS;
+                break;
+
+            default:
+                Log.info("no tables found");
+        }
+        Log.info(promisDuplicateLatestSQLCount);
+        List<Map<String, Object>> promisDupLatestTableCount = DBManager.getDBResultMap(promisDuplicateLatestSQLCount, Constants.AWS_URL);
+        promisDuplicateLatestCount = ((Long) promisDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the count should be Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + promisDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count for unique value in "+tableName,0,promisDuplicateLatestCount);
+
+    }
 
 
 }

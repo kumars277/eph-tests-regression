@@ -68,6 +68,10 @@ public class gdTablesDataLake {
             case "gd_product_financial_attribs":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_FIN_ATTR_GD_SQL_COUNT;
                 break;
+
+            case "gd_product_identifier":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_IDENTIF_GD_SQL_COUNT;
+
             case "gd_product_hierarchy":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_HIER_GD_SQL_COUNT;
                 break;
@@ -76,6 +80,10 @@ public class gdTablesDataLake {
                 break;
             case "gd_product_person_role":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_PERSON_ROLE_GD_SQL_COUNT;
+                break;
+
+             case "gd_product_rel_package":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_REL_PKG_GD_SQL_COUNT;
                 break;
             case "gd_product_product_hchy_link":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_HCHY_LINK_GD_SQL_COUNT;
@@ -165,6 +173,9 @@ public class gdTablesDataLake {
             case "gd_product_financial_attribs":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_FIN_ATTR_GD_DL_COUNT;
                 break;
+            case "gd_product_identifier":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_IDENTIF_GD_DL_COUNT;
+
             case "gd_product_hierarchy":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_HIER_GD_DL_COUNT;
                 break;
@@ -173,6 +184,9 @@ public class gdTablesDataLake {
                 break;
             case "gd_product_person_role":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_PERSON_ROLE_GD_DL_COUNT;
+                break;
+            case "gd_product_rel_package":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_REL_PKG_GD_DL_COUNT;
                 break;
             case "gd_product_product_hchy_link":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_HCHY_LINK_GD_DL_COUNT;
@@ -240,5 +254,65 @@ public class gdTablesDataLake {
 
     }
 
+    @Given ("^Get (.*) random ids of (.*) from the postgreSQL$")
+    public void getRandomGdTableIds(String numberOfRecords, String SourceTable) {
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Getting random records...");
+        switch (SourceTable) {
+            case "gd_accountable_product":
+                sql = String.format(gdTableDLSQL.GET_GD_ACC_PROD_IDS, numberOfRecords);
+                List<Map<?, ?>> randomAccProdIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomAccProdIds.stream().map(m -> (String) m.get("external_reference")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_event":
+                sql = String.format(gdTableDLSQL.GET_GD_EVENT_IDS, numberOfRecords);
+                List<Map<?, ?>> randomEventIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomEventIds.stream().map(m -> (BigDecimal) m.get("event_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_legal_owner":
+                sql = String.format(gdTableDLSQL.GET_GD_LEGAL_OWNER_IDS, numberOfRecords);
+                List<Map<?, ?>> randomLegalOwnerIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomLegalOwnerIds.stream().map(m -> (BigDecimal) m.get("legal_owner_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_manifestation":
+                sql = String.format(gdTableDLSQL.GET_GD_MANIF_IDS, numberOfRecords);
+                List<Map<?, ?>> randomManifIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManifIds.stream().map(m -> (String) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_manifestation_identifier":
+                sql = String.format(gdTableDLSQL.GET_GD_MANIF_IDENTIF_IDS, numberOfRecords);
+                List<Map<?, ?>> randomManifIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManifIdentifierIds.stream().map(m -> (BigDecimal) m.get("manif_identifier_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_person":
+                sql = String.format(gdTableDLSQL.GET_GD_PERSON_IDS, numberOfRecords);
+                List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomPersonIds.stream().map(m -> (BigDecimal) m.get("person_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_product":
+                sql = String.format(gdTableDLSQL.GET_GD_PRODUCT_IDS, numberOfRecords);
+                List<Map<?, ?>> randomPriceIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomPriceIds.stream().map(m -> (String) m.get("product_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_product_financial_attribs":
+                sql = String.format(gdTableDLSQL.GET_GD_PRODUCT_FIN_IDS, numberOfRecords);
+                List<Map<?, ?>> randomProdFinIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomProdFinIds.stream().map(m -> (BigDecimal) m.get("product_fin_attribs_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_product_identifier":
+                sql = String.format(gdTableDLSQL.GET_GD_PRODUCT_IDENTIF_IDS, numberOfRecords);
+                List<Map<?, ?>> randomProdIdentifIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomProdIdentifIds.stream().map(m -> (BigDecimal) m.get("product_identifier_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "gd_product_person_role":
+                sql = String.format(gdTableDLSQL.GET_GD_PRODUCT_PERSON_ROLE_IDS, numberOfRecords);
+                List<Map<?, ?>> randomProdPersRoleIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomProdPersRoleIds.stream().map(m -> (BigDecimal) m.get("product_person_role_id")).map(String::valueOf).collect(Collectors.toList());
+                break;
 
+        }
+        Log.info(sql);
+        Log.info(Ids.toString());
+    }
  }
