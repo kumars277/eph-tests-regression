@@ -1,10 +1,25 @@
 package com.eph.automation.testing.services.db.bcsetlcoresql;
 
-
 public class BcsEtlCoreCountChecksSql {
-    private BcsEtlCoreCountChecksSql(){
-        throw new IllegalStateException("Utility class");
-    }
+    private BcsEtlCoreCountChecksSql(){}
+
+    public static final String GET_ACC_PROD_INBOUND_CURRENT_COUNT =
+            "select count(*) as Source_Count\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(sourceref, '') sourceref\n" +
+                    "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
+                    "   , NULLIF(accountablename, '') accountablename\n" +
+                    "   , NULLIF(accountableparent, '') accountableparent\n" +
+                    "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
+                    "   , 'N' dq_err\n" +
+                    "   FROM\n" +
+                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
+                    "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
+                    ")  A\n" +
+                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))";
 
     public static final String GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_accountable_product_current_v";
@@ -742,24 +757,6 @@ public class BcsEtlCoreCountChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".manifestationtypecode ON manifestation_type = manifestationtypecode.ppmcode\n" +
                     ")A WHERE A.sourceref is not null \n" ;
 
-
-    public static final String GET_ACC_PROD_INBOUND_CURRENT_COUNT =
-               "select count(*) as Source_Count\n" +
-                       "FROM\n" +
-                       "  (\n" +
-                       "   SELECT DISTINCT\n" +
-                       "     NULLIF(sourceref, '') sourceref\n" +
-                       "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
-                       "   , NULLIF(accountablename, '') accountablename\n" +
-                       "   , NULLIF(accountableparent, '') accountableparent\n" +
-                       "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
-                       "   , 'N' dq_err\n" +
-                       "   FROM\n" +
-                       "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
-                       "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
-                       "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
-                       ")  A\n" +
-                       "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))";
 
 
 

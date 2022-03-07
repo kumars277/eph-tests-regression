@@ -1,13 +1,7 @@
 package com.eph.automation.testing.services.db.bcsetlcoresql;
 
-
-import com.eph.automation.testing.helper.Log;
-
 public class BcsEtlCoreDataChecksSql {
-
-    private BcsEtlCoreDataChecksSql(){
-        Log.info("private constructor");
-    }
+    private BcsEtlCoreDataChecksSql(){}
 
     public static final String GET_RANDOM_ACCPROD_KEY_INBOUND =
     "SELECT u_key as sourceref\n" +
