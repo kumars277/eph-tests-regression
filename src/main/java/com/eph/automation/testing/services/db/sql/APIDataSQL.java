@@ -80,7 +80,7 @@ GET_GD_DATA_BUSINESSMODEL_BY_WORKID
 * */
 
 
-
+import com.eph.automation.testing.steps.GenericFunctions;
 
 public class APIDataSQL {
 
@@ -438,7 +438,9 @@ public class APIDataSQL {
           + "                cast(json as JSON) -> 'workExtended' -> 'workExtendedPersons'\n"
           + "            ) -> 'extendedPerson' as person\n"
           + "        from\n"
-          + "            ephuat_extended_data_stitch.stch_work_ext_json swej\n"
+          + "            eph"
+          + GenericFunctions.getDBsufix()
+          + "_extended_data_stitch.stch_work_ext_json swej\n"
           + "        where\n"
           + "            type in ('ABS', 'JBB', 'JNL', 'NWL')\n"
           + "    ),\n"

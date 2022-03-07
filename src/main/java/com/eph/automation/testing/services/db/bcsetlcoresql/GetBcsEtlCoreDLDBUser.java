@@ -38,6 +38,7 @@ public static String getBcsETLCoreDataBase(){
         else{dbProd = "product_staging_database_sit";}
         return dbProd;
     }
+
     public static String getErmsETLCoreDataBase(){
         String dbERMS = null;
 
@@ -92,7 +93,6 @@ public static String getBcsETLCoreDataBase(){
         return dbProdDB;
     }
 
-
     public static String getProdDataBaseGd(){
         String dbProdDb = null;
         switch (System.getProperty("ENV")) {
@@ -117,7 +117,6 @@ public static String getBcsETLCoreDataBase(){
         }*/
         return dbProdDb;
     }
-
 
     public static String getdppDataBase(){
         String dbDpp = null;

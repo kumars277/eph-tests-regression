@@ -43,9 +43,10 @@ Feature: Search API: Works
     Then   the work details are retrieved by title <tType> and compared
     Examples:
     | tType                                   |
+    | WORK_PRODUCT_SUMMARY_NAME                |
     | WORK_TITLE                               |
     | WORK_MANIFESTATION_TITLE                 |
-    | WORK_PRODUCT_SUMMARY_NAME                |
+
     | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME  |
 
   @searchAPI @workSearchAPI

@@ -65,7 +65,8 @@ public class WorkRelationshipsAPIObject {
                 for (int wp2 = 0; wp2 < workParent.length; wp2++) {
                     if (list_workParent.get(wp).id.equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_PARENT())
                             && list_workParent.get(wp).type.get("code").toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_RELATIONSHIP_TYPE())
-                    && list_workParent.get(wp).effectiveStartDate.toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE()))
+                    //&& list_workParent.get(wp).effectiveStartDate.toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE())
+                    )
                     {
                         parentFound = true;
                         Log.info("verifying workParent " + list_workParent.get(wp).id+", " +
@@ -135,7 +136,7 @@ public class WorkRelationshipsAPIObject {
     }
       catch (NullPointerException e)
       {
-          Assert.assertFalse(getBreadcrumbMessage()+e.getStackTrace(),true);
+          Assert.assertFalse(getBreadcrumbMessage()+e.toString(),true);
       }
 
       }
