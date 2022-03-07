@@ -1000,46 +1000,47 @@ public class BcsEtlCoreCountChecksSql {
     public static final String GET_DUPLICATES_LATEST_ACC_PROD_COUNT =
             "select count(*) as Duplicate_Count " +
                     "from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_accountable_product_latest " +
-                    "where delete_flag=false group by u_key having count(*)>1)";
+                    " group by u_key having count(*)>1)";
 
 
     public static final String GET_DUPLICATES_LATEST_MANIF_COUNT =
             "select count(*) as Duplicate_Count " +
                     "from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_latest " +
-                    " where delete_flag=false group by sourceref having count(*)>1)";
+                    " group by sourceref having count(*)>1)";
 
 
     public static final String GET_DUPLICATES_LATEST_PROD_COUNT =
             "select count(*) as Duplicate_Count from " +
                     "(SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_product_latest " +
-                    "where delete_flag=false group by u_key having count(*)>1)";
+                    " group by u_key having count(*)>1)";
 
     public static final String GET_DUPLICATES_LATEST_PERSON_COUNT =
             "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_person_latest" +
-                    " where delete_flag=false group by sourceref having count(*)>1)";
+                    " group by sourceref having count(*)>1)";
 
     public static final String  GET_DUPLICATES_LATEST_WORK_RELT_COUNT=
         "select count(*) as Duplicate_Count " +
                 "from (SELECT count(*) " +
                 "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_relationship_latest " +
-                "where delete_flag=false group by u_key having count(*)>1)";
+                " group by u_key having count(*)>1)";
 
     public static final String GET_DUPLICATES_LATEST_WORK_PERS_COUNT =
             "select count(*) as Duplicate_Count" +
                     " from (SELECT count(*)" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_latest " +
-                    "where delete_flag=false group by u_key having count(*)>1)";
+                    " group by u_key having count(*)>1)";
 
     public static final String GET_DUPLICATES_LATEST_WORK_COUNT =
             "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest" +
-                    " where delete_flag=false group by sourceref having count(*)>1)";
+                    " group by sourceref having count(*)>1)";
 
     public static final String GET_DUPLICATES_WORK_IDENTIFIER_COUNT =
-            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_identifier_latest group by sourceref,identifier,identifier_type having count(*)>1)";
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_identifier_latest" +
+                    " group by sourceref,identifier,identifier_type having count(*)>1)";
 
     public static final String GET_DUPLICATES_MANIF_IDENTIFIER_COUNT =
             "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest" +
-                    " where delete_flag=false group by sourceref,identifier,identifier_type,lead_indicator having count(*)>1)";
+                    " group by sourceref,identifier,identifier_type,lead_indicator having count(*)>1)";
 
     public static final String GET_PERSON_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +

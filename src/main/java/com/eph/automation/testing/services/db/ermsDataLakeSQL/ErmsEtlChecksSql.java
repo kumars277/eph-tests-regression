@@ -387,10 +387,10 @@ public class ErmsEtlChecksSql {
                     "select d.u_key from "+GetErmsDbUser.getERMSDataBase()+".erms_delta_current_work_person_role as d)";
 
     public static final String GET_DUPLICATES_LATEST_WORK_IDENTIFIER_COUNT =
-            "select count(*) as Duplicate_Count from (select count(*) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_identifier where delete_flag=false group by u_key having count()>1 )";
+            "select count(*) as Duplicate_Count from (select count(*) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_identifier group by u_key having count()>1 )";
 
     public static final String GET_DUPLICATES_LATEST_WORK_PERSON_ROLE_COUNT =
-            "select count(*) as Duplicate_Count from (select count(*) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_person_role where delete_flag=false group by u_key having count()>1 )";
+            "select count(*) as Duplicate_Count from (select count(*) from "+GetErmsDbUser.getERMSDataBase()+".erms_transform_latest_work_person_role group by u_key having count()>1 )";
 
     public static final String GET_RANDOM_WORK_IDENTIFIER_ID_CURRENT =
             "select epr_id as epr_id" +

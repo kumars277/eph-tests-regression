@@ -22,6 +22,8 @@ public class PromisETLDataCheckSQL {
 
     public static String GET_PUB_IDT_IDS = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+ ".%s order by rand() limit %s";
 
+
+
     public static String GET_Promis_prmautpubt_part = "select "
             + "cast(ppa.pub_idt as integer) as pub_idt"
             +  ",cast(ppa.aut_edt_idt as integer) as aut_edt_idt"
@@ -1343,6 +1345,24 @@ public class PromisETLDataCheckSQL {
     public static String GET_LATEST_WORK_RELS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_work_rels where parent_epr_id in ('%s') order by child_title";
     public static String GET_LATEST_SUBJECT_AREAS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas where epr_id in ('%s') order by subject_area_code";
     public static String GET_LATEST_URLS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_urls where epr_id in ('%s') order by url_code, url";
+
+    public static final  String GET_PROMIS_DUPLICATES_COUNT_SUBJ_AREA =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas group by u_key having count(*)>1)\n";
+
+    public static final  String GET_PROMIS_DUPLICATE_COUNT_PRICING =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_pricing group by u_key having count(*)>1)\n";
+
+    public static final  String GET_PROMIS_DUPLICATE_COUNT_PERSON_ROLE =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_person_roles group by u_key having count(*)>1)\n";
+
+    public static final  String GET_PROMIS_DUPLICATE_COUNT_METRICS =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_metrics group by u_key having count(*)>1)\n";
+
+    public static final  String GET_PROMIS_DUPLICATE_COUNT_URL =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_urls group by u_key having count(*)>1)\n";
+
+    public static final  String GET_PROMIS_DUPLICATE_COUNT_WORK_RELS =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_work_rels group by u_key having count(*)>1)\n";
 
 }
 
