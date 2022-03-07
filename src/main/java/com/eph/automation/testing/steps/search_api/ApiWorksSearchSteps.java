@@ -1039,7 +1039,12 @@ public class ApiWorksSearchSteps {
     int count =0;
     switch (searchType) {
       case PER_FULLNAME_CURRENT:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, fName,lName);break;
-      default:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, fName,lName,fName,lName);     break;    }
+      default://sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson, fName,lName,fName,lName);     break;
+        sql = APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson
+                .replaceAll("FIRSTNAME",fName)
+                .replaceAll("LASTNAME",lName);
+        break;
+         }
 
     try
     {
