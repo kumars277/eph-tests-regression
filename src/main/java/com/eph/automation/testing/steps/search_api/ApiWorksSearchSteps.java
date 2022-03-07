@@ -999,11 +999,19 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMCCode) {
+    int count=0;
     sql =
             String.format(
                     APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH, searchKeyword, PMCCode);
+    try{
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-    int count = ((Long) getCount.get(0).get("count")).intValue();
+     count = ((Long) getCount.get(0).get("count")).intValue();
+    }
+    catch (NullPointerException e)
+    {
+      Log.info(sql);
+      Assert.assertFalse(getBreadcrumbMessage()+e.getStackTrace(),true);
+    }
     Log.info("EPH count..." + count);
     return count;
   }

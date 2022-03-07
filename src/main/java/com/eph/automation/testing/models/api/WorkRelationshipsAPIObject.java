@@ -52,6 +52,7 @@ public class WorkRelationshipsAPIObject {
 
     public void compareWithDB(String workId) throws ParseException {
         // updated by Nishant @ 05 Apr 2021
+      try{
         Log.info("verifying workRelationship..." + workId);
         if (workParent != null) {
             ArrayList<workParent> list_workParent = new ArrayList<>(Arrays.asList(workParent));
@@ -132,6 +133,12 @@ public class WorkRelationshipsAPIObject {
             }
         }
     }
+      catch (NullPointerException e)
+      {
+          Assert.assertFalse(getBreadcrumbMessage()+e.getStackTrace(),true);
+      }
+
+      }
 
   public boolean isExpired(String date) throws ParseException {
       Boolean endDated = false;
