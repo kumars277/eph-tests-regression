@@ -26,13 +26,13 @@ Feature: Search API: Works
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
     Given  We get 1 random journal ids to search <options>
-    And    We get the work search data from EPH GD
+    And    We get the  work search data from EPH GD
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
+    # EPR-W-102VH8 fix UAT count mismatch for perso_name
       | PERSON_NAME           |
       | personFullNameCurrent |
-
       | PERSON_ID             |
       | PEOPLE_HUB_ID         |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
@@ -78,8 +78,8 @@ Feature: Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
-      | WORK_IDENTIFIER                        |
       | WORK_ID                                |
+      | WORK_IDENTIFIER                        |
       | WORK_TITLE                             |
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |
