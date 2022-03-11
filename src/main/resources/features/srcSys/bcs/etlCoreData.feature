@@ -23,7 +23,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |etl_work_current_v                           |10              |
       |etl_work_identifier_current_v                |10              |
       |etl_manifestation_identifier_current_v       |10              |
-      |all_manifestation_statuses_v                 |10              |
+    #  |all_manifestation_statuses_v                |10              | Removed fron Divested Change
       |all_manifestation_pubdates_v                 |10              |
 
     #EPHD-3362

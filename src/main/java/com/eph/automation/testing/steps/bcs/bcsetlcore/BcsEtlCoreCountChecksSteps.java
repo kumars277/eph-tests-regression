@@ -48,7 +48,7 @@ public class BcsEtlCoreCountChecksSteps {
 
 
     @Given("^Get the total count of BCS Core from Current Tables (.*)$")
-    public static void getBCSCoreCount (String tableName) {
+    public static void getBCSCoreCount(String tableName) {
         switch (tableName){
             case "etl_accountable_product_current_v":
                 Log.info("Getting bcs Core Accountable Product table Current view Count...");
