@@ -80,7 +80,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   //ids.clear();ids.add("EPR-W-101BSN");Log.info("hard coded work id is : " + ids);
+   //ids.clear();ids.add("EPR-W-102W80");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-//ids.clear();    ids.add("EPR-W-102VH8");  Log.info("hard coded work ids are : " + ids);
+//ids.clear();    ids.add("EPR-W-102V3N");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -999,11 +999,19 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMCCode) {
+    int count=0;
     sql =
             String.format(
                     APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH, searchKeyword, PMCCode);
+    try{
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-    int count = ((Long) getCount.get(0).get("count")).intValue();
+     count = ((Long) getCount.get(0).get("count")).intValue();
+    }
+    catch (NullPointerException e)
+    {
+      Log.info(sql);
+      Assert.assertFalse(getBreadcrumbMessage()+e.getStackTrace(),true);
+    }
     Log.info("EPH count..." + count);
     return count;
   }
@@ -1039,7 +1047,12 @@ public class ApiWorksSearchSteps {
     int count =0;
     switch (searchType) {
       case PER_FULLNAME_CURRENT:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, fName,lName);break;
-      default:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME, fName,lName,fName,lName);     break;    }
+      default://sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson, fName,lName,fName,lName);     break;
+        sql = APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson
+                .replaceAll("FIRSTNAME",fName)
+                .replaceAll("LASTNAME",lName);
+        break;
+         }
 
     try
     {

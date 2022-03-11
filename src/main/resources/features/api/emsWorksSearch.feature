@@ -17,10 +17,11 @@ Feature: Search API: Works
     Then   the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
+      |JOURNAL_NUMBER     |
       |EPR_ID             |
       |TITLE              |
       |ISSN               |
-      |JOURNAL_NUMBER     |
+
       |JOURNAL_ACRONYM    |
 
   @searchAPI @workSearchAPI @JFSearch
@@ -32,7 +33,6 @@ Feature: Search API: Works
       | options               |
       | PERSON_NAME           |
       | personFullNameCurrent |
-
       | PERSON_ID             |
       | PEOPLE_HUB_ID         |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
@@ -44,9 +44,10 @@ Feature: Search API: Works
     Then   the work details are retrieved by title <tType> and compared
     Examples:
     | tType                                   |
+    | WORK_PRODUCT_SUMMARY_NAME                |
     | WORK_TITLE                               |
     | WORK_MANIFESTATION_TITLE                 |
-    | WORK_PRODUCT_SUMMARY_NAME                |
+
     | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME  |
 
   @searchAPI @workSearchAPI
@@ -78,8 +79,8 @@ Feature: Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
-      | WORK_IDENTIFIER                        |
       | WORK_ID                                |
+      | WORK_IDENTIFIER                        |
       | WORK_TITLE                             |
       | WORK_MANIFESTATION_ID                  |
       | WORK_MANIFESTATION_TITLE               |

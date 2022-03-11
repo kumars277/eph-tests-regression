@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.eph.automation.testing.steps.GenericFunctions.setRandomCount;
+
 
 public class BcsEtlCoreLatestDataChecksSteps {
 
@@ -25,9 +27,12 @@ public class BcsEtlCoreLatestDataChecksSteps {
     private static String noTablemsg = "No such Tables found";
 
     @Given("^Get the (.*) from diff of delta_current and current_hist tables (.*)$")
-    public static void getIdsFromDiffOfDeltaCurrAndCurrHist(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        Log.info("numberOfRecords = " + numberOfRecords);
+    public static void getIdsFromDiffOfDeltaCurrAndCurrHist(String countOfRandomIds, String tableName) {
+        /*String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
+        Log.info("numberOfRecords = " + numberOfRecords);*/
+
+        String numberOfRecords = setRandomCount(countOfRandomIds);
         Log.info("Get random Ids for bcs Core Tables from Diff of Delta Current and Current Hist....");
 
         switch (tableName) {
@@ -416,9 +421,9 @@ public class BcsEtlCoreLatestDataChecksSteps {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta tables (.*)$")
-    public static void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        //if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
+    public static void getIdsFromDiffOfDeltaCurrAndExcl(String countOfRandomIds, String tableName) {
+        String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for bcs Core Tables from Diff of Delta Current and Exclude....");
         switch (tableName) {

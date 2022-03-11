@@ -1,20 +1,21 @@
 package com.eph.automation.testing.steps.bcs.bcsetlcore;
 
-
+import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.services.db.bcsetlcoresql.BcsEtlCoreCountChecksSql;
+import com.eph.automation.testing.services.db.bcsetlcoresql.*;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
-
 import java.util.List;
 import java.util.Map;
 
+
 public class BcsEtlCoreCountChecksSteps {
-    private static  String bcsCoreSQLCurrentCount;
+    @StaticInjection
+    private static String bcsCoreSQLCurrentCount;
     private static int bcsCoreCurrentCount;
     private static String leadIndicatorSQLCount;
     private static String leadIndicatorSQLCountInbound;
@@ -44,95 +45,45 @@ public class BcsEtlCoreCountChecksSteps {
     private static int bcsDiffTransformFileCount;
 
     private static String noTablemsg = "No such tables found";
-
-
+    public void BcsEtlCoreCountChecksSteps(){};
 
     @Given("^Get the total count of BCS Core from Current Tables (.*)$")
-    public static void getBCSCoreCount(String tableName) {
+    public static void getBCSCoreCount (String tableName) throws ReflectiveOperationException {
         switch (tableName){
             case "etl_accountable_product_current_v":
-                Log.info("Getting bcs Core Accountable Product table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT;      break;
             case "etl_manifestation_current_v":
-                Log.info("Getting bcs Core Manifestation table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_CURR_COUNT;         break;
             case "etl_person_current_v":
-                Log.info("Getting bcs Core Person table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PERSON_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PERSON_CURR_COUNT;        break;
             case "etl_product_current_v":
-                Log.info("Getting bcs Core Product table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PRODUCT_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_PRODUCT_CURR_COUNT;       break;
             case "etl_work_person_role_current_v":
-                Log.info("Getting bcs Core work person table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_PERS_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_PERS_CURR_COUNT;      break;
             case "etl_work_relationship_current_v":
-                Log.info("Getting bcs Core work Relation table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_RELT_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_RELT_CURR_COUNT;      break;
             case "etl_work_current_v":
-                Log.info("Getting bcs Core work table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_CURR_COUNT;           break;
             case "etl_work_identifier_current_v":
-                Log.info("Getting bcs Core work identifier table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_IDENTIF_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_WRK_IDENTIF_CURR_COUNT;   break;
             case "etl_manifestation_identifier_current_v":
-                Log.info("Getting bcs Core manif identifier table Current view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT; break;
             case "all_manifestation_statuses_v":
-                Log.info("Getting bcs Core manif table statuses view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT;
-                break;
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT;     break;
             case "all_manifestation_pubdates_v":
-                Log.info("Getting bcs Core manif table pubdates view Count...");
-                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_PUBDATES_COUNT;
-                break;
-            default:
-                Log.info(noTablemsg);
-
+                bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_MANIF_PUBDATES_COUNT;     break;
+            default:  throw new IllegalArgumentException();
         }
-        Log.info(bcsCoreSQLCurrentCount);
+
         List<Map<String, Object>> bcsETLCoreCurrentTableCount = DBManager.getDBResultMap(bcsCoreSQLCurrentCount, Constants.AWS_URL);
         bcsCoreCurrentCount = ((Long) bcsETLCoreCurrentTableCount.get(0).get("Target_Count")).intValue();
-    }
-
-    @Given ("^Get the total count of the lead indicator from the inbound table$")
-    public static void getInboundLeadIndicator(){
-        Log.info("Getting Lead indiccator Count from Inbound...");
-        leadIndicatorSQLCountInbound = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT;
-     //   Log.info(leadIndicatorSQLCountInbound);
-        List<Map<String, Object>> leadIndicatorInboundTableCount = DBManager.getDBResultMap(leadIndicatorSQLCountInbound, Constants.AWS_URL);
-        leadIndicatorCountInbound = ((Long) leadIndicatorInboundTableCount.get(0).get("Source_Count")).intValue();
-
-    }
-
-    @Then ("^Get the count of the lead indicator from the current table of manifestation identifier$")
-    public static void getCurrLeadIndicator(){
-        Log.info("Getting Lead indiccator Count from manifestation identifier current...");
-        leadIndicatorSQLCount = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT;
-      //  Log.info(leadIndicatorSQLCount);
-        List<Map<String, Object>> leadIndicatorCurrentTableCount = DBManager.getDBResultMap(leadIndicatorSQLCount, Constants.AWS_URL);
-        leadIndicatorCountCurr = ((Long) leadIndicatorCurrentTableCount.get(0).get("Target_Count")).intValue();
-    }
-
-    @And("^Compare the inbound and current tables of manifestation identifier$")
-    public void compareleadIndicatorCounts(){
-        Log.info("The count for table manifestationIdentifier_current => " + leadIndicatorCountCurr + " and in Inbound  => " + leadIndicatorCountInbound);
-        Assert.assertEquals("The counts are not equal when compared with manifestationIdentifier_current and Inbound ", leadIndicatorCountCurr, leadIndicatorCountInbound);
     }
 
     @Given("^We know the total count of Inbound tables (.*)$")
     public static void getCountInboundTables(String tableName){
         switch (tableName){
             case "etl_accountable_product_current_v":
-                Log.info("Getting Inbound Current View count of Acc Prod Table...");
+             //   Log.info("Getting Inbound Current View count of Acc Prod Table...");
                 bcsInboundCurrentSQLCount = BcsEtlCoreCountChecksSql.GET_ACC_PROD_INBOUND_CURRENT_COUNT;
                 break;
             case "etl_manifestation_current_v":
@@ -179,15 +130,40 @@ public class BcsEtlCoreCountChecksSteps {
                 Log.info(noTablemsg);
 
         }
-        Log.info(bcsInboundCurrentSQLCount);
+        //  Log.info(bcsInboundCurrentSQLCount);
         List<Map<String, Object>> bcsInboundCurrentTableCount = DBManager.getDBResultMap(bcsInboundCurrentSQLCount, Constants.AWS_URL);
         bcsInboundCurrentCount = ((Long) bcsInboundCurrentTableCount.get(0).get("Source_Count")).intValue();
     }
 
     @And("^Compare count of BCS Inbound and BCS Core (.*) tables are identical$")
     public void compareCoreAndInboundCounts(String tableName){
-        Log.info("The count for table "+tableName+" => " + bcsCoreCurrentCount + " and in Inbound  => " + bcsInboundCurrentCount);
+        Log.info(tableName+": \nCore current count => " + bcsCoreCurrentCount + " and \nInbound current count  => " + bcsInboundCurrentCount);
         Assert.assertEquals("The counts are not equal when compared with "+tableName+" and Inbound ", bcsCoreCurrentCount, bcsInboundCurrentCount);
+    }
+
+    @Given ("^Get the total count of the lead indicator from the inbound table$")
+    public static void getInboundLeadIndicator(){
+        Log.info("Getting Lead indiccator Count from Inbound...");
+        leadIndicatorSQLCountInbound = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT;
+     //   Log.info(leadIndicatorSQLCountInbound);
+        List<Map<String, Object>> leadIndicatorInboundTableCount = DBManager.getDBResultMap(leadIndicatorSQLCountInbound, Constants.AWS_URL);
+        leadIndicatorCountInbound = ((Long) leadIndicatorInboundTableCount.get(0).get("Source_Count")).intValue();
+
+    }
+
+    @Then ("^Get the count of the lead indicator from the current table of manifestation identifier$")
+    public static void getCurrLeadIndicator(){
+        Log.info("Getting Lead indiccator Count from manifestation identifier current...");
+        leadIndicatorSQLCount = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT;
+      //  Log.info(leadIndicatorSQLCount);
+        List<Map<String, Object>> leadIndicatorCurrentTableCount = DBManager.getDBResultMap(leadIndicatorSQLCount, Constants.AWS_URL);
+        leadIndicatorCountCurr = ((Long) leadIndicatorCurrentTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @And("^Compare the inbound and current tables of manifestation identifier$")
+    public void compareleadIndicatorCounts(){
+        Log.info("The count for table manifestationIdentifier_current => " + leadIndicatorCountCurr + " and in Inbound  => " + leadIndicatorCountInbound);
+        Assert.assertEquals("The counts are not equal when compared with manifestationIdentifier_current and Inbound ", leadIndicatorCountCurr, leadIndicatorCountInbound);
     }
 
     @Given("^We know the total count of delta current (.*)$")

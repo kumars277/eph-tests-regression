@@ -57,10 +57,10 @@ public class CKETLCoreDataChecks {
         Log.info("We get the records from Current CK Inbound Source table for Inbound Check...");
         switch (InboundSourcetablename) {
             case "ck_delta_history_package_work_part":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_PACKAGE_WORK, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_PACKAGE_WORK, InboundSourcetablename,String.join("','", ids), InboundSourcetablename);
                 break;
             case "ck_delta_history_work_subject_area_part":
-                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_WORK_SUBJECT_AREA, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKEtlCoreDataCheckSql.GET_CK_DELTA_HISTORY_WORK_SUBJECT_AREA, InboundSourcetablename, String.join("','", ids) , InboundSourcetablename);
                 break;
         }
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);
@@ -80,7 +80,7 @@ public class CKETLCoreDataChecks {
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getu_key)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getu_key));
 
-                        String[] DeltaCurrentPackageWorkCol = {"getu_key", "geteph_package_id", "getck_live_date", "getpackage_acronym", "getpackage_name", "geteph_work_type", "geteph_work_hierarchy_code", "geteph_work_hierarchy_id", "getpackage_start_date", "getpackage_end_date"};
+                        String[] DeltaCurrentPackageWorkCol = {"getu_key", "geteph_package_id"};
                         for (String strTemp : DeltaCurrentPackageWorkCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;

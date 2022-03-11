@@ -103,13 +103,13 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare the records for the initial ingest book series and current table book series <targetTable>
      Examples:
       | targetTable                        | countOfRandomIds|
-      |stg_current_classification_series   |       50         |
-      |stg_current_content_series          |       50         |
-      |stg_current_originatoraddress_series|       50         |
-      |stg_current_originatornotes_series  |       50         |
-      |stg_current_originators_series      |       50         |
-      |stg_current_product_series          |       50         |
-      |stg_current_text_series             |       10         |
+      |stg_current_classification_series   |       1         |
+      |stg_current_content_series          |       1         |
+      |stg_current_originatoraddress_series|       1         |
+      |stg_current_originatornotes_series  |       1         |
+      |stg_current_originators_series      |       1         |
+      |stg_current_product_series          |       1         |
+      |stg_current_text_series             |       1         |
 
 
   @BCSInbound
@@ -123,12 +123,12 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare the records for the current book series and history table book series <TargetTableName>
     Examples:
       | SourceTableName                               | TargetTableName                         |countOfRandomIds |
-      |stg_current_classification_series             |stg_history_classification_series_part    |     10           |
-      |stg_current_content_series                    |stg_history_content_series_part           |     10          |
-      |stg_current_originatoraddress_series          |stg_history_originatoraddress_series_part |     10           |
-      |stg_current_originatornotes_series            |stg_history_originatornotes_series_part   |     10           |
-      |stg_current_originators_series                |stg_history_originators_series_part       |     10           |
-      |stg_current_product_series                    |stg_history_product_series_part           |     10           |
-      |stg_current_text_series                       |stg_history_text_series_part              |     10           |
+      |stg_current_classification_series             |stg_history_classification_series_part    |     1           |
+      |stg_current_content_series                    |stg_history_content_series_part           |     1           |
+      |stg_current_originatoraddress_series          |stg_history_originatoraddress_series_part |     1           |
+      |stg_current_originatornotes_series            |stg_history_originatornotes_series_part   |     1           |
+      |stg_current_originators_series                |stg_history_originators_series_part       |     1           |
+      |stg_current_product_series                    |stg_history_product_series_part           |     1           |
+      |stg_current_text_series                       |stg_history_text_series_part              |     1           |
 
 
