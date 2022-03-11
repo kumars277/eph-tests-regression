@@ -64,14 +64,31 @@ public class gdTablesDataLake {
             case "gd_product_financial_attribs":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_FIN_ATTR_GD_SQL_COUNT;
                 break;
+
             case "gd_product_identifier":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_IDENTIF_GD_SQL_COUNT;
+
+            case "gd_product_hierarchy":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_HIER_GD_SQL_COUNT;
+                break;
+            case "gd_product_line":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_LINE_GD_SQL_COUNT;
                 break;
             case "gd_product_person_role":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_PERSON_ROLE_GD_SQL_COUNT;
                 break;
+
              case "gd_product_rel_package":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_REL_PKG_GD_SQL_COUNT;
+                break;
+            case "gd_product_product_hchy_link":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_HCHY_LINK_GD_SQL_COUNT;
+                break;
+            case "gd_product_rel_package":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_REL_PKG_GD_SQL_COUNT;
+                break;
+            case "gd_product_relationship":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_PROD_REL_GD_SQL_COUNT;
                 break;
             case "gd_subject_area":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_SUB_AREA_GD_SQL_COUNT;
@@ -154,12 +171,27 @@ public class gdTablesDataLake {
                 break;
             case "gd_product_identifier":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_IDENTIF_GD_DL_COUNT;
+
+            case "gd_product_hierarchy":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_HIER_GD_DL_COUNT;
+                break;
+            case "gd_product_line":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_LINE_GD_DL_COUNT;
                 break;
             case "gd_product_person_role":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_PERSON_ROLE_GD_DL_COUNT;
                 break;
             case "gd_product_rel_package":
                 sqlgdDLCount = gdTableDLSQL.GET_PROD_REL_PKG_GD_DL_COUNT;
+                break;
+            case "gd_product_product_hchy_link":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_HCHY_LINK_GD_DL_COUNT;
+                break;
+            case "gd_product_rel_package":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_REL_PKG_GD_DL_COUNT;
+                break;
+            case "gd_product_relationship":
+                sqlgdDLCount = gdTableDLSQL.GET_PROD_REL_GD_DL_COUNT;
                 break;
             case "gd_subject_area":
                 sqlgdDLCount = gdTableDLSQL.GET_SUB_AREA_GD_DL_COUNT;
@@ -279,5 +311,4 @@ public class gdTablesDataLake {
         Log.info(sql);
         Log.info(Ids.toString());
     }
-
  }
