@@ -111,13 +111,19 @@ public class APIDataSQL {
           + " (select work_fin_attribs_id where effective_end_date <current_date) ";
 
   public static final String SELECT_GD_RANDOM_WORK_ID =
-      "SELECT work_id as WORK_ID\n"
-          + "FROM semarchy_eph_mdm.gd_wwork \n"
-          + "WHERE exists (\n"
-          + "SELECT * FROM semarchy_eph_mdm.gd_manifestation\n"
-          + "WHERE semarchy_eph_mdm.gd_wwork.work_id = semarchy_eph_mdm.gd_manifestation.f_wwork "
-          + "and LENGTH(semarchy_eph_mdm.gd_manifestation.manifestation_key_title)>20)\n"
-          + "and LENGTH(work_title)>20\n"
+      /*"SELECT work_id as WORK_ID\n"
+      + "FROM semarchy_eph_mdm.gd_wwork \n"
+      + "WHERE exists (\n"
+      + "SELECT * FROM semarchy_eph_mdm.gd_manifestation\n"
+      + "WHERE semarchy_eph_mdm.gd_wwork.work_id = semarchy_eph_mdm.gd_manifestation.f_wwork "
+      + "and LENGTH(semarchy_eph_mdm.gd_manifestation.manifestation_key_title)>20)\n"
+      + "and LENGTH(work_title)>20\n"
+      + "order by random() limit '%s'"*/
+      "SELECT gw.work_id as WORK_ID FROM semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_manifestation gm on gw.work_id =gm.f_wwork \n"
+          + "WHERE  LENGTH(gm.manifestation_key_title)>20\n"
+          + "and LENGTH(gw.work_title)>20\n"
+          + "and gw.f_status <>'NVW'\n"
           + "order by random() limit '%s'";
 
   public static final String SELECT_GD_RANDOM_JOURNAL_ID =
@@ -142,37 +148,52 @@ public class APIDataSQL {
       "SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_manifestation_ext_json order by random() limit %s";
 
   public static final String SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT =
-      "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product "
-          + "where f_wwork is not null order by random() limit %s";
-
-  public static final String SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT =
-      "select f_wwork as WORK_ID FROM semarchy_eph_mdm.gd_manifestation where manifestation_id in (\n"
-          + "SELECT f_manifestation from semarchy_eph_mdm.gd_product p where f_manifestation is not null) \n"
-          + " order by random() limit %s";
-
-  public static final String SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER =
-      "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_wwork gw \n"
-          + "inner join semarchy_eph_mdm.gd_manifestation gm on gw.work_id =gm.f_wwork \n"
-          + "inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gm.manifestation_id =gmi.f_manifestation \n"
+      "select gw.work_id as WORK_ID from semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_product gp on gw.work_id = gp.f_wwork\n"
+          + "where gp.f_wwork is not null and gw.f_status <>'NVW'\n"
           + "order by random() limit %s";
 
-  public static final String SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT=
-          "select f_component as WORK_ID from semarchy_eph_mdm.gd_work_rel_package gwrp order by Random() limit %S";
+  public static final String SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT =
+      "select gw.work_id as WORK_ID FROM semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_manifestation gm on gw.work_id = gm.f_wwork \n"
+          + "inner join semarchy_eph_mdm.gd_product gp on gm.manifestation_id = gp.f_manifestation \n"
+          + "where gp.f_manifestation is not null and gw.f_status <>'NVW'\n"
+          + "order by random() limit %s";
+
+  public static final String SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER =
+      "select gw.work_id as WORK_ID from semarchy_eph_mdm.gd_wwork gw\n"
+          + "      inner join semarchy_eph_mdm.gd_manifestation gm on gw.work_id =gm.f_wwork\n"
+          + "      inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gm.manifestation_id =gmi.f_manifestation\n"
+          + "      where gw.f_status <>'NVW'\n"
+          + "      order by random() limit %s";
+
+  public static final String SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT =
+      "select gw.work_id as WORK_ID from semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_work_rel_package gwrp on gw.work_id =gwrp.f_component \n"
+          + "where gw.f_status <>'NVW'\n"
+          + "order by Random() limit %s";
 
   public static final String SELECT_GD_RANDOM_WORK_IN_PACKAGE =
-          "select f_package_owner as WORK_ID from semarchy_eph_mdm.gd_work_rel_package gwrp order by Random() limit %S";
+      "select gw.work_id as WORK_ID from semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_work_rel_package gwrp on gw.work_id =gwrp.f_package_owner \n"
+          + "where gw.f_status <>'NVW'\n"
+          + "order by Random() limit %s";
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_WORK =
-      "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product "
-          + "where f_wwork is not null order by random() limit 1";
+      "select gp.product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product gp \n"
+          + "inner join semarchy_eph_mdm.gd_wwork gw on gw.work_id = gp.f_wwork\n"
+          + "where gp.f_wwork is not null and gw.f_status <>'NVW'and gp.f_status <>'NVP'\n"
+          + "order by random() limit %s";
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_PERSON =
-      "select f_product as PRODUCT_ID from semarchy_eph_mdm.gd_product_person_role "
-          + "where f_product is not null order by random() limit 1";
+      "select gp.product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product gp \n"
+          + "inner join semarchy_eph_mdm.gd_product_person_role gppr on gppr.f_product = gp.product_id \n"
+          + "where gppr.f_product is not null and gp.f_status <>'NVP'\n"
+          + "order by random() limit %s";
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_IDENTIFIER =
       "select f_product as PRODUCT_ID from semarchy_eph_mdm.gd_product_identifier "
-          + "where f_product is not null order by random() limit 1";
+          + "where f_product is not null order by random() limit %s";
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_MANIFESTATION_IDENTIFIER =
       "select * from semarchy_eph_mdm.gd_product gp \n"

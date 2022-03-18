@@ -13,6 +13,7 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonProductRoleDataSQL;
+import com.eph.automation.testing.steps.GenericFunctions;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -74,26 +75,25 @@ public class ApiProductsSearchSteps {
   static String productCountByProductStatus = "getProductCountByProductStatus";
 
   @Given("^We get (.*) random search ids for products (.*)$")
-  public static void getRandomProductIds(String numberOfRecords, String productProperty) {
+  public static void getRandomProductIds(String countOfRandomIds, String productProperty) {
     // updated by Nishant @ 25 may 2021 for EPHD-3122
-    // Get property when run with jenkins
-    // "numberOfRecords = System.getProperty("dbRandomRecordsNumber");"
-    //Log.info("Test Environment... "+TestContext.getValues().environment);
+    String numberOfRecords = GenericFunctions.setRandomCount(countOfRandomIds);
+
     switch (productProperty) {
       case PRW_IDENTIFIER:
       case PRW_ID:
       case PRW_ACPRODUCT:
       case PRW_TITLE:
       case PRW_PERSONFULLNAME:
-        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_WORK);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_WORK,numberOfRecords);
         break;
 
       case PR_PERSONFULLNAME:
-        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_PERSON);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_PERSON,numberOfRecords);
         break;
 
       case PR_IDENTIFIER:
-        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_IDENTIFIER);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID_WITH_IDENTIFIER,numberOfRecords);
         break;
       case PRM_IDENTIFIER:
         sql =
@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10HNC6"); Log.info("hard coded product ids are : " + ids);
+     // ids.clear(); ids.add("EPR-113JDF"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
