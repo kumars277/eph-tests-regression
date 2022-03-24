@@ -45,12 +45,6 @@ public class BcsEtlCoreCountChecksSteps {
     private static int bcsDiffTransformFileCount;
 
     private static String noTablemsg = "No such tables found";
-
-    public void BcsEtlCoreCountChecksSteps() {
-    }
-
-    ;
-
     @Given("^Get the total count of BCS Core from Current Tables (.*)$")
     public static void getBCSCoreCount(String tableName) throws ReflectiveOperationException {
         switch (tableName) {
