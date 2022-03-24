@@ -46,19 +46,9 @@ public class BcsEtlCoreCountChecksSteps {
 
     private static String noTablemsg = "No such tables found";
 
-    public void BcsEtlCoreCountChecksSteps() {
-    }
-
-    ;
-
     @Given("^Get the total count of BCS Core from Current Tables (.*)$")
-<<<<<<< HEAD
     public static void getBCSCoreCount(String tableName) throws ReflectiveOperationException {
         switch (tableName) {
-=======
-    public static void getBCSCoreCount (String tableName) throws ReflectiveOperationException {
-        switch (tableName){
->>>>>>> c48203e2dfcfe0b77a4c8a4185fddf507edea5cc
             case "etl_accountable_product_current_v":
                 bcsCoreSQLCurrentCount = BcsEtlCoreCountChecksSql.GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT;
                 break;
