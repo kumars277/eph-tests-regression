@@ -27,7 +27,7 @@ public class BcsEtlExtendedDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Extended data from Inbound Tables (.*)$")
     public static void getRandomIdsFromInound(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for bcs Extended Inbound Tables....");
         List<Map<?, ?>> randomIds;

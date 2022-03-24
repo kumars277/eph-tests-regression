@@ -13,6 +13,7 @@ public class GenericFunctions {
 
     public static String setRandomCount(String countOfRandomIds) {
         String numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        //String numberOfRecords = countOfRandomIds; //to run in local
         if(numberOfRecords==null)numberOfRecords= countOfRandomIds;
         return numberOfRecords;
     }

@@ -14,6 +14,20 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
     Then  Compare data of BCS Inbound and BCS Core <tableName> tables are identical
     Examples:
       | tableName                                   |countOfRandomIds|
+<<<<<<< HEAD
+      |etl_accountable_product_current_v            |1              |
+      |etl_manifestation_current_v                  |1              |
+      |etl_person_current_v                         |10              |
+      |etl_product_current_v                        |1              |
+      |etl_work_person_role_current_v               |10              |
+      |etl_work_relationship_current_v              |10              |
+      |etl_work_current_v                           |1              |
+      |etl_work_identifier_current_v                |10              |
+      |etl_manifestation_identifier_current_v       |1              |
+      |all_manifestation_statuses_v                 |1              |
+      |all_manifestation_pubdates_v                 |1              |
+
+=======
       |etl_accountable_product_current_v            |10              |
       |etl_manifestation_current_v                  |10              |
       |etl_person_current_v                         |10              |
@@ -25,6 +39,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |etl_manifestation_identifier_current_v       |10              |
     #  |all_manifestation_statuses_v                |10              | Removed fron Divested Change
       |all_manifestation_pubdates_v                 |10              |
+>>>>>>> c48203e2dfcfe0b77a4c8a4185fddf507edea5cc
 
     #EPHD-3362
   @BCSCore
