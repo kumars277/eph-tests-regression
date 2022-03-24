@@ -69,7 +69,7 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021     //updated by Nishant @ 30 Dec 2021
         switch (connectionURL) {
             case "AWS_URL":
-                if(true) {//jenkins profile
+                if(false) {//jenkins profile
                     return object.getAsString("SIT_AWS_URL");}
                 else { //  Local profile
                     return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;"

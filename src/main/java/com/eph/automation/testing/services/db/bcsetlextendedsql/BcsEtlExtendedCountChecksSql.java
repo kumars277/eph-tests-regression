@@ -182,98 +182,160 @@ public final class BcsEtlExtendedCountChecksSql {
                     "WHERE A.metadeleted = FALSE \n" +
                     ")";
 
-    public static final String GET_WORK_INBOUND_CURRENT_COUNT="select count(*) as Source_Count from (\n" +
-            "\n" +
-            "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.work_type, A.* FROM ( \n" +
-            "SELECT DISTINCT\n" +
-            "     NULLIF(c.sourceref,'') sourceref \n" +
-            "   , NULLIF(c.companygroup,'') companygroup \n" +
-            "   , date_parse(NULLIF(c.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +
-            "   , CASE WHEN c.metadeleted = 'Y' then true else false END metadeleted \n" +
-            "   , concat('http://secure-ecsd.elsevier.com/covers/80/Tango2/large/',v.workmasterisbn,'.jpg') imagefileref \n" +
-            "   , NULLIF(v.workmasterisbn,'') workmasterisbn \n" +
-            "   , NULLIF(t.textreftrade,'') textreftrade \n" +
-            "   , NULLIF(f.bebullcpy,'') features \n" +
-            "   , NULLIF(f.semsbka,'') awards \n" +
-            "   , NULLIF(f.betoclng,'') toc_long \n" +
-            "   , NULLIF(f.betocsht,'') toc_short \n" +
-            "   , NULLIF(f.semktaud,'') audience \n" +
-            "   , NULLIF(f.beaubyl,'') authorbyline \n" +
-            "   , NULLIF(d.description,'') description \n" +
-            "   , NULLIF(t.sbu,'') sbu \n" +
-            "   , COALESCE(NULLIF(t.pc,''), NULLIF(t.pc2,'')) profitcentre \n" +
-            "   , NULLIF(d.review,'') review \n" +
-            "   , CAST(NULL as varchar) journalElsComInd \n" +
-            "   , CAST(NULL as varchar) journalAimsScope \n" +
-            "   , CAST(NULL as varchar) ddpEligibInd\n" +
-            "   , CAST(NULL as varchar) ptsJournalInd\n" +
-            "   , CAST(NULL as varchar) authorFeedbackInd\n" +
-            "   , CAST(NULL as varchar) deltaBusinessUnit\n" +
-            "   , CAST(NULL as varchar) printerName\n" +
-            "   , CAST(NULL as varchar) primarySiteSystem\n" +
-            "   , CAST(NULL as varchar) primarySiteAcronym\n" +
-            "   , CAST(NULL as varchar) primarySiteSupportLevel\n" +
-            "   , CAST(NULL as varchar) fulfilmentSystem\n" +
-            "   , CAST(NULL as varchar) fulfilmentJournalAcronym\n" +
-            "   , CAST(NULL as varchar) issueProdTypeCode\n" +
-            "   , CAST(NULL as integer) catalogueVolumesQty\n" +
-            "   , CAST(NULL as integer) catalogueIssuesQty\n" +
-            "   , CAST(NULL as varchar) catalogueVolumeFrom\n" +
-            "   , CAST(NULL as varchar) catalogueVolumeTo\n" +
-            "   , CAST(NULL as integer) rfIssuesQty\n" +
-            "   , CAST(NULL as integer) rfTotalPagesQty\n" +
-            "   , CAST(NULL as varchar) rfFvi\n" +
-            "   , CAST(NULL as varchar) rfLvi\n" +
-            "   , CAST(NULL as varchar) journalPreviousTitle\n" +
-            "   , CAST(NULL as varchar) journalPrimaryAuthor\n" +
-            "   FROM\n" +
-            "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content c\n" +
-            "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((c.sourceref = v.sourceref) AND (v.workmasterprojectno = v.sourceref))\n" +
-            "   LEFT JOIN (select sourceref \n" +
-            "   , max(case when split_part(classificationcode, ' | ',1) = 'PTTR' then split_part(value, ' | ', 1) end) as textreftrade\n" +
-            "   , max(case when substr(classificationcode,1,3) like 'SBU%' then substr(classificationcode, 4, 3) end) as sbu\n" +
-            "   , max(case when substr(classificationcode,1,3) like 'SBU%' then substr(classificationcode, (strpos(classificationcode, 'PC') + 2), 2) end) as pc\n" +
-            "   , max(case when substr(classificationcode,1,2) like 'PC%'  then replace(split_part(classificationcode, ' | ', 1), 'PC') end) as pc2\n" +
-            "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification\n" +
-            "   where (case when split_part(classificationcode, ' | ',1) in ('PTTR','DCDFAC') then true\n" +
-            "           when substr(classificationcode,1,3) like 'SBU%' then true\n" +
-            "           when substr(classificationcode,1,2) like 'PC%' then true\n" +
-            "           else false end) = true\n" +
-            "   group by sourceref) t ON ((t.sourceref = c.sourceref))\n" +
-            "   LEFT JOIN (select sourceref, max(case when substr(name,1,strpos(name,'|')-2)='BEBULLCPY' then text end) as bebullcpy\n" +
-            "   , max(case when substr(name,1,strpos(name,'|')-2)='SEMSBKA' then text end) as semsbka\n" +
-            "   , max(case when substr(name,1,strpos(name,'|')-2)='BETOCLNG' then text end) as betoclng\n" +
-            "   , max(case when substr(name,1,strpos(name,'|')-2)='BETOCSHT' then text end) as betocsht\n" +
-            "   , max(case when substr(name,1,strpos(name,'|')-2)='SEMKTAUD' then text end) as semktaud\n" +
-            "   , max(case when substr(name,1,strpos(name,'|')-2)='BEAUABYL' then text end) as beaubyl\n" +
-            "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text\n" +
-            "   where substr(name,1,strpos(name,'|')-2) in ('BEBULLCPY','SEMSBKA','BETOCLNG','BETOCSHT','SEMKTAUD','BEAUABYL')\n" +
-            "   group by sourceref\n" +
-            "   )  f ON (c.sourceref = f.sourceref)\n" +
-            "   LEFT JOIN (SELECT text.sourceref \n" +
-            "       , max(case when texttype.purpose = 'Review' then text.text end) as review\n" +
-            "       , max(case when texttype.purpose = 'Description' then text.text end) as description\n" +
-            "      FROM\n" +
-            "        " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text text\n" +
-            "      INNER JOIN (\n" +
-            "         SELECT\n" +
-            "           content.sourceref \n" +
-            "         , texttypecode.texttype \n" +
-            "         , texttypecode.purpose \n" +
-            "         FROM\n" +
-            "           " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content\n" +
-            "         INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".texttypecode ON ((content.objecttype = texttypecode.objecttype) AND (content.companygroup = texttypecode.companygroup))\n" +
-            "         WHERE (texttypecode.purpose in ('Review','Description'))\n" +
-            "      )  texttype ON ((text.sourceref = texttype.sourceref) AND (split_part(text.name, ' | ', 1) = texttype.texttype))\n" +
-            "      group by text.sourceref \n" +
-            "   )  d ON (c.sourceref = d.sourceref)\n" +
-            ")A\n" +
-            "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
-            "A.sourceref = cr.identifier AND \n" +
-            "cr.identifier_type = 'external_reference' AND \n" +
-            "cr.record_level = 'Work'\n" +
-            "WHERE A.metadeleted = FALSE \n" +
-            ")";
+    public static final String GET_WORK_INBOUND_CURRENT_COUNT=
+            "select count(*) as Source_Count from(\n" +
+                    "SELECT DISTINCT\n" +
+                    "  cr.epr eprId\n" +
+                    ", A.sourceref u_key\n" +
+                    ", cr.work_type\n" +
+                    ", a.*\n" +
+                    "FROM\n" +
+                    "  ((\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(\"c\".\"sourceref\", '') \"sourceref\"\n" +
+                    "   , NULLIF(\"c\".\"companygroup\", '') \"companygroup\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"c\".\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , (CASE WHEN (\"c\".\"metadeleted\" = 'Y') THEN true ELSE false END) \"metadeleted\"\n" +
+                    "   , \"concat\"('http://secure-ecsd.elsevier.com/covers/80/Tango2/large/', \"v\".\"workmasterisbn\", '.jpg') \"imagefileref\"\n" +
+                    "   , NULLIF(\"v\".\"workmasterisbn\", '') \"workmasterisbn\"\n" +
+                    "   , NULLIF(\"t\".\"textreftrade\", '') \"textreftrade\"\n" +
+                    "   , NULLIF(\"f\".\"bebullcpy\", '') \"features\"\n" +
+                    "   , NULLIF(\"f\".\"semsbka\", '') \"awards\"\n" +
+                    "   , NULLIF(\"f\".\"betoclng\", '') \"toc_long\"\n" +
+                    "   , NULLIF(\"f\".\"betocsht\", '') \"toc_short\"\n" +
+                    "   , NULLIF(\"f\".\"semktaud\", '') \"audience\"\n" +
+                    "   , NULLIF(\"f\".\"beaubyl\", '') \"authorbyline\"\n" +
+                    "   , NULLIF(\"d\".\"description\", '') \"description\"\n" +
+                    "   , NULLIF(\"t\".\"sbu\", '') \"sbu\"\n" +
+                    "   , COALESCE(NULLIF(\"t\".\"pc\", ''), NULLIF(\"t\".\"pc2\", '')) \"profitcentre\"\n" +
+                    "   , NULLIF(\"d\".\"review\", '') \"review\"\n" +
+                    "   , CAST(null AS varchar) \"journalElsComInd\"\n" +
+                    "   , CAST(null AS varchar) \"journalAimsScope\"\n" +
+                    "   , CAST(null AS varchar) \"ddpEligibInd\"\n" +
+                    "   , CAST(null AS varchar) \"ptsJournalInd\"\n" +
+                    "   , CAST(null AS varchar) \"authorFeedbackInd\"\n" +
+                    "   , CAST(null AS varchar) \"deltaBusinessUnit\"\n" +
+                    "   , CAST(null AS varchar) \"printerName\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteSystem\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteAcronym\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteSupportLevel\"\n" +
+                    "   , CAST(null AS varchar) \"fulfilmentSystem\"\n" +
+                    "   , CAST(null AS varchar) \"fulfilmentJournalAcronym\"\n" +
+                    "   , CAST(null AS varchar) \"issueProdTypeCode\"\n" +
+                    "   , CAST(null AS integer) \"catalogueVolumesQty\"\n" +
+                    "   , CAST(null AS integer) \"catalogueIssuesQty\"\n" +
+                    "   , CAST(null AS varchar) \"catalogueVolumeFrom\"\n" +
+                    "   , CAST(null AS varchar) \"catalogueVolumeTo\"\n" +
+                    "   , CAST(null AS integer) \"rfIssuesQty\"\n" +
+                    "   , CAST(null AS integer) \"rfTotalPagesQty\"\n" +
+                    "   , CAST(null AS varchar) \"rfFvi\"\n" +
+                    "   , CAST(null AS varchar) \"rfLvi\"\n" +
+                    "   , CAST(null AS varchar) \"journalPreviousTitle\"\n" +
+                    "   , CAST(null AS varchar) \"journalPrimaryAuthor\"\n" +
+                    "   FROM\n" +
+                    "     ((((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content c\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((\"c\".\"sourceref\" = \"v\".\"sourceref\") AND (\"v\".\"workmasterprojectno\" = \"v\".\"sourceref\")))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        \"sourceref\"\n" +
+                    "      , \"max\"((CASE WHEN (\"split_part\"(\"classificationcode\", ' | ', 1) = 'PTTR') THEN \"split_part\"(\"value\", ' | ', 1) END)) \"textreftrade\"\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(\"classificationcode\", 1, 3) LIKE 'SBU%') THEN \"substr\"(\"classificationcode\", 4, 3) END)) \"sbu\"\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(\"classificationcode\", 1, 3) LIKE 'SBU%') THEN \"substr\"(\"classificationcode\", (\"strpos\"(\"classificationcode\", 'PC') + 2), 2) END)) \"pc\"\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(\"classificationcode\", 1, 2) LIKE 'PC%') THEN \"replace\"(\"split_part\"(\"classificationcode\", ' | ', 1), 'PC') END)) \"pc2\"\n" +
+                    "      FROM\n" +
+                    "        " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification\n" +
+                    "      WHERE ((CASE WHEN (\"split_part\"(\"classificationcode\", ' | ', 1) IN ('PTTR', 'DCDFAC')) THEN true WHEN (\"substr\"(\"classificationcode\", 1, 3) LIKE 'SBU%') THEN true WHEN (\"substr\"(\"classificationcode\", 1, 2) LIKE 'PC%') THEN true ELSE false END) = true)\n" +
+                    "      GROUP BY \"sourceref\"\n" +
+                    "   )  t ON (\"t\".\"sourceref\" = \"c\".\"sourceref\"))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        sourceref\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'BEBULLCPY') THEN text END)) bebullcpy\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'SEMSBKA') THEN text END)) semsbka\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'BETOCLNG') THEN text END)) betoclng\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'BETOCSHT') THEN text END)) betocsht\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'SEMKTAUD') THEN text END)) semktaud\n" +
+                    "      , \"max\"((CASE WHEN (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) = 'BEAUABYL') THEN text END)) beaubyl\n" +
+                    "      FROM\n" +
+                    "        " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text\n" +
+                    "      WHERE (\"substr\"(name, 1, (\"strpos\"(name, '|') - 2)) IN ('BEBULLCPY', 'SEMSBKA', 'BETOCLNG', 'BETOCSHT', 'SEMKTAUD', 'BEAUABYL'))\n" +
+                    "      GROUP BY sourceref\n" +
+                    "   )  f ON (\"c\".\"sourceref\" = \"f\".\"sourceref\"))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        \"text\".\"sourceref\"\n" +
+                    "      , \"max\"((CASE WHEN (\"texttype\".\"purpose\" = 'Review') THEN \"text\".\"text\" END)) review\n" +
+                    "      , \"max\"((CASE WHEN (\"texttype\".\"purpose\" = 'Description') THEN \"text\".\"text\" END)) description\n" +
+                    "      FROM\n" +
+                    "        (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text text\n" +
+                    "      INNER JOIN (\n" +
+                    "         SELECT\n" +
+                    "           \"content\".\"sourceref\"\n" +
+                    "         , \"texttypecode\".\"texttype\"\n" +
+                    "         , \"texttypecode\".\"purpose\"\n" +
+                    "         FROM\n" +
+                    "           (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content\n" +
+                    "         INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".texttypecode ON ((\"content\".\"objecttype\" = \"texttypecode\".\"objecttype\") AND (\"content\".\"companygroup\" = \"texttypecode\".\"companygroup\")))\n" +
+                    "         WHERE (\"texttypecode\".\"purpose\" IN ('Review', 'Description'))\n" +
+                    "      )  texttype ON ((\"text\".\"sourceref\" = \"texttype\".\"sourceref\") AND (\"split_part\"(\"text\".\"name\", ' | ', 1) = \"texttype\".\"texttype\")))\n" +
+                    "      GROUP BY \"text\".\"sourceref\"\n" +
+                    "   )  d ON (\"c\".\"sourceref\" = \"d\".\"sourceref\"))\n" +
+                    "UNION ALL    SELECT DISTINCT\n" +
+                    "     NULLIF(\"c\".\"sourceref\", '') \"sourceref\"\n" +
+                    "   , NULLIF(\"c\".\"companygroup\", '') \"companygroup\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"c\".\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , (CASE WHEN (\"c\".\"metadeleted\" = 'Y') THEN true ELSE false END) \"metadeleted\"\n" +
+                    "   , CAST(null AS varchar) \"imagefileref\"\n" +
+                    "   , CAST(null AS varchar) \"workmasterisbn\"\n" +
+                    "   , CAST(null AS varchar) \"textreftrade\"\n" +
+                    "   , CAST(null AS varchar) \"features\"\n" +
+                    "   , CAST(null AS varchar) \"awards\"\n" +
+                    "   , CAST(null AS varchar) \"toc_long\"\n" +
+                    "   , CAST(null AS varchar) \"toc_short\"\n" +
+                    "   , CAST(null AS varchar) \"audience\"\n" +
+                    "   , CAST(null AS varchar) \"authorbyline\"\n" +
+                    "   , NULLIF(\"d\".\"description\", '') \"description\"\n" +
+                    "   , CAST(null AS varchar) \"sbu\"\n" +
+                    "   , CAST(null AS varchar) \"profitcentre\"\n" +
+                    "   , CAST(null AS varchar) \"review\"\n" +
+                    "   , CAST(null AS varchar) \"journalElsComInd\"\n" +
+                    "   , CAST(null AS varchar) \"journalAimsScope\"\n" +
+                    "   , CAST(null AS varchar) \"ddpEligibInd\"\n" +
+                    "   , CAST(null AS varchar) \"ptsJournalInd\"\n" +
+                    "   , CAST(null AS varchar) \"authorFeedbackInd\"\n" +
+                    "   , CAST(null AS varchar) \"deltaBusinessUnit\"\n" +
+                    "   , CAST(null AS varchar) \"printerName\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteSystem\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteAcronym\"\n" +
+                    "   , CAST(null AS varchar) \"primarySiteSupportLevel\"\n" +
+                    "   , CAST(null AS varchar) \"fulfilmentSystem\"\n" +
+                    "   , CAST(null AS varchar) \"fulfilmentJournalAcronym\"\n" +
+                    "   , CAST(null AS varchar) \"issueProdTypeCode\"\n" +
+                    "   , CAST(null AS integer) \"catalogueVolumesQty\"\n" +
+                    "   , CAST(null AS integer) \"catalogueIssuesQty\"\n" +
+                    "   , CAST(null AS varchar) \"catalogueVolumeFrom\"\n" +
+                    "   , CAST(null AS varchar) \"catalogueVolumeTo\"\n" +
+                    "   , CAST(null AS integer) \"rfIssuesQty\"\n" +
+                    "   , CAST(null AS integer) \"rfTotalPagesQty\"\n" +
+                    "   , CAST(null AS varchar) \"rfFvi\"\n" +
+                    "   , CAST(null AS varchar) \"rfLvi\"\n" +
+                    "   , CAST(null AS varchar) \"journalPreviousTitle\"\n" +
+                    "   , CAST(null AS varchar) \"journalPrimaryAuthor\"\n" +
+                    "   FROM\n" +
+                    "     (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content_series c\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        \"text\".\"sourceref\"\n" +
+                    "      , \"texttypecode\".\"companygroup\"\n" +
+                    "      , \"max\"(\"text\".\"text\") description\n" +
+                    "      FROM\n" +
+                    "        (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text_series text\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".texttypecode ON (((\"texttypecode\".\"objecttype\" = 'SERI') AND (\"texttypecode\".\"purpose\" = 'Description')) AND (\"split_part\"(\"text\".\"name\", ' | ', 1) = \"texttypecode\".\"texttype\")))\n" +
+                    "      GROUP BY \"text\".\"sourceref\", \"texttypecode\".\"companygroup\"\n" +
+                    "   )  d ON ((\"c\".\"sourceref\" = \"d\".\"sourceref\") AND (\"c\".\"companygroup\" = \"d\".\"companygroup\")))\n" +
+                    ")  A\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((A.\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
+                    "WHERE (\"A\".metadeleted = false))\n";
 
     public static final String GET_WORK_SUBJECT_AREA_INBOUND_CURRENT_COUNT=
             "select count(*) Source_Count from (\n" +
@@ -396,68 +458,99 @@ public final class BcsEtlExtendedCountChecksSql {
              "WHERE (A.metadeleted = 'N')AND ((CAST(date_parse(NULLIF(validto, ''), '%d-%b-%Y') AS date) IS NULL) OR (CAST(date_parse(NULLIF(validto, ''), '%d-%b-%Y') AS date) >= current_date)))";
 
     public static final String GET_WORK_PERSON_ROLE_INBOUND_CURRENT_COUNT=
-    "select count(*) as Source_Count from(\n" +
-            "SELECT\n" +
-            "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
-            ", NULLIF(r.sourceref, '') worksourceref\n" +
-            ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
-            ", 'bcs' source\n" +
-            ", cr.epr eprId\n" +
-            ", cr.work_type work_type\n" +
-            ", CAST(null AS integer) core_reference\n" +
-            ", 'MARMAN' roletype\n" +
-            ", 'Marketing Manager' rolename\n" +
-            ", CAST(null AS varchar) title\n" +
-            ", wd.given_name person_first_name\n" +
-            ", wd.family_name person_family_name\n" +
-            ", wd.email email_address\n" +
-            ", CAST(null AS varchar) honours\n" +
-            ", CAST(null AS varchar) affiliation\n" +
-            ", CAST(null AS varchar) imageUrl\n" +
-            ", CAST(null AS varchar) footnoteTxt\n" +
-            ", CAST(null AS varchar) notesTxt\n" +
-            ", (CASE WHEN (substr(split_part(NULLIF(r.responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
-            ", CAST(null AS integer) groupNumber\n" +
-            ", date_parse(NULLIF(r.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') metamodifiedon\n" +
-            ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-            "FROM\n" +
-            "  (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_responsibilities r\n" +
-            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
-            "WHERE (split_part(r.responsibility, ' | ', 1) = 'MARMAN')\n" +
-            "UNION ALL SELECT\n" +
-            "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
-            ", NULLIF(o.sourceref, '') worksourceref\n" +
-            ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
-            ", 'bcs' source\n" +
-            ", cr.epr eprId\n" +
-            ", cr.work_type work_type\n" +
-            ", gwp.work_person_role_id core_reference\n" +
-            ", NULLIF(rolecode.ephcode, '') roletype\n" +
-            ", NULLIF(rolecode.ephname, '') rolename\n" +
-            ", CAST(null AS varchar) title\n" +
-            ", (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) person_first_name\n" +
-            ", (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) person_family_name\n" +
-            ", CAST(null AS varchar) email_address\n" +
-            ", h.notes honours\n" +
-            ", a.notes affiliation\n" +
-            ", concat(concat('https://covers.elsevier.com/author/186/1', lpad(CAST(o.businesspartnerid AS varchar), 6, '000000')), '.jpg') imageUrl\n" +
-            ", CAST(null AS varchar) footnoteTxt\n" +
-            ", n.notes notesTxt\n" +
-            ", CAST(o.sequence AS varchar)\n" +
-            ", CAST(null AS integer) groupNumber\n" +
-            ", date_parse(NULLIF(o.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n" +
-            ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-            "FROM\n" +
-            "  (((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originators o\n" +
-            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
-            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
-            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
-            "WHERE (o.metadeleted = 'N'))\n";
-
+            "select count(*) as Source_Count from(\n" +
+                    "SELECT\n" +
+                    "  \"concat\"(\"concat\"(\"r\".\"sourceref\", 'MARMAN'), \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))), '-', \"substr\"(\"r\".\"responsibility\", -2, 1)) \"u_key\"\n" +
+                    ", NULLIF(\"r\".\"sourceref\", '') \"worksourceref\"\n" +
+                    ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))) \"personsourceref\"\n" +
+                    ", 'BCS' \"source\"\n" +
+                    ", \"cr\".\"epr\" \"eprId\"\n" +
+                    ", \"cr\".\"work_type\" \"work_type\"\n" +
+                    ", CAST(null AS integer) \"core_reference\"\n" +
+                    ", 'MARMAN' \"roletype\"\n" +
+                    ", 'Marketing Manager' \"rolename\"\n" +
+                    ", CAST(null AS varchar) \"title\"\n" +
+                    ", wd.given_name \"person_first_name\"\n" +
+                    ", wd.family_name \"person_family_name\"\n" +
+                    ", wd.email \"email_address\"\n" +
+                    ", CAST(null AS varchar) \"honours\"\n" +
+                    ", CAST(null AS varchar) \"affiliation\"\n" +
+                    ", CAST(null AS varchar) \"imageUrl\"\n" +
+                    ", CAST(null AS varchar) \"footnoteTxt\"\n" +
+                    ", CAST(null AS varchar) \"notesTxt\"\n" +
+                    ", (CASE WHEN (\"substr\"(\"split_part\"(NULLIF(\"r\".\"responsibility\", ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) \"sequence\"\n" +
+                    ", CAST(null AS integer) \"groupNumber\"\n" +
+                    ", \"date_parse\"(NULLIF(\"r\".\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"metamodifiedon\"\n" +
+                    ", (CASE WHEN (\"r\".\"metadeleted\" = 'Y') THEN true ELSE false END) \"metadeleted\"\n" +
+                    "FROM\n" +
+                    "  (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_responsibilities r\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((\"r\".\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (\"trim\"(\"lower\"(r.email)) = \"trim\"(\"lower\"(wd.email))))\n" +
+                    "WHERE (\"split_part\"(\"r\".\"responsibility\", ' | ', 1) = 'MARMAN')\n" +
+                    "UNION ALL SELECT\n" +
+                    "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
+                    ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
+                    ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"personsourceref\"\n" +
+                    ", 'BCS' \"source\"\n" +
+                    ", \"cr\".\"epr\" \"eprId\"\n" +
+                    ", \"cr\".\"work_type\" \"work_type\"\n" +
+                    ", \"gwp\".\"work_person_role_id\" \"core_reference\"\n" +
+                    ", NULLIF(\"rolecode\".\"ephcode\", '') \"roletype\"\n" +
+                    ", NULLIF(\"rolecode\".\"ephname\", '') \"rolename\"\n" +
+                    ", CAST(null AS varchar) \"title\"\n" +
+                    ", (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"department\", '') ELSE NULLIF(\"firstname\", '') END) \"person_first_name\"\n" +
+                    ", (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"institution\", '') ELSE NULLIF(\"lastname\", '') END) \"person_family_name\"\n" +
+                    ", CAST(null AS varchar) \"email_address\"\n" +
+                    ", \"h\".\"notes\" \"honours\"\n" +
+                    ", \"a\".\"notes\" \"affiliation\"\n" +
+                    ", \"concat\"(\"concat\"('https://covers.elsevier.com/author/186/1', \"lpad\"(CAST(\"o\".\"businesspartnerid\" AS varchar), 6, '000000')), '.jpg') \"imageUrl\"\n" +
+                    ", CAST(null AS varchar) \"footnoteTxt\"\n" +
+                    ", \"n\".\"notes\" \"notesTxt\"\n" +
+                    ", CAST(\"o\".\"sequence\" AS varchar)\n" +
+                    ", CAST(null AS integer) \"groupNumber\"\n" +
+                    ", \"date_parse\"(NULLIF(\"o\".\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    ", (CASE WHEN (\"o\".\"metadeleted\" = 'Y') THEN true ELSE false END) \"metadeleted\"\n" +
+                    "FROM\n" +
+                    "  (((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originators o\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".rolecode ON (\"split_part\"(\"copyrightholdertype\", ' | ', 1) = \"rolecode\".\"ppmcode\"))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((\"o\".\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
+                    "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes h ON (((\"o\".\"businesspartnerid\" = \"h\".\"businesspartnerid\") AND (\"split_part\"(\"h\".\"notestype\", ' | ', 1) = 'DEG')) AND (\"o\".\"sourceref\" = \"h\".\"sourceref\")))\n" +
+                    "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes a ON (((\"o\".\"businesspartnerid\" = \"a\".\"businesspartnerid\") AND (\"split_part\"(\"a\".\"notestype\", ' | ', 1) = 'AFIL')) AND (\"o\".\"sourceref\" = \"a\".\"sourceref\")))\n" +
+                    "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((\"o\".\"businesspartnerid\" = \"n\".\"businesspartnerid\") AND (\"split_part\"(\"n\".\"notestype\", ' | ', 1) = 'BIO')) AND (\"o\".\"sourceref\" = \"n\".\"sourceref\")))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((\"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END))))))))) = \"gwp\".\"external_reference\") AND (\"gwp\".\"effective_end_date\" IS NULL)))\n" +
+                    "WHERE (\"o\".\"metadeleted\" = 'N')\n" +
+                    "UNION ALL SELECT\n" +
+                    "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
+                    ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
+                    ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"personsourceref\"\n" +
+                    ", 'BCS' \"source\"\n" +
+                    ", \"cr\".\"epr\" \"eprId\"\n" +
+                    ", \"cr\".\"work_type\" \"work_type\"\n" +
+                    ", \"gwp\".\"work_person_role_id\" \"core_reference\"\n" +
+                    ", NULLIF(\"rolecode\".\"ephcode\", '') \"roletype\"\n" +
+                    ", NULLIF(\"rolecode\".\"ephname\", '') \"rolename\"\n" +
+                    ", CAST(null AS varchar) \"title\"\n" +
+                    ", NULLIF(\"firstname\", '') \"person_first_name\"\n" +
+                    ", NULLIF(\"lastname\", '') \"person_family_name\"\n" +
+                    ", CAST(null AS varchar) \"email_address\"\n" +
+                    ", \"h\".\"notes\" \"honours\"\n" +
+                    ", \"a\".\"notes\" \"affiliation\"\n" +
+                    ", \"concat\"(\"concat\"('https://covers.elsevier.com/author/186/1', \"lpad\"(CAST(\"o\".\"businesspartnerid\" AS varchar), 6, '000000')), '.jpg') \"imageUrl\"\n" +
+                    ", CAST(null AS varchar) \"footnoteTxt\"\n" +
+                    ", \"n\".\"notes\" \"notesTxt\"\n" +
+                    ", CAST(\"o\".\"sequence\" AS varchar)\n" +
+                    ", CAST(null AS integer) \"groupNumber\"\n" +
+                    ", \"date_parse\"(NULLIF(\"o\".\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    ", (CASE WHEN (\"o\".\"metadeleted\" = 'Y') THEN true ELSE false END) \"metadeleted\"\n" +
+                    "FROM\n" +
+                    "  (((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originators_series o\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".rolecode ON (\"split_part\"(\"copyrightholdertype\", ' | ', 1) = \"rolecode\".\"ppmcode\"))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((\"o\".\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
+                    "LEFT JOIN  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes_series h ON (((\"o\".\"businesspartnerid\" = \"h\".\"businesspartnerid\") AND (\"split_part\"(\"h\".\"notestype\", ' | ', 1) = 'DEG')) AND (\"o\".\"sourceref\" = \"h\".\"sourceref\")))\n" +
+                    "LEFT JOIN  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes_series a ON (((\"o\".\"businesspartnerid\" = \"a\".\"businesspartnerid\") AND (\"split_part\"(\"a\".\"notestype\", ' | ', 1) = 'AFIL')) AND (\"o\".\"sourceref\" = \"a\".\"sourceref\")))\n" +
+                    "LEFT JOIN  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes_series n ON (((\"o\".\"businesspartnerid\" = \"n\".\"businesspartnerid\") AND (\"split_part\"(\"n\".\"notestype\", ' | ', 1) = 'BIO')) AND (\"o\".\"sourceref\" = \"n\".\"sourceref\")))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((\"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\")))))))) = \"gwp\".\"external_reference\") AND (\"gwp\".\"effective_end_date\" IS NULL)))\n" +
+                    "WHERE (\"o\".\"metadeleted\" = 'N'))\n";
 
     public static final String GET_AVAILABILITY_DELTA_CURR_COUNT =
             "select count(*) as Source_Count from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability";

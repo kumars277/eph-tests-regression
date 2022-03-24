@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.eph.automation.testing.steps.GenericFunctions.setRandomCount;
+
 
 public class BcsEtlCoreDataChecksSteps {
 
@@ -26,10 +28,8 @@ public class BcsEtlCoreDataChecksSteps {
     private static String noTablemsg = "No such tables found";
 
     @Given("^Get the (.*) of BCS Core data from Inbound Tables (.*)$")
-    public static void getRandomidsFromInound(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-     // if(numberOfRecords==null)numberOfRecords=countOfRandomIds;
-     //   Log.info("numberOfRecords = " + numberOfRecords);
+    public static void getRandomidsFromInound(String countOfRandomIds, String tableName) {
+        String numberOfRecords = setRandomCount(countOfRandomIds);
         Log.info("Get "+numberOfRecords+" random ids for bcs Core Inbound Tables....");
         List<Map<?, ?>> randomids;
         switch (tableName) {
@@ -74,7 +74,6 @@ public class BcsEtlCoreDataChecksSteps {
         Log.info(sql);
         Log.info("below ids selected to be verified \n"+ids.toString());
     }
-
 
     @When("^Get the Data from the Inbound Tables (.*)$")
     public static void getIngestRecords(String tableName) {
@@ -490,12 +489,9 @@ public class BcsEtlCoreDataChecksSteps {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
-    public static void getRandomidsFromCurrent(String numberOfRecords, String tableName) {
-      numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-     //  if(numberOfRecords==null)numberOfRecords = countOfRandomIds;
-        Log.info("numberOfRecords = " + numberOfRecords);
+    public static void getRandomidsFromCurrent(String countOfRandomIds, String tableName) {
+        String numberOfRecords = setRandomCount(countOfRandomIds);
         Log.info("Get random ids for bcs Core Current Tables....");
-
         switch (tableName) {
             case "etl_accountable_product_current_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_ACCPROD_KEY_CURRENT, numberOfRecords);

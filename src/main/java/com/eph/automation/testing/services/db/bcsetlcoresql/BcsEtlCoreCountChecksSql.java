@@ -1,10 +1,25 @@
 package com.eph.automation.testing.services.db.bcsetlcoresql;
 
-
 public class BcsEtlCoreCountChecksSql {
-    private BcsEtlCoreCountChecksSql(){
-        throw new IllegalStateException("Utility class");
-    }
+    private BcsEtlCoreCountChecksSql(){}
+
+    public static final String GET_ACC_PROD_INBOUND_CURRENT_COUNT =
+            "select count(*) as Source_Count\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(sourceref, '') sourceref\n" +
+                    "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
+                    "   , NULLIF(accountablename, '') accountablename\n" +
+                    "   , NULLIF(accountableparent, '') accountableparent\n" +
+                    "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
+                    "   , 'N' dq_err\n" +
+                    "   FROM\n" +
+                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
+                    "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
+                    ")  A\n" +
+                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))";
 
     public static final String GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_accountable_product_current_v";
@@ -312,42 +327,64 @@ public class BcsEtlCoreCountChecksSql {
                     ")A WHERE A.sourceref is not null and A.identifier is not null)where lead_indicator=true";
 
     public static final String GET_WRK_IDENTIF_INBOUND_CURRENT_COUNT =
-            "WITH\n" +
-                    "  work_id AS (\n" +
-                    "   SELECT DISTINCT workmasterprojectno\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily\n" +
-                    ") \n" +
-                    "select count(*) as Source_Count from( \n" +
-                    "SELECT\n" +
-                    "  A.*\n" +
-                    ", sourceref||identifier||identifier_type as u_key\n" +
-                    "FROM\n" +
-                    "  (\n" +
-                    "   SELECT\n" +
-                    "     NULLIF(sourceref, '') sourceref\n" +
-                    "   , NULLIF(piidack, '') identifier\n" +
-                    "   , 'DAC-K' identifier_type\n" +
-                    "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
-                    "   INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
-                    "   WHERE (piidack <> '')\n" +
-                    "UNION ALL SELECT DISTINCT\n" +
-                    "     NULLIF(seriesid, '') sourceref\n" +
-                    "   , NULLIF(seriesissn, '') identifier\n" +
-                    "   , 'ISSN-L' identifier_type\n" +
-                    " from ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
-                    " INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
-                    " WHERE (seriesissn <> '')" +
-                    " UNION ALL SELECT" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
-                    "   , NULLIF(orderno,'') identifier\n" +
-                    "   , 'PPM-PART' identifier_type\n" +
-                    "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN work_id ON (product.sourceref = work_id.workmasterprojectno))\n" +
-                    "   WHERE (orderno <> '')\n" +
-                    ")  A\n" +
-                    "WHERE ((A.sourceref IS NOT NULL) AND (A.identifier IS NOT NULL)))";
+        "WITH\n" +
+                "  work_id AS (\n" +
+                "   SELECT DISTINCT \"workmasterprojectno\"\n" +
+                "   FROM\n" +
+                "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily\n" +
+                ") \n" +
+                "select count(*) as Source_Count from(\n" +
+                "SELECT\n" +
+                "  a.*\n" +
+                ", \"concat\"(\"concat\"(\"sourceref\", \"identifier\"), \"identifier_type\") \"u_key\"\n" +
+                "FROM\n" +
+                "  (\n" +
+                "   SELECT\n" +
+                "     NULLIF(\"sourceref\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"piidack\", '') \"identifier\"\n" +
+                "   , 'DAC-K' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
+                "   INNER JOIN work_id ON (\"content\".\"sourceref\" = \"work_id\".\"workmasterprojectno\"))\n" +
+                "   WHERE (\"piidack\" <> '')\n" +
+                "UNION ALL    SELECT\n" +
+                "     NULLIF(\"sourceref\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"piidack\", '') \"identifier\"\n" +
+                "   , 'DAC-K' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                "   WHERE (\"piidack\" <> '')\n" +
+                "UNION ALL    SELECT DISTINCT\n" +
+                "     NULLIF(\"seriesid\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"seriesissn\", '') \"identifier\"\n" +
+                "   , 'ISSN-L' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                "   WHERE (\"seriesissn\" <> '')\n" +
+                "UNION ALL    SELECT DISTINCT\n" +
+                "     NULLIF(\"seriesid\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"seriescode\", '') \"identifier\"\n" +
+                "   , 'SERCO' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                "   WHERE (\"seriescode\" <> '')\n" +
+                "UNION ALL    SELECT\n" +
+                "     NULLIF(\"sourceref\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"orderno\", '') \"identifier\"\n" +
+                "   , 'PPM-PART' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product product\n" +
+                "   INNER JOIN work_id ON (\"product\".\"sourceref\" = \"work_id\".\"workmasterprojectno\"))\n" +
+                "   WHERE (\"orderno\" <> '')\n" +
+                "UNION ALL    SELECT\n" +
+                "     NULLIF(\"sourceref\", '') \"sourceref\"\n" +
+                "   , NULLIF(\"sourceref\", '') \"identifier\"\n" +
+                "   , 'WMPRNM' \"identifier_type\"\n" +
+                "   FROM\n" +
+                "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product product\n" +
+                "   INNER JOIN work_id ON (\"product\".\"sourceref\" = \"work_id\".\"workmasterprojectno\"))\n" +
+                ")  A\n" +
+                "WHERE ((A.sourceref IS NOT NULL) AND (A.identifier IS NOT NULL)))\n";
 
     public static final String GET_WRK_INBOUND_CURRENT_COUNT =
         "WITH\n" +
@@ -486,7 +523,8 @@ public class BcsEtlCoreCountChecksSql {
                     "      , c.editionno\n" +
                     "      FROM\n" +
                     "        ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content c\n" +
-                    "      INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily f ON ((c.sourceref = f.sourceref) AND (c.sourceref = f.workmasterprojectno)))\n" +
+                    "      INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily f ON ((c.sourceref = f.sourceref) \n" +
+                    "\t  AND (c.sourceref = f.workmasterprojectno)))\n" +
                     "   ) \n" +
                     ",    diffed_edition AS (\n" +
                     "      SELECT\n" +
@@ -534,6 +572,16 @@ public class BcsEtlCoreCountChecksSql {
                     "   FROM\n" +
                     "     ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content content\n" +
                     "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n" +
+                    "UNION ALL    SELECT\n" +
+                    "     \"concat\"(CAST(parent.seriesid AS varchar), 'CON', CAST(child.seriesid AS varchar)) u_key\n" +
+                    "   , parent.seriesid parentref\n" +
+                    "   , child.seriesid childref\n" +
+                    "   , 'CON' relationtyperef\n" +
+                    "   , \"date_parse\"(NULLIF(child.\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     ("+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series child\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series parent ON (parent.seriesid = child.mainseries))\n" +
                     "UNION    SELECT\n" +
                     "     NULLIF(\"concat\"(\"concat\"(CAST(d.work_2_sourceref AS varchar), 'IRB'), CAST(d.work_1_sourceref AS varchar)), '') \"u_key\"\n" +
                     "   , d.work_2_sourceref parentref\n" +
@@ -545,56 +593,69 @@ public class BcsEtlCoreCountChecksSql {
                     "     (diffed_edition d\n" +
                     "   INNER JOIN min_diff m ON (((d.work_1_sourceref = m.work_1_sourceref) AND (d.abs_diff = m.min_diff)) AND (editiondiff > 0)))\n" +
                     ")  A\n" +
-                    "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) AND (\"A\".\"parentref\" <> \"A\".\"childref\"))\n" +
-                    ")\n";
+                    "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) \n" +
+                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\")))\n";
 
     public static final String GET_WRK_PERSON_INBOUND_CURRENT_COUNT =
             "SELECT count(*) as Source_Count\n" +
-                    " FROM (\n" +
-                    "SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref,'') worksourceref\n" +
-                    "   , NULLIF(CAST(businesspartnerid AS varchar),'') personsourceref\n" +
-                    "   , NULLIF(CAST(old_businesspartnerid AS varchar),'') linking_id\n" +
-                    "   , NULLIF(rolecode.ephcode,'') roletype\n" +
-                    "   , NULLIF(sourceref,'')||NULLIF(rolecode.ephcode,'')||NULLIF(CAST(businesspartnerid AS varchar),'') as u_key\n" +
-                    "   , NULLIF(CAST(sequence AS varchar),'') sequence\n" +
-                    "   , NULLIF(CAST(locationid AS varchar),'') deduplicator\n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
-                    "   , 'N' dq_err\n" +
                     "FROM\n" +
-                    "((SELECT sourceref,\n" +
-                   " lower(to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
-                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
-                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) businesspartnerid, \n" +
-                    "businesspartnerid old_businesspartnerid,\n" +
-                    "copyrightholdertype,\n" +
-                    "sequence,\n" +
-                    "metamodifiedon,\n" +
-                    "locationid,\n" +
-                    "row_number()\n" +
-                    "OVER (partition by sourceref,businesspartnerid,copyrightholdertype\n" +
-                    "ORDER BY metamodifiedon,sequence) min_id\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators)\n" +
-                    "INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-                    "where min_id = 1\n" +
-                    "UNION \n" +
-                    "SELECT\n" +
-                    "     NULLIF(r.sourceref,'') worksourceref\n" +
-                    "   , NULLIF(lower(to_hex(md5(to_utf8(w.peoplehub_id)))),'') personsourceref \n" +
-                    "   , NULLIF(w.peoplehub_id,'') linking_id \n" +
-                    "   , NULLIF(rolecode.ephcode,'') roletype\n" +
-                    "   , r.sourceref||rolecode.ephcode||lower(to_hex(md5(to_utf8(w.peoplehub_id)))) as u_key \n" +
-                    "   , (CASE WHEN (substr(split_part(NULLIF(responsibility,''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
-                    "   , '0' deduplicator\n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
-                    "   , 'N' dq_err\n" +
+                    "  ((\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(\"sourceref\", '') \"worksourceref\"\n" +
+                    "   , NULLIF(CAST(\"businesspartnerid\" AS varchar), '') \"personsourceref\"\n" +
+                    "   , NULLIF(CAST(\"old_businesspartnerid\" AS varchar), '') \"linking_id\"\n" +
+                    "   , NULLIF(\"rolecode\".\"ephcode\", '') \"roletype\"\n" +
+                    "   , \"concat\"(\"concat\"(NULLIF(\"sourceref\", ''), NULLIF(\"rolecode\".\"ephcode\", '')), NULLIF(CAST(\"businesspartnerid\" AS varchar), '')) u_key\n" +
+                    "   , NULLIF(CAST(\"sequence\" AS varchar), '') \"sequence\"\n" +
+                    "   , NULLIF(CAST(\"locationid\" AS varchar), '') \"deduplicator\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
                     "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".workday_reference_v w on r.email = w.email \n" +
-                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode)) \n" +
-                    ") A\n" +
-                    "INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily vf on a.worksourceref = vf.workmasterprojectno and a.worksourceref = vf.sourceref\n" +
-                    "WHERE (((A.worksourceref IS NOT NULL) AND (A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL)) \n";
+                    "     ((\n" +
+                    "(\n" +
+                    "         SELECT\n" +
+                    "           \"sourceref\"\n" +
+                    "         , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"businesspartnerid\"\n" +
+                    "         , \"businesspartnerid\" \"old_businesspartnerid\"\n" +
+                    "         , \"copyrightholdertype\"\n" +
+                    "         , \"sequence\"\n" +
+                    "         , \"metamodifiedon\"\n" +
+                    "         , \"locationid\"\n" +
+                    "         , \"row_number\"() OVER (PARTITION BY \"sourceref\", \"businesspartnerid\", \"copyrightholdertype\" ORDER BY \"metamodifiedon\" ASC, \"sequence\" ASC) \"min_id\"\n" +
+                    "         FROM\n" +
+                    "           "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                    "      ) UNION ALL (\n" +
+                    "         SELECT\n" +
+                    "           \"sourceref\"\n" +
+                    "         , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"businesspartnerid\"\n" +
+                    "         , \"businesspartnerid\" \"old_businesspartnerid\"\n" +
+                    "         , \"copyrightholdertype\"\n" +
+                    "         , \"sequence\"\n" +
+                    "         , \"metamodifiedon\"\n" +
+                    "         , CAST(null AS integer) \"locationid\"\n" +
+                    "         , \"row_number\"() OVER (PARTITION BY \"sourceref\", \"businesspartnerid\", \"copyrightholdertype\" ORDER BY \"metamodifiedon\" ASC, \"sequence\" ASC) \"min_id\"\n" +
+                    "         FROM\n" +
+                    "           "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series\n" +
+                    "      )    ) \n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".rolecode ON (\"split_part\"(\"copyrightholdertype\", ' | ', 1) = \"rolecode\".\"ppmcode\"))\n" +
+                    "   WHERE (\"min_id\" = 1)\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(r.\"sourceref\", '') \"worksourceref\"\n" +
+                    "   , NULLIF(\"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(w.\"peoplehub_id\")))), '') \"personsourceref\"\n" +
+                    "   , NULLIF(w.\"peoplehub_id\", '') \"linking_id\"\n" +
+                    "   , NULLIF(\"rolecode\".\"ephcode\", '') \"roletype\"\n" +
+                    "   , \"concat\"(\"concat\"(r.\"sourceref\", \"rolecode\".\"ephcode\"), \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(w.\"peoplehub_id\"))))) u_key\n" +
+                    "   , (CASE WHEN (\"substr\"(\"split_part\"(NULLIF(\"responsibility\", ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) \"sequence\"\n" +
+                    "   , '0' \"deduplicator\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%d-%b-%Y %H:%i:%s') \"modifiedon\"\n" +
+                    "   , 'N' \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     (("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_responsibilities r\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".workday_reference_v w ON (r.email = w.email))\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".rolecode ON (\"split_part\"(\"responsibility\", ' | ', 1) = \"rolecode\".\"ppmcode\"))\n" +
+                    ")  \"A\"\n" +
+                    "INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily vf ON ((a.worksourceref = vf.workmasterprojectno) AND (a.worksourceref = vf.sourceref)))\n" +
+                    "WHERE (((\"A\".\"worksourceref\" IS NOT NULL) AND (\"A\".\"personsourceref\" IS NOT NULL)) AND (\"A\".\"roletype\" IS NOT NULL))\n";
 
 
        public static final String GET_PRODUCT_INBOUND_CURRENT_COUNT =
@@ -662,21 +723,36 @@ public class BcsEtlCoreCountChecksSql {
 
        public static final String GET_PERSON_INBOUND_CURRENT_COUNT =
                "SELECT count(*) as Source_Count \n" +
-                       "FROM \n" +
-                       "  ( \n" +
-                       "   SELECT DISTINCT \n" +
-                       "     businesspartnerid sourceref \n" +
-                       "   , lower (to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
-                       "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
-                       "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))u_key \n" +
-                       "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
-                       "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
-                       "   , CAST(null AS varchar) peoplehub_id \n" +
-                       "   , CAST(null AS varchar) email_address \n" +
-                       "   , 'N' dq_err \n" +
-                       "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators \n" +
-                       ")  A \n" +
-                       " WHERE (A.sourceref IS NOT NULL)";
+                       "FROM\n" +
+                       "  (\n" +
+                       "select * from(" +
+                       "   SELECT DISTINCT\n" +
+                       "     businesspartnerid sourceref\n" +
+                       "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) u_key\n" +
+                       "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname\n" +
+                       "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname\n" +
+                       "   , CAST(null AS varchar) peoplehub_id\n" +
+                       "   , CAST(null AS varchar) email_address\n" +
+                       "   , 'N' dq_err\n" +
+                       "   \n" +
+                       "  FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                       ")  A\n" +
+                       "WHERE (A.sourceref IS NOT NULL)\n" +
+                       "UNION ALL SELECT *\n" +
+                       "FROM\n" +
+                       "  (\n" +
+                       "   SELECT DISTINCT\n" +
+                       "     businesspartnerid sourceref\n" +
+                       "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper(firstname)), trim(upper(lastname))))))) u_key\n" +
+                       "   , NULLIF(firstname, '') firstname\n" +
+                       "   , NULLIF(lastname, '') familyname\n" +
+                       "   , CAST(null AS varchar) peoplehub_id\n" +
+                       "   , CAST(null AS varchar) email_address\n" +
+                       "   , 'N' dq_err\n" +
+                       "   FROM\n" +
+                       "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series)  A\n" +
+                       "\n" +
+                       "WHERE (A.sourceref IS NOT NULL))\n";
 
 
     public static final String GET_MANIF_INBOUND_CURRENT_COUNT =
@@ -731,24 +807,6 @@ public class BcsEtlCoreCountChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".manifestationtypecode ON (manifestation_type = manifestationtypecode.ppmcode))\n" +
                     ")  A\n" +
                     "WHERE (A.sourceref IS NOT NULL)\n";
-
-    public static final String GET_ACC_PROD_INBOUND_CURRENT_COUNT =
-               "select count(*) as Source_Count\n" +
-                       "FROM\n" +
-                       "  (\n" +
-                       "   SELECT DISTINCT\n" +
-                       "     NULLIF(sourceref, '') sourceref\n" +
-                       "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
-                       "   , NULLIF(accountablename, '') accountablename\n" +
-                       "   , NULLIF(accountableparent, '') accountableparent\n" +
-                       "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
-                       "   , 'N' dq_err\n" +
-                       "   FROM\n" +
-                       "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
-                       "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
-                       "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
-                       ")  A\n" +
-                       "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))";
 
 
 
