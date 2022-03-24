@@ -65,7 +65,7 @@ public class JM_ETLExtendedCountDataChecksSQL {
                     ", TRY(date(date_parse(last_updated_date, '%%d/%%m/%%Y'))) availability_start_date\n" +
                     ", 'Available' availability_status\n" +
                     ", false delete_flag\n" +
-                    "FROM "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system)order by rand() limit %s";
+                    "FROM "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system)order by rand() limit '%s'";
 
     public static String GET_SOURCE_JM_EXT_NEW_FULFIL_SYSTEM_COUNT =
                 "select count(*) as Source_Count from(\n" +
