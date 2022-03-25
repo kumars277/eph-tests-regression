@@ -71,7 +71,7 @@ public class BcsEtlCoreDataChecksSteps {
         }
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("sourceRef")).collect(Collectors.toList());
-      //  Log.info(sql);
+        Log.info(sql);
         Log.info("below ids selected to be verified \n"+ids.toString());
     }
 
@@ -116,7 +116,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-      //  Log.info(sql);
+        Log.info(sql);
     }
 
     @Then("^Data from the BCS Core Current Tables to compare Inbound Check (.*)$")
@@ -160,7 +160,7 @@ public class BcsEtlCoreDataChecksSteps {
                 Log.info(noTablemsg);
         }
         BcsEtlCoreAccessDLContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
-       // Log.info(sql);
+        Log.info(sql);
     }
 
     @And("^Compare data of BCS Inbound and BCS Core (.*) tables are identical$")
@@ -490,12 +490,8 @@ public class BcsEtlCoreDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
     public static void getRandomidsFromCurrent(String countOfRandomIds, String tableName) {
-     // numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-     //  if(numberOfRecords==null)numberOfRecords = countOfRandomIds;
-     //   Log.info("numberOfRecords = " + numberOfRecords);
         String numberOfRecords = setRandomCount(countOfRandomIds);
         Log.info("Get random ids for bcs Core Current Tables....");
-
         switch (tableName) {
             case "etl_accountable_product_current_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_ACCPROD_KEY_CURRENT, numberOfRecords);
