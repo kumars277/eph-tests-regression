@@ -1659,48 +1659,7 @@ public class DL_ExtendedViewChecksSQL {
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
-                    "UNION ALL SELECT\n" +
-                    "  cr.epr work_epr_id\n" +
-                    ", 'PMX' source\n" +
-                    ", cr.work_type work_type\n" +
-                    ", TRY(date_parse(wesd.last_updated_date, '%Y-%m-%d %H:%i:%s.%f')) last_updated_date\n" +
-                    ", CAST(null AS boolean) journal_els_com_ind\n" +
-                    ", CAST(null AS varchar) journs_aims_scope\n" +
-                    ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", CAST(null AS varchar) image_file_ref\n" +
-                    ", CAST(null AS varchar) master_isbn\n" +
-                    ", CAST(null AS varchar) author_by_line_text\n" +
-                    ", CAST(null AS varchar) key_features\n" +
-                    ", CAST(null AS varchar) product_awards\n" +
-                    ", wesd.text_long product_long_desc\n" +
-                    ", CAST(null AS varchar) product_short_desc\n" +
-                    ", CAST(null AS varchar) review_quotes\n" +
-                    ", CAST(null AS varchar) toc_long\n" +
-                    ", CAST(null AS varchar) toc_short\n" +
-                    ", CAST(null AS varchar) audience_text\n" +
-                    ", CAST(null AS varchar) book_sub_business_unit\n" +
-                    ", CAST(null AS varchar) internal_els_div\n" +
-                    ", CAST(null AS varchar) profit_centre\n" +
-                    ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", CAST(null AS varchar) primary_site_system\n" +
-                    ", CAST(null AS varchar) primary_site_acronym\n" +
-                    ", CAST(null AS varchar) primary_site_support_level\n" +
-                    ", CAST(null AS varchar) issue_prod_type_code\n" +
-                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
-                    ", CAST(null AS integer) catalogue_issues_qty\n" +
-                    ", CAST(null AS varchar) catalogue_volume_from\n" +
-                    ", CAST(null AS varchar) catalogue_volume_to\n" +
-                    ", CAST(null AS integer) rf_issues_qty\n" +
-                    ", CAST(null AS integer) rf_total_pages_qty\n" +
-                    ", CAST(null AS varchar) rf_fvi\n" +
-                    ", CAST(null AS varchar) rf_lvi\n" +
-                    ", CAST(null AS varchar) business_unit_desc\n" +
-                    ", CAST(null AS varchar) journal_prod_site_code\n" +
-                    ", false delete_flag\n" +
-                    "FROM\n" +
-                    "  ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))";
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))";
 
     public static String GET_SOURCE_WORK_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -1866,48 +1825,7 @@ public class DL_ExtendedViewChecksSQL {
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
-                    "UNION ALL SELECT\n" +
-                    "  cr.epr work_epr_id\n" +
-                    ", 'PMX' source\n" +
-                    ", cr.work_type work_type\n" +
-                    ", TRY(date_parse(wesd.last_updated_date, '%%Y-%%m-%%d %%H:%%i:%%s.%%f')) last_updated_date\n" +
-                    ", CAST(null AS boolean) journal_els_com_ind\n" +
-                    ", CAST(null AS varchar) journs_aims_scope\n" +
-                    ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", CAST(null AS varchar) image_file_ref\n" +
-                    ", CAST(null AS varchar) master_isbn\n" +
-                    ", CAST(null AS varchar) author_by_line_text\n" +
-                    ", CAST(null AS varchar) key_features\n" +
-                    ", CAST(null AS varchar) product_awards\n" +
-                    ", wesd.text_long product_long_desc\n" +
-                    ", CAST(null AS varchar) product_short_desc\n" +
-                    ", CAST(null AS varchar) review_quotes\n" +
-                    ", CAST(null AS varchar) toc_long\n" +
-                    ", CAST(null AS varchar) toc_short\n" +
-                    ", CAST(null AS varchar) audience_text\n" +
-                    ", CAST(null AS varchar) book_sub_business_unit\n" +
-                    ", CAST(null AS varchar) internal_els_div\n" +
-                    ", CAST(null AS varchar) profit_centre\n" +
-                    ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", CAST(null AS varchar) primary_site_system\n" +
-                    ", CAST(null AS varchar) primary_site_acronym\n" +
-                    ", CAST(null AS varchar) primary_site_support_level\n" +
-                    ", CAST(null AS varchar) issue_prod_type_code\n" +
-                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
-                    ", CAST(null AS integer) catalogue_issues_qty\n" +
-                    ", CAST(null AS varchar) catalogue_volume_from\n" +
-                    ", CAST(null AS varchar) catalogue_volume_to\n" +
-                    ", CAST(null AS integer) rf_issues_qty\n" +
-                    ", CAST(null AS integer) rf_total_pages_qty\n" +
-                    ", CAST(null AS varchar) rf_fvi\n" +
-                    ", CAST(null AS varchar) rf_lvi\n" +
-                    ", CAST(null AS varchar) business_unit_desc\n" +
-                    ", CAST(null AS varchar) journal_prod_site_code\n" +
-                    ", false delete_flag\n" +
-                    "FROM\n" +
-                    "  ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))order by rand() limit %s";
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_EXT_REC =
             "select epr_id as epr_id" +
@@ -2110,49 +2028,8 @@ public class DL_ExtendedViewChecksSQL {
                     "  (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
                     "INNER JOIN "+GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
-                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL))\n" +
-                    "UNION ALL SELECT\n" +
-                    "  cr.epr work_epr_id\n" +
-                    ", 'PMX' source\n" +
-                    ", cr.work_type work_type\n" +
-                    ", TRY(date_parse(wesd.last_updated_date, '%%Y-%%m-%%d %%H:%%i:%%s.%%f')) last_updated_date\n" +
-                    ", CAST(null AS boolean) journal_els_com_ind\n" +
-                    ", CAST(null AS varchar) journs_aims_scope\n" +
-                    ", CAST(null AS varchar) delta_business_unit\n" +
-                    ", CAST(null AS varchar) image_file_ref\n" +
-                    ", CAST(null AS varchar) master_isbn\n" +
-                    ", CAST(null AS varchar) author_by_line_text\n" +
-                    ", CAST(null AS varchar) key_features\n" +
-                    ", CAST(null AS varchar) product_awards\n" +
-                    ", wesd.text_long product_long_desc\n" +
-                    ", CAST(null AS varchar) product_short_desc\n" +
-                    ", CAST(null AS varchar) review_quotes\n" +
-                    ", CAST(null AS varchar) toc_long\n" +
-                    ", CAST(null AS varchar) toc_short\n" +
-                    ", CAST(null AS varchar) audience_text\n" +
-                    ", CAST(null AS varchar) book_sub_business_unit\n" +
-                    ", CAST(null AS varchar) internal_els_div\n" +
-                    ", CAST(null AS varchar) profit_centre\n" +
-                    ", CAST(null AS varchar) text_ref_trade\n" +
-                    ", CAST(null AS varchar) primary_site_system\n" +
-                    ", CAST(null AS varchar) primary_site_acronym\n" +
-                    ", CAST(null AS varchar) primary_site_support_level\n" +
-                    ", CAST(null AS varchar) issue_prod_type_code\n" +
-                    ", CAST(null AS integer) catalogue_volumes_qty\n" +
-                    ", CAST(null AS integer) catalogue_issues_qty\n" +
-                    ", CAST(null AS varchar) catalogue_volume_from\n" +
-                    ", CAST(null AS varchar) catalogue_volume_to\n" +
-                    ", CAST(null AS integer) rf_issues_qty\n" +
-                    ", CAST(null AS integer) rf_total_pages_qty\n" +
-                    ", CAST(null AS varchar) rf_fvi\n" +
-                    ", CAST(null AS varchar) rf_lvi\n" +
-                    ", CAST(null AS varchar) business_unit_desc\n" +
-                    ", CAST(null AS varchar) journal_prod_site_code\n" +
-                    ", false delete_flag\n" +
-                    "FROM\n" +
-                    " ("+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_series_description wesd\n" +
-                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((cr.identifier = concat('SERI-', wesd.external_edition_id)) AND (cr.record_level = 'Work')) AND (cr.identifier_type = 'external_reference'))))" +
-                    "where epr_id in ('%s') order by epr_id,image_file_ref,source,key_features,author_by_line_text\n" +
+                    "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))\n" +
+                    " where epr_id in ('%s') order by epr_id,image_file_ref,source,key_features,author_by_line_text\n" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code,\n" +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty,\n" +
                     "rf_fvi,rf_lvi,business_unit_desc,journal_prod_site_code desc";
