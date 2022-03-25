@@ -246,7 +246,7 @@ public class APIService {
   }
 
   public static WorksMatchedApiObject getWorkByIsInPackage(String workID)          throws AzureOauthTokenFetchingException {
-    Response response =getResponse("/product-hub-works/works?_alt=1&queryType=isInWorkPackages&queryValue=" + workID);
+    Response response =getResponse("/product-hub-works/works?queryType=isInWorkPackages&queryValue=" + workID);
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
