@@ -1,7 +1,7 @@
 Feature:Validate data for BCS ETL Core in Data Lake Access Layer
 
  #confluence Link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45477370317/Core+Transformed+View+Mappings
- #conflunce Veraion: v93
+ #conflunce Veraion: v100
 
   @BCSCore
   Scenario Outline: Verify Data for BCS_ETL Core tables is transferred from Inbound Tables
