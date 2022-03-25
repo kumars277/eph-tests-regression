@@ -1315,7 +1315,6 @@ public final class BcsEtlExtendedCountChecksSql {
                     "from (SELECT count(*) FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest " +
                     "group by u_key having count(*)>1)";
 
-
 }
 
 
