@@ -111,13 +111,16 @@ public class BcsEtlCoreDataChecksSql {
                     "   SELECT\n" +
                     "     \"m\".\"sourceref\"\n" +
                     "   , \"w\".\"seriesid\"\n" +
+                    "   , \"csm\".\"seriesid\" mainseries\n" +
                     "   , \"m\".\"work_priority\"\n" +
                     "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
+                    "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
                     "   WHERE (\"w\".\"seriesid\" <> '')\n" +
                     ") \n" +
-                    "SELECT u_key as sourceref\t\n" +
+                    "SELECT sourceref as sourceref \n" +
                     "FROM\n" +
                     "  (\n" +
                     "   SELECT DISTINCT\n" +
@@ -201,23 +204,18 @@ public class BcsEtlCoreDataChecksSql {
                     "   , CAST(null AS varchar) \"te_opco\"\n" +
                     "   , CAST(null AS varchar) \"opco\"\n" +
                     "   , CAST(null AS varchar) \"resp_centre\"\n" +
-                    "   , CAST(null AS varchar) \"pmg\"\n" +
+                    "   , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
                     "   , CAST(null AS varchar) \"languagecode\"\n" +
                     "   , CAST(null AS boolean) \"electro_rights_indicator\"\n" +
                     "   , 'N' \"f_oa_journal_type\"\n" +
                     "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
                     "   , CAST(null AS varchar) \"subscription_type\"\n" +
-                    "   , \"modifiedon\" \"modifiedon\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
                     "   FROM\n" +
-                    "     (((\n" +
-                    "      SELECT\n" +
-                    "        \"seriesid\" \"seriesid\"\n" +
-                    "      , \"series\" \"title\"\n" +
-                    "      , \"max\"(\"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s')) \"modifiedon\"\n" +
-                    "      FROM\n" +
-                    "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                    "      GROUP BY \"seriesid\", \"series\"\n" +
-                    "   )  content\n" +
+                    "     ((((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((\"opcocode\".\"11icode\" = \"rc_pmg_co\".\"company\") AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg_co\".\"pmg\" AS integer))) AND (\"rc_pmg_co\".\"active_end_date\" IS NULL)))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT\n" +
                     "        \"man_status\".\"seriesid\" \"seriesid\"\n" +
@@ -225,10 +223,16 @@ public class BcsEtlCoreDataChecksSql {
                     "      FROM\n" +
                     "        \"man_status\"\n" +
                     "      GROUP BY \"man_status\".\"seriesid\"\n" +
+                    "UNION ALL       SELECT\n" +
+                    "        \"man_status\".\"mainseries\" \"seriesid\"\n" +
+                    "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
+                    "      FROM\n" +
+                    "        \"man_status\"\n" +
+                    "      GROUP BY \"man_status\".\"mainseries\"\n" +
                     "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                     ")  \"A\"\n" +
-                    "WHERE (\"A\".\"sourceref\" IS NOT NULL)order by rand() limit %s";
+                    "WHERE (\"A\".\"sourceref\" <> '')order by rand() limit %s";
 
      public static final String GET_WORK_INBOUND_DATA =
              "WITH\n" +
@@ -236,10 +240,13 @@ public class BcsEtlCoreDataChecksSql {
                      "   SELECT\n" +
                      "     \"m\".\"sourceref\"\n" +
                      "   , \"w\".\"seriesid\"\n" +
+                     "   , \"csm\".\"seriesid\" mainseries\n" +
                      "   , \"m\".\"work_priority\"\n" +
                      "   FROM\n" +
-                     "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
+                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
                      "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
+                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
+                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
                      "   WHERE (\"w\".\"seriesid\" <> '')\n" +
                      ") \n" +
                      "SELECT u_key as uKey \n" +
@@ -262,7 +269,7 @@ public class BcsEtlCoreDataChecksSql {
                      ",f_oa_journal_type as foaJournalType \n" +
                      ",f_society_ownership as fSocietyOwnership \n" +
                      ",subscription_type as subscriptionType \n" +
-                     "FROM\n" +
+                     " FROM\n" +
                      "  (\n" +
                      "   SELECT DISTINCT\n" +
                      "     \"content\".\"sourceref\" \"sourceref\"\n" +
@@ -345,23 +352,18 @@ public class BcsEtlCoreDataChecksSql {
                      "   , CAST(null AS varchar) \"te_opco\"\n" +
                      "   , CAST(null AS varchar) \"opco\"\n" +
                      "   , CAST(null AS varchar) \"resp_centre\"\n" +
-                     "   , CAST(null AS varchar) \"pmg\"\n" +
+                     "   , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
                      "   , CAST(null AS varchar) \"languagecode\"\n" +
                      "   , CAST(null AS boolean) \"electro_rights_indicator\"\n" +
                      "   , 'N' \"f_oa_journal_type\"\n" +
                      "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
                      "   , CAST(null AS varchar) \"subscription_type\"\n" +
-                     "   , \"modifiedon\" \"modifiedon\"\n" +
+                     "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
                      "   FROM\n" +
-                     "     (((\n" +
-                     "      SELECT\n" +
-                     "        \"seriesid\" \"seriesid\"\n" +
-                     "      , \"series\" \"title\"\n" +
-                     "      , \"max\"(\"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s')) \"modifiedon\"\n" +
-                     "      FROM\n" +
-                     "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                     "      GROUP BY \"seriesid\", \"series\"\n" +
-                     "   )  content\n" +
+                     "     ((((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
+                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((\"opcocode\".\"11icode\" = \"rc_pmg_co\".\"company\") AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg_co\".\"pmg\" AS integer))) AND (\"rc_pmg_co\".\"active_end_date\" IS NULL)))\n" +
+                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                      "   LEFT JOIN (\n" +
                      "      SELECT\n" +
                      "        \"man_status\".\"seriesid\" \"seriesid\"\n" +
@@ -369,10 +371,16 @@ public class BcsEtlCoreDataChecksSql {
                      "      FROM\n" +
                      "        \"man_status\"\n" +
                      "      GROUP BY \"man_status\".\"seriesid\"\n" +
+                     "UNION ALL       SELECT\n" +
+                     "        \"man_status\".\"mainseries\" \"seriesid\"\n" +
+                     "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
+                     "      FROM\n" +
+                     "        \"man_status\"\n" +
+                     "      GROUP BY \"man_status\".\"mainseries\"\n" +
                      "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                      "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                      ")  \"A\"\n" +
-                     "WHERE (\"A\".\"sourceref\" IS NOT NULL)and u_key in ('%s') order by u_key desc";
+                     "WHERE (\"A\".\"sourceref\" <> '')and u_key in ('%s') order by u_key desc";
 
     public static final String GET_WORK_PERS_INBOUND_DATA =
             "SELECT " +
