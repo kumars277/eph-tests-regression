@@ -652,8 +652,10 @@ public class APIDataSQL {
           + "where f_manifestation in ('%s')";
 
   public static final String SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID =
-      "select identifier as identifier, f_type as f_type, effective_start_date as effective_start_date "
-          + "from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s')";
+      "select identifier as identifier, f_type as f_type, effective_start_date as effective_start_date, " +
+              "effective_end_date as effective_end_date "
+          + "from semarchy_eph_mdm.gd_manifestation_identifier where identifier ='%s'" +
+              " and f_manifestation ='%s'";
 
   public static final String GET_GD_DATA_WORKIDENTIFIER_BY_WORKID =
       "SELECT F_EVENT as F_EVENT\n"

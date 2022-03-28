@@ -79,10 +79,7 @@ public class WorkIdentifiersApiObject {
                 break;
             }
         }
-
         Assert.assertTrue(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",identifierMatched);
-
-
     }
 
     private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122

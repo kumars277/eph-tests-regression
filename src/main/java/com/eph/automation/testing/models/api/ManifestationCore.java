@@ -69,7 +69,7 @@ public class ManifestationCore {
 
     if (identifiers != null) {
         for (ManifestationIdentifiersApiObject identif : identifiers) {
-            identif.compareWithDB();
+            identif.compareWithDB(manifestationId);
         }
         printLog("identifiers");
     }
