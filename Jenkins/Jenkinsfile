@@ -35,8 +35,8 @@ pipeline {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
-                        bat('clean test -Dcucumber.options="--tags @PFdebug" -e -X')
-                        
+                        bat('mvn clean test -Dcucumber.options="--tags @PFdebug" -e -X')
+
                     }
                 }
             }
