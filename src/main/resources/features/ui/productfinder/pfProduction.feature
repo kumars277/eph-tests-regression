@@ -34,7 +34,7 @@ Feature: Product Finder production smoke tests
       |PF|anerica                     |america                    |
       |PF|anrica                      |africa                     |
 
-  @PFProd @UI @PFRegressionSuite
+  @PFProd @UI @PFRegressionSuite @PFdebug
   Scenario Outline: Search and filter with Work Types
     Given user is on Product Finder search page
     And   Searches for given <keyword>

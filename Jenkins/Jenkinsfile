@@ -1,0 +1,70 @@
+pipeline {
+    agent { label 'master' }
+    triggers {
+        cron('0 17 * * 1-5')
+    }
+    environment {
+        JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
+        VATT_DECRYPTION_KEY = credentials('appian-vatt-decryption-key')
+        EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
+        EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
+        WINDOWS_AGENT = 'eph-windows-gui'
+    }
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        ansiColor('xterm')
+        timestamps()
+    }
+    stages {
+        stage ('Build Windows GUI Agent') {
+            steps {
+                build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Start')]
+            }
+        }
+        stage ('Initialise') {
+            agent { label env.WINDOWS_AGENT }
+            steps {
+               deleteDir()
+               checkout scm
+            }
+        }
+       
+        stage ('Run Tests') {
+            agent { label env.WINDOWS_AGENT }
+            steps {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
+                        bat('mvn clean compile exec:java -Dexec.cleanupDaemonThreads=false -Dcucumber.options="--tags @PFdebug"')
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            node(env.WINDOWS_AGENT) {
+                script {
+                    def htmlFiles
+                    dir ('Reports') { htmlFiles = findFiles glob: '*.html' }
+                    publishHTML([reportDir: 'Reports', reportFiles: htmlFiles[0].toString(), allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportName: 'EPH CK Appian Tests'])
+                    def zipFileName = 'ReportsZip\\' + htmlFiles[0].toString() + '.zip'
+                    zip([zipFile: zipFileName, archive: false, dir: 'Reports', glob: '*.html', overwrite: true])
+                }
+            }
+        }
+        failure {
+            node(env.WINDOWS_AGENT) {
+                emailext(subject: 'EPH CK Appian Tests - Failure', body: 'There are falures, please see the attached report.', attachmentsPattern: 'ReportsZip\\*.zip', from: "${env.EMAIL_FROM}", to: "${env.EMAIL_DIST_LIST}")
+            }
+        }
+        success {
+            node(env.WINDOWS_AGENT) {
+                emailext(subject: 'EPH CK Appian Tests - Success', body: 'All tests have passed, please see the attached report.', attachmentsPattern: 'ReportsZip\\*.zip', from: "${env.EMAIL_FROM}", to: "${env.EMAIL_DIST_LIST}")
+            }
+        }
+        cleanup {
+            build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
+        }
+    }
+}
