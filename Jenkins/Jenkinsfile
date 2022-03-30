@@ -1,15 +1,20 @@
 pipeline {
     agent { label 'master' }
     triggers {
-        cron('0 17 * * 1-5')
+        cron('0 12 * * 1-5')
     }
+    //3. Environment variables
     environment {
         JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
         VATT_DECRYPTION_KEY = credentials('appian-vatt-decryption-key')
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
         WINDOWS_AGENT = 'eph-windows-gui'
+        ENV = 'SIT'
     }
+
+
+
     options {
         disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -56,12 +61,21 @@ pipeline {
         }
         failure {
             node(env.WINDOWS_AGENT) {
-                emailext(subject: 'EPH CK Appian Tests - Failure', body: 'There are falures, please see the attached report.', attachmentsPattern: 'ReportsZip\\*.zip', from: "${env.EMAIL_FROM}", to: "${env.EMAIL_DIST_LIST}")
+                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
+                body: 'There are falures, please see the attached report.',
+                attachmentsPattern: 'ReportsZip\\*.zip',
+                from: "${env.EMAIL_FROM}",
+                to: "${env.EMAIL_DIST_LIST}")
             }
         }
         success {
+       // echo "Test succeeded"
             node(env.WINDOWS_AGENT) {
-                emailext(subject: 'EPH CK Appian Tests - Success', body: 'All tests have passed, please see the attached report.', attachmentsPattern: 'ReportsZip\\*.zip', from: "${env.EMAIL_FROM}", to: "${env.EMAIL_DIST_LIST}")
+                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
+                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
+                attachmentsPattern: 'ReportsZip\\*.zip',
+                from: "${env.EMAIL_FROM}",
+                to: "${env.EMAIL_DIST_LIST}")
             }
         }
         cleanup {
