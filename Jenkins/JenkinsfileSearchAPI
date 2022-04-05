@@ -42,22 +42,11 @@ pipeline {
         }
     }
     post {
-        always {
-            node(env.WINDOWS_AGENT) {
-                script {
-                    def htmlFiles
-                    dir ('target/cucumber-reports') { htmlFiles = findFiles glob: '*.html' }
-                    publishHTML([reportDir: 'target/cucumber-reports', reportFiles: htmlFiles[0].toString(), allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportName: 'EPH Search API Tests'])
-                    def zipFileName = 'ReportsZip\\' + htmlFiles[0].toString() + '.zip'
-                    zip([zipFile: zipFileName, archive: false, dir: 'target/cucumber-reports', glob: '*.html', overwrite: true])
-                }
-            }
-        }
         failure {
             node(env.WINDOWS_AGENT) {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} failed. To get more details, visit the build results page: ${BUILD_URL}.",
-                attachmentsPattern: 'ReportsZip\\*.zip',
+
                 from: "${env.EMAIL_FROM}",
                 to: "${env.EMAIL_DIST_LIST}")
             }
@@ -67,11 +56,11 @@ pipeline {
             node(env.WINDOWS_AGENT) {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
                 body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                attachmentsPattern: 'ReportsZip\\*.zip',
+
                 from: "${env.EMAIL_FROM}",
                 to: "${env.EMAIL_DIST_LIST}")
             }
         }
-        
+
     }
 }
