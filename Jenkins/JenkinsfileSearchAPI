@@ -1,8 +1,8 @@
 pipeline {
     agent { label 'master' }
-   // triggers {
-  //      cron('0 12 * * 1-5')
-   // }
+    triggers {
+        cron('0 07 * * 1-5')
+    }
     //3. Environment variables
     environment {
         JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
@@ -10,7 +10,7 @@ pipeline {
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
         WINDOWS_AGENT = 'eph-windows-gui'
-        ENV = 'SIT'
+        ENV = 'UAT'
     }
 
 

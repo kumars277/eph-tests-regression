@@ -591,7 +591,7 @@ else{
             {
             if ((fromCntr + sizeCntr) < 10000) {
               Log.info("intetended product not found, scanned " + (fromCntr + sizeCntr) + "records...");
-              Assert.assertTrue(getBreadcrumbMessage() + "- scenned " + (fromCntr + sizeCntr) + "records...",false);
+              Assert.assertTrue(getBreadcrumbMessage() +">"+apiResource+ "- scenned " + (fromCntr + sizeCntr) + " records...",false);
             }
             else //due to api limitation, we can not scan records beyond 10000. Hence abord scanning
             {

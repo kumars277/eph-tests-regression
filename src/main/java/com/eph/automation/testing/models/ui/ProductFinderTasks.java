@@ -41,7 +41,6 @@ public class ProductFinderTasks {
     public ProductFinderTasks(final TasksNew tasks, SpecificTasks specificTasks) {
         this.tasks = tasks;
         this.specificTasks = new SpecificTasks();
-
     }
 
     public static String searchResultId;
@@ -56,7 +55,6 @@ public class ProductFinderTasks {
     public Properties prop_editorial2 = new Properties();
     public List<Properties> list_people = new ArrayList<>();
     public Properties prop_links = new Properties();
-
 
     public void authentication_browser() throws AzureOauthTokenFetchingException, ExecutionException, InterruptedException {
         LocalStorage local = ((WebStorage) tasks.driver).getLocalStorage();
