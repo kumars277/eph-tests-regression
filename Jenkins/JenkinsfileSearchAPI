@@ -22,13 +22,8 @@ pipeline {
         timestamps()
     }
     stages {
-        stage ('Build Windows GUI Agent') {
-            steps {
-                build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Start')]
-            }
-        }
         stage ('Initialise') {
-            agent { label env.WINDOWS_AGENT }
+
             steps {
                deleteDir()
                checkout scm
@@ -36,7 +31,6 @@ pipeline {
         }
        
         stage ('Run Tests') {
-            agent { label env.WINDOWS_AGENT }
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
@@ -52,10 +46,10 @@ pipeline {
             node(env.WINDOWS_AGENT) {
                 script {
                     def htmlFiles
-                    dir ('Reports') { htmlFiles = findFiles glob: '*.html' }
-                    publishHTML([reportDir: 'Reports', reportFiles: htmlFiles[0].toString(), allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportName: 'EPH CK Appian Tests'])
+                    dir ('target/cucumber-reports') { htmlFiles = findFiles glob: '*.html' }
+                    publishHTML([reportDir: 'target/cucumber-reports', reportFiles: htmlFiles[0].toString(), allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportName: 'EPH Search API Tests'])
                     def zipFileName = 'ReportsZip\\' + htmlFiles[0].toString() + '.zip'
-                    zip([zipFile: zipFileName, archive: false, dir: 'Reports', glob: '*.html', overwrite: true])
+                    zip([zipFile: zipFileName, archive: false, dir: 'target/cucumber-reports', glob: '*.html', overwrite: true])
                 }
             }
         }
@@ -78,8 +72,6 @@ pipeline {
                 to: "${env.EMAIL_DIST_LIST}")
             }
         }
-        cleanup {
-            build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
-        }
+        
     }
 }
