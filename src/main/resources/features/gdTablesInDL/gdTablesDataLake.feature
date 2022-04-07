@@ -19,7 +19,6 @@ Feature:Validate data for GD Tables in DataLake from PostgreSQL
       | 5               |gd_manifestation_identifier |
       | 5               |gd_person                   |
       | 5               |gd_product                   |
-
       | 5               |gd_product_financial_attribs |
       | 5               |gd_product_identifier      |
       | 5               |gd_product_person_role      |
