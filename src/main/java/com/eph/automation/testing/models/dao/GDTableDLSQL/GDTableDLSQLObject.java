@@ -79,6 +79,214 @@ public class GDTableDLSQLObject {
     private String f_self_six;
     private String f_self_seven;
 
+    private String product_fin_attribs_id;
+    private String f_gl_company;
+    private String f_gl_cost_resp_centre;
+    private String f_gl_revenue_resp_centre;
+    private String f_product;
+
+    private String product_identifier_id;
+    private String product_person_role_id;
+    private String f_role;
+    private String f_person;
+    private String product_rel_pack_id;
+    private String allocation;
+    private String f_package_owner;
+    private String f_component;
+    private String f_relationship_type;
+
+    private String subject_area_id;
+    private String code;
+    private String f_parent_subject_area;
+    private String  work_access_model_id;
+    private String f_access_model;
+    private String work_business_model_id;
+    private String f_business_model;
+
+    private String work_fin_attribs_id;
+    private String work_hierarchy_id;
+    private String hierarchy_level;
+    private String f_parent_work_hierarchy;
+
+    private String work_identifier_id;
+    private String work_legal_owner_id;
+    private String f_legal_owner;
+    private String f_ownership_description;
+
+    private String work_person_role_id;
+    private String work_rel_pack_id;
+
+    private String work_relationship_id;
+    private String f_parent;
+    private String f_child;
+
+    private String work_subject_area_link_id;
+    private String f_subject_area;
+    private String pprimary;
+
+    private String wrk_wrk_hchy_link_id;
+    private String f_work_hierarchy;
+
+    private String work_id;
+    private String s_work_id;
+    private String work_title;
+    private String s_work_title;
+    private String work_sub_title;
+    private String s_work_sub_title;
+    private String work_short_title;
+    private String s_work_short_title;
+    private String electro_rights_indicator;
+    private String volume_name;
+    private String copyright_year;
+    private String edition_number;
+    private String planned_launch_date;
+    private String actual_launch_date;
+    private String planned_discontinue_date;
+    private String actual_discontinue_date;
+    private String f_pmc;
+    private String f_family;
+    private String f_imprint;
+    private String f_subscription_type;
+    private String f_llanguage;
+    private String f_self_eight;
+    private String f_self_nine;
+    private String f_self_ten;
+
+    public String gets_work_id() { return s_work_id; }
+    public void sets_work_id(String s_work_id) { this.s_work_id = s_work_id; }
+    public String getf_self_ten() { return f_self_ten; }
+    public void setf_self_ten(String f_self_ten) { this.f_self_ten = f_self_ten; }
+    public String getf_self_nine() { return f_self_nine; }
+    public void setf_self_nine(String f_self_nine) { this.f_self_nine = f_self_nine; }
+    public String getf_self_eight() { return f_self_eight; }
+    public void setf_self_eight(String f_self_eight) { this.f_self_eight = f_self_eight; }
+    public String getf_llanguage() { return f_llanguage; }
+    public void setf_llanguage(String f_llanguage) { this.f_llanguage = f_llanguage; }
+    public String getf_subscription_type() { return f_subscription_type; }
+    public void setf_subscription_type(String f_subscription_type) { this.f_subscription_type = f_subscription_type; }
+    public String getf_imprint() { return f_imprint; }
+    public void setf_imprint(String f_imprint) { this.f_imprint = f_imprint; }
+    public String getf_family() { return f_family; }
+    public void setf_family(String f_family) { this.f_family = f_family; }
+    public String getf_pmc() { return f_pmc; }
+    public void setf_pmc(String f_pmc) { this.f_pmc = f_pmc; }
+    public String getactual_discontinue_date() { return actual_discontinue_date; }
+    public void setactual_discontinue_date(String actual_discontinue_date) { this.actual_discontinue_date = actual_discontinue_date; }
+    public String getplanned_discontinue_date() { return planned_discontinue_date; }
+    public void setplanned_discontinue_date(String planned_discontinue_date) { this.planned_discontinue_date = planned_discontinue_date; }
+    public String getactual_launch_date() { return actual_launch_date; }
+    public void setactual_launch_date(String actual_launch_date) { this.actual_launch_date = actual_launch_date; }
+    public String getplanned_launch_date() { return planned_launch_date; }
+    public void setplanned_launch_date(String planned_launch_date) { this.planned_launch_date = planned_launch_date; }
+    public String getedition_number() { return edition_number; }
+    public void setedition_number(String edition_number) { this.edition_number = edition_number; }
+    public String getcopyright_year() { return copyright_year; }
+    public void setcopyright_year(String copyright_year) { this.copyright_year = copyright_year; }
+    public String getvolume_name() { return volume_name; }
+    public void setvolume_name(String volume_name) { this.volume_name = volume_name; }
+    public String getelectro_rights_indicator() { return electro_rights_indicator; }
+    public void setelectro_rights_indicator(String electro_rights_indicator) { this.electro_rights_indicator = electro_rights_indicator; }
+    public String gets_work_short_title() { return s_work_short_title; }
+    public void sets_work_short_title(String s_work_short_title) { this.s_work_short_title = s_work_short_title; }
+    public String getwork_short_title() { return work_short_title; }
+    public void setwork_short_title(String work_short_title) { this.work_short_title = work_short_title; }
+    public String gets_work_sub_title() { return s_work_sub_title; }
+    public void sets_work_sub_title(String s_work_sub_title) { this.s_work_sub_title = s_work_sub_title; }
+    public String getwork_sub_title() { return work_sub_title; }
+    public void setwork_sub_title(String work_sub_title) { this.work_sub_title = work_sub_title; }
+    public String gets_work_title() { return s_work_title; }
+    public void sets_work_title(String s_work_title) { this.s_work_title = s_work_title; }
+    public String getwork_title() { return work_title; }
+    public void setwork_title(String work_title) { this.work_title = work_title; }
+    public String getwork_id() { return work_id; }
+    public void setwork_id(String work_id) { this.work_id = work_id; }
+
+
+    public String getf_work_hierarchy() { return f_work_hierarchy; }
+    public void setf_work_hierarchy(String f_work_hierarchy) { this.f_work_hierarchy = f_work_hierarchy; }
+    public String getwrk_wrk_hchy_link_id() { return wrk_wrk_hchy_link_id; }
+    public void setwrk_wrk_hchy_link_id(String wrk_wrk_hchy_link_id) { this.wrk_wrk_hchy_link_id = wrk_wrk_hchy_link_id; }
+    public String getpprimary() { return pprimary; }
+    public void setpprimary(String pprimary) { this.pprimary = pprimary; }
+    public String getf_subject_area() { return f_subject_area; }
+    public void setf_subject_area(String f_subject_area) { this.f_subject_area = f_subject_area; }
+    public String getwork_subject_area_link_id() { return work_subject_area_link_id; }
+    public void setwork_subject_area_link_id(String work_subject_area_link_id) { this.work_subject_area_link_id = work_subject_area_link_id; }
+    public String getwork_relationship_id() { return work_relationship_id; }
+    public void setwork_relationship_id(String work_relationship_id) { this.work_relationship_id = work_relationship_id; }
+    public String getf_parent() { return f_parent; }
+    public void setf_parent(String f_parent) { this.f_parent = f_parent; }
+    public String getf_child() { return f_child; }
+    public void setf_child(String f_child) { this.f_child = f_child; }
+
+    public String getwork_rel_pack_id() { return work_rel_pack_id; }
+    public void setwork_rel_pack_id(String work_rel_pack_id) { this.work_rel_pack_id = work_rel_pack_id; }
+    public String getwork_person_role_id() { return work_person_role_id; }
+    public void setwork_person_role_id(String work_person_role_id) { this.work_person_role_id = work_person_role_id; }
+
+    public String getf_ownership_description() { return f_ownership_description; }
+    public void setf_ownership_description(String f_ownership_description) { this.f_ownership_description = f_ownership_description; }
+    public String getf_legal_owner() { return f_legal_owner; }
+    public void setf_legal_owner(String f_legal_owner) { this.f_legal_owner = f_legal_owner; }
+    public String getwork_legal_owner_id() { return work_legal_owner_id; }
+    public void setwork_legal_owner_id(String work_legal_owner_id) { this.work_legal_owner_id = work_legal_owner_id; }
+    public String getwork_identifier_id() { return work_identifier_id; }
+    public void setwork_identifier_id(String work_identifier_id) { this.work_identifier_id = work_identifier_id; }
+    public String getf_parent_work_hierarchy() { return f_parent_work_hierarchy; }
+    public void setf_parent_work_hierarchy(String f_parent_work_hierarchy) { this.f_parent_work_hierarchy = f_parent_work_hierarchy; }
+    public String gethierarchy_level() { return hierarchy_level; }
+    public void sethierarchy_level(String hierarchy_level) { this.hierarchy_level = hierarchy_level; }
+    public String getwork_hierarchy_id() { return work_hierarchy_id; }
+    public void setwork_hierarchy_id(String work_hierarchy_id) { this.work_hierarchy_id = work_hierarchy_id; }
+    public String getwork_fin_attribs_id() { return work_fin_attribs_id; }
+    public void setwork_fin_attribs_id(String work_fin_attribs_id) { this.work_fin_attribs_id = work_fin_attribs_id; }
+    public String getf_business_model() { return f_business_model; }
+    public void setf_business_model(String f_business_model) { this.f_business_model = f_business_model; }
+    public String getwork_business_model_id() { return work_business_model_id; }
+    public void setwork_business_model_id(String work_business_model_id) { this.work_business_model_id = work_business_model_id; }
+    public String getf_access_model() { return f_access_model; }
+    public void setf_access_model(String f_access_model) { this.f_access_model = f_access_model; }
+    public String getwork_access_model_id() { return work_access_model_id; }
+    public void setwork_access_model_id(String work_access_model_id) { this.work_access_model_id = work_access_model_id; }
+    public String getsubject_area_id() { return subject_area_id; }
+    public void setsubject_area_id(String subject_area_id) { this.subject_area_id = subject_area_id; }
+    public String getcode() { return code; }
+    public void setcode(String code) { this.code = code; }
+    public String getf_parent_subject_area() { return f_parent_subject_area; }
+    public void setf_parent_subject_area(String f_parent_subject_area) { this.f_parent_subject_area = f_parent_subject_area; }
+
+
+    public String getproduct_rel_pack_id() { return product_rel_pack_id; }
+    public void setproduct_rel_pack_id(String product_rel_pack_id) { this.product_rel_pack_id = product_rel_pack_id; }
+    public String getallocation() { return allocation; }
+    public void setallocation(String allocation) { this.allocation = allocation; }
+    public String getf_package_owner() { return f_package_owner; }
+    public void setf_package_owner(String f_package_owner) { this.f_package_owner = f_package_owner; }
+    public String getf_component() { return f_component; }
+    public void setf_component(String f_component) { this.f_component = f_component; }
+    public String getf_relationship_type() { return f_relationship_type; }
+    public void setf_relationship_type(String f_relationship_type) { this.f_relationship_type = f_relationship_type; }
+
+    public String getf_role() { return f_role; }
+    public void setf_role(String f_role) { this.f_role = f_role; }
+    public String getf_person() { return f_person; }
+    public void setf_person(String f_person) { this.f_person = f_person; }
+    public String getproduct_identifier_id() { return product_identifier_id; }
+    public void setproduct_identifier_id(String product_identifier_id) { this.product_identifier_id = product_identifier_id; }
+    public String getproduct_person_role_id() { return product_person_role_id; }
+    public void setproduct_person_role_id(String product_person_role_id) { this.product_person_role_id = product_person_role_id; }
+
+    public String getproduct_fin_attribs_id() { return product_fin_attribs_id; }
+    public void setproduct_fin_attribs_id(String product_fin_attribs_id) { this.product_fin_attribs_id = product_fin_attribs_id; }
+    public String getf_gl_company() { return f_gl_company; }
+    public void setf_gl_company(String f_gl_company) { this.f_gl_company = f_gl_company; }
+    public String getf_gl_cost_resp_centre() { return f_gl_cost_resp_centre; }
+    public void setf_gl_cost_resp_centre(String f_gl_cost_resp_centre) { this.f_gl_cost_resp_centre = f_gl_cost_resp_centre; }
+    public String getf_gl_revenue_resp_centre() { return f_gl_revenue_resp_centre; }
+    public void setf_gl_revenue_resp_centre(String f_gl_revenue_resp_centre) { this.f_gl_revenue_resp_centre = f_gl_revenue_resp_centre; }
+    public String getf_product() { return f_product; }
+    public void setf_product(String f_product) { this.f_product = f_product; }
+
     public String getf_self_seven() { return f_self_seven; }
     public void setf_self_seven(String f_self_seven) { this.f_self_seven = f_self_seven; }
     public String getf_self_six() { return f_self_six; }
