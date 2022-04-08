@@ -146,5 +146,88 @@ public class gdTableDLSQL {
     public static String GET_GD_WORK_HCHU_LINK_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_work_work_hchy_link where wrk_wrk_hchy_link_id in (%s) order by wrk_wrk_hchy_link_id desc";
     public static String GET_GD_WWORK_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_wwork where work_id in ('%s') order by work_id desc";
 
+    public static String GET_GD_LOV_ACCESS_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_access_model";
+    public static String GET_GD_LOV_ACCESS_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_access_model";
+
+    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_access_model";
+    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_access_model";
+
+    public static String GET_GD_LOV_CURRENCY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_currency";
+    public static String GET_GD_LOV_CURRENCY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_currency";
+
+    public static String GET_GD_LOV_ETAX_PROD_CODE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_etax_product_code";
+    public static String GET_GD_LOV_ETAX_PROD_CODE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_etax_product_code";
+
+    public static String GET_GD_LOV_EVENT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_event_type";
+    public static String GET_GD_LOV_EVENT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_event_type";
+
+    public static String GET_GD_LOV_GL_COMPANY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_company";
+    public static String GET_GD_LOV_GL_COMPANY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_company";
+
+    public static String GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent";
+    public static String GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_prod_seg_parent";
+
+    public static String GET_GD_LOV_GL_RESP_CENTER_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_resp_centre";
+    public static String GET_GD_LOV_GL_RESP_CENTER_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_resp_centre";
+
+    public static String GET_GD_LOV_IDENTIFIER_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_identifier_type";
+    public static String GET_GD_LOV_IDENTIFIER_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_identifier_type";
+
+    public static String GET_GD_LOV_IMPRINT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_imprint";
+    public static String GET_GD_LOV_IMPRINT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_imprint";
+
+    public static String GET_GD_LOV_LANGUAGE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_language";
+    public static String GET_GD_LOV_LANGUAGE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_language";
+
+    public static String GET_GD_LOV_LEGAL_OWNERSHIP_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_legal_ownership";
+    public static String GET_GD_LOV_LEGAL_OWNERSHIP_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_legal_ownership";
+
+    public static String GET_GD_LOV_MANIF_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_manif_status";
+    public static String GET_GD_LOV_MANIF_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_status";
+
+    public static String GET_GD_LOV_MANIF_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_manif_type";
+    public static String GET_GD_LOV_MANIF_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_type";
+    public static String GET_GD_LOV_METRIC_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_metric_type";
+    public static String GET_GD_LOV_METRIC_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_metric_type";
+    public static String GET_GD_LOV_ORIGIN_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_origin";
+    public static String GET_GD_LOV_ORIGIN_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_origin";
+    public static String GET_GD_LOV_OWNER_DESCRIP_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_owner_description";
+    public static String GET_GD_LOV_OWNER_DESCRIP_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_owner_description";
+
+    public static String GET_GD_LOV_PERSON_ROLE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_person_role";
+    public static String GET_GD_LOV_PERSON_ROLE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_person_role";
+    public static String GET_GD_LOV_PMC_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_pmc";
+    public static String GET_GD_LOV_PMC_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmc";
+    public static String GET_GD_LOV_PMG_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_pmg";
+    public static String GET_GD_LOV_PMG_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmg";
+    public static String GET_GD_LOV_PROD_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_product_status";
+    public static String GET_GD_LOV_PROD_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_status";
+    public static String GET_GD_LOV_PROD_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_product_type";
+    public static String GET_GD_LOV_PROD_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_type";
+    public static String GET_GD_LOV_RELATION_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_relationship_type";
+    public static String GET_GD_LOV_RELATION_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_relationship_type";
+    public static String GET_GD_LOV_REVENUE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_revenue_account";
+    public static String GET_GD_LOV_REVNUE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_account";
+
+    public static String GET_GD_LOV_REVENUE_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_revenue_model";
+    public static String GET_GD_LOV_REVNUE_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_model";
+
+    public static String GET_GD_LOV_SUBJ_AREA_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_subject_area_type";
+    public static String GET_GD_LOV_SUBJ_AREA_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subject_area_type";
+
+    public static String GET_GD_LOV_SUB_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_subscription_type";
+    public static String GET_GD_LOV_SUB_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subscription_type";
+
+    public static String GET_GD_LOV_WORK_HCHY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_hchy_type";
+    public static String GET_GD_LOV_WORK_HCHY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_hchy_type";
+
+    public static String GET_GD_LOV_WORK_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_status";
+    public static String GET_GD_LOV_WORK_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_status";
+
+    public static String GET_GD_LOV_WORK_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_type";
+    public static String GET_GD_LOV_WORK_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_type";
+
+    public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_workflow_source";
+    public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_workflow_source";
 }
 

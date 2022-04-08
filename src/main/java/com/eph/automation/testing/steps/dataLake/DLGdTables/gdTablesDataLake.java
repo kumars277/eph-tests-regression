@@ -114,8 +114,101 @@ public class gdTablesDataLake {
             case "gd_wwork":
                 sqlGdPostgresCounts = gdTableDLSQL.GET_WORK_SQL_COUNT;
                 break;
+            case "gd_x_lov_access_model":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_ACCESS_MODEL_COUNT;
+                break;
+            case "gd_x_lov_business_model":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_BUSINESS_MODEL_COUNT;
+                break;
+            case "gd_x_lov_currency":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_CURRENCY_COUNT;
+                break;
+            case "gd_x_lov_etax_product_code":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_ETAX_PROD_CODE_COUNT;
+                break;
+            case "gd_x_lov_event_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_EVENT_COUNT;
+                break;
+            case "gd_x_lov_gl_company":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_GL_COMPANY_COUNT;
+                break;
+            case "gd_x_lov_gl_prod_seg_parent":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT;
+                break;
+            case "gd_x_lov_gl_resp_centre":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_GL_RESP_CENTER_COUNT;
+                break;
+            case "gd_x_lov_identifier_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_IDENTIFIER_COUNT;
+                break;
+            case "gd_x_lov_imprint":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_IMPRINT_COUNT;
+                break;
+            case "gd_x_lov_language":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_LANGUAGE_COUNT;
+                break;
+            case "gd_x_lov_legal_ownership":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_LEGAL_OWNERSHIP_COUNT;
+                break;
+            case "gd_x_lov_manif_status":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_MANIF_STATUS_COUNT;
+                break;
+            case "gd_x_lov_manif_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_MANIF_TYPE_COUNT;
+                break;
+            case "gd_x_lov_metric_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_METRIC_TYPE_COUNT;
+                break;
+            case "gd_x_lov_origin":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_ORIGIN_COUNT;
+                break;
+            case "gd_x_lov_owner_description":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_OWNER_DESCRIP_COUNT;
+                break;
+            case "gd_x_lov_person_role":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_PERSON_ROLE_COUNT;
+                break;
+            case "gd_x_lov_pmc":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_PMC_COUNT;
+                break;
+            case "gd_x_lov_pmg":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_PMG_COUNT;
+                break;
+            case "gd_x_lov_product_status":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_PROD_STATUS_COUNT;
+                break;
+            case "gd_x_lov_product_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_PROD_TYPE_COUNT;
+                break;
+            case "gd_x_lov_relationship_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_RELATION_TYPE_COUNT;
+                break;
+            case "gd_x_lov_revenue_account":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_REVENUE_COUNT;
+                break;
+            case "gd_x_lov_revenue_model":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_REVENUE_MODEL_COUNT;
+                break;
+            case "gd_x_lov_subject_area_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_SUBJ_AREA_COUNT;
+                break;
+            case "gd_x_lov_subscription_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_SUB_COUNT;
+                break;
+            case "gd_x_lov_work_hchy_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_WORK_HCHY_COUNT;
+                break;
+            case "gd_x_lov_work_status":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_WORK_STATUS_COUNT;
+                break;
+            case "gd_x_lov_work_type":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_WORK_TYPE_COUNT;
+                break;
+            case "gd_x_lov_workflow_source":
+                sqlGdPostgresCounts = gdTableDLSQL.GET_GD_LOV_WORKFOW_SOURCE_COUNT;
+                break;
         }
-        // Log.info(sqlGdPostgresCounts);
+         Log.info(sqlGdPostgresCounts);
         List<Map<String, Object>> gdTableSqlCount = DBManager.getDBResultMap(sqlGdPostgresCounts, Constants.EPH_URL);
         gdTablePosgreSQLCount = ((Long) gdTableSqlCount.get(0).get("Source_Count")).intValue();
     }
@@ -202,10 +295,102 @@ public class gdTablesDataLake {
             case "gd_wwork":
                 sqlgdDLCount = gdTableDLSQL.GET_WORK_DL_COUNT;
                 break;
+            case "gd_x_lov_access_model":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_ACCESS_MODEL_COUNT_DL;
+                break;
+            case "gd_x_lov_business_model":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_BUSINESS_MODEL_COUNT_DL;
+                break;
+            case "gd_x_lov_currency":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_CURRENCY_COUNT_DL;
+                break;
+            case "gd_x_lov_etax_product_code":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_ETAX_PROD_CODE_COUNT_DL;
+                break;
+            case "gd_x_lov_event_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_EVENT_COUNT_DL;
+                break;
+            case "gd_x_lov_gl_company":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_GL_COMPANY_COUNT_DL;
+                break;
+            case "gd_x_lov_gl_prod_seg_parent":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT_DL;
+                break;
+            case "gd_x_lov_gl_resp_centre":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_GL_RESP_CENTER_COUNT_DL;
+                break;
+            case "gd_x_lov_identifier_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_IDENTIFIER_COUNT_DL;
+                break;
+            case "gd_x_lov_imprint":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_IMPRINT_COUNT_DL;
+                break;
+            case "gd_x_lov_language":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_LANGUAGE_COUNT_DL;
+                break;
+            case "gd_x_lov_legal_ownership":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_LEGAL_OWNERSHIP_COUNT_DL;
+                break;
+            case "gd_x_lov_manif_status":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_MANIF_STATUS_COUNT_DL;
+                break;
+            case "gd_x_lov_manif_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_MANIF_TYPE_COUNT_DL;
+                break;
+            case "gd_x_lov_metric_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_METRIC_TYPE_COUNT_DL;
+                break;
+            case "gd_x_lov_origin":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_ORIGIN_COUNT_DL;
+                break;
+            case "gd_x_lov_owner_description":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_OWNER_DESCRIP_COUNT_DL;
+                break;
+            case "gd_x_lov_person_role":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_PERSON_ROLE_COUNT_DL;
+                break;
+            case "gd_x_lov_pmc":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_PMC_COUNT_DL;
+                break;
+            case "gd_x_lov_pmg":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_PMG_COUNT_DL;
+                break;
+            case "gd_x_lov_product_status":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_PROD_STATUS_COUNT_DL;
+                break;
+            case "gd_x_lov_product_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_PROD_TYPE_COUNT_DL;
+                break;
+            case "gd_x_lov_relationship_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_RELATION_TYPE_COUNT_DL;
+                break;
+            case "gd_x_lov_revenue_account":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_REVNUE_COUNT_DL;
+                break;
+            case "gd_x_lov_revenue_model":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_REVNUE_MODEL_COUNT_DL;
+                break;
+            case "gd_x_lov_subject_area_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_SUBJ_AREA_COUNT_DL;
+                break;
+            case "gd_x_lov_subscription_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_SUB_COUNT_DL;
+                break;
+            case "gd_x_lov_work_hchy_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_WORK_HCHY_COUNT_DL;
+                break;
+            case "gd_x_lov_work_status":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_WORK_STATUS_COUNT_DL;
+                break;
+            case "gd_x_lov_work_type":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_WORK_TYPE_COUNT_DL;
+                break;
+            case "gd_x_lov_workflow_source":
+                sqlgdDLCount = gdTableDLSQL.GET_GD_LOV_WORKFOW_SOURCE_COUNT_DL;
+                break;
 
         }
-
-        //Log.info(sqlgdDLCount);
+        Log.info(sqlgdDLCount);
         List<Map<String, Object>> gdTableDLCount = DBManager.getDBResultMap(sqlgdDLCount, Constants.AWS_URL);
         gdDLCount = ((Long) gdTableDLCount.get(0).get("Target_Count")).intValue();
     }
@@ -214,7 +399,6 @@ public class gdTablesDataLake {
     public void compareGdandDLCounts(String srctable) {
         Log.info("The count for " + srctable + " in SQL => " + gdTablePosgreSQLCount + " and in Data_LAke  => " + gdDLCount);
         Assert.assertEquals("The counts are not equal for " + srctable + " in Posgres and DL ", gdDLCount, gdTablePosgreSQLCount);
-
     }
 
     @Given("^Get (.*) random ids of (.*) from the postgreSQL$")
