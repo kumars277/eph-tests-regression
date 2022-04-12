@@ -13,8 +13,6 @@ pipeline {
         ENV = 'UAT'
     }
 
-
-
     options {
         disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -23,7 +21,6 @@ pipeline {
     }
     stages {
         stage ('Initialise') {
-
             steps {
                deleteDir()
                checkout scm
@@ -35,7 +32,6 @@ pipeline {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
                         bat('mvn clean test -Dcucumber.options="--tags @searchAPI" -e -X')
-
                     }
                 }
             }

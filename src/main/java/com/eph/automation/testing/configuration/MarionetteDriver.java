@@ -4,6 +4,7 @@ import com.google.inject.Provider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.*;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 //import org.openqa.selenium.firefox.FirefoxOptions;
@@ -39,7 +40,13 @@ public class MarionetteDriver implements Provider<WebDriver>{
                 break;
         }
 
-        final WebDriver driver = new ChromeDriver();
+        ChromeOptions o= new ChromeOptions();
+        o.addArguments("incognito");
+     //   DesiredCapabilities c = DesiredCapabilities.chrome();
+     //   c.setCapability(ChromeOptions.CAPABILITY, o);
+
+        //final WebDriver driver = new ChromeDriver(c);
+        final WebDriver driver = new ChromeDriver(o);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         return driver;

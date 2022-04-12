@@ -23,24 +23,12 @@ public class TasksNew {
 
   @Inject
   public TasksNew() {
-    //  this.driver = new MarionetteDriver().getFirefoxDriver();
-    //   this.driver = new MarionetteDriver().getChromeDriver();
     this.driver = new WebDriverFactory().get();
     this.wait = new WebDriverWait(driver, 10);
     this.pageLoadTimeout = 30000;
-    loginWithScience();
-  }
+   }
 
   public void loginWithScience() {
-    String id = "svc-sciproductfinder";
-    String pwd = "";
-    String url = "https://sit.productfinder.elsevier.net";
-
-    if (!pwd.equalsIgnoreCase(""))
-      url = "https://" + id + ":" + pwd + "@" + "productfinder.elsevier.net";
-    else {
-      openPage(url);
-
       try {
         sendKeys(
             "NAME",
@@ -49,11 +37,10 @@ public class TasksNew {
         click("ID", ProductFinderConstants.nextButton);
         Thread.sleep(1000);
         waitUntilPageLoad();
-        Log.info("signed in to "+url);
+
       } catch (Exception e) {
         Log.error(e.getMessage());
       }
-    }
   }
 
   public WebElement findElementByText(final String text) {
@@ -77,11 +64,7 @@ public class TasksNew {
     }
   }
 
-  public String authenticateUri(String uri) {
-    String id = "";
-    String pwd = "";
-    return "https://" + id + ":" + pwd + "@" + uri;
-  }
+
 
   public void openPage(final String url) {
     driver.get(url);

@@ -102,7 +102,7 @@ public class ProductFinderUISteps {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
-
+        productFinderTasks.loginWithCredential();
         tasks.waitUntilPageLoad();
     }
 
@@ -121,7 +121,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-       // tasks.waitUntilPageLoad();
+       productFinderTasks.loginWithCredential();
     }
 
     @Then("^Search works by (.*)$")

@@ -46,23 +46,25 @@ public class WorkIdentifiersApiObject {
     public String getEffectiveEndDate() {return effectiveEndDate;}
     public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
 
-    private void getWorkIdentifierByID(String workidentifierID){
-        String sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_IDENTIFIER.replace("PARAM1", workidentifierID);
+    private void getWorkIdentifierByID(String workidentifierID,String workIdentType){
+        String sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_IDENTIFIER
+                .replace("PARAM1", workidentifierID)
+                .replace("PARAM2",workIdentType);
         DBworkIdentifier = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     public void compareWithDB(){
         //updated by Nishant @ 18 May 2021, EPHD-3122
-        Log.info("verifiying work identifiers... "+this.identifier);
-        getWorkIdentifierByID(this.identifier);
+        Log.info("verifiying work identifier... "+this.identifierType.get("code").toString()+" - "+this.identifier);
+        getWorkIdentifierByID(this.identifier,this.identifierType.get("code").toString());
         boolean identifierMatched = false;
         for(int i=0;i<this.DBworkIdentifier.size();i++)
         {
-            if(this.identifierType.get("code").toString().equalsIgnoreCase(this.DBworkIdentifier.get(i).getF_TYPE()))
-            {
+            //if(this.identifierType.get("code").toString().equalsIgnoreCase(this.DBworkIdentifier.get(i).getF_TYPE()))
+           // {
                 identifierMatched=true;
-
-                printLog("work identifier code");
+                printLog("work identifier ");
+                printLog("work identifier type");
 
                 Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
                 printLog("work identifier name");
@@ -77,7 +79,7 @@ public class WorkIdentifiersApiObject {
                 }
 
                 break;
-            }
+            //}
         }
         Assert.assertTrue(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",identifierMatched);
     }

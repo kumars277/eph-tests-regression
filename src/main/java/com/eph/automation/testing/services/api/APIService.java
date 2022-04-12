@@ -2,6 +2,7 @@ package com.eph.automation.testing.services.api;
 /** Created by GVLAYKOV updated by Nishant in Apr-May 2020 for data model changes */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
@@ -108,6 +109,7 @@ public class APIService {
               .when()
               .get(getParam);
 
+    Log.info(searchAPIEndPoint+getParam);
     DataQualityContext.api_response = response;
     Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
     return response;

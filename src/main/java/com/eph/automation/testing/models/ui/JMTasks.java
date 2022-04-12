@@ -24,7 +24,7 @@ public class JMTasks {
             default:jmRole_URI=Constants.JM_ROLE_URL_SIT;break;
         }
         jmRole_URI+=role;
-        tasks.openPage(tasks.authenticateUri(jmRole_URI.replace("https://","")));
+      //  tasks.openPage(tasks.authenticateUri(jmRole_URI.replace("https://","")));
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
         Log.info("\nrole URI accessed...");

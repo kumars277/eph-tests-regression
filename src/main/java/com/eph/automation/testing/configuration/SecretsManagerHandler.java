@@ -110,6 +110,14 @@ public class SecretsManagerHandler {
         }
     }
 
+    public static JSONObject getSMKeys(String secretName)
+    {
+        //by Nishant @12 Apr 2022 to access secrete manager keys
+      //  String secretName = "eph_svcUsers"; //svc4/svc4pwd
+        JSONObject object = getSecretKeyObj(region,secretName);
+        return object;
+    }
+
     public static JSONObject getSecretKeyObj(String region, String secretName) throws DecryptionFailureException, InternalServiceErrorException, InvalidParameterException, InvalidRequestException, ResourceNotFoundException {
         //created by Nishant @  29 Mar 2021
         JSONObject object = null;

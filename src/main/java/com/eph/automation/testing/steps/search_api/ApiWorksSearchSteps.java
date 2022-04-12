@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-//ids.clear();    ids.add("EPR-W-102V3N");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102SGK");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -768,7 +768,7 @@ public class ApiWorksSearchSteps {
         else
         {
           Log.info("intended work "+workId+" is missing in search result");
-          Assert.assertFalse("intended work "+workId+" is missing in search result",true);
+          Assert.assertFalse(getBreadcrumbMessage()+" intended work "+workId+" is missing in search result",true);
         }
 
       }

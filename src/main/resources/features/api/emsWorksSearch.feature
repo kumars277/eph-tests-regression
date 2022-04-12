@@ -17,12 +17,13 @@ Feature: Search API: Works
     Then   the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
+      |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
       |EPR_ID             |
       |TITLE              |
       |ISSN               |
 
-      |JOURNAL_ACRONYM    |
+
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id

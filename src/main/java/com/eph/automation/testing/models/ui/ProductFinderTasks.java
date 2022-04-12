@@ -1,6 +1,7 @@
 package com.eph.automation.testing.models.ui;
 //updated by Nishant @ 03032021 for UAT2 environment
 import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.Product;
 import com.eph.automation.testing.models.TestContext;
@@ -12,6 +13,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import cucumber.api.java.en.When;
 import gherkin.lexer.Da;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -75,6 +77,7 @@ public class ProductFinderTasks {
             case "UAT2":
                 HomePageAddress = Constants.PRODUCT_FINDER_EPH_UAT2_UI;
                 break;
+            case "PROD":
             default:
                 HomePageAddress = Constants.PRODUCT_FINDER_EPH_PROD_UI;
                 break;
@@ -83,10 +86,37 @@ public class ProductFinderTasks {
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("JF")) HomePageAddress += "journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
-        tasks.waitUntilPageLoad();
+        Log.info("\nhome page accessed...");
         Log.info(HomePageAddress);
-        Log.info("\nhome page loaded...");
     }
+
+
+    public void loginWithCredential() {
+        JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = svc.getAsString("svc4");
+        String pwd = svc.getAsString("svc4pwd");
+
+            try {
+               tasks.sendKeys(
+                        "NAME",
+                        ProductFinderConstants.loginByEmail,
+                        loginId + ProductFinderConstants.SCIENCE_ID);
+                tasks.click("ID", ProductFinderConstants.nextButton);
+                Thread.sleep(3000);
+
+               String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
+
+                tasks.driver.get("https://"+loginId+":"+pwd+"@"+driverCurrentUrl);
+
+                tasks.waitUntilPageLoad();
+                Log.info("signed in successful ");
+            } catch (Exception e) {
+                Log.error(e.getMessage());
+            }
+
+    }
+
+
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
         //updated by Nishant @ 13 Feb 2020
