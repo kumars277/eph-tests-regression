@@ -152,6 +152,58 @@ public class GDTableDLSQLObject {
     private String f_self_nine;
     private String f_self_ten;
 
+    private String l_description;
+    private String l_start_date;
+    private String l_end_date;
+    private String level_2_event;
+    private String level_3_event;
+    private String valid_at_work;
+    private String valid_at_manifestation;
+    private String valid_at_product;
+    private String valid_for_books;
+    private String valid_for_journals;
+    private String roll_up_ownership;
+    private String roll_up_status;
+    private String roll_up_type;
+    private String valid_for_digital_package;
+    private String parent_description;
+    private String child_description;
+
+    public String getparent_description() { return parent_description; }
+    public void setparent_description(String parent_description) { this.parent_description = parent_description; }
+    public String getchild_description() { return child_description; }
+    public void setchild_description(String child_description) { this.child_description = child_description; }
+    public String getvalid_for_digital_package() { return valid_for_digital_package; }
+    public void setvalid_for_digital_package(String valid_for_digital_package) { this.valid_for_digital_package = valid_for_digital_package; }
+    public String getroll_up_type() { return roll_up_type; }
+    public void setroll_up_type(String roll_up_type) { this.roll_up_type = roll_up_type; }
+    public String getroll_up_status() { return roll_up_status; }
+    public void setroll_up_status(String roll_up_status) { this.roll_up_status = roll_up_status; }
+    public String getroll_up_ownership() { return roll_up_ownership; }
+    public void setroll_up_ownership(String roll_up_ownership) { this.roll_up_ownership = roll_up_ownership; }
+    public String getvalid_at_work() { return valid_at_work; }
+    public void setvalid_at_work(String valid_at_work) { this.valid_at_work = valid_at_work; }
+    public String getvalid_at_manifestation() { return valid_at_manifestation; }
+    public void setvalid_at_manifestation(String valid_at_manifestation) { this.valid_at_manifestation = valid_at_manifestation; }
+    public String getvalid_at_product() { return valid_at_product; }
+    public void setvalid_at_product(String valid_at_product) { this.valid_at_product = valid_at_product; }
+    public String getvalid_for_books() { return valid_for_books; }
+    public void setvalid_for_books(String valid_for_books) { this.valid_for_books = valid_for_books; }
+    public String getvalid_for_journals() { return valid_for_journals; }
+    public void setvalid_for_journals(String valid_for_journals) { this.valid_for_journals = valid_for_journals; }
+
+    public String getl_description() { return l_description; }
+    public void setl_description(String l_description) { this.l_description = l_description; }
+    public String getl_start_date() { return l_start_date; }
+    public void setl_start_date(String l_start_date) { this.l_start_date = l_start_date; }
+    public String getl_end_date() { return l_end_date; }
+    public void setl_end_date(String l_end_date) { this.l_end_date = l_end_date; }
+    public String getlevel_2_event() { return level_2_event; }
+    public void setlevel_2_event(String level_2_event) { this.level_2_event = level_2_event; }
+    public String getlevel_3_event() { return level_3_event; }
+    public void setlevel_3_event(String level_3_event) { this.level_3_event = level_3_event; }
+
+
     public String gets_work_id() { return s_work_id; }
     public void sets_work_id(String s_work_id) { this.s_work_id = s_work_id; }
     public String getf_self_ten() { return f_self_ten; }

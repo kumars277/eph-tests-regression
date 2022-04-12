@@ -148,86 +148,208 @@ public class gdTableDLSQL {
 
     public static String GET_GD_LOV_ACCESS_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_access_model";
     public static String GET_GD_LOV_ACCESS_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_access_model";
+    public static String GET_GD_LOV_ACCESS_IDS = "select code from semarchy_eph_mdm.gd_x_lov_access_model order by random() limit %s";
+    public static String GET_GD_GD_LOV_ACCESS_MODEL_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_access_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_ACCESS_MODEL = "select * from semarchy_eph_mdm.gd_x_lov_access_model where code in ('%s') order by code desc";
 
-    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_access_model";
-    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_access_model";
+    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_business_model";
+    public static String GET_GD_LOV_BUSINESS_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_business_model";
+    public static String GET_GD_LOV_BUSINESS_IDS = "select code from semarchy_eph_mdm.gd_x_lov_business_model order by random() limit %s";
+    public static String GET_GD_GD_LOV_BUSINESS_MODEL_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_business_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_BUSINESS_MODEL = "select * from semarchy_eph_mdm.gd_x_lov_business_model where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_CURRENCY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_currency";
     public static String GET_GD_LOV_CURRENCY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_currency";
+    public static String GET_GD_LOV_CURRENCY_IDS = "select code from semarchy_eph_mdm.gd_x_lov_currency order by random() limit %s";
+    public static String GET_GD_GD_LOV_CURRENCY_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_currency where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_CURRENCY = "select * from semarchy_eph_mdm.gd_x_lov_currency where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_ETAX_PROD_CODE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_etax_product_code";
     public static String GET_GD_LOV_ETAX_PROD_CODE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_etax_product_code";
+    public static String GET_GD_LOV_ETAX_IDS = "select code from semarchy_eph_mdm.gd_x_lov_etax_product_code order by random() limit %s";
+    public static String GET_GD_GD_LOV_ETAX_PROD_CODE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_etax_product_code where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_ETAX_PROD_CODE = "select * from semarchy_eph_mdm.gd_x_lov_etax_product_code where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_EVENT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_event_type";
     public static String GET_GD_LOV_EVENT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_event_type";
+    public static String GET_GD_LOV_EVENT_IDS = "select code from semarchy_eph_mdm.gd_x_lov_event_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_EVENT_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_event_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_EVENT = "select * from semarchy_eph_mdm.gd_x_lov_event_type where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_GL_COMPANY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_company";
     public static String GET_GD_LOV_GL_COMPANY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_company";
+    public static String GET_GD_LOV_GL_COMPANY_IDS = "select code from semarchy_eph_mdm.gd_x_lov_gl_company order by random() limit %s";
+    public static String GET_GD_GD_LOV_GL_COMPANY_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_company where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_COMPANY = "select * from semarchy_eph_mdm.gd_x_lov_gl_company where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent";
     public static String GET_GD_LOV_GL_PROD_SEG_PARENT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_prod_seg_parent";
+    public static String GET_GD_LOV_GL_PROD_SEG_PARENT_IDS = "select code from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent order by random() limit %s";
+    public static String GET_GD_GD_LOV_GL_PROD_SEG_PARENT_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_prod_seg_parent where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_PROD_SEG_PARENT = "select * from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_GL_RESP_CENTER_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_gl_resp_centre";
     public static String GET_GD_LOV_GL_RESP_CENTER_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_resp_centre";
+    public static String GET_GD_LOV_GL_RESP_CENTER_IDS = "select code from semarchy_eph_mdm.gd_x_lov_gl_resp_centre order by random() limit %s";
+    public static String GET_GD_GD_LOV_GL_RESP_CENTER_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_gl_resp_centre where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_RESP_CENTER = "select * from semarchy_eph_mdm.gd_x_lov_gl_resp_centre where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_IDENTIFIER_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_identifier_type";
     public static String GET_GD_LOV_IDENTIFIER_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_identifier_type";
+    public static String GET_GD_LOV_IDENTIFIER_IDS = "select code from semarchy_eph_mdm.gd_x_lov_identifier_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_IDENTIFIER_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_identifier_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_IDENTIFIER = "select * from semarchy_eph_mdm.gd_x_lov_identifier_type where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_IMPRINT_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_imprint";
     public static String GET_GD_LOV_IMPRINT_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_imprint";
+    public static String GET_GD_LOV_IMPRINT_IDS = "select code from semarchy_eph_mdm.gd_x_lov_imprint order by random() limit %s";
+    public static String GET_GD_GD_LOV_IMPRINT_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_imprint where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_IMPRINT = "select * from semarchy_eph_mdm.gd_x_lov_imprint where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_LANGUAGE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_language";
     public static String GET_GD_LOV_LANGUAGE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_language";
+    public static String GET_GD_LOV_LANGUAGE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_language order by random() limit %s";
+    public static String GET_GD_GD_LOV_LANGUAGE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_language where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_LANGUAGE = "select * from semarchy_eph_mdm.gd_x_lov_language where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_LEGAL_OWNERSHIP_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_legal_ownership";
     public static String GET_GD_LOV_LEGAL_OWNERSHIP_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_legal_ownership";
+    public static String GET_GD_LOV_LEGALOWNER_IDS = "select code from semarchy_eph_mdm.gd_x_lov_legal_ownership order by random() limit %s";
+    public static String GET_GD_GD_LOV_LEGAL_OWNERSHIP_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_legal_ownership where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_LEGAL_OWNERSHIP = "select * from semarchy_eph_mdm.gd_x_lov_legal_ownership where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_MANIF_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_manif_status";
     public static String GET_GD_LOV_MANIF_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_status";
+    public static String GET_GD_LOV_MANIF_STATUS_IDS = "select code from semarchy_eph_mdm.gd_x_lov_manif_status order by random() limit %s";
+    public static String GET_GD_GD_LOV_MANIF_STATUS_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_MANIF_STATUS = "select * from semarchy_eph_mdm.gd_x_lov_manif_status where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_MANIF_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_manif_type";
     public static String GET_GD_LOV_MANIF_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_type";
+    public static String GET_GD_LOV_MANIF_TYPE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_manif_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_MANIF_TYPE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_manif_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_MANIF_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_manif_type where code in ('%s') order by code desc";
+
     public static String GET_GD_LOV_METRIC_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_metric_type";
     public static String GET_GD_LOV_METRIC_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_metric_type";
+    public static String GET_GD_LOV_METRIC_IDS = "select code from semarchy_eph_mdm.gd_x_lov_metric_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_METRIC_TYPE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_metric_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_METRIC_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_metric_type where code in ('%s') order by code desc";
+
     public static String GET_GD_LOV_ORIGIN_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_origin";
     public static String GET_GD_LOV_ORIGIN_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_origin";
+    public static String GET_GD_LOV_ORIGIN_IDS = "select code from semarchy_eph_mdm.gd_x_lov_origin order by random() limit %s";
+    public static String GET_GD_GD_LOV_ORIGIN_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_origin where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_ORIGIN = "select * from semarchy_eph_mdm.gd_x_lov_origin where code in ('%s') order by code desc";
+
+
     public static String GET_GD_LOV_OWNER_DESCRIP_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_owner_description";
     public static String GET_GD_LOV_OWNER_DESCRIP_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_owner_description";
+    public static String GET_GD_LOV_OWNER_DESCRIPTION_IDS = "select code from semarchy_eph_mdm.gd_x_lov_owner_description order by random() limit %s";
+    public static String GET_GD_GD_LOV_OWNER_DESCRIP_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_owner_description where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_OWNER_DESCRIP = "select * from semarchy_eph_mdm.gd_x_lov_owner_description where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_PERSON_ROLE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_person_role";
     public static String GET_GD_LOV_PERSON_ROLE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_person_role";
+    public static String GET_GD_LOV_PERSON_ROLE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_person_role order by random() limit %s";
+    public static String GET_GD_GD_LOV_PERSON_ROLE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_person_role where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PERSON_ROLE = "select * from semarchy_eph_mdm.gd_x_lov_person_role where code in ('%s') order by code desc";
+
+
     public static String GET_GD_LOV_PMC_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_pmc";
     public static String GET_GD_LOV_PMC_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmc";
+    public static String GET_GD_LOV_PMC_ROLE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_pmc order by random() limit %s";
+    public static String GET_GD_GD_LOV_PMC_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmc where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PMC= "select * from semarchy_eph_mdm.gd_x_lov_pmc where code in ('%s') order by code desc";
+
+
     public static String GET_GD_LOV_PMG_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_pmg";
     public static String GET_GD_LOV_PMG_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmg";
+    public static String GET_GD_LOV_PMG_ROLE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_pmg order by random() limit %s";
+    public static String GET_GD_GD_LOV_PMG_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_pmg where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PMG_ROLE = "select * from semarchy_eph_mdm.gd_x_lov_pmg where code in ('%s') order by code desc";
+
+
+
     public static String GET_GD_LOV_PROD_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_product_status";
     public static String GET_GD_LOV_PROD_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_status";
+    public static String GET_GD_LOV_PROD_STATUS_IDS = "select code from semarchy_eph_mdm.gd_x_lov_product_status order by random() limit %s";
+    public static String GET_GD_GD_LOV_PROD_STATUS_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PROD_STATUS = "select * from semarchy_eph_mdm.gd_x_lov_product_status where code in ('%s') order by code desc";
+
     public static String GET_GD_LOV_PROD_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_product_type";
     public static String GET_GD_LOV_PROD_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_type";
+    public static String GET_GD_LOV_PROD_TYPE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_product_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_PROD_TYPE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_product_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PROD_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_product_type where code in ('%s') order by code desc";
+
+
     public static String GET_GD_LOV_RELATION_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_relationship_type";
     public static String GET_GD_LOV_RELATION_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_relationship_type";
+    public static String GET_GD_LOV_RELATION_TYPE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_relationship_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_RELATION_TYPE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_relationship_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_RELATION_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_relationship_type where code in ('%s') order by code desc";
+
+
     public static String GET_GD_LOV_REVENUE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_revenue_account";
     public static String GET_GD_LOV_REVNUE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_account";
+    public static String GET_GD_LOV_REVNUE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_revenue_account order by random() limit %s";
+    public static String GET_GD_GD_LOV_REVENUE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_account where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_REVENUE = "select * from semarchy_eph_mdm.gd_x_lov_revenue_account where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_REVENUE_MODEL_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_revenue_model";
     public static String GET_GD_LOV_REVNUE_MODEL_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_model";
+    public static String GET_GD_LOV_REVNUE_MODEL_IDS = "select code from semarchy_eph_mdm.gd_x_lov_revenue_model order by random() limit %s";
+    public static String GET_GD_GD_LOV_REVENUE_MODEL_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_revenue_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_REVENUE_MODEL = "select * from semarchy_eph_mdm.gd_x_lov_revenue_model where code in ('%s') order by code desc";
 
     public static String GET_GD_LOV_SUBJ_AREA_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_subject_area_type";
     public static String GET_GD_LOV_SUBJ_AREA_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subject_area_type";
+    public static String GET_GD_LOV_SUBJ_AREA_IDS = "select code from semarchy_eph_mdm.gd_x_lov_subject_area_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_SUBJ_AREA_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subject_area_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_SUBJ_AREA = "select * from semarchy_eph_mdm.gd_x_lov_subject_area_type where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_SUB_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_subscription_type";
     public static String GET_GD_LOV_SUB_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subscription_type";
+    public static String GET_GD_LOV_SUB_IDS = "select code from semarchy_eph_mdm.gd_x_lov_subscription_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_SUB_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_subscription_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_SUB = "select * from semarchy_eph_mdm.gd_x_lov_subscription_type where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_WORK_HCHY_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_hchy_type";
     public static String GET_GD_LOV_WORK_HCHY_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_hchy_type";
+    public static String GET_GD_LOV_WORK_HCHY_IDS = "select code from semarchy_eph_mdm.gd_x_lov_work_hchy_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_WORK_HCHY_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_hchy_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_HCHY = "select * from semarchy_eph_mdm.gd_x_lov_work_hchy_type where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_WORK_STATUS_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_status";
     public static String GET_GD_LOV_WORK_STATUS_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_status";
+    public static String GET_GD_LOV_WORK_STATUS_IDS = "select code from semarchy_eph_mdm.gd_x_lov_work_status order by random() limit %s";
+    public static String GET_GD_GD_LOV_WORK_STATUS_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_STATUS = "select * from semarchy_eph_mdm.gd_x_lov_work_status where code in ('%s') order by code desc";
+
 
     public static String GET_GD_LOV_WORK_TYPE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_work_type";
     public static String GET_GD_LOV_WORK_TYPE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_type";
+    public static String GET_GD_LOV_WORK_TYPE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_work_type order by random() limit %s";
+    public static String GET_GD_GD_LOV_WORK_TYPE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_work_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_work_type where code in ('%s') order by code desc";
+
+
 
     public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_workflow_source";
     public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_workflow_source";
+    public static String GET_GD_LOV_WORKFOW_SOURCE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_workflow_source order by random() limit %s";
+    public static String GET_GD_GD_LOV_WORKFOW_SOURCE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_workflow_source where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORKFOW_SOURCE = "select * from semarchy_eph_mdm.gd_x_lov_workflow_source where code in ('%s') order by code desc";
+
 }
 
