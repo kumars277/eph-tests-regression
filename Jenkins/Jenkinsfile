@@ -61,8 +61,8 @@ pipeline {
         }
         failure {
             node(env.WINDOWS_AGENT) {
-                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
-               body: "Run ${JOB_NAME}-#${BUILD_NUMBER} failed. To get more details, visit the build results page: ${BUILD_URL}.",
+                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} Failure",
+               body: "Run ${JOB_NAME} - #${BUILD_NUMBER} Failed. \nTo get more details, please visit the build results page:\n ${BUILD_URL}.",
                 attachmentsPattern: 'ReportsZip\\*.zip',
                 from: "${env.EMAIL_FROM}",
                 to: "${env.EMAIL_DIST_LIST}")
@@ -71,8 +71,8 @@ pipeline {
         success {
        // echo "Test succeeded"
             node(env.WINDOWS_AGENT) {
-                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
-                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
+                emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} Success",
+                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. \nTo get more details, please visit the build results page:\n ${BUILD_URL}.",
                 attachmentsPattern: 'ReportsZip\\*.zip',
                 from: "${env.EMAIL_FROM}",
                 to: "${env.EMAIL_DIST_LIST}")

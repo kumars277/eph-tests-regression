@@ -806,6 +806,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
     @Then("^user is searching for \"([^\"]*)\"$")
     public void search_for_string(String searchString) throws InterruptedException {
+        Log.info("searching on page... ");
         productFinderTasks.searchFor(searchString);
         Thread.sleep(1000);
     }

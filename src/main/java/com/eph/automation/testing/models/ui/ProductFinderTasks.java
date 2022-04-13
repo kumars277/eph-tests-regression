@@ -109,6 +109,8 @@ public class ProductFinderTasks {
                 tasks.driver.get("https://"+loginId+":"+pwd+"@"+driverCurrentUrl);
 
                 tasks.waitUntilPageLoad();
+                Thread.sleep(3000);
+                Log.info(tasks.driver.getCurrentUrl());
                 Log.info("signed in successful ");
             } catch (Exception e) {
                 Log.error(e.getMessage());
@@ -153,6 +155,7 @@ public class ProductFinderTasks {
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();
             Thread.sleep(3000);
+            Log.info("page refreshed as search bar not available...");
         }
         Log.info("Searching " + searchID + " on " + DataQualityContext.uiUnderTest);
         tasks.clearText("XPATH", ProductFinderConstants.searchBar);
