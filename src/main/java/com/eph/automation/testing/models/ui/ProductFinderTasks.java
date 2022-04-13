@@ -92,9 +92,9 @@ public class ProductFinderTasks {
 
 
     public void loginWithCredential() {
-        JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
-        String loginId = svc.getAsString("svc4");
-        String pwd = svc.getAsString("svc4pwd");
+      //  JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = "svc-scielsoxfsem004";//svc.getAsString("svc4");
+        String pwd = "zwpLwaQ9FFm+uA9";//svc.getAsString("svc4pwd");
 
             try {
                tasks.sendKeys(
