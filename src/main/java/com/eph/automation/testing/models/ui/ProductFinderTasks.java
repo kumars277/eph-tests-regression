@@ -152,13 +152,14 @@ public class ProductFinderTasks {
     public void searchFor(final String searchID) throws InterruptedException {
         //updated by Nishant @ 14 May 2020
         //updated by Nishant @ 03 Jul 2020 for Journal Finder
-        Thread.sleep(10000);
-
+        Thread.sleep(15000);
+/*
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();
             Thread.sleep(10000);
             Log.info("page refreshed as search bar not available...");
         }
+        */
         Log.info("Searching " + searchID + " on " + DataQualityContext.uiUnderTest);
         tasks.clearText("XPATH", ProductFinderConstants.searchBar);
         tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
