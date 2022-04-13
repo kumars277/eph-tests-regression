@@ -157,6 +157,19 @@ public class ProductFinderTasks {
         Log.info("\n");
         Log.info(tasks.driver.getPageSource());
         Log.info("\n");
+        Log.info(tasks.driver.getCurrentUrl());
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");
+        Log.info("\n");Log.info("\n");
+
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();
             Thread.sleep(30000);
