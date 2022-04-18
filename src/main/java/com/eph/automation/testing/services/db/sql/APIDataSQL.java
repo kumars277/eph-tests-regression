@@ -755,6 +755,19 @@ public class APIDataSQL {
           + "f_person as F_PERSON,\n"
           + "f_event as F_EVENT"
           + " from semarchy_eph_mdm.gd_work_person_role where f_wwork='%s'";
+  // created by Nishant @ 18 Apr 2022
+  public static final String GET_GD_DATA_ACTIVE_WORKPERSON_BY_WORKID =
+          "Select "
+                  + "work_person_role_id as WORK_PERSON_ROLE_ID,\n"
+                  + "b_classname as B_CLASSNAME,\n"
+                  + "effective_start_date as EFFECTIVE_START_DATE,\n"
+                  + "effective_end_date as EFFECTIVE_END_DATE,\n"
+                  + "f_role as F_ROLE,\n"
+                  + "f_wwork as F_WWORK,\n"
+                  + "f_person as F_PERSON,\n"
+                  + "f_event as F_EVENT"
+                  + " from semarchy_eph_mdm.gd_work_person_role where effective_end_date is null" +
+                  " and f_wwork='%s'" ;
 
   public static final String GET_GD_DATA_PERSON_BY_PERSONID =
       "select "

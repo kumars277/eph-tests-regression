@@ -10,30 +10,31 @@ public class PersonWorkRoleDataObject {
     private String WORK_PERSON_ROLE_SOURCE_REF;
     private int PMX_PARTY_SOURCE_REF;
     private String PMX_WORK_SOURCE_REF;
-    private String F_ROLE;
-    private String START_DATE;
-    private String END_DATE;
-    private String UPDATED;
 
+//    private String START_DATE;
+//    private String END_DATE;
+  //  private String UPDATED;
+
+    private String F_ROLE;
     //SA_WORK_PERSON_ROLE
-    private String B_LOADID;
-    private String F_EVENT;
+//    private String B_LOADID;
+
     private String B_CLASSNAME;
     private String WORK_PERSON_ROLE_ID;
     private String EFFECTIVE_START_DATE;
     private String EFFECTIVE_END_DATE;
     private String F_WWORK;
     private String F_PERSON;
+    private String F_EVENT;
 
+  //  public String getSTART_DATE() {return START_DATE;}
+  //  public void setSTART_DATE(String START_DATE) {this.START_DATE = START_DATE;}
 
-    public String getSTART_DATE() {return START_DATE;}
-    public void setSTART_DATE(String START_DATE) {this.START_DATE = START_DATE;}
+ //   public String getEND_DATE() {return END_DATE;}
+ //   public void setEND_DATE(String END_DATE) {this.END_DATE = END_DATE;}
 
-    public String getEND_DATE() {return END_DATE;}
-    public void setEND_DATE(String END_DATE) {this.END_DATE = END_DATE;}
-
-    public String getUPDATED() {return UPDATED;}
-    public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
+  //  public String getUPDATED() {return UPDATED;}
+  //  public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
 
     public String getWORK_PERSON_ROLE_SOURCE_REF() {return WORK_PERSON_ROLE_SOURCE_REF;}
     public void setWORK_PERSON_ROLE_SOURCE_REF(String WORK_PERSON_ROLE_SOURCE_REF) {this.WORK_PERSON_ROLE_SOURCE_REF = WORK_PERSON_ROLE_SOURCE_REF;}
@@ -47,8 +48,8 @@ public class PersonWorkRoleDataObject {
     public String getF_ROLE() {return F_ROLE;}
     public void setF_ROLE(String f_ROLE) {F_ROLE = f_ROLE;}
 
-    public String getB_LOADID() {return B_LOADID;}
-    public void setB_LOADID(String b_LOADID) {B_LOADID = b_LOADID;}
+ //   public String getB_LOADID() {return B_LOADID;}
+ //   public void setB_LOADID(String b_LOADID) {B_LOADID = b_LOADID;}
 
     public String getF_EVENT() {return F_EVENT;}
     public void setF_EVENT(String f_EVENT) {F_EVENT = f_EVENT;}
@@ -80,7 +81,7 @@ public class PersonWorkRoleDataObject {
                 Objects.equals(PMX_PARTY_SOURCE_REF, that.PMX_PARTY_SOURCE_REF) &&
                 Objects.equals(PMX_WORK_SOURCE_REF, that.PMX_WORK_SOURCE_REF) &&
                 Objects.equals(F_ROLE, that.F_ROLE) &&
-                Objects.equals(B_LOADID, that.B_LOADID) &&
+          //      Objects.equals(B_LOADID, that.B_LOADID) &&
                 Objects.equals(F_EVENT, that.F_EVENT) &&
                 Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
                 Objects.equals(WORK_PERSON_ROLE_ID, that.WORK_PERSON_ROLE_ID) &&
@@ -97,7 +98,7 @@ public class PersonWorkRoleDataObject {
                 ", PMX_PARTY_SOURCE_REF='" + PMX_PARTY_SOURCE_REF + '\'' +
                 ", PMX_WORK_SOURCE_REF='" + PMX_WORK_SOURCE_REF + '\'' +
                 ", F_ROLE='" + F_ROLE + '\'' +
-                ", B_LOADID='" + B_LOADID + '\'' +
+            //    ", B_LOADID='" + B_LOADID + '\'' +
                 ", F_EVENT='" + F_EVENT + '\'' +
                 ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
                 ", WORK_PERSON_ROLE_ID='" + WORK_PERSON_ROLE_ID + '\'' +

@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102SGK");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102R42");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -571,7 +571,7 @@ public class ApiWorksSearchSteps {
           shouldResultOnTop = true;break;
         case "WORK_PERSONS_FULLNAME":
           // implemented by Nishant @ 24 Apr 2020
-          getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+          getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID(),"all");
           getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
           searchOption =DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                   + " "
@@ -721,7 +721,7 @@ public class ApiWorksSearchSteps {
     for (int i = 0; i < ids.size(); i++) {
       String resourceString = "";
       String workId = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
-      getWorkPersonRoleByWorkId(workId);
+      getWorkPersonRoleByWorkId(workId,"all");
       getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
 
       Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
@@ -735,7 +735,11 @@ public class ApiWorksSearchSteps {
           resourceString += activeWorkTypeStatus;
           returnedWorks = apiFun.workByParam_Iterative("personName",resourceString,i);    break;
 
-        case PER_FULLNAME_CURRENT:  resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
+        case PER_FULLNAME_CURRENT:
+          getWorkPersonRoleByWorkId(workId,"ActivePersonOnly");
+          getPersonDataByPersonId(DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+
+          resourceString = DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME()
                  + " "+ DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
           dbCount =getNumberOfWorksByPerson(personSearchOption,DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME(),
                   DataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME());
@@ -1142,8 +1146,14 @@ public class ApiWorksSearchSteps {
   }
 
   // created by Nishant @ 24 Apr 2020
-  private static void getWorkPersonRoleByWorkId(String workId) {
-    sql = String.format(APIDataSQL.GET_GD_DATA_WORKPERSON_BY_WORKID, workId);
+  private static void getWorkPersonRoleByWorkId(String workId,String personType) {
+
+    if(personType.equalsIgnoreCase("ActivePersonOnly"))
+    {
+      sql = String.format(APIDataSQL.GET_GD_DATA_ACTIVE_WORKPERSON_BY_WORKID, workId);
+    } else {
+      sql = String.format(APIDataSQL.GET_GD_DATA_WORKPERSON_BY_WORKID, workId);
+    }
     DataQualityContext.personWorkRoleDataObjectsFromEPHGD =
             DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
