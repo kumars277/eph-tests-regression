@@ -1065,7 +1065,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jfs.availability_start_date\n" +
                     ", jfs.availability_status\n" +
                     ", jfs.delete_flag\n" +
-                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('EPR-10JYD5')" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')" +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
                     "availability_format,delta_answer_code_us,delete_flag,source,application_name,last_updated_date desc";
 
@@ -1082,7 +1082,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",availability_start_date as availability_start_date" +
                     ",availability_status as availability_status" +
                     ",delete_flag as delete_flag" +
-                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('EPR-10JYD5') " +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('%s') " +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
                     "availability_format,delta_answer_code_us,delete_flag,source,application_name,last_updated_date desc";
 
