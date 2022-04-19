@@ -9,9 +9,14 @@ import com.eph.automation.testing.helper.Log;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
@@ -41,6 +46,33 @@ public class TasksNew {
       } catch (Exception e) {
         Log.error(e.getMessage());
       }
+  }
+
+  public void sendCredential(String user, String pwd)
+  {
+
+
+    //parent window handle id
+    String window_before = driver.getWindowHandle();
+    Log.info(window_before);
+    Set<String> w = driver.getWindowHandles();
+
+// iterate handles
+    Iterator<String> i = w.iterator();
+    //child window handle id
+    String child = i.next();
+    Log.info(child);
+
+    // child window switch
+    driver.switchTo().window(child);
+
+    Actions actionProvider  = new Actions(driver);
+    actionProvider .sendKeys(user).build().perform();
+    actionProvider.sendKeys(Keys.TAB).build().perform();
+    actionProvider .sendKeys(pwd).perform();
+    actionProvider .sendKeys(Keys.ENTER).perform();
+   // builder.keyDown(Keys.TAB).perform();
+
   }
 
   public WebElement findElementByText(final String text) {

@@ -17,6 +17,7 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
@@ -105,11 +106,21 @@ public class ProductFinderTasks {
                 Thread.sleep(3000);
 
                String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
+               // tasks.sendCredential(loginId,pwd);
+              //  tasks.driver.get("https://"+loginId+":"+pwd+"@federation.reedelsevier.com/basic_auth");
+               String authUrl = "https://"+loginId+":"+pwd+"@"+driverCurrentUrl;
+               // tasks.driver.get();
+                tasks.driver.navigate().to(authUrl);
+                String text = tasks.driver.findElement(By.className("product-header")).getText();
+                Assert.assertTrue("Basic Authentication failed",text.contains("Product Finder"));
 
-                tasks.driver.get("https://"+loginId+":"+pwd+"@"+driverCurrentUrl);
+
+                //JavascriptExecutor jse = (JavascriptExecutor)tasks.driver;
+                //jse.executeScript("browserstack_executor: {\"action\": \"dismissBasicAuth\",\"arguments\": {\"timeout\": \"5000\"}}");
+                //jse.executeScript("browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\""+loginId+"\", \"password\": \""+pwd+"\", \"timeout\": \"5000\"}}");
 
                 tasks.waitUntilPageLoad();
-                Thread.sleep(10000);
+                Thread.sleep(5000);
                 Log.info(tasks.driver.getCurrentUrl());
                 Log.info("signed in successful ");
             } catch (Exception e) {
