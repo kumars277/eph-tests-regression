@@ -14,6 +14,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.nio.file.WatchEvent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,14 @@ public class TasksNew {
 
   public void sendCredential(String user, String pwd)
   {
+//created by Nishant @ 19 Apr 2022 for PF jenkins login
 
+    //  String text = tasks.driver.findElement(By.className("product-header")).getText();
+    //  Assert.assertTrue("Basic Authentication failed",text.contains("Product Finder"));
+
+    //JavascriptExecutor jse = (JavascriptExecutor)tasks.driver;
+    //jse.executeScript("browserstack_executor: {\"action\": \"dismissBasicAuth\",\"arguments\": {\"timeout\": \"5000\"}}");
+    //jse.executeScript("browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\""+loginId+"\", \"password\": \""+pwd+"\", \"timeout\": \"5000\"}}");
 
     //parent window handle id
     String window_before = driver.getWindowHandle();
@@ -73,6 +81,17 @@ public class TasksNew {
     actionProvider .sendKeys(Keys.ENTER).perform();
    // builder.keyDown(Keys.TAB).perform();
 
+  }
+
+  public void signIntoYourOrganisation(String id, String pwd) throws InterruptedException {
+    //created by Nishant @ 19 Apr 2022
+    WebElement userAccount = driver.findElement(By.xpath("//input[@id='userNameInput']"));
+    WebElement password = driver.findElement(By.xpath("//input[@id = 'passwordInput']"));
+    WebElement btn_signIn = driver.findElement(By.xpath("//*[@id = 'submitButton']"));
+    password.sendKeys(pwd);
+    btn_signIn.click();
+    waitUntilPageLoad();
+    Log.info("sign in to your organisation funtion called");
   }
 
   public WebElement findElementByText(final String text) {

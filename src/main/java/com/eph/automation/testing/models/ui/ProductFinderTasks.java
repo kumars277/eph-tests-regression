@@ -105,33 +105,27 @@ public class ProductFinderTasks {
                 tasks.click("ID", ProductFinderConstants.nextButton);
                 Thread.sleep(3000);
 
-               String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
-               // tasks.sendCredential(loginId,pwd);
-              //  tasks.driver.get("https://"+loginId+":"+pwd+"@federation.reedelsevier.com/basic_auth");
-               String authUrl = "https://"+loginId+":"+pwd+"@"+driverCurrentUrl;
+               //String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
+               //String authUrl = "https://"+loginId+":"+pwd+"@"+driverCurrentUrl;
 
-                tasks.driver.navigate().to(authUrl);
-                Thread.sleep(5000);
-                Log.info(tasks.driver.getCurrentUrl());
-
-
-                tasks.driver.get(authUrl);
-                Thread.sleep(5000);
-                Log.info(tasks.driver.getCurrentUrl());
-
-              //  String text = tasks.driver.findElement(By.className("product-header")).getText();
-              //  Assert.assertTrue("Basic Authentication failed",text.contains("Product Finder"));
-
-                //JavascriptExecutor jse = (JavascriptExecutor)tasks.driver;
-                //jse.executeScript("browserstack_executor: {\"action\": \"dismissBasicAuth\",\"arguments\": {\"timeout\": \"5000\"}}");
-                //jse.executeScript("browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\""+loginId+"\", \"password\": \""+pwd+"\", \"timeout\": \"5000\"}}");
-
+                tasks.driver.get("https://"+loginId+":"+pwd+"@"+tasks.driver.getCurrentUrl().split("//")[1]);
                 tasks.waitUntilPageLoad();
-                Thread.sleep(5000);
-                Log.info(tasks.driver.getCurrentUrl());
+                Thread.sleep(3000);
+                if(!tasks.driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+                {
+                    tasks.signIntoYourOrganisation(loginId,pwd);
+                }
 
+                Thread.sleep(3000);
 
+                if(tasks.driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+                {
                 Log.info("signed in successful ");
+                }
+                else {
+                    Log.info("sign in issue for below link");
+                    tasks.driver.getCurrentUrl();
+                }
             } catch (Exception e) {
                 Log.error(e.getMessage());
             }
