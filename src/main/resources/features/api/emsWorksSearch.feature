@@ -17,10 +17,11 @@ Feature: Search API: Works
     Then   the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
+      |TITLE              |
       |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
       |EPR_ID             |
-      |TITLE              |
+
       |ISSN               |
 
 

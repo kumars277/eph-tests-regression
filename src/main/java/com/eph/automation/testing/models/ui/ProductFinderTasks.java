@@ -93,9 +93,9 @@ public class ProductFinderTasks {
 
 
     public void loginWithCredential() {
-      //  JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
-        String loginId = "svc-scielsoxfsem004";//svc.getAsString("svc4");
-        String pwd = "zwpLwaQ9FFm+uA9";//svc.getAsString("svc4pwd");
+       JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = svc.getAsString("svc4");
+        String pwd = svc.getAsString("svc4pwd");
 
             try {
                tasks.sendKeys(
@@ -105,10 +105,7 @@ public class ProductFinderTasks {
                 tasks.click("ID", ProductFinderConstants.nextButton);
                 Thread.sleep(3000);
 
-               //String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
-               //String authUrl = "https://"+loginId+":"+pwd+"@"+driverCurrentUrl;
-
-                tasks.driver.get("https://"+loginId+":"+pwd+"@"+tasks.driver.getCurrentUrl().split("//")[1]);
+              tasks.driver.get("https://"+loginId+":"+pwd+"@"+tasks.driver.getCurrentUrl().split("//")[1]);
                 tasks.waitUntilPageLoad();
                 Thread.sleep(3000);
                 if(!tasks.driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
@@ -166,23 +163,6 @@ public class ProductFinderTasks {
     public void searchFor(final String searchID) throws InterruptedException {
         //updated by Nishant @ 14 May 2020
         //updated by Nishant @ 03 Jul 2020 for Journal Finder
-        Thread.sleep(15000);
-        Log.info("after 15 sec from accessing the page");
-        Log.info("\n");
-        Log.info(tasks.driver.getPageSource());
-        Log.info("\n");
-        Log.info(tasks.driver.getCurrentUrl());
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");Log.info("\n");
 
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();

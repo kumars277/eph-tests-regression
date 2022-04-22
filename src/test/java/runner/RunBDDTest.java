@@ -19,7 +19,4 @@ import org.junit.runner.RunWith;
         tags = {"@PFdebug"}
         )
 
-public class RunBDDTest {
-    public RunBDDTest() {
-    }
-}
+public class RunBDDTest {  public RunBDDTest() { }}

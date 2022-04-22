@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102R42");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102VTR");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -626,7 +626,7 @@ public class ApiWorksSearchSteps {
       Boolean shouldResultOnTop = false;
       switch (searchType) {
         case "EPR_ID":              resourceString = workId; shouldResultOnTop=true;         break;
-        case "TITLE":               resourceString = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE();
+        case "TITLE":               resourceString = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE().replace("&","%26");
                                       shouldResultOnTop=true;break;
 
         case "JOURNAL_ACRONYM":     getWorkIdentifiersByWorkID(workId);
