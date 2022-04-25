@@ -20,7 +20,7 @@ public class SDBooksDataChecksSQL {
                     "FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part src\n" +
                     "LEFT OUTER JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v crf\n" +
                     " ON src.unformatted_isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Work'\n" +
-                    " WHERE crf.epr is not null) where inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part) order by rand() limit '%s'";
+                    " WHERE crf.epr is not null) where inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part) order by rand() limit %s";
 
 
     public static final String GET_REC_URL_INBOUND =
