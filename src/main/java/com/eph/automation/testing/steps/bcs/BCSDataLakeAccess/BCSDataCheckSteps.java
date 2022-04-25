@@ -3617,8 +3617,8 @@ public class BCSDataCheckSteps {
                     Log.info("stg_current_content_series Records:");
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
-                    String[] content_series = {"getMetadeleted", "getMetamodifiedon", "getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
-                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getSeriesid","getShorttitle",
+                    String[] content_series = {"getMetadeleted", "getMetamodifiedon","getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
+                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getShorttitle",
                     "getPiidack","getOwnership","getDeltype","getNumbered","getBibliographicserial","getMainseries","getEditionid"};
 
                     for (String strTemp : content_series) {
@@ -3678,7 +3678,7 @@ public class BCSDataCheckSteps {
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
 
-                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getSourceref", "getNotes", "getCompanygroup"};
+                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getNotes", "getCompanygroup"};
                     for (String strTemp : originatornotes_series) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
