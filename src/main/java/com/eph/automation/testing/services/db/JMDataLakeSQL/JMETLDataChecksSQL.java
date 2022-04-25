@@ -1096,7 +1096,7 @@ public class JMETLDataChecksSQL {
             "         mu1.scenario_name, mu1.scenario_code, mu1.upsert, mu1.w0_journal_number, mu1.w0_eph_work_id,\n" +
             "         mu1.m0_eph_manifestation_id, m2.eph_manifestation_id, mu1.m0_issn, m2.issn, m2.notified_date,\n" +
             "         w1.eph_work_id, m2.eph_manifestation_id\n" +
-            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, " +
+            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc,eph_manifestation_id desc,identifier_new desc, " +
             "effective_start_date desc, notified_date desc";
 
     public static String GET_PRODUCT_PART1_QUERY ="select * from \n" +
@@ -2225,7 +2225,7 @@ public class JMETLDataChecksSQL {
     public static String GET_WORK_SUBJECT_AREA_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_subject_area_dq_v where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id";
     public static String GET_MANIFESTATION_UPDATES1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_updates1_v where w0_chronicle_id in (%s) order by w0_chronicle_id desc,m0_notified_date desc";
     public static String GET_MANIFESTATION_IDENTIFIER ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_identifier_dq_v where jm_source_ref_new in ('%s') " +
-            "order by jm_source_ref_new desc, eph_work_id desc,effective_start_date desc, notified_date desc";
+            "order by jm_source_ref_new desc, eph_work_id desc,eph_manifestation_id desc,identifier_new desc,effective_start_date desc, notified_date desc";
     public static String GET_PRODUCT_PART1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v " +
             "where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
     public static String GET_PRODUCT_INSERTS ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v where jm_source_reference in ('%s') " +

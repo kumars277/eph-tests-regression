@@ -3470,6 +3470,7 @@ public class BCSDataCheckSteps {
 
         //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
         setBreadcrumbMessage(Ids.toString());
+        Log.info(sql);
     }
 
     @When("Get the data records from initial ingest book series for (.*)")
@@ -3517,6 +3518,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
                 break;
         }
+        Log.info(sql);
 
     }
 
@@ -3567,6 +3569,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
                 break;
             }
+            Log.info(sql);
     }
 
     @And("Compare the records for the initial ingest book series and current table book series (.*)")
