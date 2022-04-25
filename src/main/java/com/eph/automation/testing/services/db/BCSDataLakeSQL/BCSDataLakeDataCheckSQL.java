@@ -1151,7 +1151,7 @@ public class BCSDataLakeDataCheckSQL {
                             ",mainseries as mainseries" +
                             ",editionid as editionid " +
                             " from" +
-                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series where sourceref in ('%s') order by sourceref,seriescode,editionid desc\n";
+                            " bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content_series where sourceref in ('SERI-%s') order by sourceref,seriescode,editionid desc\n";
 
             public static String getInitialIngestDataFor_stg_current_originatoraddress_series_rec =
                     "select metadeleted as metadeleted\n" +
