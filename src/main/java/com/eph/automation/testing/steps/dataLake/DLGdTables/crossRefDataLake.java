@@ -132,6 +132,11 @@ public class crossRefDataLake {
                 List<Map<?, ?>> randomWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomWorkIds.stream().map(m -> (String) m.get("work_id")).map(String::valueOf).collect(Collectors.toList());
                 break;
+            case "eph_identifier_cross_reference":
+                sql = String.format(crossRefDLSQL.GET_IDENTIFIER, numberOfRecords);
+                List<Map<?, ?>> randomIdentifiersIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomIdentifiersIds.stream().map(m -> (String) m.get("identifier")).map(String::valueOf).collect(Collectors.toList());
+                break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
@@ -539,4 +544,59 @@ public class crossRefDataLake {
         Assert.assertEquals("The counts are not equal for prod,manif and work Identifiers and eph_identifier_cross_reference", gdWorkMAnifProdIdentifierSQLCount, IdentifierCrossRefSQLCount);
     }
 
+
+    @When("^We get the records from the work,manif and product identifiers")
+    public void getRecfromGdTableIdentifiers() {
+        Log.info("We get the records from GD table work, manif and prod identifiers..");
+                sql = String.format(crossRefDLSQL.GET_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        GDTablesDLSQLContext.recordsFromGDTableIdentifiers = DBManager.getDBResultAsBeanList(sql, GDTableDLSQLObject.class, Constants.AWS_URL);
+    }
+
+    @When("^Get the records from (.*)")
+    public void getRecfrom(String table) {
+        Log.info("We get the records from "+table);
+        sql = String.format(crossRefDLSQL.GET_CROSS_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        GDTablesDLSQLContext.recordsFromCrossRefIdentifier = DBManager.getDBResultAsBeanList(sql, GDTableDLSQLObject.class, Constants.AWS_URL);
+    }
+
+
+    @And("^Compare the records of work,manif and product identifiers with (.*)$")
+    public void compareGDAndCrossRefRecs(String SourceTable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (GDTablesDLSQLContext.recordsFromGDTableIdentifiers.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare Records for " + SourceTable);
+            for (int i = 0; i < GDTablesDLSQLContext.recordsFromGDTableIdentifiers.size(); i++) {
+                GDTablesDLSQLContext.recordsFromGDTableIdentifiers.sort(Comparator.comparing(GDTableDLSQLObject::getidentifier)); //sort data in the lists
+                GDTablesDLSQLContext.recordsFromCrossRefIdentifier.sort(Comparator.comparing(GDTableDLSQLObject::getidentifier));
+                String[] manif = {"getidentifier", "getidentifier_type", "getrecord_level", "getepr", "getproduct_type", "getmanifestation_type"
+                        , "getwork_type"};
+                for (String strTemp : manif) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    GDTableDLSQLObject objectToCompare1 = GDTablesDLSQLContext.recordsFromGDTableIdentifiers.get(i);
+                    GDTableDLSQLObject objectToCompare2 = GDTablesDLSQLContext.recordsFromCrossRefIdentifier.get(i);
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
+                    Log.info("identifier => " + GDTablesDLSQLContext.recordsFromGDTableIdentifiers.get(i).getidentifier() +
+                            " " + strTemp + " => GD Tables=" + method.invoke(objectToCompare1) +
+                            " " + strTemp + " cross_ref_identifier=" + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) +
+                                        " is missing/not found in " + SourceTable + " for: " + GDTablesDLSQLContext.recordsFromGDTableIdentifiers.get(i).getidentifier(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
+                }
+            }
+        }
+    }
 }
+
+
+
+
+

@@ -11,6 +11,7 @@ import java.util.List;
 public class GDTablesDLSQLContext {
     public static List<GDTableDLSQLObject>recordsFromSql;
     public static List<GDTableDLSQLObject>recordsFromDL;
-
+    public static List<GDTableDLSQLObject> recordsFromGDTableIdentifiers;
+    public static List<GDTableDLSQLObject> recordsFromCrossRefIdentifier;
 }
 
