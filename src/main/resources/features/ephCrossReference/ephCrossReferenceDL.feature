@@ -21,15 +21,17 @@ Feature:Validate data for EPH Cross Reference PostgreSQL
 
 
   @crossRef
-  Scenario: Verify that CrossRef identifier in DL
+  Scenario Outline: Verify that CrossRef identifier in DL
     Given We get the count from the work,manif and product identifiers
     Then Get the count from eph_identifier_cross_reference
     And we compare work,manifestation and product identifiers counts with eph_identifier_cross_reference
-   # Given Get <numberOfRecords> random ids from the work,manif and product identifiers
-   # When We get the records from the work,manif and product identifiers
-   # Then Get the records from <TargetTable>
-   # And Compare the records of work,manif and product identifiers with <TargetTable>
-
+    Given Get <numberOfRecords> random ids of <SourceTable> from the Semarchy
+    When We get the records from the work,manif and product identifiers
+    Then Get the records from <SourceTable>
+   And Compare the records of work,manif and product identifiers with <SourceTable>
+    Examples:
+      |numberOfRecords  |SourceTable                 |
+      | 1000               |eph_identifier_cross_reference            |
 
 
 
