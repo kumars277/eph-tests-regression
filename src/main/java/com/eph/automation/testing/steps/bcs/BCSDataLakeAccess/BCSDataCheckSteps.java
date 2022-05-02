@@ -3470,6 +3470,7 @@ public class BCSDataCheckSteps {
 
         //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
         setBreadcrumbMessage(Ids.toString());
+        Log.info(sql);
     }
 
     @When("Get the data records from initial ingest book series for (.*)")
@@ -3517,6 +3518,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
                 break;
         }
+        Log.info(sql);
 
     }
 
@@ -3567,6 +3569,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
                 break;
             }
+            Log.info(sql);
     }
 
     @And("Compare the records for the initial ingest book series and current table book series (.*)")
@@ -3614,8 +3617,8 @@ public class BCSDataCheckSteps {
                     Log.info("stg_current_content_series Records:");
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
-                    String[] content_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
-                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getSeriesid","getShorttitle",
+                    String[] content_series = {"getMetadeleted", "getMetamodifiedon","getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
+                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getShorttitle",
                     "getPiidack","getOwnership","getDeltype","getNumbered","getBibliographicserial","getMainseries","getEditionid"};
 
                     for (String strTemp : content_series) {
@@ -3675,7 +3678,7 @@ public class BCSDataCheckSteps {
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
 
-                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getSourceref", "getNotes", "getCompanygroup"};
+                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getNotes", "getCompanygroup"};
                     for (String strTemp : originatornotes_series) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;

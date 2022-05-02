@@ -58,7 +58,7 @@ public class SDRMDataChecksSQL {
             "LEFT JOIN (select mi.identifier, m.first_pub_date from "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation_identifier mi\n" +
             "inner join "+ GetSdrmDbUser.getProdDataBase()+".gd_manifestation m on m.manifestation_id = mi.f_manifestation\n" +
             "where m.f_status <> 'NVM' AND mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
-            "WHERE crf.epr is not null and src.ispdf = '1') where inbound_ts = (select max(inbound_ts) from "+ GetSdrmDbUser.getSDRMDataBase()+".sdrm_inbound_part) order by rand() limit '%s'";
+            "WHERE crf.epr is not null and src.ispdf = '1') where inbound_ts = (select max(inbound_ts) from "+ GetSdrmDbUser.getSDRMDataBase()+".sdrm_inbound_part) order by rand() limit %s";
 
     public static final String GET_SDRM_SOURCE_INBOUND_DATA="select isbn,sku,title,rendition_format as rednitionFormat,inbound_ts as inboundTs,production_date as productionDate,epr_id as eprId,product_type as productType, u_key as uKey " +
             " from (SELECT\n" +

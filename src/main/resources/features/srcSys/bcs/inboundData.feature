@@ -18,7 +18,7 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_content          |       2         |
       |stg_current_extobject        |       1         |
       |stg_current_fullversionfamily|       1         |
-      |stg_current_originatoraddress|       1         |
+    #  |stg_current_originatoraddress|       1         | Removed for GDOR
       |stg_current_originators      |       1         |
       |stg_current_pricing          |       1         |
       |stg_current_product          |       1         |
@@ -57,7 +57,7 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_text                       |stg_history_text_part              |     1           |
       |stg_current_versionfamily              |stg_history_versionfamily_part     |     1           |
       |stg_current_originatornotes              |stg_history_originatornotes_part |     1           |
-      |stg_current_originatoraddress          |stg_history_originatoraddress_part |     1           |
+    #  |stg_current_originatoraddress          |stg_history_originatoraddress_part |     1           | Remove for GdPR
 
 
 
@@ -103,12 +103,12 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare the records for the initial ingest book series and current table book series <targetTable>
      Examples:
       | targetTable                        | countOfRandomIds|
-      |stg_current_classification_series   |       1         |
+    #  |stg_current_classification_series   |       1         | removed
       |stg_current_content_series          |       1         |
-      |stg_current_originatoraddress_series|       1         |
+   #   |stg_current_originatoraddress_series|       1         |removed
       |stg_current_originatornotes_series  |       1         |
       |stg_current_originators_series      |       1         |
-      |stg_current_product_series          |       1         |
+   #   |stg_current_product_series          |       1         |removed
       |stg_current_text_series             |       1         |
 
 
@@ -123,12 +123,12 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare the records for the current book series and history table book series <TargetTableName>
     Examples:
       | SourceTableName                               | TargetTableName                         |countOfRandomIds |
-      |stg_current_classification_series             |stg_history_classification_series_part    |     1           |
+  #    |stg_current_classification_series             |stg_history_classification_series_part    |     1           |removed
       |stg_current_content_series                    |stg_history_content_series_part           |     1           |
-      |stg_current_originatoraddress_series          |stg_history_originatoraddress_series_part |     1           |
+   #   |stg_current_originatoraddress_series          |stg_history_originatoraddress_series_part |     1           |removed
       |stg_current_originatornotes_series            |stg_history_originatornotes_series_part   |     1           |
       |stg_current_originators_series                |stg_history_originators_series_part       |     1           |
-      |stg_current_product_series                    |stg_history_product_series_part           |     1           |
+    #  |stg_current_product_series                    |stg_history_product_series_part           |     1           |removed
       |stg_current_text_series                       |stg_history_text_series_part              |     1           |
 
 
