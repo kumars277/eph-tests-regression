@@ -80,7 +80,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   //ids.clear();ids.add("EPR-W-10Y4RY");Log.info("hard coded work id is : " + ids);
+  // ids.clear();ids.add("EPR-W-102R11");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -106,7 +106,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102VTR");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102V9R");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -1047,14 +1047,21 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByPerson(String searchType, String fName,String lName) {
-
+String specialName = "";
+String[] arr_specialName = fName.replace("-"," ").split(" ");
+if(arr_specialName.length>1) specialName = arr_specialName[1];
+        arr_specialName = lName.replace("-"," ").split(" ");
+if(arr_specialName.length>1) specialName = arr_specialName[1];
+if(specialName.equalsIgnoreCase(""))specialName=lName;
     int count =0;
     switch (searchType) {
       case PER_FULLNAME_CURRENT:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, fName,lName);break;
       default://sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson, fName,lName,fName,lName);     break;
         sql = APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson
                 .replaceAll("FIRSTNAME",fName)
-                .replaceAll("LASTNAME",lName);
+                .replaceAll("LASTNAME",lName)
+                .replaceAll("SPECIALNAME1",arr_specialName[0])
+                .replaceAll("SPECIALNAME2",specialName);
         break;
          }
 
