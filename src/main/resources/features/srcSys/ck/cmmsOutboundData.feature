@@ -2,7 +2,7 @@ Feature:Validate data for DPP_CMMS_Export_dag tables
 
 #confluence link:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/119483627562926/EPH-CMMS+Integration
 
-  @CKETLCORE
+  @DPPCMMSEXPORT
   Scenario Outline: Verify that all CK data is transferred between DPP CMMS VIEW and DPP CMMS tables
     Given We know the number of CK <DPPCMMSView> data in CMMS View
     Then Get the count for CK <DPPCMMSTable> CMMS Table
