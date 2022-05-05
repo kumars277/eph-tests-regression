@@ -30,6 +30,150 @@ public class CKCurrentTablesDataObject {
     private String journal_backfiles_only;
     private String aip;
     private String type;
+    private String workflowId;
+    private String workflowType;
+    private String workflowCutoffDate;
+    private String workflowLiveDate;
+    private String workId;
+    private String workTitle;
+    private String alternateTitle;
+    private String plannedLaunchDate;
+    private String actualLaunchDate;
+    private String workStatus;
+    private String workType;
+    private String pmg;
+    private String editionNumber;
+    private String copyrightYear;
+    private String plannedDiscontinuedate;
+    private String actualDiscontinueDate;
+    private String currentIdentifier;
+    private String financeTier;
+    private String searchTier;
+    private String pdfSuppression;
+    private String topicPages;
+    private String journalBackfilesOnly;
+    private String journalBackfileYears;
+    private String journalAip;
+    private String identifier;
+    private String enddate;
+    private String subjectareaid;
+    private String subjectareaname;
+    private String packageid;
+    private String packagesitecode;
+    private String packageacronym;
+    private String packagetitle;
+    private String packagestatus;
+    private String packagetype;
+    private String cmmssitename;
+    private String durableurl;
+
+    public String getdurableurl() {return durableurl;}
+    public void setdurableurl(String durableurl) {this.durableurl = durableurl;}
+
+    public String getpackageid() {return packageid;}
+    public void setpackageid(String packageid) {this.packageid = packageid;}
+
+    public String getpackagesitecode() {return packagesitecode;}
+    public void setpackagesitecode(String packagesitecode) {this.packagesitecode = packagesitecode;}
+
+    public String getpackageacronym() {return packageacronym;}
+    public void setpackageacronym(String packageacronym) {this.packageacronym = packageacronym;}
+
+    public String getpackagetitle() {return packagetitle;}
+    public void setpackagetitle(String packagetitle) {this.packagetitle = packagetitle;}
+
+    public String getpackagestatus() {return packagestatus;}
+    public void setpackagestatus(String packagestatus) {this.packagestatus = packagestatus;}
+
+    public String getpackagetype() {return packagetype;}
+    public void setpackagetype(String packagetype) {this.packagetype = packagetype;}
+
+    public String getcmmssitename() {return cmmssitename;}
+    public void setcmmssitename(String cmmssitename) {this.cmmssitename = cmmssitename;}
+
+    public String getsubjectareaid() {return subjectareaid;}
+    public void setsubjectareaid(String subjectareaid) {this.subjectareaid = subjectareaid;}
+
+    public String getsubjectareaname() {return subjectareaname;}
+    public void setsubjectareaname(String subjectareaname) {this.subjectareaname = subjectareaname;}
+
+    public String getidentifier() {return identifier;}
+    public void setidentifier(String identifier) {this.identifier = identifier;}
+
+    public String getenddate() {return enddate;}
+    public void setenddate(String enddate) {this.enddate = enddate;}
+
+    public String getpdfSuppression() {return pdfSuppression;}
+    public void setpdfSuppression(String pdfSuppression) {this.pdfSuppression = pdfSuppression;}
+
+    public String getjournalAip() {return journalAip;}
+    public void setjournalAip(String journalAip) {this.journalAip = journalAip;}
+
+    public String getjournalBackfileYears() {return journalBackfileYears;}
+    public void setjournalBackfileYears(String journalBackfileYears) {this.journalBackfileYears = journalBackfileYears;}
+
+    public String getjournalBackfilesOnly() {return journalBackfilesOnly;}
+    public void setjournalBackfilesOnly(String journalBackfilesOnly) {this.journalBackfilesOnly = journalBackfilesOnly;}
+
+    public String gettopicPages() {return topicPages;}
+    public void settopicPages(String topicPages) {this.topicPages = topicPages;}
+
+    public String getsearchTier() {return searchTier;}
+    public void setsearchTier(String searchTier) {this.searchTier = searchTier;}
+
+    public String getfinanceTier() {return financeTier;}
+    public void setfinanceTier(String financeTier) {this.financeTier = financeTier;}
+
+    public String getcurrentIdentifier() {return currentIdentifier;}
+    public void setcurrentIdentifier(String currentIdentifier) {this.currentIdentifier = currentIdentifier;}
+
+    public String getactualDiscontinueDate() {return actualDiscontinueDate;}
+    public void setactualDiscontinueDate(String actualDiscontinueDate) {this.actualDiscontinueDate = actualDiscontinueDate;}
+
+    public String getplannedDiscontinuedate() {return plannedDiscontinuedate;}
+    public void setplannedDiscontinuedate(String plannedDiscontinuedate) {this.plannedDiscontinuedate = plannedDiscontinuedate;}
+
+    public String getcopyrightYear() {return copyrightYear;}
+    public void setcopyrightYear(String copyrightYear) {this.copyrightYear = copyrightYear;}
+
+    public String geteditionNumber() {return editionNumber;}
+    public void seteditionNumber(String editionNumber) {this.editionNumber = editionNumber;}
+
+    public String getpmg() {return pmg;}
+    public void setpmg(String pmg) {this.pmg = pmg;}
+
+    public String getworkType() {return workType;}
+    public void setworkType(String workType) {this.workType = workType;}
+
+    public String getworkStatus() {return workStatus;}
+    public void setworkStatus(String workStatus) {this.workStatus = workStatus;}
+
+    public String getactualLaunchDate() {return actualLaunchDate;}
+    public void setactualLaunchDate(String actualLaunchDate) {this.actualLaunchDate = actualLaunchDate;}
+
+    public String getplannedLaunchDate() {return plannedLaunchDate;}
+    public void setplannedLaunchDate(String plannedLaunchDate) {this.plannedLaunchDate = plannedLaunchDate;}
+
+    public String getalternateTitle() {return alternateTitle;}
+    public void setalternateTitle(String alternateTitle) {this.alternateTitle = alternateTitle;}
+
+    public String getworkTitle() {return workTitle;}
+    public void setworkTitle(String workTitle) {this.workTitle = workTitle;}
+
+    public String getworkId() {return workId;}
+    public void setworkId(String workId) {this.workId = workId;}
+
+    public String getworkflowType() {return workflowType;}
+    public void setworkflowType(String workflowType) {this.workflowType = workflowType;}
+
+    public String getworkflowCutoffDate() {return workflowCutoffDate;}
+    public void setworkflowCutoffDate(String workflowCutoffDate) {this.workflowCutoffDate = workflowCutoffDate;}
+
+    public String getworkflowLiveDate() {return workflowLiveDate;}
+    public void setworkflowLiveDate(String workflowLiveDate) {this.workflowLiveDate = workflowLiveDate;}
+
+    public String getworkflowId() {return workflowId;}
+    public void setworkflowId(String workflowId) {this.workflowId = workflowId;}
 
     public String gettype() {return type;}
     public void settype(String type) {this.type = type;}
