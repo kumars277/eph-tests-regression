@@ -8,7 +8,7 @@ Feature:Validate data count for BCS tables in Data Lake
     Given Get the total count of BCS Data from initial_ingest <targetTable>
     Then  Get total count of BCS Current table <targetTable>
     And Compare count of initial ingest with current table <targetTable>
-    Given We get the <countOfRandomIds> random ids from initial ingest <targetTable>
+    Given Get the <countOfRandomIds> random ids from initial ingest <targetTable>
     When Get the data records from initial ingest for <targetTable>
     Then we Get the records from current tables <targetTable>
     And Compare the records of initial ingest and current table <targetTable>
