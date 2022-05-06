@@ -72,7 +72,7 @@ public class JRBIDataChecksSteps {
     }
 
 
-    @Then("^We get the records from transform (.*)$")
+    @When("^We get the records from transform (.*)$")
     public static void getRecords(String table) {
         Log.info("We get the records...");
         switch (table) {
@@ -277,7 +277,7 @@ public class JRBIDataChecksSteps {
     }
 
 
-    @Then("^Get the records from transform history (.*)$")
+    @Then("^we get the records from transform history (.*)$")
     public static void getRecordsFromCurrentWorkHistory(String table) {
         Log.info("We get the records from Current history ..");
         switch (table){
@@ -740,7 +740,7 @@ public class JRBIDataChecksSteps {
     }
 
 
-    @When("^Get the records from the addition of delta current and exclude (.*)$")
+    @When("^we get the records from the addition of delta current and exclude (.*)$")
     public static void getAddRecDeltaCurrentWorkandExclude( String secondSourceTable){
         Log.info("We get the Addition of Delta Current and Exclude records...");
         switch (secondSourceTable){
@@ -762,7 +762,7 @@ public class JRBIDataChecksSteps {
 
     }
 
-    @Then("^Get the records from latest table (.*)$")
+    @Then("^we get the records from latest table (.*)$")
     public static void getLatestWorkRec(String table){
         Log.info("We get the Latest records...");
         switch (table){

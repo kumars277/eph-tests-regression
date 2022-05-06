@@ -89,7 +89,7 @@ public class DL_AllSourceExtViewsChecksSteps {
         DLAllExtViewCount = ((Long) DLAllExtViewTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Given("^We know the total count of Source Ingestion (.*)$")
+    @Given("^get total count of Source Ingestion (.*)$")
     public void getSourceIngestTables(String tableName){
         switch (tableName){
             case "product_availability_extended_allsource_v":

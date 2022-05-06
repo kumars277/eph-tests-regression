@@ -59,7 +59,7 @@ public class SDBooksDataChecksSteps {
         Log.info(ids.toString());
     }
 
-    @When("^Get the records from data inbound for URL$")
+    @When("^we Get the records from data inbound URL$")
     public static void getUrlRecordsFromFullLoad() {
         Log.info("We get the Inbound Load URL records...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_URL_INBOUND, String.join("','",ids));
@@ -67,7 +67,7 @@ public class SDBooksDataChecksSteps {
         SDAccessDLContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @Then("^Get the records from transform SD current URL$")
+    @Then("^we Get the records from transform SD current URL$")
     public static void getRecordsFromCurrentURL() {
         Log.info("We get the records from Current URL table...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_CURRENT_URL, String.join("','",ids));
@@ -744,7 +744,7 @@ public class SDBooksDataChecksSteps {
         }
     }
 
-    @When("^Get the records from the addition of SDbooks Delta_URL and URL_Exclude$")
+    @When("^we Get the records from the addition of SDbooks Delta_URL and URL_Exclude$")
     public static void getSumOfDeltaAndExclude() {
         Log.info("We get the Sum of Delta and Excude URL records...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_SUM_DELTA_EXCL_URL, String.join("','",ids));
@@ -752,7 +752,7 @@ public class SDBooksDataChecksSteps {
         SDAccessDLContext.recordsFromAddDeltaAndExcludeUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @Then("^Get the records from SDbooks URL latest table$")
+    @Then("^we Get the records from SDbooks URL latest table$")
     public static void getUrlLatest() {
         Log.info("We get the Latest URL records...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_LATEST_URL, String.join("','",ids));

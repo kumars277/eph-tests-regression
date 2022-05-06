@@ -59,7 +59,7 @@ public class r12ConsumerAppSteps {
         r12trgtCount = ((Long) r12FullTableCnt.get(0).get("Target_count")).intValue();
     }
 
-    @And("^Compare count of Full load with (.*)$")
+    @And("^we Compare count of Full load with (.*)$")
     public void comparesrcAndTrgtCounts(String table){
         Log.info("The count for table r12 => " + r12FullSetCount + " and in "+table+ "=> " + r12trgtCount);
         Assert.assertEquals("The counts are not equal when compared for "+table, r12FullSetCount,r12FullSetCount );

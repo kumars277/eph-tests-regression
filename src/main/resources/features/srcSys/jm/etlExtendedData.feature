@@ -6,7 +6,7 @@ Feature:Validate data count for JM Extended tables
    @JMETLExtended
   Scenario Outline: Verify Data for JM_ETL Extended tables is transferred from Inbound Tables
      Given Get the total count of JM ETL Extended Tables <tableName>
-     When We know the total count of JM source tables <tableName>
+     When Get the total count of JM source tables <tableName>
      Then Compare count of JM source Inbound and JM ETL Extended <tableName> tables are identical
      Given Get the <countOfRandomIds> of JM ETL Extended data from Inbound Tables <tableName>
      Then  Get the Data from the Source Tables <tableName>

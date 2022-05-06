@@ -5,8 +5,8 @@ Feature:Validate data for JRBI Extended
   @JRBIETLExtended
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
     Given Get the total count of JRBI Data from Full Load <tableName>
-    Then  We know the total count of Current JRBI data from <tableName>
-    And Compare count of Full load with current <tableName> table are identical
+    Then we get the total count of Current JRBI data from <tableName>
+    And we Compare count of Full load with current <tableName> table are identical
     Given We get the<countOfRandomIds> random EPR ids from full load<tableName>
     When We get the records from data jrbi_journal_data_full <tableName>
     Then We get the records from transform <tableName>
@@ -24,8 +24,8 @@ Feature:Validate data for JRBI Extended
     Then Get the count of transform_current_history <TargettableName>
     And Check count of current table <SourceTableName> and current history <TargettableName> are identical
     Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>
-    When  We get the records from transform <SourceTableName>
-    Then Get the records from transform history <TargettableName>
+    When We get the records from transform <SourceTableName>
+    Then we get the records from transform history <TargettableName>
     And compare the records of <SourceTableName> and <TargettableName>
     Examples:
       |SourceTableName                      |TargettableName                                  | countOfRandomIds   |
@@ -39,9 +39,9 @@ Feature:Validate data for JRBI Extended
    Then Get the JRBI <TargetTable> latest data count
     And Compare latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Given We get the <countOfRandomIds> random EPR ids from <TargetTable>
-    When Get the records from the addition of delta current and exclude <TargetTable>
-    Then Get the records from latest table <TargetTable>
-    And  Compare the records for Latest tables <TargetTable>
+    When we get the records from the addition of delta current and exclude <TargetTable>
+    Then we get the records from latest table <TargetTable>
+    And Compare the records for Latest tables <TargetTable>
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |countOfRandomIds |
       |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work             |10              |

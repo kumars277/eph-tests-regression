@@ -6,12 +6,12 @@ Feature:Validate data for BCS ETL Extended tables
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended tables is transferred from Inbound Tables
     Given Get the total count of BCS Extended from Current Tables <tableName>
-    When We know the total count of BCS Extended Inbound tables <tableName>
+    When Get the total count of BCS Extended Inbound tables <tableName>
     Then Compare count of BCS Inbound and BCS Extended <tableName> tables are identical
     Given Get the <countOfRandomIds> of BCS Extended data from Inbound Tables <tableName>
     Then  Get the Data from the BCS Extended Inbound Tables <tableName>
-    And   Data from the BCS Extended Current Tables <tableName>
-    Then  Compare data of BCS Inbound and BCS Extended <tableName> tables are identical
+    And Data from the BCS Extended Current Tables <tableName>
+    Then Compare data of BCS Inbound and BCS Extended <tableName> tables are identical
     Examples:
       | tableName                                               |countOfRandomIds |
       | etl_availability_extended_current_v                     |10            |

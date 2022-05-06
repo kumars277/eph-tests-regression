@@ -6,7 +6,7 @@ Feature:Validate data for  Product Ext Stitching tables in EPH
   @ProductExtStitching
   Scenario Outline: Verify Data from the Product extended availability tables transferred to Product Extended Stitching JSON
     Given We get the <countOfRandomIds> random Prod Ext Availability EPR ids <tableName>
-    And Get the records from Prod extended Availability table
+    And we Get the records from Prod extended Availability table
     Then Compare Product Extended Availability and Product Extended Stitching JSON
     Examples:
       |tableName                                   |countOfRandomIds|
@@ -16,7 +16,7 @@ Feature:Validate data for  Product Ext Stitching tables in EPH
   @ProductExtStitching
   Scenario Outline: Verify Data from the Product extended Pricing tables transferred to Product Extended Stitching JSON
     Given We get the <countOfRandomIds> random Prod Ext Pricing EPR ids from Pricing Extended Table <tableName>
-    And Get the records from Prod extended Pricing table
+    And we Get the records from Prod extended Pricing table
     Then Compare Product Extended Pricing and Product Extended Stitching JSON
     Examples:
       |tableName                                   |countOfRandomIds|

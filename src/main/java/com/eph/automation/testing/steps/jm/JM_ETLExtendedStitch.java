@@ -36,7 +36,7 @@ public class JM_ETLExtendedStitch {
         JMEXtCurrentCount = ((Long) JM_ETLEXTCurrentTableCount.get(0).get("Count")).intValue();
     }
 
-    @When("^We know the total count of Stitching table$")
+    @When("^We get the total count of Stitching table$")
     public void getJMStitchCount() {
         Log.info("Getting JM Stitch data Count...");
         JMsourceSQLCount = JM_ETLExtendedCountDataChecksSQL.GET_JMStitched_Count;

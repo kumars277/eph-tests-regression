@@ -102,7 +102,7 @@ public class BcsEtlExtendedCountChecksSteps {
         bcsExtCurrCount = ((Long) bcsExtCurrTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @When("^We know the total count of BCS Extended Inbound tables (.*)$")
+    @When("^Get the total count of BCS Extended Inbound tables (.*)$")
     public static void getCountInboundTables(String tableName) {
         switch (tableName) {
             case "etl_availability_extended_current_v":
