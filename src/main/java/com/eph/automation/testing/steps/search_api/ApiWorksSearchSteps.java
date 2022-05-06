@@ -13,6 +13,8 @@ import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
+
+import com.eph.automation.testing.steps.GenericFunctions;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.java.en.*;
@@ -80,7 +82,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-  // ids.clear();ids.add("EPR-W-102R11");Log.info("hard coded work id is : " + ids);
+  // ids.clear();ids.add("EPR-W-10WYJH");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -338,13 +340,13 @@ public class ApiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
 
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-      String searchKeyword =
-              DataQualityContext
+      String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
+              /*DataQualityContext
                       .workDataObjectsFromEPHGD
                       .get(0)
                       .getWORK_TITLE()
                       .split(" ")[0]
-                      .toUpperCase();
+                      .toUpperCase();*/
       for (int i = 0; i < bound; i++) {
         String PMGCode =
                 getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());

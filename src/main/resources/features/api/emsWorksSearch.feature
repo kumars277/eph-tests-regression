@@ -23,11 +23,9 @@ Feature: Search API: Works
       |EPR_ID             |
       |ISSN               |
 
-
-
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
-    Given  We get 1 ran-dom journal ids to search <options>
+    Given  We get 1 random journal ids to search <options>
     And    We get the work search data from EPH GD
     Then   work response is compared with the DB for <options>
     Examples:
