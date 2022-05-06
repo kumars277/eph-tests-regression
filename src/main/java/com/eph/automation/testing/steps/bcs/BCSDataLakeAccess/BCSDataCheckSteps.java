@@ -3797,7 +3797,7 @@ public class BCSDataCheckSteps {
     }
 
 
-    @Given("^We get the (.*) random ids from the current book series (.*)$")
+    @Given("^Get the (.*) random ids from the current book series (.*)$")
     public void getRandomIdsForCurrentSeries(String countOfRandomIds, String targetTable) {
         // countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
