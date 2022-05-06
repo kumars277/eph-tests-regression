@@ -1246,7 +1246,7 @@ public class BcsEtlExtendedDeltaDataChecksSteps {
         Log.info(ids.toString());
     }
 
-    @When ("^Get the records from the sum of delta_current and exclude_delta for BCS Extended (.*)$")
+    @When ("^Records from the sum of delta_current and exclude_delta for BCS Extended (.*)$")
     public static void getRecFromDiffDeltaCurrAndExcl(String tableName){
         Log.info("We get the records from Diff of Delta Current and Excl of bcs Extended table...");
         switch (tableName) {
@@ -1284,7 +1284,7 @@ public class BcsEtlExtendedDeltaDataChecksSteps {
         Log.info(sql);
     }
 
-    @When ("^Get the records from (.*) BCS Extended latest table$")
+    @When ("^The records from (.*) BCS Extended latest table$")
     public static void getRecFromLatest(String tableName){
         Log.info("We get the records from Latest bcs Extended table...");
         switch (tableName) {

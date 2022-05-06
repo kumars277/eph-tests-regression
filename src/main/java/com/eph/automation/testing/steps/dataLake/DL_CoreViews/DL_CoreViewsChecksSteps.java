@@ -31,7 +31,7 @@ public class DL_CoreViewsChecksSteps {
     private static int BCSJMCExtRefFieldNullCount;
     private static String BCSJMExtRefNullVal;
 
-    public DL_CoreViewsAccessContext dataQualityDLCoreViewContext;
+    public static DL_CoreViewsAccessContext dataQualityDLCoreViewContext;
     private static String sql;
     private static List<String> Ids;
 

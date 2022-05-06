@@ -117,7 +117,7 @@ Feature:Validate data count for BCS tables in Data Lake
     Given Get total count of BCS Book series Current table <SourceTableName>
     Then Get the count for the BCS stg_history series <TargetTableName> for current comparision
     And Check count for the current table <SourceTableName> and history table series <TargetTableName> are identical
-    Given We get the <countOfRandomIds> random ids from the current book series <SourceTableName>
+    Given Get the <countOfRandomIds> random ids from the current book series <SourceTableName>
     When Get the records for current tables for the book series <SourceTableName>
     Then Get the records for current tables for the staging history book series <TargetTableName>
     And Compare the records for the current book series and history table book series <TargetTableName>
