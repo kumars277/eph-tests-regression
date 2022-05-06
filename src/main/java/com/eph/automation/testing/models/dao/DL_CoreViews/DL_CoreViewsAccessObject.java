@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.dao.DL_CoreViews;
 
-import java.security.PrivateKey;
-
 public class DL_CoreViewsAccessObject {
 
     private String EXTERNALREFERENCE;

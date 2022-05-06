@@ -33,7 +33,7 @@ public class crossRefDataLake {
     private static String sqlIdentifierCrossRefCounts;
 
 
-    @Given("^We get the count (.*) from semarchy_eph_mdm")
+    @Given("^We get the count (.*) from semarchy_eph_mdm$")
     public void getTheCountfromSemarchy(String table) {
         // Log.info("Getting the count from the PostgreSQL");
         switch (table) {
@@ -96,7 +96,7 @@ public class crossRefDataLake {
         Assert.assertEquals("The counts are not equal for " + srctable + " in Posgres and CrossRef DL ", crossRefgdDLCount, gdTablePosgreSQLCount);
     }
 
-    @Given("^Get (.*) random ids of (.*) from the Semarchy")
+    @Given("^Get (.*) random ids of (.*) from the Semarchy$")
     public void getIds(String numberOfRecords, String SourceTable) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
@@ -142,7 +142,7 @@ public class crossRefDataLake {
         Log.info(Ids.toString());
     }
 
-    @When("^We get the records for (.*) from semarchy")
+    @When("^We get the records for (.*) from semarchy$")
     public void getRecordsSemarchy(String SemarchyTable) {
         Log.info("We get the records from Semarchy..");
         switch (SemarchyTable) {
@@ -521,16 +521,16 @@ public class crossRefDataLake {
         }
     }
 
-    @Given("^We get the count from the work,manif and product identifiers")
+    @Given("^We get the count from the work,manif and product identifiers$")
     public void getCountfromGD() {
         // Log.info("Getting the count from the PostgreSQL");
-                sqlGdWorkMAnifProdIdentifierCounts = crossRefDLSQL.GD_WORK_MANIF_PROD_IDENTIFIERS_COUNT;
-                   Log.info(sqlGdWorkMAnifProdIdentifierCounts);
+        sqlGdWorkMAnifProdIdentifierCounts = crossRefDLSQL.GD_WORK_MANIF_PROD_IDENTIFIERS_COUNT;
+        Log.info(sqlGdWorkMAnifProdIdentifierCounts);
         List<Map<String, Object>> GdWorkMAnifProdIdentifierCountsTableSqlCount = DBManager.getDBResultMap(sqlGdWorkMAnifProdIdentifierCounts, Constants.AWS_URL);
         gdWorkMAnifProdIdentifierSQLCount = ((Long) GdWorkMAnifProdIdentifierCountsTableSqlCount.get(0).get("Source_Count")).intValue();
     }
 
-    @Given("^Get the count from eph_identifier_cross_reference")
+    @Given("^Get the count from eph_identifier_cross_reference$")
     public void getCountfromcrossRefIdentifier() {
         sqlIdentifierCrossRefCounts = crossRefDLSQL.EPH_IDENTIFIER_CROSS_REF_COUNT;
         Log.info(sqlIdentifierCrossRefCounts);
@@ -545,15 +545,15 @@ public class crossRefDataLake {
     }
 
 
-    @When("^We get the records from the work,manif and product identifiers")
+    @When("^We get the records from the work,manif and product identifiers$")
     public void getRecfromGdTableIdentifiers() {
         Log.info("We get the records from GD table work, manif and prod identifiers..");
-                sql = String.format(crossRefDLSQL.GET_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
+        sql = String.format(crossRefDLSQL.GET_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
         Log.info(sql);
         GDTablesDLSQLContext.recordsFromGDTableIdentifiers = DBManager.getDBResultAsBeanList(sql, GDTableDLSQLObject.class, Constants.AWS_URL);
     }
 
-    @When("^Get the records from (.*)")
+    @When("^Get the records from (.*)$")
     public void getRecfrom(String table) {
         Log.info("We get the records from "+table);
         sql = String.format(crossRefDLSQL.GET_CROSS_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
