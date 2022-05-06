@@ -2,7 +2,7 @@ Feature:Validate data for JM tables between JM ETL Core tables and JM Staging
 
     @JMETLCore
     Scenario Outline: Verify that all JM data is transferred from Staging to JM ETL Core tables
-        Given We know the total count of JM ETL Core <ETLtable> data
+        Given get the total count of JM ETL Core <ETLtable> data
         When Get the total count of JM <ETLtable> data is in the JM Staging
         Then Compare count of the JM count for <ETLtable> table between JM ETL Core and DL are identical
         Given We get the <numberOfRecords> random JM ETL ids of <ETLtable>
