@@ -581,7 +581,7 @@ public class APIDataSQL {
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
       "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_type='%s'";
 
-   /*By Nishant @ 10 Feb 2022
+  /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
   Work title
   Manifestation title
@@ -590,9 +590,14 @@ public class APIDataSQL {
   then need to modify your query to accommodate all of those as well
   */
   public static final String SELECT_GD_COUNT_WORK_BY_MANIFESTATIONTPYE_WITHSEARCH =
-      "select count(*) from (select distinct w.work_id "
-          + "from semarchy_eph_mdm.gd_wwork w inner join semarchy_eph_mdm.gd_manifestation m "
-          + "on w.work_id=m.f_wwork where upper(w.work_title) like '%%%s%%' and m.f_type='%s') s";
+      "select count(*) from\n"
+          + "(select distinct w.work_id from semarchy_eph_mdm.gd_wwork w\n"
+          + "inner join semarchy_eph_mdm.gd_manifestation m\n"
+          + "on w.work_id=m.f_wwork\n"
+          + "where upper(translate(\n"
+          + "    lower(work_title),\n"
+          + "    'áàâãäåāăąèééêëēĕėęěìíîïìĩīĭḩóôõöōŏőùúûüũūŭůäàáâãåæçćĉčöòóôõøüùúûßéèêëýñîìíïş',\n"
+          + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis')) like '%%%s%%' and m.f_type='%s') s";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH =
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork where UPPER(work_title) like '%%%S%%' AND f_pmc='%s'";
