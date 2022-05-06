@@ -21,10 +21,7 @@ Feature: Search API: Works
       |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
       |EPR_ID             |
-
       |ISSN               |
-
-
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
@@ -33,9 +30,8 @@ Feature: Search API: Works
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
-      | personFullNameCurrent |
       | PERSON_NAME           |
-
+      | personFullNameCurrent |
       | PERSON_ID             |
       | PEOPLE_HUB_ID         |
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
@@ -82,6 +78,7 @@ Feature: Search API: Works
     Then   the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
+      | WORK_PRODUCT_SUMMARY_NAME              |
       | WORK_ID                                |
       | WORK_IDENTIFIER                        |
       | WORK_TITLE                             |
@@ -89,7 +86,7 @@ Feature: Search API: Works
       | WORK_MANIFESTATION_TITLE               |
       | WORK_MANIFESTATION_IDENTIFIER          |
       | WORK_PRODUCT_ID                        |
-      | WORK_PRODUCT_SUMMARY_NAME              |
+
       | WORK_MANIFESTATION_PRODUCT_ID          |
       | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
       | WORK_PERSONS_FULLNAME                  |
