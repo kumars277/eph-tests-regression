@@ -6,7 +6,7 @@ Feature:Validate data between ERMS ETL Tables
   @ERMS
   Scenario Outline: Check between ERMS Inbound and transform current tables
     Given Get the total count of ERMS Data from Inbound Load <tableName>
-    Then  We know the total count of Current ERMS ETL data <tableName>
+    Then  The total count of Current ERMS ETL data <tableName>
     And Compare count of ERMS Inbound load with current ERMS ETL table are identical <tableName>
     Given Get the <countOfRandomIds> random EPR ids from the table ERMS inbound <tableName>
     When Get the data from the ERMS inbound tables <tableName>
@@ -19,8 +19,8 @@ Feature:Validate data between ERMS ETL Tables
 
   @ERMS
   Scenario Outline: Check between ERMS Current and transform file tables
-    Given We know the total count of Current ERMS ETL data <SrctableName>
-    Then  We know the total count of erms transform file <trgtTable>
+    Given The total count of Current ERMS ETL data <SrctableName>
+    Then  The total count of erms transform file <trgtTable>
     And Compare count of ERMS current and the ERMS transform file table are identical <SrctableName><trgtTable>
     Given Get the <countOfRandomIds> random EPR ids from the current table <SrctableName>
     When  Get the data from the ERMS transform current tables <SrctableName>
@@ -33,8 +33,8 @@ Feature:Validate data between ERMS ETL Tables
 
   @ERMS
   Scenario Outline: Check between ERMS Current and transform partition history tables
-    Given We know the total count of Current ERMS ETL data <SrctableName>
-    Then  We know the total count of erms transform partition history <trgtTable>
+    Given The total count of Current ERMS ETL data <SrctableName>
+    Then  The total count of erms transform partition history <trgtTable>
     And Compare count of ERMS current and the ERMS transform partition history table are identical <SrctableName><trgtTable>
     Given Get the <countOfRandomIds> random EPR ids from the current table <SrctableName>
     When  Get the data from the ERMS transform current tables <SrctableName>
@@ -47,8 +47,8 @@ Feature:Validate data between ERMS ETL Tables
 
   @ERMS
     Scenario Outline: Check ERMS latest tables data transffered from delta current and exclude tables
-    Given We know the total count of latest ERMS ETL data <SrctableName>
-    Then  We know the total count of erms delta current and exclude tables <SrctableName>
+    Given The total count of latest ERMS ETL data <SrctableName>
+    Then  The total count of erms delta current and exclude tables <SrctableName>
     And Compare count of ERMS latest with the delta current and exclude tables are identical <SrctableName>
     Given Get the <countOfRandomIds> random EPR ids from the latest table <SrctableName>
     When  Get the data from the ERMS erms delta current and exclude tables <SrctableName>

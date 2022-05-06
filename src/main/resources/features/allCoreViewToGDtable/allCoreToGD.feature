@@ -18,9 +18,9 @@ Feature:Validate data for GD Tables
       | 5               |all_product_v                      |gd_product                  |
       | 5               |all_work_identifier_v              |gd_work_identifier          |
       | 5               |all_work_v                         |gd_wwork                    |
-     | 5               |all_work_relationship_v            |gd_work_relationship        |
+      | 5               |all_work_relationship_v            |gd_work_relationship        |
       | 5               |all_work_person_role_v             |gd_work_person_role         |
-      | 5              |all_work_subject_areas_v           |gd_subject_area             |
+      | 5               |all_work_subject_areas_v           |gd_subject_area             |
       | 5               |all_work_access_model_v            |gd_work_access_model        |
       | 5               |all_work_business_model_v          |gd_work_business_model      |
       | 5               |all_accountable_product_v          |gd_accountable_product      |
