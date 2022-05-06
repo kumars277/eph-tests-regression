@@ -50,7 +50,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Manifestation extended table$")
+    @And("^Records from Manifestation extended table$")
     public void getRecordsFromManifExtendedTable() {
         Log.info("We get the records from Manif Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_REC, Joiner.on("','").join(Ids));
@@ -230,7 +230,7 @@ public class ManifestationExtDataChecksSteps {
     }
 
 
-    @Then("^Get the records from Manifestation extended page count table$")
+    @Then("^Records from Manifestation extended page count table$")
     public void getRecordsFromManifExtPageCountTable() {
         Log.info("We get the records from Manif Extended Page count Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC, Joiner.on("','").join(Ids));
@@ -324,7 +324,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Manifestation extended restrictions table$")
+    @Then("^Records from Manifestation extended restrictions table$")
     public void getRecordsFromManifExtRestrictTable() {
         Log.info("We get the records from Manif Extended Restrict Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC, Joiner.on("','").join(Ids));
