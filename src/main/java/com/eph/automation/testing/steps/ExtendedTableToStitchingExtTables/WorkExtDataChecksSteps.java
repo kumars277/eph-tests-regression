@@ -90,7 +90,7 @@ public class WorkExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Work extended table$")
+    @Then("^we Get the records from Work extended table$")
     public void getRecordsFromWorkExtendedTable() {
         Log.info("We get the records from Work Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_REC, Joiner.on("','").join(Ids));
@@ -496,7 +496,7 @@ public class WorkExtDataChecksSteps {
 
     }
 
-    @Then("^Get the records from work extended metric table$")
+    @Then("^we Get the records from work extended metric table$")
     public void getRecordsFromWorkExtMEtricTable() {
         Log.info("We get the records from work Extended metric Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_METRIC_REC, Joiner.on("','").join(Ids));
@@ -702,7 +702,7 @@ public class WorkExtDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from work extended url table$")
+    @Then("^we Get the records from work extended url table$")
     public void getRecordsFromWorkExtUrltTable() {
         Log.info("We get the records from work Extended url Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_URL_REC, Joiner.on("','").join(Ids));
@@ -789,7 +789,7 @@ public class WorkExtDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from work extended subj area table$")
+    @Then("^we Get the records from work extended subj area table$")
     public void getRecordsFromWorkExtSubAreaTable() {
         Log.info("We get the records from work Extended Subject Area Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_SUB_AREA_REC, Joiner.on("','").join(Ids));
@@ -886,7 +886,7 @@ public class WorkExtDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from work extended person role table$")
+    @Then("^we Get the records from work extended person role table$")
     public void getRecordsFromWorkExtPersRoleTable() {
         Log.info("We get the records from work Extended Person Role Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_PERS_ROLE_REC, Joiner.on("','").join(Ids));
@@ -1196,7 +1196,7 @@ public class WorkExtDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from work extended relationship sibling table$")
+    @Then("^we Get the records from work extended relationship sibling table$")
     public void getRecordsFromWorkExtRelationshipSiblings() {
         Log.info("We get the records from work Extended relationship siblings Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_RELATION_SIBLINGS_REC, Joiner.on("','").join(Ids));
@@ -1324,7 +1324,7 @@ public class WorkExtDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from work extended editorial board table$")
+    @Then("^we Get the records from work extended editorial board table$")
     public void getRecordsFromWorkExtEditorialBoard() {
         Log.info("We get the records from work Extended editorial board Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_EDITORIAL_BOARD_REC, Joiner.on("','").join(Ids));

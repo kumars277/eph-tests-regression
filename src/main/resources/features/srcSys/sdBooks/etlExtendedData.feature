@@ -5,11 +5,11 @@ Feature:Validate data for SDBooks in Data Lake Access Layer
   @SD
   Scenario Outline: Verify Data for SDBooks transform_Current_tables is transferred from Source Table
     Given Get the total count of SD Data from Full Load
-    Then  We know the total count of Current SD data
+    Then  We know the total count SD current data
     And Compare count of SD Full load with current table are identical
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
-    When Get the records from data inbound for URL
-    Then Get the records from transform SD current URL
+    When we Get the records from data inbound URL
+    Then we Get the records from transform SD current URL
     And  we compare records of Inbound and current URL
     Examples:
       | tableName                        |    countOfRandomIds|
@@ -34,8 +34,8 @@ Feature:Validate data for SDBooks in Data Lake Access Layer
       Then Get the SDbooks latest data count
       And Compare SDBooks latest counts and exclude with delta are identical
       Given We get the <countOfRandomIds> random ISBN ids <tableName>
-      When Get the records from the addition of SDbooks Delta_URL and URL_Exclude
-      Then Get the records from SDbooks URL latest table
+      When we Get the records from the addition of SDbooks Delta_URL and URL_Exclude
+      Then we Get the records from SDbooks URL latest table
       And we compare records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude
       Examples:
         |tableName                                | countOfRandomIds|

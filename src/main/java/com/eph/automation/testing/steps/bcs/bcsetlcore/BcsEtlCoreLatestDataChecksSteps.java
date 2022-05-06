@@ -464,7 +464,7 @@ public class BcsEtlCoreLatestDataChecksSteps {
         Log.info(ids.toString());
     }
 
-    @When ("^Get the records from the sum of delta_current and exclude_delta tables (.*)$")
+    @When ("^we get records from the sum of delta_current and exclude_delta tables (.*)$")
     public static void getRecFromDiffDeltaCurrAndExcl(String tableName){
         Log.info("We get the records from Diff of Delta Current and Excl of bcs Core table...");
         switch (tableName) {
@@ -502,7 +502,7 @@ public class BcsEtlCoreLatestDataChecksSteps {
         Log.info(sql);
     }
 
-    @When ("^Get the records from (.*) BCS core latest table$")
+    @When ("^we get the records from (.*) BCS core latest table$")
     public static void getRecFromLatest(String tableName){
         Log.info("We get the records from Latest bcs Core table...");
         switch (tableName) {

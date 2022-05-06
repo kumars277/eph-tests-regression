@@ -7,7 +7,7 @@ Feature:Validate data of DL Extended Views and Extended Tables
   @DLExtViews
   Scenario Outline: Verify Data Count for All Extended views is transferred from Source Ingestion
     Given Get the total count of All Extended views <tableName>
-    Then  We know the total count of Source Ingestion <tableName>
+    Then  get total count of Source Ingestion <tableName>
     And Compare count of All Extended Views with Source Ingestion <tableName> are identical
     Given Get the <countOfRandomIds> from source ingestion Tables <tableName>
     Then  Get the Records from the source ingestion Tables <tableName>
@@ -32,7 +32,7 @@ Feature:Validate data of DL Extended Views and Extended Tables
   @DLExtViews
   Scenario Outline: Verify Data Count for DL extended tables is transferred from All Extended views
     Given Get the total count of DL Extended views <tableName>
-    Then  We know the total count of All Extended views <tableName>
+    Then  get total count of All Extended views <tableName>
     And   Compare count of All Ext Views with <tableName> views are identical
     Given Get the <countOfRandomIds> from All Extended views <tableName>
     Then  Get the Records from the All Extended views <tableName>

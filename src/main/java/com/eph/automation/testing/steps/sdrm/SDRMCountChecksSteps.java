@@ -40,8 +40,8 @@ public class SDRMCountChecksSteps {
         Log.info(sdrmSourceCountSQL);
     }
 
-    @Given("^We know the total count of Current SDRM data from Current Product Availability$")
-    public static void getCountfromCurrentTables(){
+    @Given("^We know the total count Current SDRM data from Current Product Availability$")
+    public static void getCountCurrentTables(){
         Log.info("Getting sdrm current product availability table count...");
         sdrmCurrCountSql=SDRMDataChecksSQL.GET_SDRM_CURRENT_COUNT;
         List<Map<String, Object>> sdrmCurrentTableCount = DBManager.getDLResultMap(sdrmCurrCountSql, Constants.AWS_URL);
@@ -55,7 +55,7 @@ public class SDRMCountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with sdrm_inbound_part and in current Product Availability", sdrmCurrCount, sdrmSourceCount);
     }
 
-    @Given("^We know the total count of SDRM Current product availability data$")
+    @Given("^We know the total SDRM Current product availability data$")
     public static void getCountfromCurrentHistoryTables(){
         Log.info("Getting sdrm Current Product Table Count...");
         sdrmCurrCountSql=SDRMDataChecksSQL.GET_SDRM_CURRENT_COUNT;
@@ -177,7 +177,7 @@ public class SDRMCountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with srcTable and in product availability excl", sdrmDeltaCurrProdHistCount, sdrmHistExclDeltaCount);
     }
 
-    @Given("^We know the total count of SDRM Delta Current product availability data and SDRM prod availability History Excl Delta$")
+    @Given("^We know the total SDRM Delta Current product availability data and SDRM prod availability History Excl Delta$")
     public static void getCountfromDeltaCurrentProductAndSDRMHistoryExclDeltaTables(){
         Log.info("Getting combine of sdrm Delta Current Product Table Count and sdrm History Excl Delta table...");
         String sdrmExclCountSql;

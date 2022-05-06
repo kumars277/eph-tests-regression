@@ -6,7 +6,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
   @BCSCore
   Scenario Outline: Verify Data for BCS_ETL Core tables is transferred from Inbound Tables
     Given Get the total count of BCS Core from Current Tables <tableName>
-    Then  We know the total count of Inbound tables <tableName>
+    Then  get the total count of Inbound tables <tableName>
     And Compare count of BCS Inbound and BCS Core <tableName> tables are identical
     Given Get the <countOfRandomIds> of BCS Core data from Inbound Tables <tableName>
     Then  Get the Data from the Inbound Tables <tableName>
@@ -81,8 +81,8 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       Then Get the BCSCore <TargetTable> latest data count
       And Compare BCSCore latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
       Given Get the <countOfRandomIds> from sum of delta_current and exclude_delta tables <TargetTable>
-      When Get the records from the sum of delta_current and exclude_delta tables <TargetTable>
-      Then Get the records from <TargetTable> BCS core latest table
+      When we get records from the sum of delta_current and exclude_delta tables <TargetTable>
+      Then we get the records from <TargetTable> BCS core latest table
       And  Compare the records of Latest with sum of delta_current and Exclude_Delta tables <TargetTable>
     Examples:
       |FirstSourceTable                           |SecondSourceTable                                                  |TargetTable                                           |countOfRandomIds |

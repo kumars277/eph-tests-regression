@@ -102,7 +102,7 @@ public class DL_CoreViewsChecksSteps {
         DLCoreViewCount = ((Long) DLCoreViewTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Given("^We know the total count of BCS And JM Core tables (.*)$")
+    @Given("^get total count of BCS And JM Core tables (.*)$")
     public void getCountBCSAndJMTables(String tableName){
         switch (tableName){
             case "all_accountable_product_v":

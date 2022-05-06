@@ -52,7 +52,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
         JMEXtCurrentCount = ((Long) JM_ETLEXTCurrentTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Given("^We know the total count of JM source tables (.*)$")
+    @Given("^Get the total count of JM source tables (.*)$")
     public void getJMExtSourceCount(String tableName) {
         switch (tableName) {
             case "jnl_new_fulfilment_system_v":

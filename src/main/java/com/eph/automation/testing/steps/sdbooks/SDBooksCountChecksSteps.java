@@ -35,7 +35,7 @@ public class SDBooksCountChecksSteps {
         sdFullSrcCount = ((Long) sdFullSrcTableCnt.get(0).get("Source_count")).intValue();
     }
 
-    @Given("^We know the total count of Current SD data$")
+    @Given("^We know the total count SD current data$")
     public static void getCountfromCurrentTables(){
         Log.info("Getting Current URL Table Count...");
         String sdCurrSqlCount = SDDataLakeCountChecksSQL.GET_SD_URL_CURRENT_COUNT;
