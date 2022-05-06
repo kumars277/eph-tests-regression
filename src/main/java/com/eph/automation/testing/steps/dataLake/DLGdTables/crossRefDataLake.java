@@ -524,8 +524,8 @@ public class crossRefDataLake {
     @Given("^We get the count from the work,manif and product identifiers$")
     public void getCountfromGD() {
         // Log.info("Getting the count from the PostgreSQL");
-                sqlGdWorkMAnifProdIdentifierCounts = crossRefDLSQL.GD_WORK_MANIF_PROD_IDENTIFIERS_COUNT;
-                   Log.info(sqlGdWorkMAnifProdIdentifierCounts);
+        sqlGdWorkMAnifProdIdentifierCounts = crossRefDLSQL.GD_WORK_MANIF_PROD_IDENTIFIERS_COUNT;
+        Log.info(sqlGdWorkMAnifProdIdentifierCounts);
         List<Map<String, Object>> GdWorkMAnifProdIdentifierCountsTableSqlCount = DBManager.getDBResultMap(sqlGdWorkMAnifProdIdentifierCounts, Constants.AWS_URL);
         gdWorkMAnifProdIdentifierSQLCount = ((Long) GdWorkMAnifProdIdentifierCountsTableSqlCount.get(0).get("Source_Count")).intValue();
     }
@@ -548,7 +548,7 @@ public class crossRefDataLake {
     @When("^We get the records from the work,manif and product identifiers$")
     public void getRecfromGdTableIdentifiers() {
         Log.info("We get the records from GD table work, manif and prod identifiers..");
-                sql = String.format(crossRefDLSQL.GET_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
+        sql = String.format(crossRefDLSQL.GET_IDENTIFIER_RECS, Joiner.on("','").join(Ids));
         Log.info(sql);
         GDTablesDLSQLContext.recordsFromGDTableIdentifiers = DBManager.getDBResultAsBeanList(sql, GDTableDLSQLObject.class, Constants.AWS_URL);
     }

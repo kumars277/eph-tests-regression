@@ -62,7 +62,7 @@ public class ERMSEtlChecksSteps {
     }
 
 
-    @Then("^We know the total count of Current ERMS ETL data (.*)$")
+    @Then("^The total count of Current ERMS ETL data (.*)$")
     public static void getCountERMSCurrentTables(String tableName){
         switch (tableName){
             case "erms_transform_current_work_identifier":
@@ -220,7 +220,7 @@ public class ERMSEtlChecksSteps {
     }
 
 
-    @Then("^We know the total count of erms transform file (.*)$")
+    @Then("^The total count of erms transform file (.*)$")
     public static void getCountERMSTransformFileTables(String tableName){
         switch (tableName){
             case "erms_transform_file_history_work_identifier_part":
@@ -361,7 +361,7 @@ public class ERMSEtlChecksSteps {
 
 
 
-    @Then("^We know the total count of erms transform partition history (.*)$")
+    @Then("^The total count of erms transform partition history (.*)$")
     public static void getCountERMSTransformPartitionHistTables(String tableName){
         switch (tableName){
             case "erms_transform_history_work_identifier_part":
@@ -390,7 +390,7 @@ public class ERMSEtlChecksSteps {
 
     }
 
-    @Then("^We know the total count of latest ERMS ETL data (.*)$")
+    @Then("^The total count of latest ERMS ETL data (.*)$")
     public static void getCountERMSLatestTables(String tableName){
         switch (tableName){
             case "erms_transform_latest_work_identifier":
@@ -412,7 +412,7 @@ public class ERMSEtlChecksSteps {
         ermsLatestCount = ((Long) ermsLatestTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Then("^We know the total count of erms delta current and exclude tables (.*)$")
+    @Then("^The total count of erms delta current and exclude tables (.*)$")
     public static void getCountERMSDeltaAndExclTables(String tableName){
         switch (tableName){
             case "erms_transform_latest_work_identifier":

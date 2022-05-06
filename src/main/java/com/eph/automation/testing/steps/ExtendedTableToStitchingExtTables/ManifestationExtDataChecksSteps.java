@@ -35,7 +35,7 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext EPR ids (.*)$")
     public void getRandomManifExtEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext EPR Ids...");
         switch (tableName) {
