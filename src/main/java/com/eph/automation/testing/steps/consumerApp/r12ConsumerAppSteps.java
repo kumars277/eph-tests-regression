@@ -44,7 +44,7 @@ public class r12ConsumerAppSteps {
     }
 
     @Then("^We know the total count of (.*)$")
-    public static void getr12TrgtCount (String tableNanem) {
+    public static void getr12TrgtCount(String tableNanem) {
         switch (tableNanem){
             case "r12_full_data_v":
                 r12CountSQL = r12ChecksSQL.GET_TARGET_COUNT_R12;
