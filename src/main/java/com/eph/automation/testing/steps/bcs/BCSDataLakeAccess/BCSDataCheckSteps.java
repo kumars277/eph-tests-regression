@@ -31,7 +31,7 @@ public class BCSDataCheckSteps {
     private static List<String> Ids;
     private static BCSDataQualityContext bcsDataQualityContext = new BCSDataQualityContext();
 
-    @Given("^We get the (.*) random ids from initial ingest (.*)$")
+    @Given("^Get the (.*) random ids from initial ingest (.*)$")
     public void getRandomIdsFromInitialIngest(String countOfRandomIds, String targetTable) {
       //countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
