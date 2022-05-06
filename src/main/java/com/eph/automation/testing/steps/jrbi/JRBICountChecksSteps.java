@@ -73,7 +73,7 @@ public class JRBICountChecksSteps {
         jrbiFullSourceCount = ((Long) jrbiFullSourceTableCount.get(0).get("Source_Count")).intValue();
     }
 
-    @Given("^We know the total count of Current JRBI data from (.*)$")
+    @Then("^we get the total count of Current JRBI data from (.*)$")
     public static void getCountfromCurrentTables(String tableName){
         switch (tableName){
             case "jrbi_transform_current_work":

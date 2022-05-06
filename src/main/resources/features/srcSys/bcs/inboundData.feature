@@ -8,9 +8,9 @@ Feature:Validate data count for BCS tables in Data Lake
     Given Get the total count of BCS Data from initial_ingest <targetTable>
     Then  Get total count of BCS Current table <targetTable>
     And Compare count of initial ingest with current table <targetTable>
-    Given We get the <countOfRandomIds> random ids from initial ingest <targetTable>
+    Given Get the <countOfRandomIds> random ids from initial ingest <targetTable>
     When Get the data records from initial ingest for <targetTable>
-    Then Get the records from current tables <targetTable>
+    Then we Get the records from current tables <targetTable>
     And Compare the records of initial ingest and current table <targetTable>
     Examples:
       | targetTable                 | countOfRandomIds|
@@ -97,7 +97,7 @@ Feature:Validate data count for BCS tables in Data Lake
     Given Get the total count of BCS Book series Data from initial_ingest <targetTable>
     Then  Get total count of BCS Book series Current table <targetTable>
     And Compare count of initial ingest series with current book series table <targetTable>
-    Given We get the <countOfRandomIds> random ids for the initial ingest book series <targetTable>
+    Given Get <countOfRandomIds> random ids for initial ingest book series <targetTable>
     When Get the data records from initial ingest book series for <targetTable>
     Then Get the records for current tables for the book series <targetTable>
     And Compare the records for the initial ingest book series and current table book series <targetTable>

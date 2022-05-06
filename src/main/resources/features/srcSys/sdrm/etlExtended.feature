@@ -6,7 +6,7 @@ Feature:Validate data between SDRM ETL Tables
   @SDRM
   Scenario Outline: Check between SDRM Inbound and SDRM Current Product Availability
     Given Get the total count of SDRM Data from Inbound Load
-    Then  We know the total count of Current SDRM data from Current Product Availability
+    Then  We know the total count Current SDRM data from Current Product Availability
     And Compare count of SDRM Inbound load with current Product Availability table are identical
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When  Get the data from sdrm inbound table
@@ -18,7 +18,7 @@ Feature:Validate data between SDRM ETL Tables
 
   @SDRM
   Scenario Outline: Verify Data for SDRM transform product file history tables are transferred from transform current product table
-   Given We know the total count of SDRM Current product availability data
+   Given We know the total SDRM Current product availability data
     Then Get the count of SDRM transform product file history
     And Check count of SDRM current product availability table and SDRM product availability file history are identical
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
@@ -31,7 +31,7 @@ Feature:Validate data between SDRM ETL Tables
 
   @SDRM
   Scenario Outline: Verify Data for SDRM transform latest product availability tables are transferred from SDRM delta current product table and SDRM history excl delta table
-    Given We know the total count of SDRM Delta Current product availability data and SDRM prod availability History Excl Delta
+    Given We know the total SDRM Delta Current product availability data and SDRM prod availability History Excl Delta
     Then Get the count of SDRM transform prod availability latest table
     And Check count of between SDRM Delta Current product availability data and SDRM Product availability History and SDRM transform latest product availability are identical
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>

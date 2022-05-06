@@ -31,7 +31,7 @@ public class BCSDataCheckSteps {
     private static List<String> Ids;
     private static BCSDataQualityContext bcsDataQualityContext = new BCSDataQualityContext();
 
-    @Given("^We get the (.*) random ids from initial ingest (.*)$")
+    @Given("^Get the (.*) random ids from initial ingest (.*)$")
     public void getRandomIdsFromInitialIngest(String countOfRandomIds, String targetTable) {
       //countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
@@ -200,7 +200,7 @@ public class BCSDataCheckSteps {
         }
     }
 
-    @Then("^Get the records from current tables (.*)$")
+    @Then("^we Get the records from current tables (.*)$")
     public void getCurrentTableData(String targetTable) {//created by Nishant @ 21 Oct 2020
         Log.info("We get current table records...");
         switch (targetTable) {
@@ -1704,9 +1704,7 @@ public class BCSDataCheckSteps {
 
     @When("Get data from BCS stg_current (.*)")
     public void getDatafromBCSstgCurrentTables(String sourceTable) {//created by Nishant @ 26 Nov 2020
-
         Log.info("We get bcs current table records...");
-
         switch (sourceTable) {
             case "stg_current_classification":
                 sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_current_classification,
@@ -3431,7 +3429,7 @@ public class BCSDataCheckSteps {
                 + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getSourceref());
     }
 
-    @Given("^We get the (.*) random ids for the initial ingest book series (.*)$")
+    @Given("^Get (.*) random ids for initial ingest book series (.*)$")
     public void getRandomIdsFromInitialIngestSeries(String countOfRandomIds, String targetTable) {
         // countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);

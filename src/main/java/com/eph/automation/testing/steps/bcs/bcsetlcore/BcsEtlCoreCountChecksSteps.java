@@ -88,7 +88,7 @@ public class BcsEtlCoreCountChecksSteps {
         bcsCoreCurrentCount = ((Long) bcsETLCoreCurrentTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Given("^We know the total count of Inbound tables (.*)$")
+    @Given("^get the total count of Inbound tables (.*)$")
     public static void getCountInboundTables(String tableName) {
         Log.info("Getting Inbound Current View count of: "+tableName);
         switch (tableName) {

@@ -175,7 +175,6 @@ public class GDTableDLSQLObject {
     private String product_type;
     private String manifestation_type;
     private String work_type;
-
     public String getidentifier_type() { return identifier_type; }
     public void setidentifier_type(String identifier_type) { this.identifier_type = identifier_type; }
     public String getproduct_type() { return product_type; }

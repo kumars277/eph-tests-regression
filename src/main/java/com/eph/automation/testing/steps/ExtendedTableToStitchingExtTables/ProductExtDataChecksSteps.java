@@ -48,7 +48,7 @@ public class ProductExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Prod extended Availability table$")
+    @Then("^we Get the records from Prod extended Availability table$")
     public void getRecordsFromProdExtendedAvailabilityTable() {
         Log.info("We get the records from Prod Extended Avaiability Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_REC, Joiner.on("','").join(Ids));
@@ -271,7 +271,7 @@ public class ProductExtDataChecksSteps {
     }
 
 
-    @Then("^Get the records from Prod extended Pricing table$")
+    @Then("^we Get the records from Prod extended Pricing table$")
     public void getRecordsFromProdExtendedPricingTable() {
         Log.info("We get the records from Prod Extended Pricing Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_PRICING_REC, Joiner.on("','").join(Ids));
