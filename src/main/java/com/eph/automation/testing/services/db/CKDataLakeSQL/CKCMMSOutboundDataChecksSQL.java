@@ -14,7 +14,7 @@ public class CKCMMSOutboundDataChecksSQL {
     public static String GET_CK_CMMS_WORK1_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where currentIdentifier in ('%s')";
     public static String GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where identifier in ('%s') order by workId desc, identifier desc ";
     public static String GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where subjectAreaId in (%s) order by enddate desc, workid desc ";
-    public static String GET_CK_CMMS_PACKAGE1_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s')";
+    public static String GET_CK_CMMS_PACKAGE1_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s') order by packageID desc, workflowLiveDate desc";
     public static String GET_CK_CMMS_PACKAGE2_WORKS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by durableurl desc";
 
     //    GET Table Records
@@ -22,6 +22,6 @@ public class CKCMMSOutboundDataChecksSQL {
     public static String GET_CK_CMMS_WORK1 = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where currentIdentifier in ('%s')";
     public static String GET_CK_CMMS_WORK2_IDENTIFIERS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where identifier in ('%s') order by workId desc, identifier desc";
     public static String GET_CK_CMMS_WORK3_SUBJECT_AREAS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where subjectAreaId in (%s) order by enddate desc, workid desc";
-    public static String GET_CK_CMMS_PACKAGE1 = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s')";
+    public static String GET_CK_CMMS_PACKAGE1 = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s') order by packageID desc, workflowLiveDate desc";
     public static String GET_CK_CMMS_PACKAGE2_WORKS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by durableurl desc";
 }
