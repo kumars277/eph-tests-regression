@@ -1130,7 +1130,7 @@ public class JMETLDataChecksSQL {
             "   , m.manifestation_type m0_manifestation_type\n" +
             "   , CAST(1 AS boolean) separately_saleable_ind\n" +
             "   , CAST(0 AS boolean) trial_allowed_ind\n" +
-            "   , CAST(w.launch_date AS date) launch_date\n" +
+            "   , (CASE WHEN (wbm.APC = 'Y') THEN COALESCE(CAST(w.editorial_effective_date AS date), CAST(w.launch_date AS date)) ELSE CAST(w.launch_date AS date) END) launch_date\n" +
             "   , (CASE m.manifestation_type WHEN 'P' THEN 'G003' ELSE 'S001' END) tax_code\n" +
             "   , (CASE WHEN (wbm.SBS = 'Y') THEN 'Y' ELSE 'N' END) subscription\n" +
             "   , (CASE WHEN ((wbm.SBS = 'Y') AND (m.manifestation_type = 'P')) THEN 'Y' ELSE 'N' END) bulk_sales\n" +
@@ -1153,7 +1153,10 @@ public class JMETLDataChecksSQL {
             "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
             "   LEFT JOIN work_business_model wbm ON (wbm.work_id = w.work_id))\n" +
             "   WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) AND (m.notified_date IS NOT NULL))\n" +
-            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w.work_chronicle_id, w.elsevier_journal_number, w.work_journey_identifier, wbm.SBS, wbm.APC, wbm.SBD, m.manifestation_id, w.launch_date, m.manifestation_type, m.elsevier_journal_number, m.manifestation_title, w.eph_work_id, w.work_title, m.eph_manifestation_id, m.notified_date\n" +
+            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w.work_chronicle_id," +
+            " w.elsevier_journal_number, w.work_journey_identifier, wbm.SBS, wbm.APC, wbm.SBD, m.manifestation_id, w.launch_date," +
+            " m.manifestation_type, m.elsevier_journal_number, m.manifestation_title, w.eph_work_id, w.work_title, m.eph_manifestation_id," +
+            " m.notified_date, w.editorial_effective_date\n" +
             "UNION    SELECT\n" +
             "     cs.chronicle_scenario_name scenario_name\n" +
             "   , cs.chronicle_scenario_code scenario_code\n" +

@@ -50,7 +50,6 @@ public class JM_ETLCoreCountChecksSteps {
             case "etl_manifestation_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION;
                 break;
-
             case "etl_manifestation_identifier_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION_IDENTIFIER;
                 break;
