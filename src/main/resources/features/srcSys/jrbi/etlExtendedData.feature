@@ -10,16 +10,16 @@ Feature:Validate data for JRBI Extended
     Given We get the<countOfRandomIds> random EPR ids from full load<tableName>
     When We get the records from data jrbi_journal_data_full <tableName>
     Then We get the records from transform <tableName>
-    And compare the records of jrbi_journal_data_full and transform current <tableName>
+    And compare the records of <SourceTableName> and <tableName>
     Examples:
-      | tableName                                |    countOfRandomIds  |
-      |jrbi_transform_current_work               | 10                   |
-      |jrbi_transform_current_manifestation      | 10                   |
-      |jrbi_transform_current_person             | 10                   |
+     |SourceTableName        | tableName                                |    countOfRandomIds  |
+     |jrbi_journal_data_full |jrbi_transform_current_work               | 10                   |
+     |jrbi_journal_data_full |jrbi_transform_current_manifestation      | 10                   |
+     |jrbi_journal_data_full |jrbi_transform_current_person             | 10                   |
 
   @JRBIETLExtended
   Scenario Outline: Verify Data count for JRBI transform_current_history tables are transferred from transformed_current tables
-    Given We know the total count of Current JRBI data from <SourceTableName>
+    Given we get the total count of Current JRBI data from <SourceTableName>
     Then Get the count of transform_current_history <TargettableName>
     And Check count of current table <SourceTableName> and current history <TargettableName> are identical
     Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>

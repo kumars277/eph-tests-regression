@@ -51,8 +51,8 @@ Feature:Validate data for BCS ETL Extended tables
     Then Get the BCS Extended <targetTable> latest data count
     And Compare BCS Extended latest counts of are identical <targetTable>
     Given Get the <countOfRandomIds> from sum of delta_current and exclude_delta for BCS Extended <targetTable>
-    When Get the records from the sum of delta_current and exclude_delta for BCS Extended <targetTable>
-    Then Get the records from <targetTable> BCS Extended latest table
+    When Records from the sum of delta_current and exclude_delta for BCS Extended <targetTable>
+    Then The records from <targetTable> BCS Extended latest table
     And  Compare the records of Latest with sum of delta_current and Exclude_Delta for BCS Extended <targetTable>
     Examples:
       | targetTable                                                     |  countOfRandomIds     |

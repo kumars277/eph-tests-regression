@@ -97,7 +97,7 @@ public class JRBICountChecksSteps {
         jrbiCurrentCount = ((Long) jrbiCurrentTableCount.get(0).get("Current_Count")).intValue();
     }
 
-    @And("^Compare count of Full load with current (.*) table are identical$")
+    @And("^we Compare count of Full load with current (.*) table are identical$")
     public void compareFullAndCurrentCount(String tableName){
         Log.info("The count for table jrbi_journal_data_full => " + jrbiFullSourceCount + " and in "+tableName+" => " + jrbiCurrentCount);
         Assert.assertEquals("The counts are not equal when compared with jrbi_journal_data_full and "+tableName, jrbiCurrentCount, jrbiFullSourceCount);
