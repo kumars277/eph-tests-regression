@@ -17,7 +17,6 @@ Feature:Validate data for JRBI Extended
       |jrbi_transform_current_manifestation      | 10                   |
       |jrbi_transform_current_person             | 10                   |
 
-
   @JRBIETLExtended
   Scenario Outline: Verify Data count for JRBI transform_current_history tables are transferred from transformed_current tables
     Given We know the total count of Current JRBI data from <SourceTableName>
@@ -75,7 +74,6 @@ Feature:Validate data for JRBI Extended
       |jrbi_transform_previous_manifestation|jrbi_transform_previous_manifestation_history_part |     10                    |
       |jrbi_transform_previous_person       |jrbi_transform_previous_person_history_part        |     10                    |
 
-
   @notUsed
   Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
     Given Get the difference of total count between current and previous Table <TargetTable>
@@ -90,7 +88,6 @@ Feature:Validate data for JRBI Extended
       |jrbi_transform_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work         |   10              |
       | jrbi_transform_current_manifestation|jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|   10              |
       |jrbi_transform_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person       |   10              |
-
 
   @notUsed
   Scenario Outline: Verify Data count for JRBI delta_current_exclude are transferred from delta_current and current_history tables
@@ -117,8 +114,3 @@ Feature:Validate data for JRBI Extended
       |jrbi_delta_current_work           |jrbi_transform_delta_work_history_part   |
       |jrbi_delta_current_manifestation  |jrbi_transform_delta_manifestation_history_part   |
       |jrbi_delta_current_person         |jrbi_transform_delta_person_history_part   |
-
-
-
-
-

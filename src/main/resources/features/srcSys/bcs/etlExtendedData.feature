@@ -104,7 +104,6 @@ Feature:Validate data for BCS ETL Extended tables
       |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part            |50                   |
       |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part          |50                   |
 
-
   @notUsed
   Scenario Outline: Verify Data for BCS Extended delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Extended transform_file by diff of current and previous timestamp <sourceTable>
@@ -126,7 +125,6 @@ Feature:Validate data for BCS ETL Extended tables
       |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part|50                   |
       |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part            |50                   |
       |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part          |50                   |
-
 
   @notUsed
   Scenario Outline: Verify Data from the difference of BCS Extended Delta_Current and Current_history is transferred to BCS Extended exclude table

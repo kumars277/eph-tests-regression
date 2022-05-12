@@ -7,6 +7,9 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import org.junit.Assert;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;
 
 public class ApiReusableFunctions {
@@ -94,14 +97,25 @@ public class ApiReusableFunctions {
     public static String getSearchKeyword(String title)
     {
         //created by Nishant @ 28 Feb 2022
+        //updated by Nishant @ 12 May 2022
+        List<String> ignoreKeywords = Arrays.asList("Edition");
         String keyword = "";
         String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
-        keyword=arr_title[arr_title.length-1];
+
+        for(int i=0;i<arr_title.length;i++)
+        {
+            if(!ignoreKeywords.contains(arr_title[i]))
+            {
+                keyword=arr_title[i];
+                break;
+            }
+        }
+
         /*ngram filter in API splits the title into all the combinations
         of consecutive characters between 3 and 50 characters long.
         Because the minimum length is 3, CD isn’t a valid match.
         hence valid keyword should be more than 2 characters*/
-        if(keyword.length()<4)keyword = arr_title[arr_title.length-2];
+        if(keyword.length()<3)keyword = arr_title[arr_title.length-2];
         return keyword;
     }
 
