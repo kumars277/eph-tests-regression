@@ -55,7 +55,16 @@ public class JRBIManifestationDataChecksSQL {
                     ",journal_issue_trim_size as journal_issue_trim_size" +
                     ",war_reference as warReference" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where EPR in ('%s') AND " +
-                    "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part)\n";
+                    "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part) and delete_flag=false \n";
+
+ public static final String GET_MANIF_FILE_RECORDS =
+         "select epr as EPR" +
+                 ",record_type as recordType" +
+                 ",manifestation_type as manifestationType" +
+                 ",journal_issue_trim_size as journal_issue_trim_size" +
+                 ",war_reference as warReference" +
+                 " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part where EPR in ('%s') AND " +
+                 "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part)\n";
 
     public static final String GET_PREVIOUS_MANIF_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation order by rand() limit %s\n";

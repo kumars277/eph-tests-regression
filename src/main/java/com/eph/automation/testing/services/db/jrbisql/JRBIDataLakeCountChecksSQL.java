@@ -166,13 +166,27 @@ public class JRBIDataLakeCountChecksSQL {
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where\n " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part) and delete_flag = false\n ";
 
+    public static final  String GET_JRBI_CURRENT_WORK_FILE_COUNT =
+            "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part where\n " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n ";
+
+
     public static final  String GET_JRBI_CURRENT_MANIF_HISTORY_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where\n " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part) and delete_flag = false\n ";
 
+    public static final  String GET_JRBI_CURRENT_MANIF_FILE_COUNT =
+            "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part where\n " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part)\n ";
+
     public static final  String GET_JRBI_CURRENT_PERSON_HISTORY_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where\n " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part) and delete_flag = false\n ";
+
+    public static final  String GET_JRBI_CURRENT_PERSON_FILE_COUNT =
+            "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part where\n " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part)\n ";
+
 
     public static final  String GET_JRBI_PREVIOUS_WORK_HISTORY_COUNT =
     "select count(*) as Previous_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where\n " +

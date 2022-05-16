@@ -19,7 +19,7 @@ Feature:Validate data for JRBI Extended
 
 
   @JRBIETLExtended
-  Scenario Outline: Verify Data count for JRBI transform_current_history tables are transferred from transformed_current tables
+  Scenario Outline: Verify Data count for JRBI transform file and history are transferred from current tables
     Given we get the total count of Current JRBI data from <SourceTableName>
     Then Get the count of transform_current_history <TargettableName>
     And Check count of current table <SourceTableName> and current history <TargettableName> are identical
@@ -32,6 +32,10 @@ Feature:Validate data for JRBI Extended
       |jrbi_transform_current_work          |jrbi_transform_current_work_history_part         |   10                |
       |jrbi_transform_current_manifestation |jrbi_transform_current_manifestation_history_part|   10                  |
       |jrbi_transform_current_person        |jrbi_transform_current_person_history_part       |   10                |
+      |jrbi_transform_current_work          |jrbi_transform_work_file_history_part         |   10                |
+      |jrbi_transform_current_manifestation |jrbi_transform_manifestation_file_history_part|   10                  |
+      |jrbi_transform_current_person        |jrbi_transform_person_file_history_part       |   10                |
+
 
   @JRBIETLExtended
   Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
@@ -60,20 +64,20 @@ Feature:Validate data for JRBI Extended
 
       ###################################3
 
-  @notUsed
-  Scenario Outline: Verify Data count for JRBI transform_previous_history tables are transferred from transformed_previous tables
-    Given We know the total count of Previous tables from <SourceTableName>
-    Then We Get the JRBI <TargettableName> previous history data count
-    And Check count of previous table <SourceTableName> and previous history <TargettableName> are identical
-    Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>
-    When  We get the records from transform <SourceTableName>
-    Then Get the records from transform history <TargettableName>
-    And compare the records of <SourceTableName> and <TargettableName>
-    Examples:
-      |SourceTableName                      |TargettableName                                    |  countOfRandomIds         |
-      |jrbi_transform_previous_work         |jrbi_transform_previous_work_history_part          |     10                    |
-      |jrbi_transform_previous_manifestation|jrbi_transform_previous_manifestation_history_part |     10                    |
-      |jrbi_transform_previous_person       |jrbi_transform_previous_person_history_part        |     10                    |
+#  @notUsed
+#  Scenario Outline: Verify Data count for JRBI transform_previous_history tables are transferred from transformed_previous tables
+#    Given We know the total count of Previous tables from <SourceTableName>
+#    Then We Get the JRBI <TargettableName> previous history data count
+#    And Check count of previous table <SourceTableName> and previous history <TargettableName> are identical
+#    Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>
+#    When  We get the records from transform <SourceTableName>
+#    Then Get the records from transform history <TargettableName>
+#    And compare the records of <SourceTableName> and <TargettableName>
+#    Examples:
+#      |SourceTableName                      |TargettableName                                    |  countOfRandomIds         |
+#      |jrbi_transform_previous_work         |jrbi_transform_previous_work_history_part          |     10                    |
+#      |jrbi_transform_previous_manifestation|jrbi_transform_previous_manifestation_history_part |     10                    |
+#      |jrbi_transform_previous_person       |jrbi_transform_previous_person_history_part        |     10                    |
 
 
   @notUsed

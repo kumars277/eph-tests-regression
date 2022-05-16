@@ -6,7 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.GDTablesDLSQLContext;
 import com.eph.automation.testing.models.dao.consumerApp.r12Objects;
-import com.eph.automation.testing.services.db.consumerAppSQL.r12ChecksSQL;
+import com.eph.automation.testing.services.db.consumerAppSQL.mercuryChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -19,53 +19,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class r12ConsumerAppSteps {
-    private static String r12CountSQL;
-    private static String r12FullSetCountSQL;
-    private static int r12FullSetCount;
-    private static int r12trgtCount;
+public class mercuryConsumerAppSteps {
+    private static String mercuryPrintCountSQL;
+    private static String sourceEPHSQL;
+    private static int sourceEPHCount;
+    private static int mercuryPrintCount;
     private static String sql;
     private static List<String> ids;
 
-    @Given("^Get the total count of Full set (.*)$")
-    public static void getr12FullSetCount (String tableNanem) {
+    @Given("^Get the total count from EPH (.*)$")
+    public static void sourceEPHCount (String tableNanem) {
         switch (tableNanem){
-            case "r12_full_data_v":
-                 r12FullSetCountSQL = r12ChecksSQL.GET_FULL_SET_COUNT_R12;
-                break;
-            case "drm_action_scripts_v":
-                 r12FullSetCountSQL = r12ChecksSQL.GET_DRM_ACTION_SOURCE_COUNT;
+            case "extract_mercury_print_v":
+                sourceEPHSQL = mercuryChecksSQL.GET_SOURCE_EPH_COUNT;
                 break;
         }
 
-        Log.info(r12FullSetCountSQL);
-        List<Map<String, Object>> r12FullSrcTableCnt = DBManager.getDBResultMap(r12FullSetCountSQL, Constants.AWS_URL);
-        r12FullSetCount = ((Long) r12FullSrcTableCnt.get(0).get("Source_count")).intValue();
+        Log.info(sourceEPHSQL);
+        List<Map<String, Object>> SrcEPHTableCnt = DBManager.getDBResultMap(sourceEPHSQL, Constants.AWS_URL);
+        sourceEPHCount = ((Long) SrcEPHTableCnt.get(0).get("source_count")).intValue();
     }
 
-    @Then("^We know the total count of (.*)$")
-    public static void getr12TrgtCount(String tableNanem) {
+    @Then("^We know the total count from mercury view (.*)$")
+    public static void getmercuryPrintCount(String tableNanem) {
         switch (tableNanem){
-            case "r12_full_data_v":
-                r12CountSQL = r12ChecksSQL.GET_TARGET_COUNT_R12;
+            case "extract_mercury_print_v":
+                mercuryPrintCountSQL = mercuryChecksSQL.GET_MERCURY_PRINT_COUNT;
                 break;
-            case "drm_action_scripts_v":
-                r12CountSQL = r12ChecksSQL.GET_DRM_ACTION_TARGET_COUNT;
-                break;
+
         }
 
-        Log.info(r12CountSQL);
-        List<Map<String, Object>> r12FullTableCnt = DBManager.getDBResultMap(r12CountSQL, Constants.AWS_URL);
-        r12trgtCount = ((Long) r12FullTableCnt.get(0).get("Target_count")).intValue();
+        Log.info(mercuryPrintCountSQL);
+        List<Map<String, Object>> mercuryPrintTableCnt = DBManager.getDBResultMap(mercuryPrintCountSQL, Constants.AWS_URL);
+        mercuryPrintCount = ((Long) mercuryPrintTableCnt.get(0).get("Target_count")).intValue();
     }
 
-    @And("^Compare count of Full load with (.*)$")
-    public void comparesrcAndTrgtCounts(String table){
-        Log.info("The count for table r12 => " + r12FullSetCount + " and in "+table+ "=> " + r12trgtCount);
-        Assert.assertEquals("The counts are not equal when compared for "+table, r12trgtCount,r12FullSetCount );
+    @And("^Compare counts of EPH and MercuryPrint view (.*)$")
+    public void compCounts(String table){
+        Log.info("The count for EPH => " + sourceEPHCount + " and in "+table+ "=> " + mercuryPrintCount);
+        Assert.assertEquals("The counts are not equal when compared for "+table, sourceEPHCount,mercuryPrintCount );
     }
 
-    @Given("^We get the (.*) random ids (.*)$")
+  /*  @Given("^We get the (.*) random ids (.*)$")
     public void getRandomIds(String numberOfRecords,String tableName){
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
@@ -187,7 +182,7 @@ public class r12ConsumerAppSteps {
         }
     }
 
-
+*/
 
 
 

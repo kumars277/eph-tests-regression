@@ -121,6 +121,18 @@ public class JRBICountChecksSteps {
                 Log.info("Getting Current Person History Table Count...");
                 jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_PERSON_HISTORY_COUNT;
                 break;
+            case "jrbi_transform_work_file_history_part":
+                Log.info("Getting Current work file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_WORK_FILE_COUNT;
+                break;
+            case "jrbi_transform_manifestation_file_history_part":
+                Log.info("Getting Current manif file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_MANIF_FILE_COUNT;
+                break;
+            case "jrbi_transform_person_file_history_part":
+                Log.info("Getting Current Person file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_PERSON_FILE_COUNT;
+                break;
              default:
                  Log.info("no tables");
         }
@@ -132,7 +144,7 @@ public class JRBICountChecksSteps {
 
     @And("^Check count of current table (.*) and current history (.*) are identical$")
     public void compareCurrentandCurrentHistoryCount(String srctableName,String trgttableName){
-        Log.info("The count for current table " + srctableName + " => " + jrbiCurrentCount + " and in current_history "+trgttableName+" => " + jrbiCurrentHistoryCount);
+        Log.info("The count for " + srctableName + " => " + jrbiCurrentCount + " and in "+trgttableName+" => " + jrbiCurrentHistoryCount);
         Assert.assertEquals("The counts are not equal when compared with "+srctableName+" and "+trgttableName, jrbiCurrentHistoryCount, jrbiCurrentCount);
     }
 
