@@ -16,5 +16,8 @@ public class GDTablesDLSQLContext {
     public static List<GDTableDLSQLObject> recordsFromCrossRefIdentifier;
     public static List<r12Objects>recsR12source;
     public static List<r12Objects>recsR12target;
+    public static List<r12Objects>sourceEPHMercury;
+    public static List<r12Objects>mercuryPrintView;
+
 }
 

@@ -60,130 +60,91 @@ public class mercuryConsumerAppSteps {
         Assert.assertEquals("The counts are not equal when compared for "+table, sourceEPHCount,mercuryPrintCount );
     }
 
-  /*  @Given("^We get the (.*) random ids (.*)$")
+ @Given("^Get the (.*) random ids from EPH (.*)$")
     public void getRandomIds(String numberOfRecords,String tableName){
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random ids from R12 Tables....");
+        Log.info("Get random ids from Mercury Tables....");
         List<Map<?, ?>> randomids;
         switch (tableName) {
-            case "r12_full_data_v":
-                sql = String.format(r12ChecksSQL.GET_RANDOM_EPR_ID_R12_FULL, numberOfRecords);
+            case "extract_mercury_print_v":
+                sql = String.format(mercuryChecksSQL.GET_RANDOM_ID_MERCURY, numberOfRecords);
                 break;
-            case "drm_action_scripts_v":
-                sql = String.format(r12ChecksSQL.GET_RANDOM_EPR_ID_DRM_ACTION, numberOfRecords);
-                break;
+
         }
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        ids = randomids.stream().map(m -> (String) m.get("eph_work_id")).collect(Collectors.toList());
-       // Log.info(sql);
-        //Log.info(ids.toString());
+        ids = randomids.stream().map(m -> (String) m.get("product_id")).collect(Collectors.toList());
+        Log.info(sql);
+        Log.info(ids.toString());
     }
 
-    @When("^We Get the records from full set data (.*)$")
-    public static void getFullRecSrc(String tableName) {
+      @When("^We Get the records from the source EPH (.*)$")
+    public static void getSrcEPH(String tableName) {
         Log.info("We get source records...");
         switch (tableName) {
-            case "r12_full_data_v":
-                sql = String.format(r12ChecksSQL.GET_FULL_SET_SOURCE_R12_DATA, String.join("','",ids));
+            case "extract_mercury_print_v":
+                sql = String.format(mercuryChecksSQL.GET_EPH_SOURCE_DATA, String.join("','",ids));
                 break;
-            case "drm_action_scripts_v":
-                sql = String.format(r12ChecksSQL.GET_SOURCE_DATA_DRM_ACTION_SCRIPT, String.join("','",ids));
-                break;
+
         }
-        GDTablesDLSQLContext.recsR12source = DBManager.getDBResultAsBeanList(sql, r12Objects.class, Constants.AWS_URL);
+        GDTablesDLSQLContext.sourceEPHMercury = DBManager.getDBResultAsBeanList(sql, r12Objects.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @When("^We Get the records from the views of (.*)$")
-    public static void getRecTarget(String tableName) {
+    @When("^We Get the records from the Mercury Print (.*)$")
+    public static void getMecuryViewRec(String tableName) {
         Log.info("We get Target records...");
         switch (tableName) {
-            case "r12_full_data_v":
-                sql = String.format(r12ChecksSQL.GET_FULL_SET_TARGET_R12_DATA, String.join("','",ids));
+            case "extract_mercury_print_v":
+                sql = String.format(mercuryChecksSQL.GET_MERCURY_PRINT_RECS, String.join("','",ids));
                 break;
-            case "drm_action_scripts_v":
-                sql = String.format(r12ChecksSQL.GET_TARGET_DATA_DRM_ACTION_SCRIPT, String.join("','",ids));
-                break;
+
         }
-        GDTablesDLSQLContext.recsR12target = DBManager.getDBResultAsBeanList(sql, r12Objects.class, Constants.AWS_URL);
+        GDTablesDLSQLContext.mercuryPrintView = DBManager.getDBResultAsBeanList(sql, r12Objects.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @And("^we compare records of full set and (.*)$")
-    public void compareRecs(String tableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (GDTablesDLSQLContext.recsR12source.isEmpty()) {
+    @And("^compare the rec of both EPH and Mercury Print views (.*)$")
+    public void compareRecsEPHAndMercury(String tableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (GDTablesDLSQLContext.sourceEPHMercury.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
             Log.info("Sorting the ids to compare the records...");
-            for (int i = 0; i < GDTablesDLSQLContext.recsR12source.size(); i++) {
+            for (int i = 0; i < GDTablesDLSQLContext.sourceEPHMercury.size(); i++) {
                 switch (tableName) {
-                    case "r12_full_data_v":
-                        Log.info("comparing inbound and r12_full_data_v records...");
-                        GDTablesDLSQLContext.recsR12source.sort(Comparator.comparing(r12Objects::geteph_work_id)); //sort primarykey data in the lists
-                        GDTablesDLSQLContext.recsR12target.sort(Comparator.comparing(r12Objects::geteph_work_id));
+                    case "extract_mercury_print_v":
+                        Log.info("comparing eph vs mercury records...");
+                        GDTablesDLSQLContext.sourceEPHMercury.sort(Comparator.comparing(r12Objects::getproduct_id)); //sort primarykey data in the lists
+                        GDTablesDLSQLContext.mercuryPrintView.sort(Comparator.comparing(r12Objects::getproduct_id));
 
-                        String[] r12FullData = {"geteph_work_id", "getlast_updated_date", "getproduct_type","getproduct_description",
-                                "getr12_alias","getcompany_code","getresponsibility_centre","getproduct_segment","getcreated_date","getjournal_acronym","getpmg","getpmc","getissn","getpublisher","getmanifestation_type","getmanifestation_status"};
+                        String[] r12FullData = {"getschemaversion", "getcreated", "getupdated", "getproduct_id",
+                                "getproduct_full_name", "getproduct_name", "getwork_title", "getwork_type", "getwork_typerollup", "getwork_status", "getwork_statusrollup", "getmanifestation_id", "getjournal_number", "getjournal_acronym", "getoperating_company", "getproduct_type", "getissn", "getpublication_status", "getetax_code", "getfulfilment_system", "getwarehouse_primary", "getwarehouse_backissue", "getnumber_of_issues", "getnumber_of_issues", "getddp_eligible", "getpts_journal_indicator", "getyear_of_first_issue", "getfirst_issue_name", "getfirst_volume_name", "getdefault_start", "getshort_title", "getrc_code", "getpmc_code"};
                         for (String strTemp : r12FullData) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            r12Objects objectToCompare1 = GDTablesDLSQLContext.recsR12source.get(i);
-                            r12Objects objectToCompare2 = GDTablesDLSQLContext.recsR12target.get(i);
+                            r12Objects objectToCompare1 = GDTablesDLSQLContext.sourceEPHMercury.get(i);
+                            r12Objects objectToCompare2 = GDTablesDLSQLContext.mercuryPrintView.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("eph_work_id => " + GDTablesDLSQLContext.recsR12source.get(i).geteph_work_id() +
-                                    " " + strTemp + " => source = " + method.invoke(objectToCompare1) +
-                                    " r12_full_data_v = " + method2.invoke(objectToCompare2));
+                            Log.info("product_id => " + GDTablesDLSQLContext.sourceEPHMercury.get(i).getproduct_id() +
+                                    " " + strTemp + " => EPH = " + method.invoke(objectToCompare1) +
+                                    " Mercury Print = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in r12_full_data_v for eph_work_id:" + GDTablesDLSQLContext.recsR12source.get(i).geteph_work_id(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Mercury_Print for product_id:" + GDTablesDLSQLContext.sourceEPHMercury.get(i).getproduct_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
                         }
                         break;
 
-                    case "drm_action_scripts_v":
-                        Log.info("drm_action_scripts_v records.... ");
-                        GDTablesDLSQLContext.recsR12source.sort(Comparator.comparing(r12Objects::geteph_work_id)); //sort primarykey data in the lists
-                        GDTablesDLSQLContext.recsR12target.sort(Comparator.comparing(r12Objects::geteph_work_id));
-
-                        String[] drm_action_recs = {"getscript_group", "getaction", "getconsolidation",
-                                "getchart_of_account_value", "getproduct_segment", "getaction_value_type",
-                                "getvalue","geteph_work_id","getlast_updated_date"};
-                        for (String strTemp : drm_action_recs) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            r12Objects objectToCompare1 = GDTablesDLSQLContext.recsR12source.get(i);
-                            r12Objects objectToCompare2 = GDTablesDLSQLContext.recsR12target.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("eph_work_id => " + GDTablesDLSQLContext.recsR12source.get(i).geteph_work_id() +
-                                    " " + strTemp + " => Source = " + method.invoke(objectToCompare1) +
-                                    " drm_action_scripts_v = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in drm_action_scripts_v for eph_work_id:" + GDTablesDLSQLContext.recsR12source.get(i).geteph_work_id(),
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-
-                        break;
-                    }
+                }
             }
         }
+
+
     }
-
-*/
-
-
-
 }

@@ -219,7 +219,7 @@ public class JRBIDataChecksSteps {
 
     @Given("^We get the (.*) random EPR ids from (.*)$")
     public static void getRandomEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Source EPR Ids...");
         switch (tableName) {

@@ -7,10 +7,10 @@ Feature:Validate data for SDBooks in Data Lake Access Layer
     Given Get the total count from EPH <tableName>
     Then  We know the total count from mercury view <tableName>
     And  Compare counts of EPH and MercuryPrint view <tableName>
- #   Given Get the <countOfRandomIds> random ids from EPH <tableName>
- #   When We Get the records from the source EPH <tableName>
- #   Then We Get the records from the Mercury Print <tableName>
- #   And  compare the rec of both EPH and Mercury Print views <tableName>
+    Given Get the <countOfRandomIds> random ids from EPH <tableName>
+    When We Get the records from the source EPH <tableName>
+    Then We Get the records from the Mercury Print <tableName>
+    And  compare the rec of both EPH and Mercury Print views <tableName>
     Examples:
       | tableName                   |    countOfRandomIds |
       |extract_mercury_print_v      |500                   |
