@@ -16,7 +16,7 @@ public class GetJRBIDLDBUser {
                 dbJRBIDL = "jrbi_staging_uat";
             }
         }else{
-            dbJRBIDL = "jrbi_staging_sit";
+            dbJRBIDL = "jrbi_staging_sit2";
         }
         return dbJRBIDL;
     }
@@ -31,7 +31,7 @@ public class GetJRBIDLDBUser {
                 dbProdDb = "product_staging_database_uat";
             }
         }else{
-          dbProdDb = "product_staging_database_sit";
+          dbProdDb = "product_staging_database_sit2";
         }
         return dbProdDb;
     }
@@ -46,7 +46,7 @@ public class GetJRBIDLDBUser {
                 dbProdExtdb = "product_ext_database_uat";
             }
          }else{
-           dbProdExtdb = "product_ext_database_sit";
+           dbProdExtdb = "product_ext_database_sit2";
         }
         return dbProdExtdb;
     }

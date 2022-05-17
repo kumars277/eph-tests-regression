@@ -106,6 +106,20 @@ public class JRBIPersonDataChecksSQL {
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
                     "and delete_flag=false";
 
+    public static final String GET_PERSON_FILE_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part where EPR in ('%s') AND " +
+                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part)";
+
     public static final String GET_PREVIOUS_PERSON_HISTORY_RECORDS =
             "select epr as EPR" +
                     ",record_type as recordType" +

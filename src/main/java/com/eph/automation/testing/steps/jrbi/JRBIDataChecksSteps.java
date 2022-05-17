@@ -290,14 +290,23 @@ public class JRBIDataChecksSteps {
             case "jrbi_transform_current_person_history_part":
                 sql = String.format(JRBIPersonDataChecksSQL.GET_CURRENT_PERSON_HISTORY_RECORDS, String.join("','",ids));
                 break;
-            case "jrbi_transform_previous_work_history_part":
-                sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_HISTORY_RECORDS, String.join("','",ids));
+//            case "jrbi_transform_previous_work_history_part":
+//                sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_HISTORY_RECORDS, String.join("','",ids));
+//                break;
+//            case "jrbi_transform_previous_manifestation_history_part":
+//                sql = String.format(JRBIManifestationDataChecksSQL.GET_PREVIOUS_MANIF_HISTORY_RECORDS, String.join("','",ids));
+//                break;
+//            case "jrbi_transform_previous_person_history_part":
+//                sql = String.format(JRBIPersonDataChecksSQL.GET_PREVIOUS_PERSON_HISTORY_RECORDS, String.join("','",ids));
+//                break;
+           case "jrbi_transform_work_file_history_part":
+                sql = String.format(JRBIWorkDataChecksSQL.GET_WORK_FILE_RECORDS, String.join("','",ids));
                 break;
-            case "jrbi_transform_previous_manifestation_history_part":
-                sql = String.format(JRBIManifestationDataChecksSQL.GET_PREVIOUS_MANIF_HISTORY_RECORDS, String.join("','",ids));
+            case "jrbi_transform_manifestation_file_history_part":
+                sql = String.format(JRBIManifestationDataChecksSQL.GET_MANIF_FILE_RECORDS, String.join("','",ids));
                 break;
-            case "jrbi_transform_previous_person_history_part":
-                sql = String.format(JRBIPersonDataChecksSQL.GET_PREVIOUS_PERSON_HISTORY_RECORDS, String.join("','",ids));
+            case "jrbi_transform_person_file_history_part":
+                sql = String.format(JRBIPersonDataChecksSQL.GET_PERSON_FILE_RECORDS, String.join("','",ids));
                 break;
             default:
                 Log.info(nomsg);
@@ -331,8 +340,8 @@ public class JRBIDataChecksSteps {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("EPR => " +  JRBIAccessDLContext.recordsFromSource.get(i).getEPR() +
-                                    " " + strTemp + " => current_work = " + method.invoke(objectToCompare1) +
-                                    " work_history = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => "+sourcetable +" = " + method.invoke(objectToCompare1) +
+                                    targetTable+" = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" for EPR:"+JRBIAccessDLContext.recordsFromSource.get(i).getEPR(),
@@ -357,9 +366,8 @@ public class JRBIDataChecksSteps {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("EPR => " +  JRBIAccessDLContext.recordsFromSource.get(i).getEPR() +
-                                    " " + strTemp + " => Current_manifest = " + method.invoke(objectToCompare1) +
-                                    " manifest_history = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                                    " " + strTemp + " => "+sourcetable +" = " + method.invoke(objectToCompare1) +
+                                    targetTable+" = " + method2.invoke(objectToCompare2));                           if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" for EPR:"+JRBIAccessDLContext.recordsFromSource.get(i).getEPR(),
                                         method.invoke(objectToCompare1),
@@ -387,8 +395,8 @@ public class JRBIDataChecksSteps {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("EPR => " + JRBIAccessDLContext.recordsFromSource.get(i).getEPR() +
-                                    " " + strTemp + " => Current_person = " + method.invoke(objectToCompare1) +
-                                    " PersonCurrent_history = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => "+sourcetable +" = " + method.invoke(objectToCompare1) +
+                                     targetTable+" = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in "+targetTable+" for EPR:" + JRBIAccessDLContext.recordsFromSource.get(i).getEPR(),
