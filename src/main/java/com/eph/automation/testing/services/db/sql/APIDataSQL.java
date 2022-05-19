@@ -461,9 +461,12 @@ public class APIDataSQL {
           + "        from\n"
           + "            eph"
           + GenericFunctions.getDBsufix()
-          + "_extended_data_stitch.stch_work_ext_json swej\n"
+          + "_extended_data_stitch.stch_work_ext_json swej"
+          + " join semarchy_eph_mdm.gd_wwork gw\n"
+          + " on swej.epr_id = gw.work_id\n"
           + "        where\n"
           + "            type in ('ABS', 'JBB', 'JNL', 'NWL')\n"
+          + "and gw.f_status in ('WLA')"
           + "    ),\n"
           + "    personNames as (\n"
           + "        select\n"
@@ -482,7 +485,7 @@ public class APIDataSQL {
           + "    where\n"
           + "        name ~* '(?c)\\mFIRSTNAME\\M'\n"
           + "        or name ~* '(?c)\\mLASTNAME\\M'\n"
-          +         "PARTIALQUERY1"
+          + "PARTIALQUERY1"
           + "    union\n"
           + "    select\n"
           + "        distinct work_id\n"
@@ -575,7 +578,7 @@ public class APIDataSQL {
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_type='%s'";
+      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_type='%s'";
 
   /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).

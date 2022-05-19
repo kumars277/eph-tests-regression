@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   //ids.clear();ids.add("EPR-W-115X06");Log.info("hard coded work id is : " + ids);
+  // ids.clear();ids.add("EPR-W-105416");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -107,7 +107,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-102VB7");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-104Y97");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
