@@ -201,6 +201,30 @@ public class JRBIWorkDataChecksSQL {
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
                     "AND delete_flag=false order by catalogue_issues_qty desc";
 
+    public static final String GET_WORK_FILE_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
+                    ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part where EPR in ('%s') AND " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n " +
+                    "order by epr,catalogue_issues_qty desc";
+
+
     public static final String GET_CURRENT_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work order by rand() limit %s\n";
 

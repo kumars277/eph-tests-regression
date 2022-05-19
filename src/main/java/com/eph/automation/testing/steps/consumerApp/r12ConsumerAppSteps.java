@@ -62,10 +62,10 @@ public class r12ConsumerAppSteps {
     @And("^Compare count of Full load with (.*)$")
     public void comparesrcAndTrgtCounts(String table){
         Log.info("The count for table r12 => " + r12FullSetCount + " and in "+table+ "=> " + r12trgtCount);
-        Assert.assertEquals("The counts are not equal when compared for "+table, r12FullSetCount,r12FullSetCount );
+        Assert.assertEquals("The counts are not equal when compared for "+table, r12trgtCount,r12FullSetCount );
     }
 
-    @Given ("^We get the (.*) random ids (.*)$")
+    @Given("^We get the (.*) random ids (.*)$")
     public void getRandomIds(String numberOfRecords,String tableName){
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
