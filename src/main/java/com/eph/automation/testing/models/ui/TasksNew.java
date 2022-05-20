@@ -40,7 +40,7 @@ public class TasksNew {
 
   public void loginWithCredential() {
     //created by Nishant in Apr 2022
-    JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+   // JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
     String loginId = "svc-scielsoxfsem004";//svc.getAsString("svc4");
     String pwd ="zwpLwaQ9FFm+uA9"; //svc.getAsString("svc4pwd");
 
