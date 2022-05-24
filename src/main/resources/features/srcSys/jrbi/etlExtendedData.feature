@@ -39,7 +39,7 @@ Feature:Validate data for JRBI Extended
   @JRBIETLExtended
   Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
     Given Get the sum of total count between delta current and and Current_Exclude Table <TargetTable>
-   Then Get the JRBI <TargetTable> latest data count
+    Then Get the JRBI <TargetTable> latest data count
     And Compare latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Given We get the <countOfRandomIds> random EPR ids from <TargetTable>
     When we get the records from the addition of delta current and exclude <TargetTable>
@@ -47,9 +47,9 @@ Feature:Validate data for JRBI Extended
     And Compare the records for Latest tables <TargetTable>
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |countOfRandomIds |
-      |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work             |10              |
-      |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation    |10              |
-      |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person           |10              |
+      |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work             |1              |
+      |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation    |1              |
+      |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person           |1              |
 
     @JRBIETLExtended
     Scenario Outline: Verify Duplicate Entry for JRBI in transform latest tables
