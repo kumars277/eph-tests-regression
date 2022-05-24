@@ -168,7 +168,7 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static final  String GET_JRBI_CURRENT_WORK_FILE_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part where\n " +
-                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n ";
+                    "transform_file_ts=(select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n ";
 
 
     public static final  String GET_JRBI_CURRENT_MANIF_HISTORY_COUNT =
@@ -177,7 +177,7 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static final  String GET_JRBI_CURRENT_MANIF_FILE_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part where\n " +
-                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part)\n ";
+                    "transform_file_ts=(select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part)\n ";
 
     public static final  String GET_JRBI_CURRENT_PERSON_HISTORY_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where\n " +
@@ -185,7 +185,7 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static final  String GET_JRBI_CURRENT_PERSON_FILE_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part where\n " +
-                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part)\n ";
+                    "transform_file_ts=(select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part)\n ";
 
 
     public static final  String GET_JRBI_PREVIOUS_WORK_HISTORY_COUNT =
@@ -223,7 +223,7 @@ public class JRBIDataLakeCountChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n" +
                     "as a union all select b.epr, b.record_type, b.role_code, b.u_key, \n" +
                     "b.role_description, b.given_name, b.family_name, b.peoplehub_id, \n" +
-                    "b.email, b.transform_ts, null as col11, null as col12 \n" +
+                    "b.email, b.transform_file_ts, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n ";
 
 
@@ -262,7 +262,7 @@ public class JRBIDataLakeCountChecksSQL {
                  "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                  "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
                  "as a union all select b.epr, b.record_type, \n" +
-                 "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                 "b.journal_issue_trim_size, b.war_reference,b.transform_file_ts,null as col11, null as col12 \n" +
                  "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n ";
 
     public static final String GET_JRBI_MANIF_LATEST_COUNT =
