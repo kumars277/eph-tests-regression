@@ -1,6 +1,4 @@
-Feature:Validate data for SDBooks in Data Lake Access Layer
-
-  #confluence link:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45487295732/SD+Books+Inbound
+Feature:Validate data for R12 App in Data Lake
 
   @r12
   Scenario Outline: Verify Data for r12 Consumer Application extracted from EPH
@@ -13,7 +11,7 @@ Feature:Validate data for SDBooks in Data Lake Access Layer
     And  we compare records of full set and <tableName>
     Examples:
       | tableName                   |    countOfRandomIds |
-      |r12_full_data_v              |500                   |
-      |drm_action_scripts_v         |500                   |
+      |r12_full_data_v              |1                   |
+      |drm_action_scripts_v         |1                   |
 
 

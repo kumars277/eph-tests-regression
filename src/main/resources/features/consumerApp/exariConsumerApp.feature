@@ -1,7 +1,7 @@
-Feature:Validate data for Mercury Print in Data Lake
+Feature:Validate data for Exari App in Data Lake
 
-  @mercury
-  Scenario Outline: Verify Data for mercury print Consumer Application extracted from EPH
+  @exari
+  Scenario Outline: Verify Data for exari view consumer application
     Given Get the total count of Full set <tableName>
     Then  We know the total count of <tableName>
     And  Compare count of Full load with <tableName>
@@ -11,7 +11,7 @@ Feature:Validate data for Mercury Print in Data Lake
     And  we compare records of full set and <tableName>
     Examples:
       | tableName                   |    countOfRandomIds |
-      |extract_mercury_print_v      |1                   |
+      |exari_view                   |500                   |
 
 
 

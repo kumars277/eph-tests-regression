@@ -255,7 +255,7 @@ public class r12ChecksSQL {
             ")";
 
     public static String GET_RANDOM_EPR_ID_R12_FULL =
-            "select distinct eph_work_id as eph_work_id from(\n" +
+            "select distinct eph_work_id as randomIds from(\n" +
                     "WITH\n" +
                     "  work_data AS (\n" +
                     "   SELECT\n" +
@@ -382,7 +382,7 @@ public class r12ChecksSQL {
                     "order by rand()) limit %s";
 
     public static String GET_RANDOM_EPR_ID_DRM_ACTION=
-            "select distinct eph_work_id as eph_work_id from(\n"+
+            "select distinct eph_work_id as randomIds from(\n"+
                     "SELECT\n"+
                     "  base.script_group\n"+
                     ", base.action\n"+
@@ -799,7 +799,6 @@ public class r12ChecksSQL {
                     " from "+GetPRMDLDBUser.getProdDataBase()+".r12_full_data_v where eph_work_id in('%s') " +
                     "order by eph_work_id desc,product_type desc,product_description desc, responsibility_centre desc, " +
                     "issn desc, manifestation_type desc,r12_alias desc,manifestation_status desc ";
-
 
 }
 

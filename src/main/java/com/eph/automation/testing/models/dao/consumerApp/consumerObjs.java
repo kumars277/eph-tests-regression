@@ -1,6 +1,6 @@
 package com.eph.automation.testing.models.dao.consumerApp;
 
-public class r12Objects {
+public class consumerObjs {
     private String script_group;
     private String action;
     private String  consolidation;
@@ -55,6 +55,7 @@ public class r12Objects {
     private String short_title;
     private String rc_code;
     private String pmc_code;
+
 
     public String getschemaversion() { return schemaversion; }
     public void setschemaversion(String schemaversion) { this.schemaversion = schemaversion; }
@@ -118,6 +119,41 @@ public class r12Objects {
     public void setpmc_code(String pmc_code) { this.pmc_code = pmc_code; }
 
     /****************************************************/
+
+    /**************exari view*************************/
+    private String jorunal_number;
+    private String ownership_type;
+    private String publisher_email;
+    private String publishing_director;
+    private String publishing_director_email;
+    private String business_controller;
+    private String business_controller_email;
+    private String senior_vice_president;
+    private String senior_vice_president_email;
+    private String rc;
+
+    public String getrc() { return rc; }
+    public void setrc(String rc) { this.rc = rc; }
+    public String getsenior_vice_president_email() { return senior_vice_president_email; }
+    public void setsenior_vice_president_email(String senior_vice_president_email) { this.senior_vice_president_email = senior_vice_president_email; }
+    public String getsenior_vice_president() { return senior_vice_president; }
+    public void setsenior_vice_president(String senior_vice_president) { this.senior_vice_president = senior_vice_president; }
+    public String getbusiness_controller_email() { return business_controller_email; }
+    public void setbusiness_controller_email(String business_controller_email) { this.business_controller_email = business_controller_email; }
+    public String getbusiness_controller() { return business_controller; }
+    public void setbusiness_controller(String business_controller) { this.business_controller = business_controller; }
+    public String getpublishing_director_email() { return publishing_director_email; }
+    public void setpublishing_director_email(String publishing_director_email) { this.publishing_director_email = publishing_director_email; }
+    public String getpublishing_director() { return publishing_director; }
+    public void setpublishing_director(String publishing_director) { this.publishing_director = publishing_director; }
+    public String getpublisher_email() { return publisher_email; }
+    public void setpublisher_email(String publisher_email) { this.publisher_email = publisher_email; }
+    public String getownership_type() { return ownership_type; }
+    public void setownership_type(String ownership_type) { this.ownership_type = ownership_type; }
+    public String getjorunal_number() { return jorunal_number; }
+    public void setjorunal_number(String jorunal_number) { this.jorunal_number = jorunal_number; }
+
+    /******************************************/
 
     public String getmanifestation_type() { return manifestation_type; }
     public void setmanifestation_type(String manifestation_type) { this.manifestation_type = manifestation_type; }
