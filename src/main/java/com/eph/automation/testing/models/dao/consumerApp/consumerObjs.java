@@ -153,7 +153,22 @@ public class consumerObjs {
     public String getjorunal_number() { return jorunal_number; }
     public void setjorunal_number(String jorunal_number) { this.jorunal_number = jorunal_number; }
 
-    /******************************************/
+    /**********************jdw********************/
+    private String lov_parent;
+    private String code;
+    private String description;
+    private String roll_up_value;
+
+    public String getroll_up_value() { return roll_up_value; }
+    public void setroll_up_value(String roll_up_value) { this.roll_up_value = roll_up_value; }
+    public String getdescription() { return description; }
+    public void setdescription(String description) { this.description = description; }
+    public String getcode() { return code; }
+    public void setcode(String code) { this.code = code; }
+    public String getlov_parent() { return lov_parent; }
+    public void setlov_parent(String lov_parent) { this.lov_parent = lov_parent; }
+
+    /************************************/
 
     public String getmanifestation_type() { return manifestation_type; }
     public void setmanifestation_type(String manifestation_type) { this.manifestation_type = manifestation_type; }

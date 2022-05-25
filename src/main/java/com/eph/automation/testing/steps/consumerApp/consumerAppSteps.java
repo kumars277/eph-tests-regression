@@ -6,9 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.GDTablesDLSQLContext;
 import com.eph.automation.testing.models.dao.consumerApp.consumerObjs;
-import com.eph.automation.testing.services.db.consumerAppSQL.r12ChecksSQL;
-import com.eph.automation.testing.services.db.consumerAppSQL.mercuryChecksSQL;
-import com.eph.automation.testing.services.db.consumerAppSQL.exariChecksSQL;
+import com.eph.automation.testing.services.db.consumerAppSQL.*;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -45,6 +43,9 @@ public class consumerAppSteps {
                 consumerSourceCountSQL = mercuryChecksSQL.GET_SOURCE_EPH_COUNT;
                 break;
 
+            case "jdw_journal_lov_vw":
+                consumerSourceCountSQL = jdwChecksSQL.GET_SOURCE_EPH_LOV_COUNT;
+                break;
         }
 
         Log.info(consumerSourceCountSQL);
@@ -66,6 +67,9 @@ public class consumerAppSteps {
                 break;
             case "exari_view":
                 consumTgtCountSQL = exariChecksSQL.GET_EXARI_TGT_COUNT;
+                break;
+            case "jdw_journal_lov_vw":
+                consumTgtCountSQL = jdwChecksSQL.GET_EXARI_TGT_COUNT;
                 break;
         }
 
@@ -99,6 +103,9 @@ public class consumerAppSteps {
             case "exari_view":
                 sql = String.format(exariChecksSQL.GET_RANDOM_ID_EXARI, numberOfRecords);
                 break;
+            case "jdw_journal_lov_vw":
+                sql = String.format(jdwChecksSQL.GET_RANDOM_ID_JDW, numberOfRecords);
+                break;
         }
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("randomIds")).collect(Collectors.toList());
@@ -122,6 +129,9 @@ public class consumerAppSteps {
             case "exari_view":
                 sql = String.format(exariChecksSQL.GET_SOURCE_REC_EXARI, String.join("','",ids));
                 break;
+            case "jdw_journal_lov_vw":
+                sql = String.format(jdwChecksSQL.GET_SOURCE_REC_JDW, String.join("','",ids));
+                break;
         }
         GDTablesDLSQLContext.recsConsumersource = DBManager.getDBResultAsBeanList(sql, consumerObjs.class, Constants.AWS_URL);
         Log.info(sql);
@@ -142,6 +152,9 @@ public class consumerAppSteps {
                 break;
             case "exari_view":
                 sql = String.format(exariChecksSQL.GET_TARGET_REC_EXARI, String.join("','",ids));
+                break;
+            case "jdw_journal_lov_vw":
+                sql = String.format(jdwChecksSQL.GET_TARGET_REC_JDW, String.join("','",ids));
                 break;
         }
         GDTablesDLSQLContext.recsConsumertarget = DBManager.getDBResultAsBeanList(sql, consumerObjs.class, Constants.AWS_URL);
@@ -268,6 +281,33 @@ public class consumerAppSteps {
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in exari_view for journa_number:" + GDTablesDLSQLContext.recsConsumersource.get(i).getjournal_number(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "jdw_journal_lov_vw":
+                        Log.info("comparing inbound and jdw_journal_lov_vw records...");
+                        GDTablesDLSQLContext.recsConsumersource.sort(Comparator.comparing(consumerObjs::getcode)); //sort primarykey data in the lists
+                        GDTablesDLSQLContext.recsConsumertarget.sort(Comparator.comparing(consumerObjs::getcode));
+
+                        String[] jdw_journal_lov_vw = {"getlov_parent", "getcode", "getdescription","getroll_up_value"};
+                        for (String strTemp : jdw_journal_lov_vw) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            consumerObjs objectToCompare1 = GDTablesDLSQLContext.recsConsumersource.get(i);
+                            consumerObjs objectToCompare2 = GDTablesDLSQLContext.recsConsumertarget.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("code => " + GDTablesDLSQLContext.recsConsumersource.get(i).getcode() +
+                                    " " + strTemp + " => source = " + method.invoke(objectToCompare1) +
+                                    " jdw_journal_lov = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in jdw_journal_view for code:" + GDTablesDLSQLContext.recsConsumersource.get(i).getcode(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
