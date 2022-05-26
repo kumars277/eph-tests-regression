@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class JRBICountChecksSteps {
     private static String jrbiFullSQLSourceCount;
@@ -44,6 +46,7 @@ public class JRBICountChecksSteps {
     private static String jrbiDeltaCurrentSQLCount;
     private static String jrbiDeltaCurrentHistorySQLCount;
     private static String jrbiDuplicateLatestSQLCount;
+    private static String jrbideltaCurrentCount;
     private static int jrbiDeltaCurrentCount;
     private static int jrbiDeltaCurrentHistoryCount;
     private static int jrbiDuplicateLatestCount;
@@ -441,6 +444,36 @@ public class JRBICountChecksSteps {
         Log.info("The Duplicate count for "+tableName+" => " + jrbiDuplicateLatestCount);
         Assert.assertEquals("There are Duplicate Count of EPR IDs in "+tableName,0,jrbiDuplicateLatestCount);
 
+    }
+
+    @Given("^Get the count of delta current (.*) table$")
+    public static void getDeltCurrentTableCount(String tableName){
+        switch (tableName){
+            case "jrbi_delta_current_work":
+                Log.info("Getting jrbi_delta_current_work Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_WORK_COUNT;
+                break;
+
+            case "jrbi_delta_current_manifestation":
+                Log.info("Getting jrbi_delta_current_manifestation Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_MANIF_COUNT;
+                break;
+
+            case "jrbi_delta_current_person":
+                Log.info("Getting jrbi_delta_current_person Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_PERSON_COUNT;
+                break;
+
+            default:
+                Log.info("no tables found");
+        }
+        Log.info(jrbideltaCurrentCount);
+        List<Map<String, Object>> jrbiDeltaTableCount = DBManager.getDBResultMap(jrbideltaCurrentCount, Constants.AWS_URL);
+        int jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount);
     }
 
    /* @Given("^Get the total count of jrbi Data from source file (.*)(.*)$")

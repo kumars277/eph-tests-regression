@@ -439,6 +439,16 @@ public class JRBIDataLakeCountChecksSQL {
                     ",war_reference as war_reference" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full where issn in ('%s') order by issn desc";
 
+    public static final  String GET_JRBI_DELTA_CURR_WORK_COUNT =
+            "select count(*) as delta_current_count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work\n";
+
+    public static final  String GET_JRBI_DELTA_CURR_PERSON_COUNT =
+            "select count(*) as delta_current_count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person\n";
+
+    public static final  String GET_JRBI_DELTA_CURR_MANIF_COUNT =
+            "select count(*) as delta_current_count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation\n";
+
+
 }
 
 
