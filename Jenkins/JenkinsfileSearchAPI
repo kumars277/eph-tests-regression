@@ -38,7 +38,7 @@ pipeline {
     }
     post {
         failure {
-            node('myagent') {
+            node('master') {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} failed. To get more details, visit the build results page: ${BUILD_URL}.",
 
@@ -48,7 +48,7 @@ pipeline {
         }
         success {
        // echo "Test succeeded"
-            node('myagent') {
+            node('master') {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
                 body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
 
