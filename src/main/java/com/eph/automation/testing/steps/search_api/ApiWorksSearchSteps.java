@@ -64,13 +64,13 @@ public class ApiWorksSearchSteps {
     // updated by Nishant @ 25 May 2021
 
     switch (workProperty) {
-      case WPR_ID:
-      case WPR_SUMMARYNAME:   sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);        break;
-      case WMPR_SUMMARYNAME:  sql =  String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);        break;
-      case WM_IDENTIFIER:     sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);        break;
-      case W_COMPONENT:       sql=String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT,numberOfRecords);        break;
-      case W_IN_PACKAGE:      sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_IN_PACKAGE,numberOfRecords);        break;
-      default:        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);        break;
+      case WPR_ID           :
+      case WPR_SUMMARYNAME  :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);        break;
+      case WMPR_SUMMARYNAME :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);        break;
+      case WM_IDENTIFIER    :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);        break;
+      case W_COMPONENT      :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT,numberOfRecords);        break;
+      case W_IN_PACKAGE     :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_IN_PACKAGE,numberOfRecords);        break;
+      default               :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);        break;
     }
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-  // ids.clear();ids.add("EPR-W-10WV6K");Log.info("hard coded work id is : " + ids);
+   //ids.clear();ids.add("EPR-W-10WBFD");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());

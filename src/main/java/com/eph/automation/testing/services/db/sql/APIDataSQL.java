@@ -88,8 +88,9 @@ public class APIDataSQL {
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID =
       "SELECT product_id as PRODUCT_ID\n"
-          + "FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n"
-          + "order by random() limit '%s'";
+          + " FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n"
+              + " and f_status <>'NVP'\n"
+          + " order by random() limit '%s'";
 
   public static final String GET_GD_DATA_SUBJECT_AREA =
       "select B_CLASSNAME as B_CLASSNAME \n"
@@ -198,6 +199,7 @@ public class APIDataSQL {
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_MANIFESTATION_IDENTIFIER =
       "select * from semarchy_eph_mdm.gd_product gp \n"
           + "inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gp.f_manifestation =gmi.f_manifestation \n"
+              + "where gp.f_status <>'NVP'\n"
           + "order by random() limit %s";
 
 
@@ -225,16 +227,20 @@ public class APIDataSQL {
 
   // created by Nishant @ 9 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMC_WITHSEARCH =
-      "select count(a.product_id) from "
-          + "( select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
-          + " where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
-          + " union \n"
-          + " select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
-          + " inner join semarchy_eph_mdm.gd_wwork w on "
-          + " p.f_wwork=w.work_id)a "
-          + " where a.name ~*'\\m%s\\M'"
-          + " and a.f_pmc='%s'";
-
+                  " select count(*) from                          "
+                  +" (select p.product_id,p.s_name,w.f_pmc         "
+                  +" from semarchy_eph_mdm.gd_product p            "
+                  +" inner join semarchy_eph_mdm.gd_manifestation m"
+                  +" on p.f_manifestation = m.manifestation_id     "
+                  +" inner join semarchy_eph_mdm.gd_wwork w        "
+                  +" on  w.work_id = m.f_wwork                     "
+                  +" union                                         "
+                  +"  select p.product_id,p.s_name,w.f_pmc         "
+                  +"  from semarchy_eph_mdm.gd_product p           "
+                  +"  inner join semarchy_eph_mdm.gd_wwork w       "
+                  +"  on  p.f_wwork=w.work_id)a                    "
+                  +"  where a.s_name like upper ('%%%s%%')         "
+                  +"  and a.f_pmc='%s';                             ";
   // created by Nishant @ 20 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG_WITHSEARCH =
       "select count(a.product_id) "
@@ -573,7 +579,7 @@ public class APIDataSQL {
           + "select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in ('%s'))";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_status = '%s'";
+      "select count(work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_status = '%s'";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
@@ -600,7 +606,7 @@ public class APIDataSQL {
           + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis')) like '%%%s%%' and m.f_type='%s') s";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH =
-      "select COUNT(*) from semarchy_eph_mdm.gd_wwork where UPPER(work_title) like '%%%S%%' AND f_pmc='%s'";
+      "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH =
       "select count(w.work_id) from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_x_lov_pmc pmc\n"

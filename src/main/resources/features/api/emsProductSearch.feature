@@ -55,14 +55,16 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
+      | PRODUCT_MANIFESTATION_ID                    |
+      | PRODUCT_TITLE                               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
       | PRODUCT_ID                                  |
-      | PRODUCT_TITLE                               |
+
  #    | PRODUCT_IDENTIFIER                          |
       | PRODUCT_WORK_ID                             |
       | PRODUCT_WORK_TITLE                          |
       | PRODUCT_WORK_IDENTIFIER                     |
-      | PRODUCT_MANIFESTATION_ID                    |
+
       | PRODUCT_MANIFESTATION_TITLE                 |
       | PRODUCT_MANIFESTATION_IDENTIFIER            |
       | PRODUCT_MANIFESTATION_WORK_ID               |
@@ -120,8 +122,8 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
-      | pmgCode       |
       | pmcCode       |
+      | pmgCode       |
       | workType      |
       | productStatus |
       | productType   |
