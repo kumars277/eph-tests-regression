@@ -61,6 +61,15 @@ Feature:Validate data for JRBI Extended
         |jrbi_transform_latest_manifestation  |
         |jrbi_transform_latest_person         |
 
+  @JRBIETLExtended
+  Scenario Outline: Get the delta current table counts for verification new dag
+    Given Get the count of delta current <SourceTableName> table
+    Examples:
+      |SourceTableName                      |
+      |jrbi_delta_current_work           |
+      |jrbi_delta_current_manifestation  |
+      |jrbi_delta_current_person         |
+
       ###################################3
 
 #  @notUsed
