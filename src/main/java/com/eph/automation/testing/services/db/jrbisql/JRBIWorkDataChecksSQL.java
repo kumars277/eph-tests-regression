@@ -221,7 +221,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as rfLvi" +
                     ",business_unit_desc as businessUnitDesc" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part where EPR in ('%s') AND " +
-                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n " +
+                    "transform_file_ts=(select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_work_file_history_part)\n " +
                     "order by epr,catalogue_issues_qty desc";
 
 

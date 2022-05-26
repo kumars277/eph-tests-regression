@@ -228,12 +228,12 @@ public class mercuryChecksSQL {
                       "   ) \n" +
                       ") \n" +
                       ")\n";
+
      public static String GET_MERCURY_PRINT_COUNT=
              "select count(*) as Target_count from "+GetPRMDLDBUser.getProdDataBase()+".extract_mercury_print_v";
 
-
     public static String GET_RANDOM_ID_MERCURY =
-            "select * from(\n" +
+            "select product_id as randomIds from(\n" +
                     "SELECT *\n" +
                     "FROM\n" +
                     "  (\n" +

@@ -55,10 +55,7 @@ public class GetPRMDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbStageProdDL = "product_staging_database_uat";
-            }else{
-                dbStageProdDL = "product_staging_database_uat2";
             }
-
         }else{
             dbStageProdDL = "product_staging_database_sit";
          //   dbStageProdDL = "product_staging_database_uat";
