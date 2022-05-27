@@ -70,6 +70,10 @@ Feature:Validate data for JRBI Extended
       |jrbi_delta_current_work           |
       |jrbi_delta_current_manifestation  |
       |jrbi_delta_current_person         |
+    |jrbi_delta_person_history_part    |
+    |jrbi_delta_work_history_part      |
+    |jrbi_delta_manifestation_history_part|
+
 
       ###################################3
 

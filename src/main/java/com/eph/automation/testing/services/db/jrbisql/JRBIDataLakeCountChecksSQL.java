@@ -445,6 +445,24 @@ public class JRBIDataLakeCountChecksSQL {
     public static final  String GET_JRBI_DELTA_CURR_PERSON_COUNT =
             "select count(*) as delta_current_count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person\n";
 
+    public static final  String GET_JRBI_DELTA_HIST_PERSON_COUNT =
+            "select delta_ts, count(*) as delta_current_count \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_person_history_part\n" +
+                    "group by delta_ts\n" +
+                    "order by delta_ts desc\n";
+
+    public static final  String GET_JRBI_DELTA_HIST_WORK_COUNT =
+            "select delta_ts, count(*) as delta_current_count \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_work_history_part\n" +
+                    "group by delta_ts\n" +
+                    "order by delta_ts desc\n";
+
+    public static final  String GET_JRBI_DELTA_HIST_MANIF_COUNT =
+            "select delta_ts, count(*) as delta_current_count \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_manifestation_history_part\n" +
+                    "group by delta_ts\n" +
+                    "order by delta_ts desc\n";
+
     public static final  String GET_JRBI_DELTA_CURR_MANIF_COUNT =
             "select count(*) as delta_current_count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation\n";
 
