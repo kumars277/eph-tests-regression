@@ -14,7 +14,9 @@ public class WorkdayDLContext {
         Log.info("Sonar Lint Fix");
     }
 
-    public static List<workDayDLAccessObject> recordsFromInboundData;
+    public static List<workDayDLAccessObject> recordsFromWorkDayOrgData;
     public static List<workDayDLAccessObject> recordsFromWorkDayRefData;
+    public static List<workDayDLAccessObject> recordsFromWorkDayInboundData;
+    public static List<workDayDLAccessObject> recordsFromWorkDayCoreData;
 
 }
