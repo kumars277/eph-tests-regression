@@ -821,7 +821,7 @@ public class JRBIDataChecksSteps {
                                     " LatestWork = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Current_manifest for EPR:" + JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found for EPR:" + JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -847,7 +847,7 @@ public class JRBIDataChecksSteps {
                                     " Latest_Manif = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found for EPR:"+JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -880,7 +880,7 @@ public class JRBIDataChecksSteps {
                                     " LatestPErson = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in LatestPErson for EPR:" + JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found for EPR:" + JRBIAccessDLContext.recordsFromAddDeltaCurrAndExclude.get(i).getEPR(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
