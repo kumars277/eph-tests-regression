@@ -15,3 +15,4 @@ Feature:Validate data count for workday inbound table
     Examples:
       | countOfRandomIds|
       |       100         |
+
