@@ -63,15 +63,15 @@ Feature:Validate data for JRBI Extended
 
   @JRBIETLExtended
   Scenario Outline: Get the delta current table counts for verification new dag
-    Given Get the count of delta current <SourceTableName> table
+      Given Get the count of delta current <SourceTableName> table
     Examples:
       |SourceTableName                      |
       |jrbi_delta_current_work           |
       |jrbi_delta_current_manifestation  |
       |jrbi_delta_current_person         |
-    |jrbi_delta_person_history_part    |
-    |jrbi_delta_work_history_part      |
-    |jrbi_delta_manifestation_history_part|
+      |jrbi_delta_person_history_part    |
+      |jrbi_delta_work_history_part      |
+      |jrbi_delta_manifestation_history_part|
 
 
       ###################################3
