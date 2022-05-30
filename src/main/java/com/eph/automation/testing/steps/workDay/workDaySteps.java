@@ -159,7 +159,7 @@ public class workDaySteps {
         Log.info("Get random workday inbound ids...");
         sql = String.format(workDayChecksSQL.GET_WORKDAY_INBOUND_IDS_SQL, numberOfRecords);
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
+        ids = randomIds.stream().map(m -> (String) m.get("peoplehub_id")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(ids.toString());
     }
