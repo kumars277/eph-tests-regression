@@ -463,17 +463,39 @@ public class JRBICountChecksSteps {
                 Log.info("Getting jrbi_delta_current_person Table Count...");
                 jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_PERSON_COUNT;
                 break;
+            case "jrbi_delta_person_history_part":
+                Log.info("Getting jrbi_delta_person_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_PERSON_COUNT;
+                break;
+            case "jrbi_delta_work_history_part":
+                Log.info("Getting jrbi_delta_work_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_WORK_COUNT;
+                break;
+            case "jrbi_delta_manifestation_history_part":
+                Log.info("Getting jrbi_delta_manifestation_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_MANIF_COUNT;
+                break;
 
             default:
                 Log.info("no tables found");
         }
         Log.info(jrbideltaCurrentCount);
         List<Map<String, Object>> jrbiDeltaTableCount = DBManager.getDBResultMap(jrbideltaCurrentCount, Constants.AWS_URL);
-        int jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
+        int jrbiDeltaCurrCount;
+        if(tableName.equalsIgnoreCase("jrbi_delta_manifestation_history_part")||tableName.equalsIgnoreCase("jrbi_delta_work_history_part")
+                ||tableName.equalsIgnoreCase("jrbi_delta_person_history_part")){
+            String  jrbiDeltahistTs = ((String) jrbiDeltaTableCount.get(0).get("delta_ts")).toString();
+             jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount+" and delta_ts "+jrbiDeltahistTs);
+        }else{
+            jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount);
+        }
 
-        Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount);
     }
 
    /* @Given("^Get the total count of jrbi Data from source file (.*)(.*)$")
