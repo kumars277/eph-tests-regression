@@ -50,7 +50,6 @@ public class ApiWorksSearchSteps {
   private static final String WM_TITLE = "WORK_MANIFESTATION_TITLE";
   private static final String WMPR_SUMMARYNAME = "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME";
   private static final String WMPR_ID = "WORK_MANIFESTATION_PRODUCT_ID";
-
   private static final String PER_FULLNAME_CURRENT = "personFullNameCurrent";
 
   static String from = "&from=";
@@ -65,13 +64,13 @@ public class ApiWorksSearchSteps {
     // updated by Nishant @ 25 May 2021
 
     switch (workProperty) {
-      case WPR_ID:
-      case WPR_SUMMARYNAME:   sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);        break;
-      case WMPR_SUMMARYNAME:  sql =  String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);        break;
-      case WM_IDENTIFIER:     sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);        break;
-      case W_COMPONENT:       sql=String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT,numberOfRecords);        break;
-      case W_IN_PACKAGE:      sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_IN_PACKAGE,numberOfRecords);        break;
-      default:        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);        break;
+      case WPR_ID           :
+      case WPR_SUMMARYNAME  :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);        break;
+      case WMPR_SUMMARYNAME :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);        break;
+      case WM_IDENTIFIER    :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);        break;
+      case W_COMPONENT      :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_HASWORKCOMPONENT,numberOfRecords);        break;
+      case W_IN_PACKAGE     :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_IN_PACKAGE,numberOfRecords);        break;
+      default               :sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);        break;
     }
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
@@ -82,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-  // ids.clear();ids.add("EPR-W-10XK9R");Log.info("hard coded work id is : " + ids);
+   //ids.clear();ids.add("EPR-W-104NY7");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -108,7 +107,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102V9R");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-104Y97");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -273,9 +272,7 @@ public class ApiWorksSearchSteps {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String searchKeyword = ApiReusableFunctions.getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-
         String workType = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
-
         Log.info("searchKeyword and workType: " + searchKeyword + " - " + workType);
 
         returnedWorks = APIService.getWorksByWorkType(searchKeyword, workType);
@@ -1049,12 +1046,34 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByPerson(String searchType, String fName,String lName) {
-String specialName = "";
-String[] arr_specialName = fName.replace("-"," ").split(" ");
-if(arr_specialName.length>1) specialName = arr_specialName[1];
-        arr_specialName = lName.replace("-"," ").split(" ");
-if(arr_specialName.length>1) specialName = arr_specialName[1];
-if(specialName.equalsIgnoreCase(""))specialName=lName;
+
+  //  String specialName = "";
+    List<String> partialName = new ArrayList<String>();
+
+  String[] arr_partialName = (fName+" "+lName).replaceAll("-"," ").split(" ");
+
+ //   for (String partname :arr_partialName) {partialName.add(partname);}
+
+  //  if(arr_specialName.length>1) specialName = arr_specialName[1];
+
+        //arr_specialName = lName.split("-");
+//if(arr_specialName.length>1) specialName = arr_specialName[1];
+//if(specialName.equalsIgnoreCase(""))specialName=fName;
+    String partialQuery1 = "";
+    String partialQuery2 = "";
+    for(int i=0;i<arr_partialName.length;i++)
+    {
+      partialQuery1 += " or name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";
+      partialQuery2 += " or given_name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";
+    }
+
+
+  //  for(int i=0;i<partialName.size();i++)
+  //  {partialQuery2 += "or given_name ~* '\\m"+partialName.get(i)+"\\M'";}
+
+    for(int i=0;i<arr_partialName.length;i++)
+    {partialQuery2 += " or family_name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";}
+
     int count =0;
     switch (searchType) {
       case PER_FULLNAME_CURRENT:sql = String.format(APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAMECURRENT, fName,lName);break;
@@ -1062,8 +1081,8 @@ if(specialName.equalsIgnoreCase(""))specialName=lName;
         sql = APIDataSQL.SELET_GD_COUNT_WORK_BY_PERSONNAME_withExtendedperson
                 .replaceAll("FIRSTNAME",fName)
                 .replaceAll("LASTNAME",lName)
-                .replaceAll("SPECIALNAME1",arr_specialName[0])
-                .replaceAll("SPECIALNAME2",specialName);
+                .replaceAll("PARTIALQUERY1",partialQuery1)
+                .replaceAll("PARTIALQUERY2",partialQuery2);
         break;
          }
 

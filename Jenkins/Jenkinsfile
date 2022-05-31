@@ -10,7 +10,7 @@ pipeline {
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
         WINDOWS_AGENT = 'eph-windows-gui'
-        ENV = 'PROD'
+        ENV = 'SIT'
     }
 
 
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
-                        bat('mvn clean test -Dcucumber.options="--tags @PFProd" -e -X')
+                        bat('mvn clean test -Dcucumber.options="--tags @PFNonProd " -e -X')
 
                     }
                 }
