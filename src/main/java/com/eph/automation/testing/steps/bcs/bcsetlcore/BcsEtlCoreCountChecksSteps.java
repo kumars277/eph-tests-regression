@@ -129,7 +129,7 @@ public class BcsEtlCoreCountChecksSteps {
                 Log.info(noTablemsg);
 
         }
-        //  Log.info(bcsInboundCurrentSQLCount);
+        Log.info(bcsInboundCurrentSQLCount);
         List<Map<String, Object>> bcsInboundCurrentTableCount = DBManager.getDBResultMap(bcsInboundCurrentSQLCount, Constants.AWS_URL);
         bcsInboundCurrentCount = ((Long) bcsInboundCurrentTableCount.get(0).get("Source_Count")).intValue();
     }
