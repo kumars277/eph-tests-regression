@@ -98,16 +98,22 @@ public class ApiReusableFunctions {
     {
         //created by Nishant @ 28 Feb 2022
         //updated by Nishant @ 12 May 2022
-        List<String> ignoreKeywords = Arrays.asList("Edition","The","III");
+        List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III");
         String keyword = "";
         String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
         for(int i=0;i<arr_title.length;i++)
         {
-            if(!ignoreKeywords.contains(arr_title[i]))
+            try{
+                int tmp = Integer.parseInt(arr_title[i]);
+                continue;
+            }
+            catch (NumberFormatException nfe)
             {
-                keyword=arr_title[i];
-                break;
+                if(!ignoreKeywords.contains(arr_title[i].toUpperCase()))
+                {
+                    keyword=arr_title[i];  break;
+                }
             }
         }
 

@@ -44,6 +44,7 @@ public class WorksMatchedApiObject {
     public boolean verifyWorkWithIdIsReturned(String workID){
         int i = 0;
         boolean found = false;
+       try{
         while (i < items.length && !found) {
             if (items[i].getId().equals(workID)) {
                 found = true;
@@ -56,6 +57,16 @@ public class WorksMatchedApiObject {
             }
             i++;
         }
+        }
+       catch(NullPointerException e)
+       {
+           Assert.assertFalse(getBreadcrumbMessage() +"NullPointerException",true);
+       }
+       catch(Exception e)
+       {
+           Assert.assertFalse(getBreadcrumbMessage() +"Exception",true);
+       }
+
         Assert.assertTrue(getBreadcrumbMessage() + " work id not found ", found);
         return found;
     }

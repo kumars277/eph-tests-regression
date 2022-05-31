@@ -73,8 +73,6 @@ Feature: Search API: Products
       | PRODUCT_PERSONS_FULLNAME                    |
       | PRODUCT_WORK_PERSONS_FULLNAME               |
 
-
-
   @searchAPI @productSearchAPI
   Scenario: search product by person ID
     Given   We get 1 search ids from the db for person roles of products
@@ -122,11 +120,11 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
-      | pmcCode       |
-      | pmgCode       |
       | workType      |
       | productStatus |
       | productType   |
+      | pmcCode       |
+      | pmgCode       |
 
 
 

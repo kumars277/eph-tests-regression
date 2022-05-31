@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-11DD22"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10KXD1"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -878,7 +878,9 @@ else{
           String pmgCode =getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           setBreadcrumbMessage(pmgCode);
           returnedProducts = getProductByParam(searchTerm, paramKey, pmgCode);
+          Log.info("API returned count : "+returnedProducts.getTotalMatchCount());
           productCountDB = getCount("getProductCountByPMGCode", searchTerm, pmgCode);
+          Log.info("DB returned count : "+productCountDB);
           break;
         default:
           throw new IllegalStateException("Unexpected value: " + paramKey);
