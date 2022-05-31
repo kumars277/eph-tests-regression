@@ -218,23 +218,28 @@ public class BcsEtlCoreDataChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT\n" +
-                    "        \"man_status\".\"seriesid\" \"seriesid\"\n" +
-                    "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
+                    " \"seriesid\"\n" +
+                    "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
                     "      FROM\n" +
-                    "        \"man_status\"\n" +
-                    "      GROUP BY \"man_status\".\"seriesid\"\n" +
-                    "UNION ALL       SELECT\n" +
-                    "        \"man_status\".\"mainseries\" \"seriesid\"\n" +
-                    "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
-                    "      FROM\n" +
-                    "        \"man_status\"\n" +
-                    "      GROUP BY \"man_status\".\"mainseries\"\n" +
+                    "        (\n" +
+                    "         SELECT\n" +
+                    "           \"man_status\".\"seriesid\" \"seriesid\"\n" +
+                    "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                    "         FROM\n" +
+                    "           \"man_status\"\n" +
+                    "UNION ALL          SELECT\n" +
+                    "           \"man_status\".\"mainseries\" \"seriesid\"\n" +
+                    "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                    "         FROM\n" +
+                    "           \"man_status\"\n" +
+                    "      ) \n" +
+                    "      GROUP BY \"seriesid\""+
                     "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                     ")  \"A\"\n" +
                     "WHERE (\"A\".\"sourceref\" <> '')order by rand() limit %s";
 
-     public static final String GET_WORK_INBOUND_DATA =
+    public static final String GET_WORK_INBOUND_DATA =
              "WITH\n" +
                      "  man_status AS (\n" +
                      "   SELECT\n" +
@@ -269,7 +274,7 @@ public class BcsEtlCoreDataChecksSql {
                      ",f_oa_journal_type as foaJournalType \n" +
                      ",f_society_ownership as fSocietyOwnership \n" +
                      ",subscription_type as subscriptionType \n" +
-                     " FROM\n" +
+                     "FROM\n" +
                      "  (\n" +
                      "   SELECT DISTINCT\n" +
                      "     \"content\".\"sourceref\" \"sourceref\"\n" +
@@ -366,17 +371,22 @@ public class BcsEtlCoreDataChecksSql {
                      "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                      "   LEFT JOIN (\n" +
                      "      SELECT\n" +
-                     "        \"man_status\".\"seriesid\" \"seriesid\"\n" +
-                     "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
+                     " \"seriesid\"\n" +
+                     "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
                      "      FROM\n" +
-                     "        \"man_status\"\n" +
-                     "      GROUP BY \"man_status\".\"seriesid\"\n" +
-                     "UNION ALL       SELECT\n" +
-                     "        \"man_status\".\"mainseries\" \"seriesid\"\n" +
-                     "      , \"min\"(\"man_status\".\"work_priority\") \"work_priority\"\n" +
-                     "      FROM\n" +
-                     "        \"man_status\"\n" +
-                     "      GROUP BY \"man_status\".\"mainseries\"\n" +
+                     "        (\n" +
+                     "         SELECT\n" +
+                     "           \"man_status\".\"seriesid\" \"seriesid\"\n" +
+                     "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                     "         FROM\n" +
+                     "           \"man_status\"\n" +
+                     "UNION ALL          SELECT\n" +
+                     "           \"man_status\".\"mainseries\" \"seriesid\"\n" +
+                     "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                     "         FROM\n" +
+                     "           \"man_status\"\n" +
+                     "      ) \n" +
+                     "      GROUP BY \"seriesid\""+
                      "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                      "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                      ")  \"A\"\n" +
@@ -569,37 +579,66 @@ public class BcsEtlCoreDataChecksSql {
 
 
     public static final String GET_RANDOM_PERSON_KEY_INBOUND =
-            "SELECT u_key as sourceref \n" +
+            "SELECT u_key as sourceref from( \n" +
+                    "SELECT *\n" +
                     "FROM\n" +
                     "  (\n" +
-                    "select * from(" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid sourceref\n" +
-                    "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) u_key\n" +
-                    "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname\n" +
-                    "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname\n" +
-                    "   , CAST(null AS varchar) peoplehub_id\n" +
-                    "   , CAST(null AS varchar) email_address\n" +
-                    "   , 'N' dq_err\n" +
-                    "   \n" +
-                    "  FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                    "   WITH\n" +
+                    "     dupls_product AS (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        \"businesspartnerid\" \"sourceref\"\n" +
+                    "      , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"u_key\"\n" +
+                    "      , (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"department\", '') ELSE NULLIF(\"firstname\", '') END) \"firstname\"\n" +
+                    "      , (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"institution\", '') ELSE NULLIF(\"lastname\", '') END) \"familyname\"\n" +
+                    "      , CAST(null AS varchar) \"peoplehub_id\"\n" +
+                    "      , CAST(null AS varchar) \"email_address\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "        "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                    "   ) \n" +
+                    "   SELECT\n" +
+                    "     sourceref\n" +
+                    "   , u_key\n" +
+                    "   , \"max\"(firstname) firstname\n" +
+                    "   , \"max\"(familyname) familyname\n" +
+                    "   , peoplehub_id\n" +
+                    "   , email_address\n" +
+                    "   , dq_err\n" +
+                    "   FROM\n" +
+                    "     dupls_product\n" +
+                    "   GROUP BY sourceref, u_key, peoplehub_id, email_address, dq_err\n" +
                     ")  A\n" +
                     "WHERE (A.sourceref IS NOT NULL)\n" +
-                    "UNION ALL SELECT *\n" +
+                    "UNION SELECT *\n" +
                     "FROM\n" +
                     "  (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid sourceref\n" +
-                    "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper(firstname)), trim(upper(lastname))))))) u_key\n" +
-                    "   , NULLIF(firstname, '') firstname\n" +
-                    "   , NULLIF(lastname, '') familyname\n" +
-                    "   , CAST(null AS varchar) peoplehub_id\n" +
-                    "   , CAST(null AS varchar) email_address\n" +
-                    "   , 'N' dq_err\n" +
+                    "   WITH\n" +
+                    "     dupls_series AS (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        \"businesspartnerid\" \"sourceref\"\n" +
+                    "      , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"u_key\"\n" +
+                    "      , NULLIF(\"firstname\", '') \"firstname\"\n" +
+                    "      , NULLIF(\"lastname\", '') \"familyname\"\n" +
+                    "      , CAST(null AS varchar) \"peoplehub_id\"\n" +
+                    "      , CAST(null AS varchar) \"email_address\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "         "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series\n" +
+                    "   ) \n" +
+                    "   SELECT\n" +
+                    "     sourceref\n" +
+                    "   , u_key\n" +
+                    "   , \"max\"(firstname) firstname\n" +
+                    "   , \"max\"(familyname) familyname\n" +
+                    "   , peoplehub_id\n" +
+                    "   , email_address\n" +
+                    "   , dq_err\n" +
                     "   FROM\n" +
-                    "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series)  A\n" +
-                    "\n" +
-                    "WHERE (A.sourceref IS NOT NULL))order by rand() limit %s\n";
+                    "     dupls_series\n" +
+                    "   GROUP BY sourceref, u_key, peoplehub_id, email_address, dq_err\n" +
+                    ")  \"A\"\n" +
+                    "WHERE (\"A\".\"sourceref\" IS NOT NULL)" +
+                    ")order by rand() limit %s\n";
 
     public static final String GET_PERSON_INBOUND_DATA =
             "SELECT  sourceref as sourceRef" +
@@ -609,36 +648,66 @@ public class BcsEtlCoreDataChecksSql {
                     ",peoplehub_id as peopleHubId" +
                     ",email_address as email" +
                     ",dq_err as dqErr " +
+                    " from( \n" +
+                    "SELECT *\n" +
                     "FROM\n" +
                     "  (\n" +
-                    "select * from(" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid sourceref\n" +
-                    "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) u_key\n" +
-                    "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname\n" +
-                    "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname\n" +
-                    "   , CAST(null AS varchar) peoplehub_id\n" +
-                    "   , CAST(null AS varchar) email_address\n" +
-                    "   , 'N' dq_err\n" +
-                    "   \n" +
-                    "  FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                    "   WITH\n" +
+                    "     dupls_product AS (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        \"businesspartnerid\" \"sourceref\"\n" +
+                    "      , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"u_key\"\n" +
+                    "      , (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"department\", '') ELSE NULLIF(\"firstname\", '') END) \"firstname\"\n" +
+                    "      , (CASE WHEN (\"isperson\" = 'N') THEN NULLIF(\"institution\", '') ELSE NULLIF(\"lastname\", '') END) \"familyname\"\n" +
+                    "      , CAST(null AS varchar) \"peoplehub_id\"\n" +
+                    "      , CAST(null AS varchar) \"email_address\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "        "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators\n" +
+                    "   ) \n" +
+                    "   SELECT\n" +
+                    "     sourceref\n" +
+                    "   , u_key\n" +
+                    "   , \"max\"(firstname) firstname\n" +
+                    "   , \"max\"(familyname) familyname\n" +
+                    "   , peoplehub_id\n" +
+                    "   , email_address\n" +
+                    "   , dq_err\n" +
+                    "   FROM\n" +
+                    "     dupls_product\n" +
+                    "   GROUP BY sourceref, u_key, peoplehub_id, email_address, dq_err\n" +
                     ")  A\n" +
                     "WHERE (A.sourceref IS NOT NULL)\n" +
-                    "UNION ALL SELECT *\n" +
+                    "UNION SELECT *\n" +
                     "FROM\n" +
                     "  (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid sourceref\n" +
-                    "   , lower(to_hex(md5(to_utf8(concat(CAST(businesspartnerid AS varchar), trim(upper(firstname)), trim(upper(lastname))))))) u_key\n" +
-                    "   , NULLIF(firstname, '') firstname\n" +
-                    "   , NULLIF(lastname, '') familyname\n" +
-                    "   , CAST(null AS varchar) peoplehub_id\n" +
-                    "   , CAST(null AS varchar) email_address\n" +
-                    "   , 'N' dq_err\n" +
+                    "   WITH\n" +
+                    "     dupls_series AS (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        \"businesspartnerid\" \"sourceref\"\n" +
+                    "      , \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"u_key\"\n" +
+                    "      , NULLIF(\"firstname\", '') \"firstname\"\n" +
+                    "      , NULLIF(\"lastname\", '') \"familyname\"\n" +
+                    "      , CAST(null AS varchar) \"peoplehub_id\"\n" +
+                    "      , CAST(null AS varchar) \"email_address\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "         "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series\n" +
+                    "   ) \n" +
+                    "   SELECT\n" +
+                    "     sourceref\n" +
+                    "   , u_key\n" +
+                    "   , \"max\"(firstname) firstname\n" +
+                    "   , \"max\"(familyname) familyname\n" +
+                    "   , peoplehub_id\n" +
+                    "   , email_address\n" +
+                    "   , dq_err\n" +
                     "   FROM\n" +
-                    "     "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_originators_series)  A\n" +
-                    "\n" +
-                    "WHERE (A.sourceref IS NOT NULL))where u_key in ('%s') order by u_key,sourceref desc";
+                    "     dupls_series\n" +
+                    "   GROUP BY sourceref, u_key, peoplehub_id, email_address, dq_err\n" +
+                    ")  \"A\"\n" +
+                    "WHERE (\"A\".\"sourceref\" IS NOT NULL)" +
+                    ")where u_key in ('%s') order by u_key,sourceref desc";
 
     public static final String GET_RANDOM_WRK_RELT_KEY_INBOUND =
             "select u_key as sourceref FROM (\n" +
