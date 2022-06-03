@@ -4,10 +4,12 @@
 package com.eph.automation.testing.models.ui;
 /** Created by GVLAYKOV */
 import com.eph.automation.testing.configuration.MarionetteDriver;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.configuration.WebDriverFactory;
 import com.eph.automation.testing.helper.Log;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.minidev.json.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
@@ -32,7 +34,47 @@ public class TasksNew {
     this.driver = new WebDriverFactory().get();
     this.wait = new WebDriverWait(driver, 10);
     this.pageLoadTimeout = 30000;
+    driver.get("https://productfinder.elsevier.net");
+    loginWithCredential();
    }
+
+  public void loginWithCredential() {
+    //created by Nishant in Apr 2022
+    JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+    String loginId = svc.getAsString("svc4");
+    String pwd =svc.getAsString("svc4pwd");
+
+    try {
+      sendKeys(
+              "NAME",
+              ProductFinderConstants.loginByEmail,
+              loginId + ProductFinderConstants.SCIENCE_ID);
+      click("ID", ProductFinderConstants.nextButton);
+      Thread.sleep(3000);
+
+      driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+      waitUntilPageLoad();
+      Thread.sleep(3000);
+      if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+      {
+        signIntoYourOrganisation(loginId,pwd);
+      }
+
+      Thread.sleep(3000);
+
+      if(driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+      {
+        Log.info("signed in successful ");
+      }
+      else {
+        Log.info("sign in issue for below link");
+        driver.getCurrentUrl();
+      }
+    } catch (Exception e) {
+      Log.error(e.getMessage());
+    }
+
+  }
 
   public void loginWithScience() {
       try {

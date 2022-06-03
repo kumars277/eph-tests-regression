@@ -88,8 +88,9 @@ public class APIDataSQL {
 
   public static final String SELECT_GD_RANDOM_PRODUCT_ID =
       "SELECT product_id as PRODUCT_ID\n"
-          + "FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n"
-          + "order by random() limit '%s'";
+          + " FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n"
+              + " and f_status <>'NVP'\n"
+          + " order by random() limit '%s'";
 
   public static final String GET_GD_DATA_SUBJECT_AREA =
       "select B_CLASSNAME as B_CLASSNAME \n"
@@ -198,6 +199,7 @@ public class APIDataSQL {
   public static final String SELECT_GD_RANDOM_PRODUCT_ID_WITH_MANIFESTATION_IDENTIFIER =
       "select * from semarchy_eph_mdm.gd_product gp \n"
           + "inner join semarchy_eph_mdm.gd_manifestation_identifier gmi on gp.f_manifestation =gmi.f_manifestation \n"
+              + "where gp.f_status <>'NVP'\n"
           + "order by random() limit %s";
 
 
@@ -225,21 +227,25 @@ public class APIDataSQL {
 
   // created by Nishant @ 9 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMC_WITHSEARCH =
-      "select count(a.product_id) from "
-          + "( select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w "
-          + " where p.f_manifestation = m.manifestation_id and w.work_id = m.f_wwork "
-          + " union \n"
-          + " select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "
-          + " inner join semarchy_eph_mdm.gd_wwork w on "
-          + " p.f_wwork=w.work_id)a "
-          + " where a.name ~*'\\m%s\\M'"
-          + " and a.f_pmc='%s'";
-
+                  " select count(*) from                          "
+                  +" (select p.product_id,p.s_name,w.f_pmc         "
+                  +" from semarchy_eph_mdm.gd_product p            "
+                  +" inner join semarchy_eph_mdm.gd_manifestation m"
+                  +" on p.f_manifestation = m.manifestation_id     "
+                  +" inner join semarchy_eph_mdm.gd_wwork w        "
+                  +" on  w.work_id = m.f_wwork                     "
+                  +" union                                         "
+                  +"  select p.product_id,p.s_name,w.f_pmc         "
+                  +"  from semarchy_eph_mdm.gd_product p           "
+                  +"  inner join semarchy_eph_mdm.gd_wwork w       "
+                  +"  on  p.f_wwork=w.work_id)a                    "
+                  +"  where a.s_name like upper ('%%%s%%')         "
+                  +"  and a.f_pmc='%s';                             ";
   // created by Nishant @ 20 Dec 2019
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG_WITHSEARCH =
       "select count(a.product_id) "
           + " from ( \n"
-          + " select p.product_id,p.name,pmc.f_pmg from"
+          + " select p.product_id,p.s_name,pmc.f_pmg from"
           + " semarchy_eph_mdm.gd_product p,"
           + " semarchy_eph_mdm.gd_manifestation m,"
           + " semarchy_eph_mdm.gd_wwork w,"
@@ -249,13 +255,14 @@ public class APIDataSQL {
           + " w.work_id = m.f_wwork and"
           + " pmc.code=w.f_pmc"
           + " union"
-          + " select  p.product_id,p.name,pmc.f_pmg"
+          + " select  p.product_id,p.s_name,pmc.f_pmg"
           + " from"
           + " semarchy_eph_mdm.gd_product p"
           + " inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id"
           + " inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc"
           + " )a"
-          + " where a.name ~*'\\m%s\\M'"
+          //+ " where a.s_name ~*'\\m%s\\M'"
+              + " where a.s_name like upper ('%%%s%%')"
           + " and a.f_pmg='%s'";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PMG =
@@ -461,9 +468,12 @@ public class APIDataSQL {
           + "        from\n"
           + "            eph"
           + GenericFunctions.getDBsufix()
-          + "_extended_data_stitch.stch_work_ext_json swej\n"
+          + "_extended_data_stitch.stch_work_ext_json swej"
+          + " join semarchy_eph_mdm.gd_wwork gw\n"
+          + " on swej.epr_id = gw.work_id\n"
           + "        where\n"
           + "            type in ('ABS', 'JBB', 'JNL', 'NWL')\n"
+          + "and gw.f_status in ('WLA')"
           + "    ),\n"
           + "    personNames as (\n"
           + "        select\n"
@@ -480,10 +490,9 @@ public class APIDataSQL {
           + "    from\n"
           + "        personNames\n"
           + "    where\n"
-          + "        name ~* '\\mFIRSTNAME\\M'\n"
-          + "        or name ~* '\\mLASTNAME\\M'\n"
-          +         "or name ~* '\\mSPECIALNAME1\\M'\n"
-              +         "or name ~* '\\mSPECIALNAME2\\M'\n"
+          + "        name ~* '(?c)\\mFIRSTNAME\\M'\n"
+          + "        or name ~* '(?c)\\mLASTNAME\\M'\n"
+          + "PARTIALQUERY1"
           + "    union\n"
           + "    select\n"
           + "        distinct work_id\n"
@@ -499,14 +508,11 @@ public class APIDataSQL {
           + "            from\n"
           + "                semarchy_eph_mdm.gd_person gp\n"
           + "            where\n"
-          + "                given_name ~* '\\mFIRSTNAME\\M'\n"
-          + "                or given_name ~* '\\mLASTNAME\\M'\n"
-          + "                or given_name ~* '\\mSPECIALNAME1\\M'\n"
-              + "                or given_name ~* '\\mSPECIALNAME2\\M'\n"
-          + "                or family_name ~* '\\mFIRSTNAME\\M'\n"
-          + "                or family_name ~* '\\mLASTNAME\\M'\n"
-          + "                or family_name ~* '\\mSPECIALNAME1\\M'\n"
-              + "                or family_name ~* '\\mSPECIALNAME2\\M'\n"
+          + "                given_name ~* '(?c)\\mFIRSTNAME\\M'\n"
+          + "                or given_name ~* '(?c)\\mLASTNAME\\M'\n"
+          + "                or family_name ~* '(?c)\\mFIRSTNAME\\M'\n"
+          + "                or family_name ~* '(?c)\\mLASTNAME\\M'\n"
+          + "                PARTIALQUERY2"
           + "        )\n"
           + "    order by\n"
           + "        work_id\n"
@@ -573,13 +579,13 @@ public class APIDataSQL {
           + "select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in ('%s'))";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_status = '%s'";
+      "select count(work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_status = '%s'";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where work_title ~*'%s' and f_type='%s'";
+      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_type='%s'";
 
   /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
@@ -600,7 +606,7 @@ public class APIDataSQL {
           + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis')) like '%%%s%%' and m.f_type='%s') s";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH =
-      "select COUNT(*) from semarchy_eph_mdm.gd_wwork where UPPER(work_title) like '%%%S%%' AND f_pmc='%s'";
+      "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH =
       "select count(w.work_id) from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_x_lov_pmc pmc\n"

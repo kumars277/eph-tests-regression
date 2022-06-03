@@ -102,7 +102,7 @@ public class ProductFinderUISteps {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
-        productFinderTasks.loginWithCredential();
+      //  productFinderTasks.loginWithCredential();
         tasks.waitUntilPageLoad();
     }
 
@@ -121,7 +121,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-       productFinderTasks.loginWithCredential();
+      // productFinderTasks.loginWithCredential();
     }
 
     @Then("^Search works by (.*)$")
@@ -168,6 +168,7 @@ public class ProductFinderUISteps {
     @And("^Verify user is forwarded to the searched work page from Search Result$")
     public void verifyUserIsForwardedToSearchedWorkPageFromSearchResult() throws InterruptedException {
         tasks.waitUntilPageLoad();
+        Thread.sleep(5000);
         assertTrue(productFinderTasks.isUserOnWorkPage(ProductFinderTasks.searchResultId));
     }
 
@@ -478,6 +479,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 22 May 2020
         getFirstIdOnPage();
         productFinderTasks.clickWork(ProductFinderTasks.searchResultId);
+        tasks.waitUntilPageLoad();
     }
 
 
@@ -566,7 +568,7 @@ public class ProductFinderUISteps {
 
 
     @Then("^Verify the Product filter is \"([^\"]*)\"$")
-    public void verify_the_Product_Status_is(String filterType) {
+    public void verify_the_Product_Status_is(String filterType) throws InterruptedException {
         //created by Nishant @ 21 April 2021 EPHD-3053
         productFinderTasks.verifyUserIsOnOverviewPage();
         productStatusUIValidation(filterType);
@@ -617,7 +619,9 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                 if(productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
                     flag = true;break;
         }
-        assertTrue("The searcg is successfully filtered and verified in UI: " + filterType, flag);
+        assertTrue("The search is successfully filtered and verified in UI: " + filterType, flag);
+        Log.info("productStatusUIValidation complete");
+
     }
 
     private boolean verifyWorkTypeForWorkId(String workId, String chooseWorkType) {//by Nishant @ 02 Jun 2020
@@ -737,7 +741,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
     }
 
     @And("^User is forwarded to the searched product page from DB$")
-    public void verifyUserIsForwardedToProductPageFromDB() {
+    public void verifyUserIsForwardedToProductPageFromDB() throws InterruptedException {
         productFinderTasks.verifyUserIsOnOverviewPage();
     }
 

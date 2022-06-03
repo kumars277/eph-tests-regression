@@ -129,8 +129,6 @@ public class ProductFinderTasks {
 
     }
 
-
-
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
         //updated by Nishant @ 13 Feb 2020
         try {
@@ -273,6 +271,7 @@ public class ProductFinderTasks {
             case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;break;
             case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;break;
             case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;break;
+            case "PROD":
             case "PRODUCTION":targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;break;
         }
 
@@ -300,6 +299,7 @@ public class ProductFinderTasks {
             case "UAT2":
                 targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
                 break;
+            case "PROD":
             case "PRODUCTION":
                 targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
                 break;
@@ -328,7 +328,7 @@ public class ProductFinderTasks {
         //created by Nishant @5 Jun 2020
         //updated UI changes and locator by Nishant @ 15 Oct 2020 for EPHD-2241
         //updated UI changes and locator by Nishant @ 12 Oct 2021 for regression testing
-
+        Log.info("getUI_WorkOverview_Information - Start");
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
         {
             //capture Information values
@@ -362,9 +362,6 @@ public class ProductFinderTasks {
                 String value = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
                 prop_subArea.setProperty(key, value);
             }
-
-
-
         }
         else //JF
         {
@@ -374,7 +371,7 @@ public class ProductFinderTasks {
                 String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
                 String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
                 prop_info.setProperty(key, value);}
-        }
+
 
         //capture identifiers values
         List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr");
@@ -398,7 +395,9 @@ public class ProductFinderTasks {
             String value = tasks.findElement("XPATH", ProductFinderConstants.specialtiesRowJF + "/li[" + i  + "]").getText();
             prop_specialties.setProperty(key, value);
         }
+        }
 
+        Log.info("getUI_WorkOverview_Information - End");
 
     }
 
@@ -538,13 +537,14 @@ public class ProductFinderTasks {
         return random.nextInt(limit);
     }
 
-    public void verifyUserIsOnOverviewPage() {//created by Nishant @ 23 Apr 2021
+    public void verifyUserIsOnOverviewPage() throws InterruptedException {//created by Nishant @ 23 Apr 2021
+       // tasks.waitUntilPageLoad();
+       // Thread.sleep(3000);
         if (TestContext.getValues().environment.equalsIgnoreCase("UAT") |
                 TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
             if (DataQualityContext.productDataObjectsFromEPHGD != null)
                 ProductFinderTasks.searchResultId = DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID();
         }
-
         assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultId));
     }
 

@@ -79,17 +79,14 @@ public class ProductApiObject {
         private workCore workCore;
         public workCore getWorkCore() {return workCore;}
         public void setWorkCore(workCore workCore) {this.workCore = workCore;}
-
-
         }
         */
 
     public void compareWithDB() throws ParseException {
-      // try {
+
            getProductDataFromEPHGD(this.id);
            createdDate = createdDate.replace("T", " ").replace("Z", "");
            updatedDate = updatedDate.replace("T", " ").replace("Z", "");
-
 
            Assert.assertEquals(getBreadcrumbMessage() + " - ", createdDate.substring(0, 21), this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0, 21));
            // Assert.assertEquals(getBreadcrumbMessage() + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
@@ -130,15 +127,12 @@ public class ProductApiObject {
                apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byPricing(jsonValue, pricingExtended);
            }
 
-           //4. pricingExtended comparison
-           if (manifestation != null) {
-               manifestation.compareWithDB();
-           }
+           //4. manifestation comparison
+           if (manifestation != null) {manifestation.compareWithDB();}
 
-           //5. pricingExtended comparison
+           //5. work comparison
            //implemented by Nishant @ 8 May 2020
            if (work != null) {
-            //   getBreadcrumbMessage() += "->" + work.getId();
                work.getWorkCore().compareWithDB(work.getId());
                if (work.getWorkExtended() != null) {
                    WorkApiObject workApiObject = new WorkApiObject();
@@ -146,15 +140,6 @@ public class ProductApiObject {
                    work.getWorkExtended().compareWithDB(work.getId());
                }
            }
-       /*}
-       catch (Exception e)
-       {
-           e.getMessage();
-
-           Assert.assertFalse(getBreadcrumbMessage() +" e.message>"+e.getMessage()+ " scenario Failed ", true);
-        //   DataQualityContext.api_response.prettyPrint();
-       }*/
-
     }
 
     private void getProductDataFromEPHGD(String workID) {
