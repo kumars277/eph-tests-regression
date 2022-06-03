@@ -73,6 +73,22 @@ public class GetJMDLDBUser {
         return dbProdDL;
     }
 
+    public static String getProdPresentationDB(){
+        String dbPresentation = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbPresentation = "product_core_database_v4_sit";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbPresentation = "product_core_database_v4_uat";
+            }
+        }else{
+            //dbProdDL = "product_database_uat";
+            dbPresentation = "product_core_database_v4_sit";
+        }
+        return dbPresentation;
+    }
+
     public static String getCrossRefDb(){
         String crossRefDb = null;
         if (System.getProperty("ENV") != null){
