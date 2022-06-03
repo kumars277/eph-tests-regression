@@ -599,8 +599,8 @@ public class BcsEtlCoreDataChecksSql {
                     "   SELECT\n" +
                     "     sourceref\n" +
                     "   , u_key\n" +
-                    "   , \"max\"(firstname) firstname\n" +
-                    "   , \"max\"(familyname) familyname\n" +
+                   ", \"max\"(\"trim\"(firstname)) firstname\n" +
+                    "   , \"max\"(\"trim\"(familyname)) familyname\n" +
                     "   , peoplehub_id\n" +
                     "   , email_address\n" +
                     "   , dq_err\n" +
@@ -628,8 +628,8 @@ public class BcsEtlCoreDataChecksSql {
                     "   SELECT\n" +
                     "     sourceref\n" +
                     "   , u_key\n" +
-                    "   , \"max\"(firstname) firstname\n" +
-                    "   , \"max\"(familyname) familyname\n" +
+                   ", \"max\"(\"trim\"(firstname)) firstname\n" +
+                    "   , \"max\"(\"trim\"(familyname)) familyname\n" +
                     "   , peoplehub_id\n" +
                     "   , email_address\n" +
                     "   , dq_err\n" +
@@ -668,8 +668,8 @@ public class BcsEtlCoreDataChecksSql {
                     "   SELECT\n" +
                     "     sourceref\n" +
                     "   , u_key\n" +
-                    "   , \"max\"(firstname) firstname\n" +
-                    "   , \"max\"(familyname) familyname\n" +
+                  ", \"max\"(\"trim\"(firstname)) firstname\n" +
+                    "   , \"max\"(\"trim\"(familyname)) familyname\n" +
                     "   , peoplehub_id\n" +
                     "   , email_address\n" +
                     "   , dq_err\n" +
@@ -697,8 +697,8 @@ public class BcsEtlCoreDataChecksSql {
                     "   SELECT\n" +
                     "     sourceref\n" +
                     "   , u_key\n" +
-                    "   , \"max\"(firstname) firstname\n" +
-                    "   , \"max\"(familyname) familyname\n" +
+                   ", \"max\"(\"trim\"(firstname)) firstname\n" +
+                    "   , \"max\"(\"trim\"(familyname)) familyname\n" +
                     "   , peoplehub_id\n" +
                     "   , email_address\n" +
                     "   , dq_err\n" +
