@@ -98,7 +98,7 @@ public class ApiReusableFunctions {
     {
         //created by Nishant @ 28 Feb 2022
         //updated by Nishant @ 12 May 2022
-        List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III");
+        List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III","SCIENTIFIC","PART");
         String keyword = "";
         String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
