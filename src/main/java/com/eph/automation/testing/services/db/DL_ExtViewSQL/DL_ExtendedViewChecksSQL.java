@@ -616,7 +616,7 @@ public class DL_ExtendedViewChecksSQL {
     public static String GET_DL_ALL_WORK_EXT_PERS_ROLE_COUNT =
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT\n" +
-                    "epr_id, work_type, last_updated_date, role_code, " +
+                    "epr_id, work_type, last_updated_date, core_work_person_role_id, " +
                     "role_name, sequence_number, group_number, first_name, last_name, " +
                     "peoplehub_id, email, title, honours, affiliation, image_url, footnote_txt, notes_txt, delete_flag\n" +
                     " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)";
