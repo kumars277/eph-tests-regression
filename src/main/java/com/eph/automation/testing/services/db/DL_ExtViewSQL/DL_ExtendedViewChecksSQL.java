@@ -154,8 +154,8 @@ public class DL_ExtendedViewChecksSQL {
              "price_amount, price_start_date, price_end_date, price_region, price_category, \n" +
              "price_customer_category, price_purchase_quantity, delete_flag\n" +
              " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s'))" +
-             " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
-             " price_customer_category,price_purchase_quantity desc";
+             " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_end_date desc,price_amount desc,price_category desc,price_region desc," +
+             " price_customer_category desc,price_purchase_quantity desc";
 
 
     public static String GET_PROD_PRICING_EXT_REC =
@@ -172,8 +172,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
-                    " price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_end_date desc,price_amount desc,price_category desc,price_region desc," +
+                    " price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_DL_ALL_MANIF_EXT_COUNT =
             "select count(*) as Source_Count from(\n" +
@@ -1203,8 +1203,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.delete_flag\n" +
                     "FROM\n" +
                     "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs)where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount," +
-                    "price_category,price_region,price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_amount desc,price_end_date desc," +
+                    "price_category desc,price_region desc,price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_ALL_VIEW_PROD_PRICING_EXT_REC =
             "select epr_id as epr_id" +
@@ -1221,8 +1221,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date," +
-                    "price_currency,price_start_date,price_amount,price_category,price_region,price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_amount desc,price_end_date desc" +
+                    ",price_category desc,price_region desc,price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_SOURCE_MANIF_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
