@@ -189,7 +189,7 @@ public class consumerAppSteps {
                             Log.info("eph_work_id => " + GDTablesDLSQLContext.recsConsumersource.get(i).geteph_work_id() +
                                     " " + strTemp + " => source = " + method.invoke(objectToCompare1) +
                                     " r12_full_data_v = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                            if (method.invoke(objectToCompare1) != null &&
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in r12_full_data_v for eph_work_id:" + GDTablesDLSQLContext.recsConsumersource.get(i).geteph_work_id(),
                                         method.invoke(objectToCompare1),
@@ -219,7 +219,7 @@ public class consumerAppSteps {
                             Log.info("eph_work_id => " + GDTablesDLSQLContext.recsConsumersource.get(i).geteph_work_id() +
                                     " " + strTemp + " => Source = " + method.invoke(objectToCompare1) +
                                     " drm_action_scripts_v = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                            if (method.invoke(objectToCompare1) != null &&
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in drm_action_scripts_v for eph_work_id:" + GDTablesDLSQLContext.recsConsumersource.get(i).geteph_work_id(),
                                         method.invoke(objectToCompare1),
@@ -249,7 +249,7 @@ public class consumerAppSteps {
                             Log.info("product_id => " + GDTablesDLSQLContext.recsConsumersource.get(i).getproduct_id() +
                                     " " + strTemp + " => EPH = " + method.invoke(objectToCompare1) +
                                     " Mercury Print = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                            if (method.invoke(objectToCompare1) != null &&
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Mercury_Print for product_id:" + GDTablesDLSQLContext.recsConsumersource.get(i).getproduct_id(),
                                         method.invoke(objectToCompare1),
@@ -278,7 +278,7 @@ public class consumerAppSteps {
                             Log.info("issn => " + GDTablesDLSQLContext.recsConsumersource.get(i).getissn() +
                                     " " + strTemp + " => source = " + method.invoke(objectToCompare1) +
                                     " exari_view = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                            if (method.invoke(objectToCompare1) != null &&
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in exari_view for journa_number:" + GDTablesDLSQLContext.recsConsumersource.get(i).getjournal_number(),
                                         method.invoke(objectToCompare1),
@@ -305,7 +305,7 @@ public class consumerAppSteps {
                             Log.info("code => " + GDTablesDLSQLContext.recsConsumersource.get(i).getcode() +
                                     " " + strTemp + " => source = " + method.invoke(objectToCompare1) +
                                     " jdw_journal_lov = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
+                            if (method.invoke(objectToCompare1) != null &&
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in jdw_journal_view for code:" + GDTablesDLSQLContext.recsConsumersource.get(i).getcode(),
                                         method.invoke(objectToCompare1),
