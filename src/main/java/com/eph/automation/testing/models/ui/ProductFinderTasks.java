@@ -306,6 +306,7 @@ public class ProductFinderTasks {
         }
 
         Log.info("Target URL " + targetURL);
+        Log.info("currentPageUrl "+tasks.getCurrentPageUrl());
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;
     }

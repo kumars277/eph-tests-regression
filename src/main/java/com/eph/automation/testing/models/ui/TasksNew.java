@@ -34,8 +34,10 @@ public class TasksNew {
     this.driver = new WebDriverFactory().get();
     this.wait = new WebDriverWait(driver, 10);
     this.pageLoadTimeout = 30000;
-    driver.get("https://productfinder.elsevier.net");
-    loginWithCredential();
+    driver.get("https://uat.productfinder.elsevier.net");
+    //driver.get("https://productfinder.elsevier.net");
+    //loginWithCredential();
+    loginWithScience(); //local execution
    }
 
   public void loginWithCredential() {
