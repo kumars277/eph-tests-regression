@@ -670,10 +670,11 @@ public class mercuryChecksSQL {
                     "      WHERE (((wt.roll_up_type = 'Journal') AND (p.f_type = 'PPV')) AND ((jmnew.elsevier_journal_number IS NOT NULL) OR (jmupd.elsevier_journal_number IS NOT NULL)))\n" +
                     "   ) \n" +
                     ") \n" +
-                    ") where product_id in ('%s') order by product_id desc,issn desc\n";
+                    ") where product_id in ('%s') order by product_id desc,issn desc, number_of_issues desc,year_of_first_issue desc,first_issue_name desc,first_volume_name desc\n";
 
     public static String GET_MERCURY_PRINT_RECS=
-            "select * from "+GetPRMDLDBUser.getProdDataBase()+".extract_mercury_print_v where product_id in ('%s') order by product_id desc,issn desc\n";
+            "select * from "+GetPRMDLDBUser.getProdDataBase()+".extract_mercury_print_v where product_id in ('%s') order by product_id desc,issn desc," +
+                    " number_of_issues desc,year_of_first_issue desc,first_issue_name desc,first_volume_name desc\n";
 
 }
 
