@@ -2272,7 +2272,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS varchar) \"scenario_name\"\n" +
                     "FROM\n" +
                     "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_latest_v)" +
-                    " where external_reference in ('%s') order by external_reference desc \n";
+                    " where external_reference in ('%s') order by external_reference desc,update_type desc,scenario_code desc, scenario_name desc \n";
 
     public static String GET_DL_CORE_ALL_WORK_VIEW_REC =
             "select external_reference as EXTERNALREFERENCE" +
@@ -2306,7 +2306,7 @@ public class DL_CoreViewChecksSQL {
                     ",scenario_name as SCENARIONAME" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_v" +
                     " where external_reference in ('%s') \n" +
-                    "order by external_reference desc \n";
+                    "order by external_reference desc,external_reference desc,update_type desc,scenario_code desc,scenario_name desc \n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_COUNT =
             "select count(*) as Source_Count from(\n" +
