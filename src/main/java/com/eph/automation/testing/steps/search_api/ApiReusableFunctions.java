@@ -112,16 +112,19 @@ public class ApiReusableFunctions {
             {
                 if(!ignoreKeywords.contains(arr_title[i].toUpperCase()))
                 {
-                    keyword=arr_title[i];  break;
+                    keyword=arr_title[i];
+
+                    /*ngram filter in API splits the title into all the combinations
+        of consecutive characters between 3 and 50 characters long.
+        Because the minimum length is 3, CD isn’t a valid match.
+        hence valid keyword should be more than 2 characters*/
+                    if(keyword.length()<3)continue;
+                    break;
                 }
             }
         }
 
-        /*ngram filter in API splits the title into all the combinations
-        of consecutive characters between 3 and 50 characters long.
-        Because the minimum length is 3, CD isn’t a valid match.
-        hence valid keyword should be more than 2 characters*/
-        if(keyword.length()<3)keyword = arr_title[arr_title.length-2];
+
         return keyword;
     }
 
