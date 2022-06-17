@@ -579,13 +579,26 @@ public class APIDataSQL {
           + "select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in ('%s'))";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_status = '%s'";
+      "select count(distinct w.work_id) \n"
+          + "from semarchy_eph_mdm.gd_wwork w \n"
+          + "left join semarchy_eph_mdm.gd_manifestation gm on w.work_id = gm.f_wwork \n"
+          + "left join semarchy_eph_mdm.gd_product gp on gm.manifestation_id = gp.f_manifestation \n"
+          + "where w.f_status ='PARAM1'\n"
+          + "and (w.work_title ~*'PARAM2'\n"
+          + "or gm.manifestation_key_title ~*'PARAM2'\n"
+          + "or gp.name ~*'PARAM2')";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_type='%s'";
+          "select count(distinct w.work_id) from semarchy_eph_mdm.gd_wwork w left join semarchy_eph_mdm.gd_manifestation gm \n" +
+          "on w.work_id = gm.f_wwork left join semarchy_eph_mdm.gd_product gp \n" +
+          "on gm.manifestation_id = gp.f_manifestation \n" +
+          "where w.f_type='PARAM1'\n" +
+          "and (w.work_title ~*'PARAM2'\n" +
+          "or gm.manifestation_key_title ~*'PARAM2'\n" +
+          "or gp.name ~*'PARAM2')" ;
 
   /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
