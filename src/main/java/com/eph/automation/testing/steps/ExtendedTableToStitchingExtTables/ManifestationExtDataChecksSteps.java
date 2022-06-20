@@ -124,30 +124,34 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getjournalIssueTrimSize());
                 }
                 String uk_textbook_ind;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()){
-                    uk_textbook_ind ="true";
-                }else{
-                    uk_textbook_ind="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind().isEmpty()){
+                        if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()=="1"){
+                            uk_textbook_ind ="true";
+                        }else{
+                            uk_textbook_ind="false";
+                        }
+
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> ukTextbookInd => " + uk_textbook_ind +
                         " Manif_JSON -> ukTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
-                if (uk_textbook_ind != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd() != null)) {
-                    Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
+                     Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             uk_textbook_ind, dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
                 }
+
                 String us_textbook_ind;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()){
-                    us_textbook_ind ="true";
-                }else{
-                    us_textbook_ind="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind().isEmpty()){
+                    if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()=="1")
+                    {
+                        us_textbook_ind ="true";
+                    }else{
+                        us_textbook_ind="false";
+                    }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> usTextbookInd => " + us_textbook_ind +
                         " Manif_JSON -> usTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
-                if (us_textbook_ind!= null || (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd() != null)) {
-                    Assert.assertEquals("The usTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
+                        Assert.assertEquals("The usTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             us_textbook_ind,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
                 }
 
@@ -181,21 +185,19 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getdiscountCodeUS());
                 }
                 String exportWebInd;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()){
-                    exportWebInd ="true";
-                }else{
-                    exportWebInd="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind().isEmpty() ){
+                   if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()=="1"){
+                         exportWebInd ="true";
+                   }else{
+                        exportWebInd="false";
+                    }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> exportToWebInd => " + exportWebInd +
                         " Manif_JSON -> exportToWebInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
-
-                if (exportWebInd != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd() != null)) {
                     Assert.assertEquals("The exportToWebInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             exportWebInd,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
                 }
-
 
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> war_reference => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getwar_reference() +
@@ -207,7 +209,6 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
                 }
             }
-
         }
 
     }

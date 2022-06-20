@@ -5,8 +5,8 @@ public class ManifestationExtAccessObject {
     private String epr_id;
     private String manifestation_type;
     private String last_updated_date;
-    private boolean uk_textbook_ind;
-    private boolean us_textbook_ind;
+    private String uk_textbook_ind;
+    private String us_textbook_ind;
     private String manifestation_trim_text;
     private String commodity_code;
     private String discount_code_emea;
@@ -15,7 +15,7 @@ public class ManifestationExtAccessObject {
     private String journal_issue_trim_size;
     private String war_reference;
     private String type;
-    private boolean export_to_web_ind;
+    private String export_to_web_ind;
 
     private String count_type_code;
     private String count_type_name;
@@ -25,10 +25,10 @@ public class ManifestationExtAccessObject {
     private String restriction_code;
 
 
-    public boolean getexport_to_web_ind() {
+    public String getexport_to_web_ind() {
         return export_to_web_ind;
     }
-    public void setexport_to_web_ind(boolean export_to_web_ind) {
+    public void setexport_to_web_ind(String export_to_web_ind) {
         this.export_to_web_ind = export_to_web_ind;
     }
 
@@ -88,10 +88,10 @@ public class ManifestationExtAccessObject {
         this.last_updated_date = last_updated_date;
     }
 
-    public boolean getuk_textbook_ind() {
+    public String getuk_textbook_ind() {
         return uk_textbook_ind;
     }
-    public void setuk_textbook_ind(boolean uk_textbook_ind) {
+    public void setuk_textbook_ind(String uk_textbook_ind) {
         this.uk_textbook_ind = uk_textbook_ind;
     }
 
@@ -112,10 +112,10 @@ public class ManifestationExtAccessObject {
         this.commodity_code = commodity_code;
     }
 
-    public boolean getus_textbook_ind() {
+    public String getus_textbook_ind() {
         return us_textbook_ind;
     }
-    public void setus_textbook_ind(boolean us_textbook_ind) {
+    public void setus_textbook_ind(String  us_textbook_ind) {
         this.us_textbook_ind = us_textbook_ind;
     }
 
