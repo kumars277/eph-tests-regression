@@ -1,6 +1,6 @@
 Feature: Product Finder production smoke tests
 
-  @PFProd @UI @PFRegressionSuite
+  @PFProd @UI @PFRegressionSuite @PFUIjenkinFix
   Scenario Outline: When no product is found "There are no results that match your search" is displayed
     Given user is on Product/Journal Finder search page <ui>
     When user is searching for "<keyword>"
