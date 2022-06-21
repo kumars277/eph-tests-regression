@@ -57,6 +57,8 @@ public class TasksNew {
       driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
       waitUntilPageLoad();
       Thread.sleep(3000);
+      Log.info("after passing credential url");
+      Log.info(driver.getCurrentUrl());
       if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
       {
         signIntoYourOrganisation(loginId,pwd);
@@ -70,7 +72,7 @@ public class TasksNew {
       }
       else {
         Log.info("sign in issue for below link");
-        driver.getCurrentUrl();
+        Log.info(driver.getCurrentUrl());
       }
     } catch (Exception e) {
       Log.error(e.getMessage());
@@ -136,6 +138,8 @@ public class TasksNew {
     btn_signIn.click();
     waitUntilPageLoad();
     Log.info("sign in to your organisation funtion called");
+    Thread.sleep(3000);
+    Log.info(driver.getCurrentUrl());
   }
 
   public WebElement findElementByText(final String text) {
