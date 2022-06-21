@@ -56,7 +56,7 @@ public class TasksNew {
 
       driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
       waitUntilPageLoad();
-      Thread.sleep(3000);
+      Thread.sleep(15000);
       Log.info("after passing credential url");
       Log.info(driver.getCurrentUrl());
       if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))

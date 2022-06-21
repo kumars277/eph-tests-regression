@@ -168,7 +168,7 @@ public class ProductFinderTasks {
             Log.info("page refreshed as search bar not available...");
             Log.info("after 30 sec from page refreshed");
             Log.info("\n");
-            Log.info(tasks.driver.getPageSource());
+          //  Log.info(tasks.driver.getPageSource());
             Log.info("\n");
         }
 
