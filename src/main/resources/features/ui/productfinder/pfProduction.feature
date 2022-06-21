@@ -8,11 +8,11 @@ Feature: Product Finder production smoke tests
     Examples:
       |ui |keyword          |
       |PF |abcdefg1234567890|
-      |PF |invalidSearch    |
-      |PF |1234567890       |
-      |JF |abcdefg1234567890|
-      |JF |invalidSearch    |
-      |JF |1234567890       |
+    #  |PF |invalidSearch    |
+    #  |PF |1234567890       |
+    #  |JF |abcdefg1234567890|
+    #  |JF |invalidSearch    |
+    #  |JF |1234567890       |
 
   @PFProd @UI @PFRegressionSuite
   Scenario Outline: verify search Suggestion displayed
