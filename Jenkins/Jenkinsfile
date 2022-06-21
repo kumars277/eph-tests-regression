@@ -10,7 +10,7 @@ pipeline {
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
         WINDOWS_AGENT = 'eph-windows-gui'
-        ENV = 'UAT'
+        ENV = 'PROD'
     }
 
     options {
