@@ -77,7 +77,7 @@ pipeline {
             }
         }
         cleanup {
-            build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
+        //    build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
         }
     }
 }
