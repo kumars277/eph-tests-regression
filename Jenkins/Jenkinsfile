@@ -76,8 +76,8 @@ pipeline {
                 to: "${env.EMAIL_DIST_LIST}")
             }
         }
-        cleanup {
+      //  cleanup {
         //    build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
-        }
+      //  }
     }
 }
