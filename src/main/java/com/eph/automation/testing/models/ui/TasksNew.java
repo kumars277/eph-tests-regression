@@ -52,13 +52,16 @@ public class TasksNew {
               ProductFinderConstants.loginByEmail,
               loginId + ProductFinderConstants.SCIENCE_ID);
       click("ID", ProductFinderConstants.nextButton);
-      Thread.sleep(3000);
+      Thread.sleep(5000);
 
-      driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+    //  driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+     // driver.get("https://"+loginId+":"+pwd+"@"+"<Url>");
       waitUntilPageLoad();
-      Thread.sleep(15000);
-      Log.info("after passing credential url");
+    //  Thread.sleep(5000);
+      Log.info("url after science id url");
       Log.info(driver.getCurrentUrl());
+      sendCredential(loginId,pwd);
+
       if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
       {
         signIntoYourOrganisation(loginId,pwd);
