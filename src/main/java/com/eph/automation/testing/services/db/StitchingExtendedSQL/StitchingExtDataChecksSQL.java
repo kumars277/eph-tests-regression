@@ -1,8 +1,6 @@
 package com.eph.automation.testing.services.db.StitchingExtendedSQL;
 
 
-import com.eph.automation.testing.services.db.StitchingExtendedSQL.GetStitchDLDBUser;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,8 +30,8 @@ public class StitchingExtDataChecksSQL {
 
     public static String GET_MANIF_EXT_REC =
             "select epr_id as epr_id\n" +
-                    ",manifestation_type as manifestation_type\n" +
-                    ",last_updated_date as last_updated_date\n" +
+             //       ",manifestation_type as manifestation_type\n" +
+             //       ",last_updated_date as last_updated_date\n" +
                     ",uk_textbook_ind as uk_textbook_ind\n" +
                     ",us_textbook_ind as us_textbook_ind\n" +
                     ",manifestation_trim_text as manifestation_trim_text\n" +
@@ -44,11 +42,18 @@ public class StitchingExtDataChecksSQL {
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
                     ",export_to_web_ind as export_to_web_ind\n" +
                     ",war_reference as war_reference\n" +
-                    ",delete_flag as delete_flag\n" +
-                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('%s') and delete_flag=false\n";
+             //       ",delete_flag as delete_flag\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('%s') and delete_flag=false order by epr_id desc\n";
+
+    public static String GET_MANIF_SUMMARY_EXT_REC =
+            "select epr_id as epr_id\n" +
+                           ",manifestation_type as manifestation_type\n" +
+                           ",last_updated_date as last_updated_date\n" +
+                           ",delete_flag as delete_flag\n" +
+                    " from "+GetStitchDLDBUser.getProdStagingDB()+".manifestation_extended_summary_v where epr_id in ('%s') and delete_flag=false order by epr_id desc\n";
 
     public static String GET_MANIF_EXT_JSON_REC =
-            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s')\n"; //EPR-M-115H09
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s') order by epr_id desc\n"; //EPR-M-115H09
 
     public static String GET_RANDOM_EPR_MANIF_EXT_PAGE_COUNT =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_page_count where delete_flag=false order by rand() limit %s\n";

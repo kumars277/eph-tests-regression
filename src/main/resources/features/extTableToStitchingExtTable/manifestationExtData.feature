@@ -7,6 +7,7 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
   Scenario Outline: Verify Data from the Manif_extended tables transferred to Manif Extended Stitching table
     Given We get the <countOfRandomIds> random manifestation Ext EPR ids <tableName>
     And Records from Manifestation extended table
+    Then Records from manifestation summary table
     Then Compare Manif Extended and Manif Extended Stitching Table
     Examples:
       |tableName                   |countOfRandomIds|

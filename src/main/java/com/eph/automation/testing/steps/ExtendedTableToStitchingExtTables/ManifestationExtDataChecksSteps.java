@@ -58,6 +58,14 @@ public class ManifestationExtDataChecksSteps {
         dataQualityStitchContext.recordsFromManifExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
     }
 
+    @And("^Records from manifestation summary table$")
+    public void getRecFromManifSummaryTable() {
+        Log.info("We get the records from Manif Summary for manf type Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_SUMMARY_EXT_REC, Joiner.on("','").join(Ids));
+        // Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtSummary = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }
+
     @Then("^Get the records from Manifestation extended stitching table$")
     public void getManifExtendedJSONRec(String manifId) {
         Log.info("We get the JSON from Manifestation Ext Stitching...");
@@ -74,6 +82,7 @@ public class ManifestationExtDataChecksSteps {
        // Log.info(sql);
         dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL);
     }
+
 
 
     @And("^Compare Manif Extended and Manif Extended Stitching Table$")
@@ -95,12 +104,12 @@ public class ManifestationExtDataChecksSteps {
                 }
 
                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
-                        " Manif_Extended -> manif_type => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() +
+                        " Manif_Extended -> manif_type => " + dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type() +
                         " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
-                if (dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() != null ||
+                if (dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type() != null ||
                         (dataQualityStitchContext.recFromManifStitchExtended.get(i).gettype() != null)) {
-                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
-                            dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type(),
+                    Assert.assertEquals("The Manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtSummary.get(i).getepr_id() + " is missing/not matching",
+                            dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type(),
                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                 }
 
@@ -224,7 +233,6 @@ public class ManifestationExtDataChecksSteps {
                 List<Map<?, ?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
                 break;
-
         }
       //  Log.info(sql);
       Log.info(Ids.toString());
@@ -269,7 +277,7 @@ public class ManifestationExtDataChecksSteps {
                                         " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() != null ||
                                         (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
-                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                    Assert.assertEquals("The manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not matching in Manif_Stitching table",
                                             dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }
@@ -363,7 +371,7 @@ public class ManifestationExtDataChecksSteps {
                                         " Manif_JSON_Restrict -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 if (dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type() != null ||
                                         (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
-                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                    Assert.assertEquals("The manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not matching in Manif_Stitching table",
                                             dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type(),
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }
