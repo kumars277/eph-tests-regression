@@ -584,9 +584,18 @@ public class APIDataSQL {
           + "left join semarchy_eph_mdm.gd_manifestation gm on w.work_id = gm.f_wwork \n"
           + "left join semarchy_eph_mdm.gd_product gp on gm.manifestation_id = gp.f_manifestation \n"
           + "where w.f_status ='PARAM1'\n"
-          + "and (w.work_title ~*'PARAM2'\n"
-          + "or gm.manifestation_key_title ~*'PARAM2'\n"
-          + "or gp.name ~*'PARAM2')";
+          + "and (translate(w.work_title\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     )  ~*'PARAM2'\n"
+          + "or translate(gm.manifestation_key_title\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     ) ~*'PARAM2'\n"
+          + "or translate(gp.name\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     ) ~*'PARAM2')";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
@@ -595,10 +604,19 @@ public class APIDataSQL {
           "select count(distinct w.work_id) from semarchy_eph_mdm.gd_wwork w left join semarchy_eph_mdm.gd_manifestation gm \n" +
           "on w.work_id = gm.f_wwork left join semarchy_eph_mdm.gd_product gp \n" +
           "on gm.manifestation_id = gp.f_manifestation \n" +
-          "where w.f_type='PARAM1'\n" +
-          "and (w.work_title ~*'PARAM2'\n" +
-          "or gm.manifestation_key_title ~*'PARAM2'\n" +
-          "or gp.name ~*'PARAM2')" ;
+          "where w.f_type='PARAM1'\n"
+                  + "and (translate(w.work_title\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     )  ~*'PARAM2'\n"
+                  + "or translate(gm.manifestation_key_title\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     ) ~*'PARAM2'\n"
+                  + "or translate(gp.name\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     ) ~*'PARAM2')";
 
   /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).

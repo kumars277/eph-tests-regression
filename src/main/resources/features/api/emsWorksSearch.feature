@@ -30,10 +30,11 @@ Feature: Search API: Works
     Then   work response is compared with the DB for <options>
     Examples:
       | options               |
+      | PEOPLE_HUB_ID         |
       | PERSON_NAME           |
       | personFullNameCurrent |
       | PERSON_ID             |
-      | PEOPLE_HUB_ID         |
+
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI
