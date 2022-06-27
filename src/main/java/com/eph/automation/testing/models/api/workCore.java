@@ -217,7 +217,7 @@ public class workCore {
         if (!(identifiers == null && this.workDataObjectsFromEPHGD_local.get(0).getIDENTIFIER() == null)) {
             Log.info("total identifiers found..." + identifiers.length);
             for (WorkIdentifiersApiObject workIdentifier : identifiers) {
-                workIdentifier.compareWithDB();
+                workIdentifier.compareWithDB(workId);
             }
             printLog("identifiers");
         }

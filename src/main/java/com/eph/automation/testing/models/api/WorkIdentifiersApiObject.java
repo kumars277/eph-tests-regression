@@ -46,42 +46,42 @@ public class WorkIdentifiersApiObject {
     public String getEffectiveEndDate() {return effectiveEndDate;}
     public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
 
-    private void getWorkIdentifierByID(String workidentifierID,String workIdentType){
+    private void getWorkIdentifierByID(String workidentifierID,String workIdentType,String workId){
         String sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_IDENTIFIER
                 .replace("PARAM1", workidentifierID)
-                .replace("PARAM2",workIdentType);
+                .replace("IDENTTYPE",workIdentType)
+                .replace("WORKID",workId);
         DBworkIdentifier = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB(){
+    public void compareWithDB(String workId){
         //updated by Nishant @ 18 May 2021, EPHD-3122
         Log.info("verifiying work identifier... "+this.identifierType.get("code").toString()+" - "+this.identifier);
-        getWorkIdentifierByID(this.identifier,this.identifierType.get("code").toString());
-        boolean identifierMatched = false;
-        for(int i=0;i<this.DBworkIdentifier.size();i++)
-        {
-            //if(this.identifierType.get("code").toString().equalsIgnoreCase(this.DBworkIdentifier.get(i).getF_TYPE()))
-           // {
-                identifierMatched=true;
+        getWorkIdentifierByID(this.identifier,this.identifierType.get("code").toString(),workId);
+     //   boolean identifierMatched = false;
+     //   for(int i=0;i<this.DBworkIdentifier.size();i++)
+     //   {
+
+           //     identifierMatched=true;
                 printLog("work identifier ");
                 printLog("work identifier type");
 
                 Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
                 printLog("work identifier name");
 
-                Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_START_DATE());
+                Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_START_DATE());
                 printLog("work identifier effectiveStartDate");
 
-                if(effectiveEndDate!=null|DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
+                if(effectiveEndDate!=null|DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
                 {
-                    Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(i).getIDENTIFIER_EFFECTIVE_END_DATE());
+                    Assert.assertEquals(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE());
                     printLog("work identifier effectiveEndtDate");
                 }
 
-                break;
-            //}
-        }
-        Assert.assertTrue(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",identifierMatched);
+         //       break;
+
+       // }
+       // Assert.assertTrue(getBreadcrumbMessage() +"-> "+ this.identifier+" - work identifier",identifierMatched);
     }
 
     private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122

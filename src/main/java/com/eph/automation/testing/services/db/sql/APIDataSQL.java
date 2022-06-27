@@ -757,7 +757,8 @@ public class APIDataSQL {
           + " inner join semarchy_eph_mdm.gd_wwork gw on gwi.f_wwork =gw.work_id \n"
           + "  WHERE gw.f_status not in ('NVW')\n"
           + "  and gwi.identifier='PARAM1'" +
-              "  and gwi.f_type ='PARAM2'";
+              "  and gwi.f_type ='IDENTTYPE'" +
+              "and gwi.f_wwork ='WORKID'";
 
   // created by Nishant @ 22 Apr 2020
   public static final String GET_GD_DATA_PRODUCT_BY_MANIFESTATIONID =
