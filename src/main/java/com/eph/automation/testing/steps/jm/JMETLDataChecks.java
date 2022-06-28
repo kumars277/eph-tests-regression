@@ -2388,6 +2388,7 @@ public class JMETLDataChecks {
                     getStitchingRecords(SemarchytableName, workId);
                     STITCHObject[] TempData = JMContext.StitchingManifestationObject.getmanifestations().clone();
                     ExternalRef = TempData[j].getmanifestationCore().gettype().getcode();
+
                     getSemarchyRecords(SemarchytableName, workId, ExternalRef);
 
                     if (JMContext.JMObjectsFromDL.get(0).getf_type() == null) {
@@ -2397,7 +2398,8 @@ public class JMETLDataChecks {
                                 " Stitching_JSON -> F_type => " + TempData[j].getmanifestationCore().gettype().getcode());
                         if (JMContext.JMObjectsFromDL.get(0).getf_type() != null ||
                                 (TempData[j].getmanifestationCore().gettype().getcode() != null)) {
-                            Assert.assertEquals("The ManifestationID => " + JMContext.JMObjectsFromDL.get(0).getmanifestation_id() + " is missing/not found in Work_Stitching table",
+                            Assert.assertEquals("The ManifestationID => " + JMContext.JMObjectsFromDL.get(0).getmanifestation_id() +
+                                            " is missing/not found in Work_Stitching table and "+TempData[j].getid(),
                                     JMContext.JMObjectsFromDL.get(0).getf_type(),
                                     TempData[j].getmanifestationCore().gettype().getcode());
                         }
@@ -2410,7 +2412,8 @@ public class JMETLDataChecks {
                                 " Stitching_JSON -> F_STATUS => " + TempData[j].getmanifestationCore().getstatus().getcode());
                         if (JMContext.JMObjectsFromDL.get(0).getf_status() != null ||
                                 (TempData[j].getmanifestationCore().getstatus().getcode() != null)) {
-                            Assert.assertEquals("The ManifestationID => " + JMContext.JMObjectsFromDL.get(0).getmanifestation_id() + " is missing/not found in Work_Stitching table",
+                            Assert.assertEquals("The ManifestationID => " + JMContext.JMObjectsFromDL.get(0).getmanifestation_id()
+                                            + " is missing/not found in Work_Stitching table and "+TempData[j].getid(),
                                     JMContext.JMObjectsFromDL.get(0).getf_status(),
                                     TempData[j].getmanifestationCore().getstatus().getcode());
                         }
