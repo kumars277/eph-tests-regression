@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10KXD1"); Log.info("hard coded product ids are : " + ids);
+     // ids.clear(); ids.add("EPR-10M35J"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -822,21 +822,21 @@ else{
           productCountDB =
               getCount(
                   productCountByProductStatus,
-                  defaultSearch,
+                      searchTerm,
                   productDataObjects.get(0).getF_STATUS());
           returnedProducts =
                   getProductByParam(
-                  defaultSearch, paramKey, productDataObjects.get(0).getF_STATUS());
+                          searchTerm, paramKey, productDataObjects.get(0).getF_STATUS());
           break;
         case "productType":   setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
 
           returnedProducts =
                   getProductByParam(
-                  defaultSearch, paramKey, productDataObjects.get(0).getF_TYPE());
+                          searchTerm, paramKey, productDataObjects.get(0).getF_TYPE());
           productCountDB =
               getCount(
                   "getProductCountByProductType",
-                  defaultSearch,
+                      searchTerm,
                   productDataObjects.get(0).getF_TYPE());
           break;
         case "workType":
@@ -845,13 +845,13 @@ else{
 
           returnedProducts =
                   getProductByParam(
-                  defaultSearch,
+                          searchTerm,
                   paramKey,
                   DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
           productCountDB =
               getCount(
                   "getProductCountByWorkType",
-                  defaultSearch,
+                      searchTerm,
                   DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
           break;
         case "manifestationType":
@@ -859,11 +859,11 @@ else{
           setBreadcrumbMessage(manifestationDataObjects.get(0).getF_TYPE());
           returnedProducts =
                   getProductByParam(
-                  defaultSearch, paramKey, manifestationDataObjects.get(0).getF_TYPE());
+                          searchTerm, paramKey, manifestationDataObjects.get(0).getF_TYPE());
           productCountDB =
               getCount(
                   "getProductCountByManifestationType",
-                  defaultSearch,
+                      searchTerm,
                   manifestationDataObjects.get(0).getF_TYPE());
           break;
         case "pmcCode":

@@ -412,6 +412,7 @@ public class workCore {
             Assert.assertEquals(getBreadcrumbMessage()+ " - pmg",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD_local.get(0).getPMC()));
             printLog("pmg code");
         }
+
         if (this.workDataObjectsFromEPHGD_local.get(0).getF_accountable_product() != null) {
             //accountable products varification implemmented by Nishant on 22 Apr 2020
             Log.info("workType - " + type.get("code"));

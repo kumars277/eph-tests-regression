@@ -7,6 +7,7 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import org.junit.Assert;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,7 +101,11 @@ public class ApiReusableFunctions {
         //updated by Nishant @ 12 May 2022
         List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III","SCIENTIFIC","PART");
         String keyword = "";
-        String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+        //by nishant @ 08 Jul 2022 to fix mismatch with DB
+        //translate all accents characters in normal characters
+        String normalisedTitle = Normalizer.normalize(title, Normalizer.Form.NFD);
+        normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", "");
+        String[] arr_title= normalisedTitle.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
         for(int i=0;i<arr_title.length;i++)
         {

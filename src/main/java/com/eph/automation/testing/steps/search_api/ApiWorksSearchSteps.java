@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-   //ids.clear();ids.add("EPR-W-102TY1");Log.info("hard coded work id is : " + ids);
+   //ids.clear();ids.add("EPR-W-103SSC");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -92,6 +92,9 @@ public class ApiWorksSearchSteps {
 
     switch(searchType)
     {
+      case "PERSON_NAME":
+      case "PEOPLE_HUB_ID":
+      case "PERSON_ID":
       case "personFullNameCurrent":
         sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent, numberOfRecords);
         break;
@@ -107,7 +110,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102WJ1");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-11FGYY");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -425,7 +428,7 @@ public class ApiWorksSearchSteps {
       for (int i = 0; i < bound; i++) {
 
         int fromCntr = 0;
-        int sizeCntr = 400;
+        int sizeCntr = 500;
 
         switch (identifierType) {
           case W_ID:
@@ -644,7 +647,8 @@ public class ApiWorksSearchSteps {
 
         case "ISSN":                getWorkIdentifiersByWorkID(workId);
                                   for (WorkDataObject workIdentifier : workIdentifiers) {
-                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L"))
+                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L")
+                                            & workIdentifier.getIDENTIFIER_EFFECTIVE_END_DATE()==null)
                                     {resourceString = workIdentifier.getIDENTIFIER();break;}
                                   }
           shouldResultOnTop=true;break;
@@ -842,14 +846,35 @@ public class ApiWorksSearchSteps {
       WorkApiObject[] items = returnedWorks.getItems().clone();
 
       for (int i = 0; i < items.length; i++) {
-        Assert.assertEquals("found nonElsevierInd work at index "+i,
+
+          if (TestContext.getValues().environment.equalsIgnoreCase("UAT")) {
+            Assert.assertEquals(
+                "found nonElsevierInd work at index " + i,
                 items[i]
-                        .getWorkCore()
-                        .getType()
-                        .get("nonElsevierInd")
-                        .toString()
-                        .equalsIgnoreCase("false"),
+                    .getWorkCore()
+                    .getType()
+                    .get("nonElsevierInd")
+                    .toString()
+                    .equalsIgnoreCase("false"),
                 true);
+       }
+          else
+          {
+            if (items[i].getWorkCore().getType().get("nonElsevierInd") != null)
+            {
+              Assert.assertEquals(
+                  "found nonElsevierInd work at index " + i,
+                  items[i]
+                      .getWorkCore()
+                      .getType()
+                      .get("nonElsevierInd")
+                      .toString()
+                      .equalsIgnoreCase("false"),
+                  true);
+            }
+          }
+
+
       }
 
       fromCntr += sizeCntr;

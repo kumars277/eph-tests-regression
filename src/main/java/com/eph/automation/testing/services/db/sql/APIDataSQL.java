@@ -710,6 +710,7 @@ public class APIDataSQL {
           + " ,B_CLASSNAME as B_CLASSNAME\n"
           + " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n"
           + " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n"
+          + " ,effective_end_date as IDENTIFIER_EFFECTIVE_END_DATE"
           + " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n"
           + " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n"
           + "  FROM semarchy_eph_mdm.gd_work_identifier\n"

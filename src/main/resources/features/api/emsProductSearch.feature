@@ -120,9 +120,9 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
+      | productType   |
       | workType      |
       | productStatus |
-      | productType   |
       | pmcCode       |
       | pmgCode       |
 
