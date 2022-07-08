@@ -2267,7 +2267,7 @@ public class JMETLDataChecksSQL {
     public static String GET_SEMARCHY_GD_WORK_RELATIONSHIP = "select * from semarchy_eph_mdm.gd_work_relationship where f_parent in ('%s')";
     public static String GET_SEMARCHY_GD_PERSON = "select * from semarchy_eph_mdm.gd_person gp where person_id in (%s)";
     public static String GET_SEMARCHY_GD_SUBJECT_Area = "select * from semarchy_eph_mdm.gd_subject_area where code in ('%s')";
-    public static String GET_SEMARCHY_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s') and f_type like ('%s')";
+    public static String GET_SEMARCHY_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s') and f_type like ('%s') order by manifestation_id asc";
     public static String GET_SEMARCHY_GD_MANIFESTATION_IDENTIFIER = "select * from semarchy_eph_mdm.gd_manifestation_identifier where f_manifestation like ('%s')";
     public static String GET_SEMARCHY_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where gl_product_segment_code like ('%s')";
 
