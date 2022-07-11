@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-     // ids.clear(); ids.add("EPR-10M35J"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10M35J"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -818,54 +818,41 @@ else{
 
       switch (paramKey) {
         case "productStatus":  setBreadcrumbMessage(productDataObjects.get(0).getF_STATUS());
-
-          productCountDB =
-              getCount(
-                  productCountByProductStatus,
-                      searchTerm,
+          productCountDB =getCount(productCountByProductStatus,searchTerm,
                   productDataObjects.get(0).getF_STATUS());
-          returnedProducts =
-                  getProductByParam(
-                          searchTerm, paramKey, productDataObjects.get(0).getF_STATUS());
+          returnedProducts =getProductByParam(searchTerm, paramKey, productDataObjects.get(0).getF_STATUS());
           break;
-        case "productType":   setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
 
-          returnedProducts =
-                  getProductByParam(
-                          searchTerm, paramKey, productDataObjects.get(0).getF_TYPE());
-          productCountDB =
-              getCount(
-                  "getProductCountByProductType",
-                      searchTerm,
+        case "productType":   setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
+          returnedProducts =getProductByParam(searchTerm, paramKey, productDataObjects.get(0).getF_TYPE());
+          Log.info("API count - "+returnedProducts.getTotalMatchCount());
+          productCountDB =getCount("getProductCountByProductType",searchTerm,
                   productDataObjects.get(0).getF_TYPE());
+          Log.info("DB count - "+productCountDB);
           break;
+
         case "workType":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           setBreadcrumbMessage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
 
-          returnedProducts =
-                  getProductByParam(
-                          searchTerm,
-                  paramKey,
+          returnedProducts =getProductByParam(searchTerm,paramKey,
                   DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
-          productCountDB =
-              getCount(
-                  "getProductCountByWorkType",
-                      searchTerm,
-                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+          Log.info("API count - "+returnedProducts.getTotalMatchCount());
+          productCountDB =getCount("getProductCountByWorkType",
+                      searchTerm,DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+          Log.info("DB count - "+productCountDB);
           break;
+
         case "manifestationType":
           getManifestationByID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           setBreadcrumbMessage(manifestationDataObjects.get(0).getF_TYPE());
-          returnedProducts =
-                  getProductByParam(
-                          searchTerm, paramKey, manifestationDataObjects.get(0).getF_TYPE());
-          productCountDB =
-              getCount(
-                  "getProductCountByManifestationType",
-                      searchTerm,
-                  manifestationDataObjects.get(0).getF_TYPE());
+          returnedProducts =getProductByParam(searchTerm, paramKey, manifestationDataObjects.get(0).getF_TYPE());
+          Log.info("API count - "+returnedProducts.getTotalMatchCount());
+          productCountDB =getCount("getProductCountByManifestationType",
+                      searchTerm,manifestationDataObjects.get(0).getF_TYPE());
+          Log.info("DB count - "+productCountDB);
           break;
+
         case "pmcCode":
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           setBreadcrumbMessage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
@@ -882,6 +869,7 @@ else{
           productCountDB = getCount("getProductCountByPMGCode", searchTerm, pmgCode);
           Log.info("DB returned count : "+productCountDB);
           break;
+
         default:
           throw new IllegalStateException("Unexpected value: " + paramKey);
       }
@@ -1028,7 +1016,9 @@ else{
         break;
 
       case "getProductCountByProductType":
-        sql = String.format(APIDataSQL.SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE, param1, param2);
+        sql = APIDataSQL.SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE
+                .replaceAll("NAME",param1)
+                .replaceAll("PTYPE",param2);
         break;
 
       case "getProductCountByWorkType":
