@@ -121,9 +121,11 @@ Feature: Search API: Products
     Examples:
       | paramKey      |
       | productStatus |
-      | productType   |
       | workType      |
-      | pmcCode       |
+
+
+      | productType   |
+     | pmcCode       |
       | pmgCode       |
 
 

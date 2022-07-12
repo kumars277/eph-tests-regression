@@ -215,11 +215,11 @@ public class APIDataSQL {
           + "(select p.name,w.f_type,w.work_title from semarchy_eph_mdm.gd_product p\n"
           + "inner join semarchy_eph_mdm.gd_manifestation m on p.f_manifestation =m.manifestation_id \n"
           + "inner join semarchy_eph_mdm.gd_wwork w on m.f_wwork =w.work_id \n"
-          + "where w.f_type like 'param2' and (p.name like '%param1%' or w.work_title like '%param1%'or m.manifestation_key_title like '%param1%')\n"
+          + "where w.f_type like 'WORKTYPE' and (p.name ~* 'TITLE' or w.work_title ~* 'TITLE'or m.manifestation_key_title ~* 'TITLE')\n"
           + "union all\n"
           + "select p.name,w.f_type,w.work_title from semarchy_eph_mdm.gd_product p\n"
           + "inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork =w.work_id\n"
-          + "where w.f_type like 'param2' and (p.name like '%param1%' or w.work_title like '%param1%')) a";
+          + "where w.f_type like 'WORKTYPE' and (p.name ~* 'TITLE' or w.work_title ~* 'TITLE')) a";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_MANIFESTATIONTYPE =
       "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m "
@@ -366,16 +366,22 @@ public class APIDataSQL {
           + "where accountable_product_id in('%s')";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTSTATUS =
-      "select count(*) from semarchy_eph_mdm.gd_product \n"
-          + "where product_id in\n"
-          + "(select product_id from semarchy_eph_mdm.gd_product \n"
-          + "where name like '%param1%' and f_status='param2')\n"
-          + "or \n"
-          + "product_id in(\n"
-          + "select product_id from semarchy_eph_mdm.gd_product gp \n"
-          + "inner join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation =gm.manifestation_id \n"
-          + "where gm.manifestation_key_title like '%param1%'\n"
-          + "and gp.f_status ='param2')";
+      "select count(*) from \n"
+          + "(select gp.product_id \n"
+          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_manifestation gm \n"
+          + "on gp.f_manifestation = gm.manifestation_id join semarchy_eph_mdm.gd_wwork gw \n"
+          + "on gm.f_wwork = gw.work_id \n"
+          + "where gp.f_status ='PSTATUS'\n"
+          + "and (gp.name  ~*'TITLE'\n"
+          + "or gm.manifestation_key_title ~*'TITLE'\n"
+          + "or gw.work_title ~*'TITLE')\n"
+          + "union\n"
+          + "select gp.product_id \n"
+          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_wwork gw \n"
+          + "on gp.f_wwork = gw.work_id \n"
+          + "where gp.f_status ='PSTATUS'\n"
+          + "and (gp.name  ~*'TITLE'\n"
+          + "or gw.work_title  ~*'TITLE'))a;";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE =
       "select count(*)\n"
@@ -383,10 +389,9 @@ public class APIDataSQL {
           + "on gp.f_manifestation = gm.manifestation_id join semarchy_eph_mdm.gd_wwork gw \n"
           + "on gm.f_wwork = gw.work_id \n"
           + "where gp.f_type='PTYPE'\n"
-          + "and (gp.name ~*'NAME'\n"
-          + "or gm.manifestation_key_title ~*'NAME'\n"
-          + "or gw.work_title ~*'NAME')"
-          ;
+          + "and (gp.name ~*'TITLE'\n"
+          + "or gm.manifestation_key_title ~*'TITLE'\n"
+          + "or gw.work_title ~*'TITLE')";
 
   public static final String SELECT_GD_RANDOM_PACKAGE_ID =
       "select product_id from semarchy_eph_mdm.gd_product "

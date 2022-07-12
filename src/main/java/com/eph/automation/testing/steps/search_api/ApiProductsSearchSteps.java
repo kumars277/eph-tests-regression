@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10M35J"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-11C82M"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -818,9 +818,11 @@ else{
 
       switch (paramKey) {
         case "productStatus":  setBreadcrumbMessage(productDataObjects.get(0).getF_STATUS());
+          returnedProducts =getProductByParam(searchTerm, paramKey, productDataObjects.get(0).getF_STATUS());
+          Log.info("API count - "+returnedProducts.getTotalMatchCount());
           productCountDB =getCount(productCountByProductStatus,searchTerm,
                   productDataObjects.get(0).getF_STATUS());
-          returnedProducts =getProductByParam(searchTerm, paramKey, productDataObjects.get(0).getF_STATUS());
+          Log.info("DB count - "+productCountDB);
           break;
 
         case "productType":   setBreadcrumbMessage(productDataObjects.get(0).getF_TYPE());
@@ -857,7 +859,9 @@ else{
           getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
           setBreadcrumbMessage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
           returnedProducts =getProductByParam(searchTerm,paramKey,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          Log.info("API count - "+returnedProducts.getTotalMatchCount());
           productCountDB =getCount("getProductCountByPMCCode",searchTerm,DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+          Log.info("DB count - "+productCountDB);
           break;
 
         case "pmgCode":
@@ -1011,21 +1015,21 @@ else{
       case "getProductCountByProductStatus":
         sql =
             APIDataSQL.SELECT_GD_COUNT_PRODUCT_BY_PRODUCTSTATUS
-                .replace("param1", param1)
-                .replace("param2", param2);
+                .replace("TITLE", param1)
+                .replace("PSTATUS", param2);
         break;
 
       case "getProductCountByProductType":
         sql = APIDataSQL.SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE
-                .replaceAll("NAME",param1)
+                .replaceAll("TITLE",param1)
                 .replaceAll("PTYPE",param2);
         break;
 
       case "getProductCountByWorkType":
         sql =
             APIDataSQL.SELECT_GD_COUNT_PRODUCT_BY_WORKTYPE
-                .replace("param1", param1)
-                .replace("param2", param2);
+                .replace("TITLE", param1)
+                .replace("WORKTYPE", param2);
         break;
 
       case "getProductCountByManifestationType":

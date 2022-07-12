@@ -860,6 +860,7 @@ public class ApiWorksSearchSteps {
        }
           else
           {
+            try{
             if (items[i].getWorkCore().getType().get("nonElsevierInd") != null)
             {
               Assert.assertEquals(
@@ -871,6 +872,11 @@ public class ApiWorksSearchSteps {
                       .toString()
                       .equalsIgnoreCase("false"),
                   true);
+            }
+            }
+            catch(Exception e)
+            {
+              Log.info(e.getMessage());
             }
           }
 
