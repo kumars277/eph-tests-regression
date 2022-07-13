@@ -27,9 +27,10 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when searched by <idType>
     Examples:
       | idType                                |
+      | PRODUCT_WORK_ID                       |
       | PRODUCT_ID                            |
      #| PRODUCT_IDENTIFIER                    |
-      | PRODUCT_WORK_ID                       |
+
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_ID              |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
@@ -44,8 +45,9 @@ Feature: Search API: Products
     Examples:
       | identifier                            |
   #   | PRODUCT_IDENTIFIER                    |
-      | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
+      | PRODUCT_WORK_IDENTIFIER               |
+
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |
 
   @searchAPI @productSearchAPI
@@ -122,10 +124,8 @@ Feature: Search API: Products
       | paramKey      |
       | productStatus |
       | workType      |
-
-
       | productType   |
-     | pmcCode       |
+      | pmcCode       |
       | pmgCode       |
 
 

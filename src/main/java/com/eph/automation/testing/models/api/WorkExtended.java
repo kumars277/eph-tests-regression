@@ -450,6 +450,7 @@ public class WorkExtended {
                 printLog("workExtendedEditorialBoard count " + weeb.length);
 
                 ignore.clear();
+                boolean extendedBoardMemberMissing = false;
                 boolean fNameMissing = false;
                 boolean lNameMissing = false;
                 boolean codeMatched = false;
@@ -498,13 +499,12 @@ public class WorkExtended {
               if(!fNameMissing &!lNameMissing)
               {if (codeMatched & firstNameMatched & lastNameMatched){exEditorialBoardFound = true;}}
               else if(!fNameMissing&lNameMissing)
-              { if (codeMatched & lastNameMatched){exEditorialBoardFound = true;}}
-              else if(!lNameMissing&fNameMissing)
               { if (codeMatched & firstNameMatched){exEditorialBoardFound = true;}}
+              else if(!lNameMissing&fNameMissing)
+              { if (codeMatched & lastNameMatched){exEditorialBoardFound = true;}}
 
                             if (exEditorialBoardFound)
                             {
-
                                 printLog("workExtendedEditorialBoard extendedBoardMember firstName");
                                 printLog("workExtendedEditorialBoard extendedBoardMember lastName");
 
@@ -526,7 +526,7 @@ public class WorkExtended {
                             }
                             else continue;
                         }
-
+else {extendedBoardMemberMissing = true;}
                           Assert.assertEquals(getBreadcrumbMessage()
                           + " - workExtendedEditorialBoard-> groupNumber",
                           weeb[i].groupNumber,weebDB[cnt].groupNumber);
@@ -539,6 +539,7 @@ public class WorkExtended {
 
                         printLog("workExtendedEditorialBoard extendedBoardRole " + i);
                         ignore.add(cnt);
+                        if(extendedBoardMemberMissing)exEditorialBoardFound=true;
                         break;
 
                     }
