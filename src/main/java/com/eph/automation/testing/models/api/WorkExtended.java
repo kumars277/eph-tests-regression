@@ -450,50 +450,60 @@ public class WorkExtended {
                 printLog("workExtendedEditorialBoard count " + weeb.length);
 
                 ignore.clear();
+                boolean fNameMissing = false;
+                boolean lNameMissing = false;
                 boolean codeMatched = false;
                 boolean firstNameMatched = false;
                 boolean lastNameMatched = false;
-
-                for (int i = 0; i < weeb.length; i++) {
-                    boolean exEditorialBoardFound = false;
+                boolean exEditorialBoardFound = false;
+                for (int i = 0; i < weeb.length; i++)
+                {
+                    exEditorialBoardFound = false;
                     codeMatched = false;
                     firstNameMatched = false;
                     lastNameMatched = false;
-                    for (int cnt = 0; cnt <= weebDB.length; cnt++) {
+                    for (int cnt = 0; cnt <= weebDB.length; cnt++)
+                    {
                         if (ignore.contains(cnt)) continue;
 
-                        printLog("workExtendedEditorialBoard extendedBoardRole " + i);
-                        if (weeb[i]
-                                .extendedBoardRole
-                                .get("code")
-                                .toString()
-                                .equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString()))
+                         if (weeb[i].extendedBoardRole.get("code").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString()))
+                         {
                             codeMatched = true;
+                         }
+                         else continue; //jump to next iteration if code not matching
 
                         if (weeb[i].extendedBoardMember != null & weebDB[cnt].extendedBoardMember != null)
                         {
-                            if (weeb[i].extendedBoardMember.get("firstName") != null
-                                    | weebDB[cnt].extendedBoardMember.get("firstName") != null)
-                                if (weeb[i]
-                                        .extendedBoardMember
-                                        .get("firstName")
-                                        .toString()
-                                        .equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString()))
-                                    firstNameMatched = true;
+              if (weeb[i].extendedBoardMember.get("firstName") != null
+                  | weebDB[cnt].extendedBoardMember.get("firstName") != null) {
+                if (weeb[i]
+                    .extendedBoardMember
+                    .get("firstName")
+                    .toString()
+                    .equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString()))
+                  firstNameMatched = true;
+}
+              else fNameMissing=true;
+              if (weeb[i].extendedBoardMember.get("lastName") != null
+                  | weebDB[cnt].extendedBoardMember.get("lastName") != null) {
+                if (weeb[i]
+                    .extendedBoardMember
+                    .get("lastName")
+                    .toString()
+                    .equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString()))
+                  lastNameMatched = true;
+}
+              else lNameMissing=true;
 
-                            if (weeb[i].extendedBoardMember.get("lastName") != null
-                                    | weebDB[cnt].extendedBoardMember.get("lastName") != null)
-                                if (weeb[i]
-                                        .extendedBoardMember
-                                        .get("lastName")
-                                        .toString()
-                                        .equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString()))
-                                    lastNameMatched = true;
+              if(!fNameMissing &!lNameMissing)
+              {if (codeMatched & firstNameMatched & lastNameMatched){exEditorialBoardFound = true;}}
+              else if(!fNameMissing&lNameMissing)
+              { if (codeMatched & lastNameMatched){exEditorialBoardFound = true;}}
+              else if(!lNameMissing&fNameMissing)
+              { if (codeMatched & firstNameMatched){exEditorialBoardFound = true;}}
 
-
-                            if ((codeMatched & firstNameMatched) | (codeMatched & lastNameMatched)) {
-                                exEditorialBoardFound = true;
-
+                            if (exEditorialBoardFound)
+                            {
 
                                 printLog("workExtendedEditorialBoard extendedBoardMember firstName");
                                 printLog("workExtendedEditorialBoard extendedBoardMember lastName");
@@ -505,36 +515,37 @@ public class WorkExtended {
                                         weebDB[cnt].extendedBoardMember.get("affiliation"));
                                 printLog("workExtendedEditorialBoard extendedBoardMember affiliation");
 
+                                if (weeb[i].extendedBoardMember.get("imageUrl") != null) {
+                                  Assert.assertEquals(
+                                      getBreadcrumbMessage()
+                                          + " - workExtendedEditorialBoard-> extendedBoardMember-> imageUrl",
+                                      weeb[i].extendedBoardMember.get("imageUrl"),
+                                      weebDB[cnt].extendedBoardMember.get("imageUrl"));
+                                  printLog("workExtendedEditorialBoard extendedBoardMember imageUrl");
+                                    }
                             }
-
-
-                            Assert.assertTrue(
-                                    getBreadcrumbMessage()
-                                            + " - workExtendedEditorialBoard-> extendedBoardRole "
-                                            + i
-                                            + " not found in DB",
-                                    exEditorialBoardFound);
-
+                            else continue;
                         }
 
+                          Assert.assertEquals(getBreadcrumbMessage()
+                          + " - workExtendedEditorialBoard-> groupNumber",
+                          weeb[i].groupNumber,weebDB[cnt].groupNumber);
+                         printLog("workExtendedEditorialBoard groupNumber");
 
-                        Assert.assertEquals(                  getBreadcrumbMessage()
-                                        + " - workExtendedEditorialBoard-> groupNumber",
-                                weeb[i].groupNumber,
-                                weebDB[cnt].groupNumber);
-                        printLog("workExtendedEditorialBoard groupNumber");
-
-                        Assert.assertEquals(
-                                getBreadcrumbMessage()
-                                        + " - workExtendedEditorialBoard-> sequenceNumber",
-                                weeb[i].sequenceNumber,
-                                weebDB[cnt].sequenceNumber);
+                         Assert.assertEquals(getBreadcrumbMessage()
+                        + " - workExtendedEditorialBoard-> sequenceNumber",
+                        weeb[i].sequenceNumber, weebDB[cnt].sequenceNumber);
                         printLog("workExtendedEditorialBoard sequenceNumber");
 
+                        printLog("workExtendedEditorialBoard extendedBoardRole " + i);
                         ignore.add(cnt);
                         break;
 
                     }
+
+                    Assert.assertTrue(getBreadcrumbMessage()
+                            + " - workExtendedEditorialBoard-> extendedBoardRole "
+                            + i+ " not found in DB", exEditorialBoardFound);
 
 
                 }

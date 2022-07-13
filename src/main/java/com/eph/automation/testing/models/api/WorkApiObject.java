@@ -66,8 +66,6 @@ public class WorkApiObject {
 
     public void compareWithDB() throws ParseException {//implemented by Nishant @ 23 Apr 2020
 
-        boolean failed = false;
-
         //1
         workCore.compareWithDB(this.id);
 
