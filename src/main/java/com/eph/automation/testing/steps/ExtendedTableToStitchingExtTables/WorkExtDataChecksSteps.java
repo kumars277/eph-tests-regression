@@ -1360,9 +1360,11 @@ public class WorkExtDataChecksSteps {
                             String trgetSeqAff = extworkEditorial_temp[j].getExtendedBoardMember().getAffiliation();
 
 
+
                             if (sourceFirstName != null && sourceLastName != null && sourceGrpNumber != null) {
                                 if (sourceFirstName.equals(trgetFirstName) && sourceLastName.equals(trgetLastName)
-                                        && sourceGrpNumber.equals(trgetGrpNumber) && sourceAff.equals(trgetSeqAff)) {
+                                        && sourceGrpNumber.equals(trgetGrpNumber) && sourceAff.equals(trgetSeqAff)
+                                       &&sourceSeqNumber.equals(trgetSeqNumber) ) {
                                     Log.info("Work_Editorial -> EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
                                             " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
                                     if (dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() != null ||
@@ -1419,7 +1421,7 @@ public class WorkExtDataChecksSteps {
                                     Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
                                             " Work_Editorial -> notes => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getnotes_txt() +
                                             " Work_JSON -> notes => " + extworkEditorial_temp[j].getExtendedBoardMember().getNotes());
-                                    Assert.assertEquals("The notes is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                    Assert.assertEquals("The noteTxt is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
                                             dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getnotes_txt(),
                                             extworkEditorial_temp[j].getExtendedBoardMember().getNotes());
 
@@ -1433,7 +1435,7 @@ public class WorkExtDataChecksSteps {
                                     Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
                                             " Work_Editorial -> SequenceNumber => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getsequence_number() +
                                             " Work_JSON -> SequenceNumber => " + extworkEditorial_temp[j].getSequenceNumber());
-                                    Assert.assertEquals("The notes is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                    Assert.assertEquals("The SequenceNo is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
                                             dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getsequence_number(),
                                             extworkEditorial_temp[j].getSequenceNumber());
 
