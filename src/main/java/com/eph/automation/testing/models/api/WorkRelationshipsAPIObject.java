@@ -59,11 +59,12 @@ public class WorkRelationshipsAPIObject {
             ArrayList<workParent> list_workParent = new ArrayList<>(Arrays.asList(workParent));
             getWorkRelationshipParentRecordsEPHGD(workId);
             for (int wp = 0; wp < workParent.length; wp++) {
+                Log.info("verifying parent "+list_workParent.get(wp).id);
                 if(list_workParent.get(wp).workSummary.status.get("code").toString().equalsIgnoreCase("NVW"))
                 {continue;}
                 if(GenericFunctions.isExpired(list_workParent.get(wp).effectiveEndDate)) continue;
                 boolean parentFound = false;
-                for (int wp2 = 0; wp2 < workParent.length; wp2++) {
+                for (int wp2 = 0; wp2 < dataQualityContext.workRelationshipParentDataObjectsFromEPGD.size(); wp2++) {
                     if (list_workParent.get(wp).id.equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_PARENT())
                             && list_workParent.get(wp).type.get("code").toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_RELATIONSHIP_TYPE())
                     //&& list_workParent.get(wp).effectiveStartDate.toString().equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE())
