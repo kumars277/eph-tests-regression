@@ -365,23 +365,27 @@ public class APIDataSQL {
       "select gl_product_segment_code from semarchy_eph_mdm.gd_accountable_product "
           + "where accountable_product_id in('%s')";
 
+  //updated on 14 Jul 2022 by Nishant
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTSTATUS =
-      "select count(*) from \n"
-          + "(select gp.product_id \n"
-          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_manifestation gm \n"
-          + "on gp.f_manifestation = gm.manifestation_id join semarchy_eph_mdm.gd_wwork gw \n"
-          + "on gm.f_wwork = gw.work_id \n"
+      "select count(*)\n"
+          + "from semarchy_eph_mdm.gd_product gp\n"
+          + "left join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation = gm.manifestation_id\n"
+          + "left join semarchy_eph_mdm.gd_wwork gw on gm.f_wwork = gw.work_id\n"
+          + "left join semarchy_eph_mdm.gd_wwork gw2 on gp.f_wwork = gw2.work_id\n"
           + "where gp.f_status ='PSTATUS'\n"
-          + "and (gp.name  ~*'TITLE'\n"
-          + "or gm.manifestation_key_title ~*'TITLE'\n"
-          + "or gw.work_title ~*'TITLE')\n"
-          + "union\n"
-          + "select gp.product_id \n"
-          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_wwork gw \n"
-          + "on gp.f_wwork = gw.work_id \n"
-          + "where gp.f_status ='PSTATUS'\n"
-          + "and (gp.name  ~*'TITLE'\n"
-          + "or gw.work_title  ~*'TITLE'))a;";
+          + "and (translate(gp.name,\n"
+          + "            '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gm.manifestation_key_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gw.work_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gw2.work_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + ")";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE =
       "select count(*)\n"
@@ -644,10 +648,10 @@ public class APIDataSQL {
           + "(select distinct w.work_id from semarchy_eph_mdm.gd_wwork w\n"
           + "inner join semarchy_eph_mdm.gd_manifestation m\n"
           + "on w.work_id=m.f_wwork\n"
-          + "where upper(translate(\n"
-          + "    lower(work_title),\n"
+          + "where translate(\n"
+          + "    work_title,\n"
           + "    'áàâãäåāăąèééêëēĕėęěìíîïìĩīĭḩóôõöōŏőùúûüũūŭůäàáâãåæçćĉčöòóôõøüùúûßéèêëýñîìíïş',\n"
-          + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis')) like '%%%s%%' and m.f_type='%s') s";
+          + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis') ~* '%s' and m.f_type='%s') s";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH =
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
