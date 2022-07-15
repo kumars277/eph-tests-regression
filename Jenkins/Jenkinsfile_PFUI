@@ -1,8 +1,8 @@
 pipeline {
     agent { label 'master' }
-    triggers {
-        cron('H 12 * * 1-5')
-    }
+  //  triggers {
+  //      cron('H 12 * * 1-5')
+  //  }
     //3. Environment variables
     environment {
       //  JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
