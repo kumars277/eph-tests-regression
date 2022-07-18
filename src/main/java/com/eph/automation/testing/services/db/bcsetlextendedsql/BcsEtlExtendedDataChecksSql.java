@@ -261,7 +261,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid desc,u_key desc,modifiedon desc \n";
 
     public static final String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
             "select eprid as eprid from (\n" +
@@ -1467,7 +1467,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",exporttowebind as exporttowebind" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
                     "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
-                    " and eprid in('%s') order by eprid,u_key desc";
+                    " and eprid in('%s') order by eprid desc,u_key desc,modifiedon desc";
 
     public static final String GET_MANIF_EXT_REC_TRANS_FILE =
             "select eprid as eprid " +
