@@ -9,7 +9,7 @@ public class Constants {
     //UI End Points
     public static String SIT_EPH_UI = "https://sit-eph.app.science.regn.net/semarchy/welcome";
     public static String THREE_S_BUCKET_UI = "https://federation.reedelsevier.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices";
-    public static String RESEARCH_PACKAGES_SIT_UI   = "https://activitisit.ephdev.tio.systems/research-packages-app/";
+    public static String RESEARCH_PACKAGES_SIT_UI   = "https://sit.dpp.elsevier.net/";
 
     public static String PRODUCT_FINDER_EPH_DEV_UI = "https://activitidev.ephdev.tio.systems/product-finder-app/search";
     public static String PRODUCT_FINDER_EPH_SIT_UI = "https://sit.productfinder.elsevier.net/";

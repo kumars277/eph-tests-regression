@@ -21,8 +21,12 @@ public class ResearchPackagesTasks {
         String methodName="loginByScienceAccount";
         try{
             if(tasks.verifyElementisDisplayed("NAME",ResearchPackagesConstants.LoginByEmail)){
-                tasks.sendKeys("NAME", ResearchPackagesConstants.LoginByEmail,scienceEmailId);
+                tasks.loginWithScience();
+               /* tasks.sendKeys("NAME", ResearchPackagesConstants.LoginByEmail,scienceEmailId);
                 tasks.click("ID", ResearchPackagesConstants.NextButton);
+                tasks.waitTime(5);*/
+                tasks.openPage("https://"+ResearchPackagesConstants.SCIENCE_ID+":"+ResearchPackagesConstants.PWD+"@"+tasks.getCurrentPageUrl().split("//")[1]);
+                tasks.waitTime(5);
             }
         }catch (Exception e){
             Log.info("Exception in the method: "+methodName);
@@ -32,7 +36,7 @@ public class ResearchPackagesTasks {
     public void impersonateUser() throws InterruptedException {
         String methodName = "impersonateUser";
         try{
-         if(!tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_ROLE)){
+       //  if(!tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_ROLE)){
              if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_LOGIN_ICON)){
                  tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
                  tasks.waitTime(2);
@@ -42,7 +46,7 @@ public class ResearchPackagesTasks {
                      tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);
                  }
              }
-         }
+        // }
         }catch (Exception e){
             Log.info("Exception in the Method: "+methodName);
         }
@@ -101,6 +105,21 @@ public class ResearchPackagesTasks {
            Log.info("Exception in the Method :"+methodName);
         }
         tasks.waitTime(2);
+    }
+
+    public void validateSearchAddJournalByIssn(String issnVal){
+        String methodName="validateSearchAddJournal";
+        try{
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SEARCH_VALUE)){
+                tasks.sendKeys("XPATH", ResearchPackagesConstants.SEARCH_VALUE,issnVal);
+                tasks.click("XPATH", ResearchPackagesConstants.SEARCH_SUBMIT);
+                tasks.waitTime(2);
+            }
+
+        }catch (Exception e){
+            Log.info("Exception in the Method "+ methodName);
+        }
+
     }
 
     public void searchJournalToAdd(String issnVal){
@@ -245,10 +264,6 @@ public class ResearchPackagesTasks {
         }
 
     }
-
-
-
-
 
 
 }
