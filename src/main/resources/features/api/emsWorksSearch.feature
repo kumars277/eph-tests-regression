@@ -3,7 +3,7 @@ Feature: Search API: Works
          I would like to search works from Enterprise Product Hub using EIP Search
          So that I can use the details to validate business needs
 
-  @searchAPI @workSearchAPI
+    @searchAPI @workSearchAPI
   Scenario: search work by ID
     Given   We get 1 random search ids for works default
     And     We get the work search data from EPH GD
@@ -18,10 +18,11 @@ Feature: Search API: Works
     Examples:
       | option            |
       |TITLE              |
+      |ISSN               |
       |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
       |EPR_ID             |
-      |ISSN               |
+
 
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
@@ -31,9 +32,10 @@ Feature: Search API: Works
     Examples:
       | options               |
       | PERSON_NAME           |
+      | PEOPLE_HUB_ID         |
       | personFullNameCurrent |
       | PERSON_ID             |
-      | PEOPLE_HUB_ID         |
+
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI
@@ -56,8 +58,8 @@ Feature: Search API: Works
     Then   the works search by identifier <idType> details are retrieved and compared
     Examples:
       | idType                        |
-      | WORK_ID                       |
       | WORK_IDENTIFIER               |
+      | WORK_ID                       |
       | WORK_MANIFESTATION_ID         |
       | WORK_MANIFESTATION_IDENTIFIER |
 
@@ -161,8 +163,8 @@ Feature: Search API: Works
     Given   verify works retrieved by search <option> for excludeNonElsevier
     Examples:
       | option                             |
-      | cell                               |
       | bio                                |
+      | cell                               |
       | blood                              |
       | human                              |
       | medicine                           |

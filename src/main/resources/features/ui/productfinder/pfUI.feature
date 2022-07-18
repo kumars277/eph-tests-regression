@@ -74,7 +74,7 @@ Feature: Product Finder Selenium tests
 
   @PFNonProd @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
   Scenario Outline: Search the Journal Finder and verify all 5 tabs
-    Given We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search ""
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches work by id
@@ -105,7 +105,7 @@ Examples:
 
   @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by PMC
-    Given We get 5 random journal ids for search
+    Given  We get 5 random journal ids to search ""
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches journal by pmc <option>

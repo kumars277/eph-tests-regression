@@ -70,7 +70,7 @@ public class ManifestationWorkApiObject {
 
         //IDENTIFIERS - EPR-11119M
         if(!(workCore.getIdentifiers()==null &&this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER()==null) )
-            for(WorkIdentifiersApiObject identifier:workCore.getIdentifiers()){identifier.compareWithDB();}
+            for(WorkIdentifiersApiObject identifier:workCore.getIdentifiers()){identifier.compareWithDB(this.id);}
             Log.info( "-work type code \n-work status code \n-imprint \n-openAccessType code \n-pmc \n-pmg\n");
         Assert.assertEquals(workCore.getType().get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         Assert.assertEquals(workCore.getStatus().get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());

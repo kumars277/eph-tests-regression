@@ -7,6 +7,7 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import org.junit.Assert;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,7 +101,11 @@ public class ApiReusableFunctions {
         //updated by Nishant @ 12 May 2022
         List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III","SCIENTIFIC","PART");
         String keyword = "";
-        String[] arr_title= title.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
+        //by nishant @ 08 Jul 2022 to fix mismatch with DB
+        //translate all accents characters in normal characters
+        String normalisedTitle = Normalizer.normalize(title, Normalizer.Form.NFD);
+        normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", "");
+        String[] arr_title= normalisedTitle.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
         for(int i=0;i<arr_title.length;i++)
         {
@@ -112,16 +117,19 @@ public class ApiReusableFunctions {
             {
                 if(!ignoreKeywords.contains(arr_title[i].toUpperCase()))
                 {
-                    keyword=arr_title[i];  break;
+                    keyword=arr_title[i];
+
+                    /*ngram filter in API splits the title into all the combinations
+        of consecutive characters between 3 and 50 characters long.
+        Because the minimum length is 3, CD isn’t a valid match.
+        hence valid keyword should be more than 2 characters*/
+                    if(keyword.length()<3)continue;
+                    break;
                 }
             }
         }
 
-        /*ngram filter in API splits the title into all the combinations
-        of consecutive characters between 3 and 50 characters long.
-        Because the minimum length is 3, CD isn’t a valid match.
-        hence valid keyword should be more than 2 characters*/
-        if(keyword.length()<3)keyword = arr_title[arr_title.length-2];
+
         return keyword;
     }
 

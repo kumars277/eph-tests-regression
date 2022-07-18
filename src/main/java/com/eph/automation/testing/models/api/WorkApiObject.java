@@ -64,9 +64,7 @@ public class WorkApiObject {
     public List<ManifestationProductAPIObject> getProducts() {return products;}
     public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
-    public void     compareWithDB() throws ParseException {//implemented by Nishant @ 23 Apr 2020
-
-        boolean failed = false;
+    public void compareWithDB() throws ParseException {//implemented by Nishant @ 23 Apr 2020
 
         //1
         workCore.compareWithDB(this.id);

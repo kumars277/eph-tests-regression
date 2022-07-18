@@ -136,7 +136,8 @@ public class APIService {
             .when()
             .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
 
-    Log.info(searchAPIEndPoint+"/product-hub-products/products?queryType=name&queryValue="+searchTerm);
+    Log.info(searchAPIEndPoint+"/product-hub-products/products?queryType=name&queryValue="+searchTerm
+    +  "&"+paramKey+"="+paramValue);
     DataQualityContext.api_response = response;
   // response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());

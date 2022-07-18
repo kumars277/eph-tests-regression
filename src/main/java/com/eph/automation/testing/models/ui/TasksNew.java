@@ -35,8 +35,14 @@ public class TasksNew {
     this.driver = new WebDriverFactory().get();
     this.wait = new WebDriverWait(driver, 10);
     this.pageLoadTimeout = 30000;
+
    // driver.get("https://productfinder.elsevier.net");
     //loginWithCredential();
+    //driver.get("https://uat.productfinder.elsevier.net");
+    driver.get("https://productfinder.elsevier.net");
+    loginWithCredential();
+    //loginWithScience(); //local execution
+
    }
 
   public void loginWithCredential() {
@@ -51,11 +57,16 @@ public class TasksNew {
               ProductFinderConstants.loginByEmail,
               loginId + ProductFinderConstants.SCIENCE_ID);
       click("ID", ProductFinderConstants.nextButton);
-      Thread.sleep(3000);
+      Thread.sleep(5000);
 
-      driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+    //  driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+     // driver.get("https://"+loginId+":"+pwd+"@"+"<Url>");
       waitUntilPageLoad();
-      Thread.sleep(3000);
+    //  Thread.sleep(5000);
+      Log.info("url after science id url");
+      Log.info(driver.getCurrentUrl());
+      sendCredential(loginId,pwd);
+
       if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
       {
         signIntoYourOrganisation(loginId,pwd);
@@ -69,7 +80,7 @@ public class TasksNew {
       }
       else {
         Log.info("sign in issue for below link");
-        driver.getCurrentUrl();
+        Log.info(driver.getCurrentUrl());
       }
     } catch (Exception e) {
       Log.error(e.getMessage());
@@ -135,6 +146,8 @@ public class TasksNew {
     btn_signIn.click();
     waitUntilPageLoad();
     Log.info("sign in to your organisation funtion called");
+    Thread.sleep(3000);
+    Log.info(driver.getCurrentUrl());
   }
 
   public WebElement findElementByText(final String text) {
