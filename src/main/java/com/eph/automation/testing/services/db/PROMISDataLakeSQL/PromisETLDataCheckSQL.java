@@ -513,7 +513,7 @@ public class PromisETLDataCheckSQL {
             "child_related_status_roll_up as CHILD_RELATED_STATUS_ROLL_UP,\n" +
             "relationship_type_code as RELATIONSHIP_TYPE_CODE,\n" +
             "relationship_type_name as RELATIONSHIP_TYPE_NAME,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by u_key desc";
 
 
     public static String GET_WORK_RELS_TRANSFORM_FILE = "select parent_pub_idt as PARENT_PUB_IDT," +
@@ -1293,7 +1293,7 @@ public class PromisETLDataCheckSQL {
             "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf ON rel.pub_pub_idt = inf.pub_idt\n" +
             "where rel_idt is not null) where U_KEY in ('%s')";
 
-    public static String GET_WORK_RELS_TransformMapping="select * from (select\n" +
+    public static String GET_WORK_RELS_TransformMapping="select * from (select DISTINCT\n" +
             "  par.pub_idt parent_pub_idt\n" +
             ", par.epr_id parent_epr_id\n" +
             ", cast(par.pub_idt as varchar)||cast(chd.pub_idt as varchar) as u_key\n" +
@@ -1316,7 +1316,7 @@ public class PromisETLDataCheckSQL {
             "INNER JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_wwork w ON w.work_id = chd.epr_id\n" +
             "INNER JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_x_lov_work_type t ON t.code = w.f_type\n" +
             "INNER JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_x_lov_work_status s ON s.code = w.f_status\n" +
-            "WHERE (rel.rtp_rtp_cod = 'JNPUB')) where U_KEY in ('%s')";
+            "WHERE (rel.rtp_rtp_cod = 'JNPUB')) where U_KEY in ('%s') order by u_key desc ";
 
 //  Latest and AllSource IDs SQL
     public static String GET_LATEST_PRICING_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_pricing limit %s ";

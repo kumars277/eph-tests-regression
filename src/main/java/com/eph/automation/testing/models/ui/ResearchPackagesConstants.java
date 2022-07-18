@@ -38,6 +38,7 @@ public class ResearchPackagesConstants {
     public static String CHOOSE_REASON_PENDING = "//span[contains(text(),'Awaiting final decision')]";
     public static String ADD_REMARKS = "//textarea[@formcontrolname='remarks']";
     public static String SCIENCE_ID = "SURESHKUMARD@science.regn.net";
+    public static String PWD = "";
     public static String resultTable  = "tbody";
 //mat-checkbox[@id='mat-checkbox-212']//div[@class='mat-checkbox-inner-container mat-checkbox-inner-container-no-side-margin']
 
@@ -85,5 +86,13 @@ public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOW
     public static String SUBMIT_COLLECTION = "//span[contains(text(),'Submit completed collection')]";
     public static String SUBMIT_LIST = "//button[contains(text(),'Submit list')]";
     public static String USER_ROLE = "//div[contains(@class,'user-role')]";
+
+    public static String LIST_OF_COLLECTIONS = "(//div[@class='collection-name'])";
+    public static String FREESOM_COLLECTION = "//div[contains(text(),'Freedom Collection')]";
+    public static String COLLECTION_TITLE = "//div[@class='collection-title']";
+    public static String ADD_JOURNAL_CLOSE = "//button[@class='pf-icon-button s32']//i[@class='gm-ico-delete']";
+
+
+
 
 }
