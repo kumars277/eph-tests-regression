@@ -1,19 +1,17 @@
 pipeline {
     agent { label 'master' }
-   // triggers {
-  //      cron('0 12 * * 1-5')
-   // }
+  //  triggers {
+  //      cron('H 12 * * 1-5')
+  //  }
     //3. Environment variables
     environment {
-        JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
-        VATT_DECRYPTION_KEY = credentials('appian-vatt-decryption-key')
+      //  JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
+     //   VATT_DECRYPTION_KEY = credentials('appian-vatt-decryption-key')
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
         WINDOWS_AGENT = 'eph-windows-gui'
-        ENV = 'SIT'
+        ENV = 'PROD'
     }
-
-
 
     options {
         disableConcurrentBuilds()
@@ -40,7 +38,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     withMaven(jdk: 'OpenJDK-8-Win', maven: 'Maven-3.6.3', mavenLocalRepo: 'repository') {
-                        bat('mvn clean test -Dcucumber.options="--tags @PFNonProd " -e -X')
+                        bat('mvn clean test -Dcucumber.options="--tags @PFUIjenkinFix " -e -X')
 
                     }
                 }
@@ -78,8 +76,8 @@ pipeline {
                 to: "${env.EMAIL_DIST_LIST}")
             }
         }
-        cleanup {
-            build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
-        }
+      //  cleanup {
+        //    build job: '/Appian/Windows GUI Agent', parameters: [string(name: 'action', value: 'Stop')]
+      //  }
     }
 }

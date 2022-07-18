@@ -212,14 +212,14 @@ public class APIDataSQL {
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_WORKTYPE =
       "select count(*) from \n"
-          + "(select p.s_name,w.f_type,w.s_work_title from semarchy_eph_mdm.gd_product p\n"
+          + "(select p.name,w.f_type,w.work_title from semarchy_eph_mdm.gd_product p\n"
           + "inner join semarchy_eph_mdm.gd_manifestation m on p.f_manifestation =m.manifestation_id \n"
           + "inner join semarchy_eph_mdm.gd_wwork w on m.f_wwork =w.work_id \n"
-          + "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%'or m.s_manifestation_key_title like '%param1%')\n"
+          + "where w.f_type like 'WORKTYPE' and (p.name ~* 'TITLE' or w.work_title ~* 'TITLE'or m.manifestation_key_title ~* 'TITLE')\n"
           + "union all\n"
-          + "select p.s_name,w.f_type,w.s_work_title from semarchy_eph_mdm.gd_product p\n"
+          + "select p.name,w.f_type,w.work_title from semarchy_eph_mdm.gd_product p\n"
           + "inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork =w.work_id\n"
-          + "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%')) a";
+          + "where w.f_type like 'WORKTYPE' and (p.name ~* 'TITLE' or w.work_title ~* 'TITLE')) a";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_MANIFESTATIONTYPE =
       "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m "
@@ -365,20 +365,37 @@ public class APIDataSQL {
       "select gl_product_segment_code from semarchy_eph_mdm.gd_accountable_product "
           + "where accountable_product_id in('%s')";
 
+  //updated on 14 Jul 2022 by Nishant
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTSTATUS =
-      "select count(*) from semarchy_eph_mdm.gd_product \n"
-          + "where product_id in\n"
-          + "(select product_id from semarchy_eph_mdm.gd_product \n"
-          + "where s_name like '%param1%' and f_status='param2')\n"
-          + "or \n"
-          + "product_id in(\n"
-          + "select product_id from semarchy_eph_mdm.gd_product gp \n"
-          + "inner join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation =gm.manifestation_id \n"
-          + "where gm.s_manifestation_key_title like '%param1%'\n"
-          + "and gp.f_status ='param2')";
+      "select count(*)\n"
+          + "from semarchy_eph_mdm.gd_product gp\n"
+          + "left join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation = gm.manifestation_id\n"
+          + "left join semarchy_eph_mdm.gd_wwork gw on gm.f_wwork = gw.work_id\n"
+          + "left join semarchy_eph_mdm.gd_wwork gw2 on gp.f_wwork = gw2.work_id\n"
+          + "where gp.f_status ='PSTATUS'\n"
+          + "and (translate(gp.name,\n"
+          + "            '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gm.manifestation_key_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gw.work_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + "or translate(gw2.work_title,\n"
+          + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+          + ")";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE =
-      "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_type='%s'";
+      "select count(*)\n"
+          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_manifestation gm \n"
+          + "on gp.f_manifestation = gm.manifestation_id join semarchy_eph_mdm.gd_wwork gw \n"
+          + "on gm.f_wwork = gw.work_id \n"
+          + "where gp.f_type='PTYPE'\n"
+          + "and (gp.name ~*'TITLE'\n"
+          + "or gm.manifestation_key_title ~*'TITLE'\n"
+          + "or gw.work_title ~*'TITLE')";
 
   public static final String SELECT_GD_RANDOM_PACKAGE_ID =
       "select product_id from semarchy_eph_mdm.gd_product "
@@ -579,13 +596,44 @@ public class APIDataSQL {
           + "select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in ('%s'))";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH =
-      "select count(work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_status = '%s'";
+      "select count(distinct w.work_id) \n"
+          + "from semarchy_eph_mdm.gd_wwork w \n"
+          + "left join semarchy_eph_mdm.gd_manifestation gm on w.work_id = gm.f_wwork \n"
+          + "left join semarchy_eph_mdm.gd_product gp on gm.manifestation_id = gp.f_manifestation \n"
+          + "where w.f_status ='PARAM1'\n"
+          + "and (translate(w.work_title\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     )  ~*'PARAM2'\n"
+          + "or translate(gm.manifestation_key_title\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     ) ~*'PARAM2'\n"
+          + "or translate(gp.name\n"
+          + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+          + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+          + "     ) ~*'PARAM2')";
 
   public static final String SELECT_GD_WORK_TYPE_STATUS_BY_WORKID =
       "select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH =
-      "select count(distinct work_id) from semarchy_eph_mdm.gd_wwork where s_work_title ~*'%s' and f_type='%s'";
+          "select count(distinct w.work_id) from semarchy_eph_mdm.gd_wwork w left join semarchy_eph_mdm.gd_manifestation gm \n" +
+          "on w.work_id = gm.f_wwork left join semarchy_eph_mdm.gd_product gp \n" +
+          "on gm.manifestation_id = gp.f_manifestation \n" +
+          "where w.f_type='PARAM1'\n"
+                  + "and (translate(w.work_title\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     )  ~*'PARAM2'\n"
+                  + "or translate(gm.manifestation_key_title\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     ) ~*'PARAM2'\n"
+                  + "or translate(gp.name\n"
+                  + "     , '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "     , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz'\n"
+                  + "     ) ~*'PARAM2')";
 
   /*By Nishant @ 10 Feb 2022
    this also searches the following fields (not just the work title).
@@ -600,10 +648,10 @@ public class APIDataSQL {
           + "(select distinct w.work_id from semarchy_eph_mdm.gd_wwork w\n"
           + "inner join semarchy_eph_mdm.gd_manifestation m\n"
           + "on w.work_id=m.f_wwork\n"
-          + "where upper(translate(\n"
-          + "    lower(work_title),\n"
+          + "where translate(\n"
+          + "    work_title,\n"
           + "    'áàâãäåāăąèééêëēĕėęěìíîïìĩīĭḩóôõöōŏőùúûüũūŭůäàáâãåæçćĉčöòóôõøüùúûßéèêëýñîìíïş',\n"
-          + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis')) like '%%%s%%' and m.f_type='%s') s";
+          + "    'aaaaaaaaaeeeeeeeeeeiiiiiiiihooooooouuuuuuuuaaaaaaeccccoooooouuuuseeeeyniiiis') ~* '%s' and m.f_type='%s') s";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH =
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
@@ -679,6 +727,7 @@ public class APIDataSQL {
           + " ,B_CLASSNAME as B_CLASSNAME\n"
           + " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n"
           + " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n"
+          + " ,effective_end_date as IDENTIFIER_EFFECTIVE_END_DATE"
           + " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n"
           + " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n"
           + "  FROM semarchy_eph_mdm.gd_work_identifier\n"
@@ -726,7 +775,8 @@ public class APIDataSQL {
           + " inner join semarchy_eph_mdm.gd_wwork gw on gwi.f_wwork =gw.work_id \n"
           + "  WHERE gw.f_status not in ('NVW')\n"
           + "  and gwi.identifier='PARAM1'" +
-              "  and gwi.f_type ='PARAM2'";
+              "  and gwi.f_type ='IDENTTYPE'" +
+              "and gwi.f_wwork ='WORKID'";
 
   // created by Nishant @ 22 Apr 2020
   public static final String GET_GD_DATA_PRODUCT_BY_MANIFESTATIONID =

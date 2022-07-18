@@ -33,28 +33,6 @@ public class ProductManifestationApiObject {
     public WorkApiObject getWork() {return work;}
     public void setWork(WorkApiObject work) {this.work = work;}
 
-    //manifestationExtended need to add, by Nishant @ 29 Jan 2021
-/*
-    private work work;
-    public ProductManifestationApiObject.work getWork() {return work;}
-    public void setWork(ProductManifestationApiObject.work work) {this.work = work;}
-
-    public class work{
-        private String id;
-        public String getId() {return id;}
-        public void setId(String id) {this.id = id;}
-
-        private workCore workCore;
-        public workCore getWorkCore() {return workCore;}
-        public void setWorkCore(workCore workCore) {this.workCore = workCore;}
-
-        //added by Nishant @ 29 Jan 2021
-        private WorkExtended workExtended;
-        public WorkExtended getWorkExtended(){return  workExtended;}
-        public void setWorkExtended(WorkExtended workExtended){this.workExtended=workExtended;}
-
-    }
-*/
     public void compareWithDB() throws ParseException {
         WorkManifestationApiObject workManifestationApiObject = new WorkManifestationApiObject();
         workManifestationApiObject.getManifestationDetailByID(this.id);

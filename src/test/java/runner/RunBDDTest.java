@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
                            "junit:target/cucumber-reports/Cucumber.xml",
                             "html:target/cucumber-reports/feature-overview"},
         monochrome = true,
-        tags = {"@DppUI"}
+        tags = {"@PFUIjenkinFix"}
         )
 
 public class RunBDDTest {  public RunBDDTest() { }}

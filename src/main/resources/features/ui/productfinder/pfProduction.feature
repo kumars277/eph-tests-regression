@@ -1,18 +1,18 @@
 Feature: Product Finder production smoke tests
 
-  @PFProd @UI @PFRegressionSuite
+  @PFProd @UI @PFRegressionSuite @PFUIjenkinFix
   Scenario Outline: When no product is found "There are no results that match your search" is displayed
     Given user is on Product/Journal Finder search page <ui>
     When user is searching for "<keyword>"
     Then No results message is displayed for "<keyword>"
     Examples:
-      |ui|keyword      |
-      |PF|abcdefg1234567890|
-      |PF|invalidSearch|
-      |PF|1234567890|
-      |JF|abcdefg1234567890|
-      |JF|invalidSearch|
-      |JF|1234567890|
+      |ui |keyword          |
+      |PF |abcdefg1234567890|
+    #  |PF |invalidSearch    |
+    #  |PF |1234567890       |
+    #  |JF |abcdefg1234567890|
+    #  |JF |invalidSearch    |
+    #  |JF |1234567890       |
 
   @PFProd @UI @PFRegressionSuite
   Scenario Outline: verify search Suggestion displayed
@@ -20,19 +20,19 @@ Feature: Product Finder production smoke tests
     When user is searching for "<keyword>"
     Then capture search suggestion for "<keyword>" and validate with "<ExpSuggestion>"
     Examples:
-      |ui |keyword                    |ExpSuggestion              |
-      |JF |Euroopean Joournal         |european journal           |
-      |JF|Eropean Joournal            |european journal           |
-      |JF|Americaan                   |american                   |
-      |JF|Aerican                     |american                   |
-      |JF|Amercan                     |american                   |
-      |JF|Neveer                      |never                      |
-      |PF|Actualitées pharmaceutiques |actualites pharmaceutiques |
-      |PF|amrica                      |america                    |
-      |PF|africa                      |africa                     |
-      |PF|america                     |america                    |
-      |PF|anerica                     |america                    |
-      |PF|anrica                      |africa                     |
+      |ui |keyword                     |ExpSuggestion              |
+      |JF |Euroopean Joournal          |european journal           |
+      |JF |Eropean Joournal            |european journal           |
+      |JF |Americaan                   |american                   |
+      |JF |Aerican                     |american                   |
+      |JF |Amercan                     |american                   |
+      |JF |Neveer                      |never                      |
+      |PF |Actualitées pharmaceutiques |actualites pharmaceutiques |
+      |PF |amrica                      |america                    |
+      |PF |africa                      |africa                     |
+      |PF |america                     |america                    |
+      |PF |anerica                     |america                    |
+      |PF |anrica                      |africa                     |
 
   @PFProd @UI @PFRegressionSuite @PFdebug
   Scenario Outline: Search and filter with Work Types

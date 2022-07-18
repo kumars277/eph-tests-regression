@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-  // ids.clear();ids.add("EPR-W-101FD6");Log.info("hard coded work id is : " + ids);
+  // ids.clear();ids.add("EPR-W-105C87");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -92,6 +92,9 @@ public class ApiWorksSearchSteps {
 
     switch(searchType)
     {
+      case "PERSON_NAME":
+      case "PEOPLE_HUB_ID":
+      case "PERSON_ID":
       case "personFullNameCurrent":
         sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent, numberOfRecords);
         break;
@@ -107,7 +110,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-104Y97");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-102TFY");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -267,8 +270,8 @@ public class ApiWorksSearchSteps {
   @Then("^the work details are retrieved by workType and compared$")
   public void compareWorksByWorkTypeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    boolean failed = false;
-   // try {
+   // boolean failed = false;
+
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String searchKeyword = ApiReusableFunctions.getSearchKeyword( DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
@@ -425,7 +428,7 @@ public class ApiWorksSearchSteps {
       for (int i = 0; i < bound; i++) {
 
         int fromCntr = 0;
-        int sizeCntr = 400;
+        int sizeCntr = 500;
 
         switch (identifierType) {
           case W_ID:
@@ -644,7 +647,8 @@ public class ApiWorksSearchSteps {
 
         case "ISSN":                getWorkIdentifiersByWorkID(workId);
                                   for (WorkDataObject workIdentifier : workIdentifiers) {
-                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L"))
+                                    if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L")
+                                            & workIdentifier.getIDENTIFIER_EFFECTIVE_END_DATE()==null)
                                     {resourceString = workIdentifier.getIDENTIFIER();break;}
                                   }
           shouldResultOnTop=true;break;
@@ -758,7 +762,7 @@ public class ApiWorksSearchSteps {
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
-      Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
+      Log.info("Total API count matched - " + returnedWorks.getTotalMatchCount());
 
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
@@ -842,14 +846,41 @@ public class ApiWorksSearchSteps {
       WorkApiObject[] items = returnedWorks.getItems().clone();
 
       for (int i = 0; i < items.length; i++) {
-        Assert.assertEquals("found nonElsevierInd work at index "+i,
+
+          if (TestContext.getValues().environment.equalsIgnoreCase("UAT")) {
+            Assert.assertEquals(
+                "found nonElsevierInd work at index " + i,
                 items[i]
-                        .getWorkCore()
-                        .getType()
-                        .get("nonElsevierInd")
-                        .toString()
-                        .equalsIgnoreCase("false"),
+                    .getWorkCore()
+                    .getType()
+                    .get("nonElsevierInd")
+                    .toString()
+                    .equalsIgnoreCase("false"),
                 true);
+       }
+          else
+          {
+            try{
+            if (items[i].getWorkCore().getType().get("nonElsevierInd") != null)
+            {
+              Assert.assertEquals(
+                  "found nonElsevierInd work at index " + i,
+                  items[i]
+                      .getWorkCore()
+                      .getType()
+                      .get("nonElsevierInd")
+                      .toString()
+                      .equalsIgnoreCase("false"),
+                  true);
+            }
+            }
+            catch(Exception e)
+            {
+              Log.info(e.getMessage());
+            }
+          }
+
+
       }
 
       fromCntr += sizeCntr;
@@ -962,7 +993,9 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByWorkStatus(String searchKeyword, String workStatus) {
-    sql =String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword.toUpperCase(), workStatus);
+    sql =APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH
+            .replaceAll("PARAM1", workStatus )
+            .replaceAll("PARAM2",searchKeyword);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
@@ -970,9 +1003,9 @@ public class ApiWorksSearchSteps {
   }
 
   private static int getNumberOfWorksByWorkType(String searchKeyword, String workType) {
-    sql =
-            String.format(
-                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword.toUpperCase(), workType);
+    sql =APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH
+            .replaceAll("PARAM1",workType)
+            .replaceAll("PARAM2",searchKeyword);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);

@@ -40,6 +40,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.bytebuddy.implementation.bytecode.Throw;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import javax.net.ssl.SSLHandshakeException;
@@ -86,7 +87,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-       // ids.clear(); ids.add("EPR-W-11FCRH");      Log.info("hard coded work ids are : " + ids);
+       // ids.clear(); ids.add("EPR-W-106TTG");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -1072,7 +1073,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
             String DBWarReference = "";
             if (DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference() != null)
                 DBWarReference = DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference();
-            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference);
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference.replaceAll("  "," "));
             printLog("UI:Despatch Location with jrbi: warReference");
 
             //coming from manifestation Extended
@@ -1222,8 +1223,12 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                 "Business Controller",
                 "Journal Manager",
                 "Local Supplier Manager",
+                "Marketing Communications Manager",
                 "Publisher",
+                "Publishing Assistant ECP",
+                "Publishing Content Specialist",
                 "Publishing Director",
+                "Publishing Support Manager",
                 "Senior Vice President"
         };
 
@@ -1256,7 +1261,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
             String DB_workPersonRole = lov_personRole(person.get("f_role"));
 
-            Log.info("verifying Core work person... " + DB_workPersonRole);
+          //  Log.info("verifying Core work person... " + DB_workPersonRole);
 
             for (int cnt = 0; cnt < productFinderTasks.list_people.size(); cnt++) {
                 if (ignore.contains(cnt)) continue;
@@ -1269,7 +1274,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                         && productFinderTasks.list_people.get(cnt).getProperty("PersonName").trim().contentEquals(DB_workPersonName)) {
                     //Assert.assertEquals(DB_workPersonRole, productFinderTasks.list_people.get(cnt).getProperty("Role")); printLog("person role ");
                     //Assert.assertEquals((productFinderTasks.list_people.get(cnt).getProperty("PersonName")).trim(),DB_workPersonName);printLog("PersonName");
-                    printLog("person role and PersonName");
+                    printLog(DB_workPersonRole+": "+DB_workPersonName);
 
                     if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&
                             productFinderTasks.list_people.get(cnt).getProperty("Email").equalsIgnoreCase(""))) {
@@ -1435,8 +1440,6 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
             //get area type name
             sql = "select l_description from semarchy_eph_mdm.gd_x_lov_subject_area_type where code ='" + stringObjectMap.get("f_type") + "'";
             List<Map<String, Object>> subAreaType = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-
             boolean subAreaMatched = false;
 
             //specialties validation by Nishant @ 12 Oct 2021
@@ -1585,7 +1588,6 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         }
 
         if (productFinderTasks.prop_info.containsKey("Edition Number")) {
-
                 String editionDB = DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER();
                 if(editionDB==null) editionDB="";
 
