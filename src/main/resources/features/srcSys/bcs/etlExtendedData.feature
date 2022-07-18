@@ -25,6 +25,27 @@ Feature:Validate data for BCS ETL Extended tables
       | etl_work_person_role_extended_current_v                 |10             |
 
   @BCSExtended
+  Scenario Outline: Verify Data for BCS Extended history tables are transferred from current tables
+    Given Get the total count of BCS Extended from Current Tables <sourceTable>
+    Then Get the count of BCS Extended history <targetTable>
+    And Compare count of BCS Extended current <sourceTable> and history <targetTable> are identical
+    Given Get the <countOfRandomIds> of BCS Extended data from Current Tables <sourceTable>
+    When Data from the BCS Extended Current Tables <sourceTable>
+    Then We Get the records from transform BCS Ext Current History <targetTable>
+    And Compare the records of BCS Extended current and BCS Current_History <targetTable>
+    Examples:
+      | sourceTable                                      |  targetTable                                                 |countOfRandomIds     |
+      |etl_availability_extended_current_v               |etl_transform_history_extended_availability_part              | 50                  |
+      |etl_manifestation_extended_current_v              |etl_transform_history_extended_manifestation_part             |50                   |
+      |etl_page_count_extended_current_v                 |etl_transform_history_extended_page_count_part                |50                   |
+      |etl_url_extended_current_v                        |etl_transform_history_extended_url_part                       |50                   |
+      |etl_work_extended_current_v                       |etl_transform_history_extended_work_part                      |50                   |
+      |etl_work_subject_area_extended_current_v          |etl_transform_history_extended_work_subject_area_part         |50                   |
+      |etl_manifestation_restrictions_extended_current_v |etl_transform_history_extended_manifestation_restrictions_part|50                   |
+      |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part            |50                   |
+      |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part          |50                   |
+
+  @BCSExtended
   Scenario Outline: Verify Data for BCS Extended transform_file tables are transferred from current tables
     Given Get the total count of BCS Extended from Current Tables <sourceTable>
     Then Get the count of BCS Extended transform_file <targetTable>
@@ -83,26 +104,7 @@ Feature:Validate data for BCS ETL Extended tables
       |etl_transform_history_extended_work_person_role_latest               |
 
     ##########################
-  @notUsed
-  Scenario Outline: Verify Data for BCS Extended history tables are transferred from current tables
-    Given Get the total count of BCS Extended from Current Tables <sourceTable>
-    Then Get the count of BCS Extended history <targetTable>
-    And Compare count of BCS Extended current <sourceTable> and history <targetTable> are identical
-    Given Get the <countOfRandomIds> of BCS Extended data from Current Tables <sourceTable>
-    When Data from the BCS Extended Current Tables <sourceTable>
-    Then We Get the records from transform BCS Ext Current History <targetTable>
-    And Compare the records of BCS Extended current and BCS Current_History <targetTable>
-    Examples:
-      | sourceTable                                      |  targetTable                                                 |countOfRandomIds     |
-      |etl_availability_extended_current_v               |etl_transform_history_extended_availability_part              | 50                  |
-      |etl_manifestation_extended_current_v              |etl_transform_history_extended_manifestation_part             |50                   |
-      |etl_page_count_extended_current_v                 |etl_transform_history_extended_page_count_part                |50                   |
-      |etl_url_extended_current_v                        |etl_transform_history_extended_url_part                       |50                   |
-      |etl_work_extended_current_v                       |etl_transform_history_extended_work_part                      |50                   |
-      |etl_work_subject_area_extended_current_v          |etl_transform_history_extended_work_subject_area_part         |50                   |
-      |etl_manifestation_restrictions_extended_current_v |etl_transform_history_extended_manifestation_restrictions_part|50                   |
-      |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part            |50                   |
-      |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part          |50                   |
+
 
   @notUsed
   Scenario Outline: Verify Data for BCS Extended delta_current tables are transferred from transform_file tables
