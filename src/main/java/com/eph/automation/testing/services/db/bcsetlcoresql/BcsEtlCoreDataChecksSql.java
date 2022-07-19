@@ -396,10 +396,19 @@ public class BcsEtlCoreDataChecksSql {
             "SELECT " +
                     "worksourceref as workSourceRef \n" +
                     ",personsourceref as personSourceRef \n" +
+                    ",linking_id as linking_id \n" +
                     ",roletype as roleType \n" +
                     ",u_key as uKey \n" +
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
+                    ",modifiedon as modifiedon \n" +
+                    ",metadeleted as metadeleted \n" +
+                    ",metamodifiedon as metamodifiedon \n" +
+                    ",sourceref as sourceref \n" +
+                    ",workmasterisbn as workmasterisbn \n" +
+                    ",workmasterprojectno as workmasterprojectno \n" +
+                    ",childisbn as childisbn \n" +
+                    ",childprojectno as childprojectno \n" +
                     ",dq_err as dqErr \n" +
                     " FROM\n" +
                     "  ((\n" +
@@ -1549,10 +1558,19 @@ public class BcsEtlCoreDataChecksSql {
             "select " +
                     "worksourceref as workSourceRef \n" +
                     ",personsourceref as personSourceRef \n" +
+                    ",linking_id as linking_id \n" +
                     ",roletype as roleType \n" +
                     ",u_key as uKey \n" +
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
+                    ",modifiedon as modifiedon \n" +
+                    ",metadeleted as metadeleted \n" +
+                    ",metamodifiedon as metamodifiedon \n" +
+                    ",sourceref as sourceref \n" +
+                    ",workmasterisbn as workmasterisbn \n" +
+                    ",workmasterprojectno as workmasterprojectno \n" +
+                    ",childisbn as childisbn \n" +
+                    ",childprojectno as childprojectno \n" +
                     ",dq_err as dqErr \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_work_person_role_current_v where u_key in ('%s') order by u_key desc";
 
@@ -1598,6 +1616,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
                     ",dq_err as dqErr \n" +
+                    ",modifiedon as modifiedon \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_part  where " +
                     "transform_ts = (select max(transform_ts) from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_part)" +
                     "and u_key in ('%s') \n" +
@@ -1611,6 +1630,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
+                    ",modifiedon as modifiedon \n" +
                     ",dq_err as dqErr \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_work_person_role_transform_file_history_part  where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_work_person_role_transform_file_history_part)" +
@@ -2912,6 +2932,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
+                    ",modifiedon as modifiedon \n" +
                     ",dq_err as dqErr \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_latest \n" +
                     "where u_key in ('%s') \n" +
@@ -3036,8 +3057,9 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",sequence as sequence \n" +
                     ",deduplicator as deDuplicator \n" +
-                    ",dq_err as dqErr from \n" +
-                    "(select c.worksourceref,c.personsourceref,c.roletype,c.u_key,c.sequence,c.deduplicator,c.modifiedon,c.dq_err from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_excl_delta as c union all \n" +
+                    ",modifiedon as modifiedon \n" +
+                    ",dq_err as dqErr \n" +
+                    " from (select c.worksourceref,c.personsourceref,c.roletype,c.u_key,c.sequence,c.deduplicator,c.modifiedon,c.dq_err from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_work_person_role_excl_delta as c union all \n" +
                     "select d.worksourceref,d.personsourceref,d.roletype,d.u_key,d.sequence,d.deduplicator,d.modifiedon,d.dq_err \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_delta_current_work_person_role as d) \n" +
                     " where u_key in ('%s') order by u_key desc";
