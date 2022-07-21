@@ -110,7 +110,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-    //ids.clear();    ids.add("EPR-W-102TFY");  Log.info("hard coded work ids are : " + ids);
+   // ids.clear();    ids.add("EPR-W-102S2S");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -762,7 +762,7 @@ public class ApiWorksSearchSteps {
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
-      Log.info("Total API count matched - " + returnedWorks.getTotalMatchCount());
+      Log.info("Total API count - " + returnedWorks.getTotalMatchCount());
 
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
@@ -1083,19 +1083,17 @@ public class ApiWorksSearchSteps {
   //  String specialName = "";
     List<String> partialName = new ArrayList<String>();
 
+    fName=fName.replaceAll("-"," ").replace("'"," ");
+    lName=lName.replaceAll("-"," ").replace("'"," ");
   String[] arr_partialName = (fName+" "+lName).replaceAll("-"," ").split(" ");
 
- //   for (String partname :arr_partialName) {partialName.add(partname);}
-
-  //  if(arr_specialName.length>1) specialName = arr_specialName[1];
-
-        //arr_specialName = lName.split("-");
 //if(arr_specialName.length>1) specialName = arr_specialName[1];
 //if(specialName.equalsIgnoreCase(""))specialName=fName;
     String partialQuery1 = "";
     String partialQuery2 = "";
     for(int i=0;i<arr_partialName.length;i++)
     {
+      if(arr_partialName[i].length()<2)continue;
       partialQuery1 += " or name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";
       partialQuery2 += " or given_name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";
     }
@@ -1105,7 +1103,9 @@ public class ApiWorksSearchSteps {
   //  {partialQuery2 += "or given_name ~* '\\m"+partialName.get(i)+"\\M'";}
 
     for(int i=0;i<arr_partialName.length;i++)
-    {partialQuery2 += " or family_name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";}
+    {
+      if(arr_partialName[i].length()<2)continue;
+      partialQuery2 += " or family_name ~* '(?c)\\\\m"+arr_partialName[i]+"\\\\M'\n";}
 
     int count =0;
     switch (searchType) {
