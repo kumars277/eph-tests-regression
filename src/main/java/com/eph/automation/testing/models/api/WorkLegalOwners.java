@@ -66,9 +66,11 @@ public class WorkLegalOwners {
                 Assert.assertEquals(getBreadcrumbMessage()+ " - ownershipDescription",ownershipDescription.get("name"),getownershipDescriptionName(workLegalOwners.get(i).get("f_ownership_description").toString()));
                 printLog("ownershipDescription name");
 
-                Assert.assertEquals(getBreadcrumbMessage()+ " - ownership effectiveStartDate",effectiveStartDate,workLegalOwners.get(i).get("effective_start_date").toString());
+                    if (effectiveStartDate != null)
+                    {
+                        Assert.assertEquals(getBreadcrumbMessage() + " - ownership effectiveStartDate",effectiveStartDate,workLegalOwners.get(i).get("effective_start_date").toString());
                 printLog("effectiveStartDate");
-
+                    }
                 if(effectiveEndDate!=null)
                 {
                     Log.info("workLegalOwners effectiveStartDate present");
