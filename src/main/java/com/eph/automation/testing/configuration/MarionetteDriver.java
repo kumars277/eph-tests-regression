@@ -41,7 +41,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
         }
 
         ChromeOptions o= new ChromeOptions();
-        o.addArguments("incognito");
+      //  o.addArguments("incognito");
 
         final WebDriver driver = new ChromeDriver(o);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

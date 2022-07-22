@@ -30,7 +30,6 @@ Feature: Search API: Products
       | PRODUCT_WORK_ID                       |
       | PRODUCT_ID                            |
      #| PRODUCT_IDENTIFIER                    |
-
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_ID              |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
@@ -47,7 +46,6 @@ Feature: Search API: Products
   #   | PRODUCT_IDENTIFIER                    |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
       | PRODUCT_WORK_IDENTIFIER               |
-
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |
 
   @searchAPI @productSearchAPI
@@ -61,12 +59,10 @@ Feature: Search API: Products
       | PRODUCT_TITLE                               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
       | PRODUCT_ID                                  |
-
  #    | PRODUCT_IDENTIFIER                          |
       | PRODUCT_WORK_ID                             |
       | PRODUCT_WORK_TITLE                          |
       | PRODUCT_WORK_IDENTIFIER                     |
-
       | PRODUCT_MANIFESTATION_TITLE                 |
       | PRODUCT_MANIFESTATION_IDENTIFIER            |
       | PRODUCT_MANIFESTATION_WORK_ID               |
