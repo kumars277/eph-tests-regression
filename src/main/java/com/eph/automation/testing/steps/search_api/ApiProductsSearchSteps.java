@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-   //   ids.clear(); ids.add("EPR-10N5YD"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-112C4M"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -595,8 +595,8 @@ else{
             else
             {
             if ((fromCntr + sizeCntr) < 10000) {
-              Log.info("intetended product not found, scanned " + (fromCntr + sizeCntr) + "records...");
-              Assert.assertTrue(getBreadcrumbMessage() +">"+apiResource+ "- scenned " + (fromCntr + sizeCntr) + " records...",false);
+              Log.info("intetended product not found, scanned " + returnedProducts.getTotalMatchCount() + " records...");
+              Assert.assertTrue(getBreadcrumbMessage() +">"+apiResource+ "- scenned " + returnedProducts.getTotalMatchCount() + " records...but intended product could not find",false);
             }
             else //due to api limitation, we can not scan records beyond 10000. Hence abord scanning
             {
