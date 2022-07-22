@@ -111,7 +111,6 @@ public class ApiWorksSearchSteps {
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
    // ids.clear();    ids.add("EPR-W-102S2S");  Log.info("hard coded work ids are : " + ids);
-
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
