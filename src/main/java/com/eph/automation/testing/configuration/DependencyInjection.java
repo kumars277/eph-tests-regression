@@ -5,6 +5,9 @@ import com.google.inject.Injector;
 import cucumber.api.guice.CucumberModules;
 import cucumber.runtime.java.guice.InjectorSource;
 import cucumber.runtime.java.guice.ScenarioScoped;
+//import io.cucumber.guice.CucumberModules;
+//import io.cucumber.guice.InjectorSource;
+//import io.cucumber.guice.ScenarioScoped;
 import org.openqa.selenium.WebDriver;
 import uk.sponte.automation.seleniumpom.dependencies.DependencyInjector;
 import uk.sponte.automation.seleniumpom.dependencies.InjectionError;
@@ -31,6 +34,7 @@ public class DependencyInjection extends AbstractModule implements
 
 
         injector = new SeleniumPomGuiceModule(CucumberModules.SCENARIO, this).getInjector();
+        //injector = new SeleniumPomGuiceModule(CucumberModules.createScenarioModule(), this).getInjector();
         return injector;
     }
 
