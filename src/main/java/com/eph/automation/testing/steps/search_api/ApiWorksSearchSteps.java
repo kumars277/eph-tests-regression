@@ -1085,11 +1085,7 @@ public class ApiWorksSearchSteps {
 
     fName=fName.replaceAll("-"," ").replace("'"," ");
     lName=lName.replaceAll("-"," ").replace("'"," ");
-<<<<<<< HEAD
-    String[] arr_partialName = (fName+" "+lName).replaceAll("-"," ").split(" ");
-=======
   String[] arr_partialName = (fName+" "+lName).replaceAll("-"," ").split(" ");
->>>>>>> 29a1a2be72d54d9b53db89857c51712fb03646d1
 
 //if(arr_specialName.length>1) specialName = arr_specialName[1];
 //if(specialName.equalsIgnoreCase(""))specialName=fName;
