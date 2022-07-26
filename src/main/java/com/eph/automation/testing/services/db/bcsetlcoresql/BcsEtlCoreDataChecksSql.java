@@ -670,9 +670,13 @@ public class BcsEtlCoreDataChecksSql {
 
     public static final String GET_RANDOM_WRK_RELT_KEY_INBOUND =
             "select u_key as sourceref FROM (\n" +
-                    "SELECT *\n" +
-                    "FROM\n" +
-                    "  (\n" +
+                    "SELECT\n" +
+                    "  u_key\n" +
+                    ", parentref\n" +
+                    ", childref\n" +
+                    ", relationtyperef\n" +
+                    ", \"max\"(modifiedon) modifiedon\n" +
+                    ", dq_err from(" +
                     "   WITH\n" +
                     "     works AS (\n" +
                     "      SELECT DISTINCT\n" +
@@ -751,7 +755,7 @@ public class BcsEtlCoreDataChecksSql {
                     "   INNER JOIN min_diff m ON (((d.work_1_sourceref = m.work_1_sourceref) AND (d.abs_diff = m.min_diff)) AND (editiondiff > 0)))\n" +
                     ")  A\n" +
                     "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) \n" +
-                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\")))order by rand() limit %s";
+                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\"))GROUP BY u_key, parentref, childref, relationtyperef, dq_err)order by rand() limit %s";
 
     public static final String GET_WORK_RELT_INBOUND_DATA =
             "select " +
@@ -761,9 +765,13 @@ public class BcsEtlCoreDataChecksSql {
                     ",relationtyperef as relationTypeRef \n" +
                     ",dq_err as dqErr" +
                     " FROM (\n" +
-                    "SELECT *\n" +
-                    "FROM\n" +
-                    "  (\n" +
+                    "SELECT\n" +
+                    "  u_key\n" +
+                    ", parentref\n" +
+                    ", childref\n" +
+                    ", relationtyperef\n" +
+                    ", \"max\"(modifiedon) modifiedon\n" +
+                    ", dq_err from(" +
                     "   WITH\n" +
                     "     works AS (\n" +
                     "      SELECT DISTINCT\n" +
@@ -842,7 +850,8 @@ public class BcsEtlCoreDataChecksSql {
                     "   INNER JOIN min_diff m ON (((d.work_1_sourceref = m.work_1_sourceref) AND (d.abs_diff = m.min_diff)) AND (editiondiff > 0)))\n" +
                     ")  A\n" +
                     "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) \n" +
-                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\")))where u_key in ('%s') order by u_key desc\n";
+                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\"))GROUP BY u_key, parentref, childref, relationtyperef, dq_err)where u_key in ('%s') order by u_key desc\n";
+
 
     public static final String GET_RANDOM_ACCPROD_KEY_CURRENT =
             "SELECT u_key as u_key \n" +
