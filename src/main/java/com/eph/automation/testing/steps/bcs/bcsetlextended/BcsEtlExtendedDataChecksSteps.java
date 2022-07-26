@@ -774,7 +774,7 @@ public class BcsEtlExtendedDataChecksSteps {
 
                         Log.info("comparing etl_transform_history_extended_work_person_role_part and etl_work_person_role_extended_current_v records...");
                         String[] allPersRoleCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmodifiedon", "getmetadeleted", "getcorereference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
-                                "gettitle", "getpersonfirstname", "getpersonfamilyname", "getemailaddress", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon"};
+                                "gettitle", "getpersonfirstname", "getpersonfamilyname", "getemailaddress", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber"};
                         for (String strTemp : allPersRoleCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -1091,12 +1091,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         }
                         break;
                     case "etl_work_person_role_extended_transform_file_history_part":
-                        BCSETL_ExtendedAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::geteprid)); //sort primarykey data in the lists
-                        BCSETL_ExtendedAccessDLContext.recFromTransformFile.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::geteprid));
-                        BCSETL_ExtendedAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey)); //sort primarykey data in the lists
-                        BCSETL_ExtendedAccessDLContext.recFromTransformFile.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
-
-                        Log.info("comparing etl_work_person_role_extended_transform_file_history_part and etl_work_person_role_extended_current_v records...");
+                          Log.info("comparing etl_work_person_role_extended_transform_file_history_part and etl_work_person_role_extended_current_v records...");
                         String[] allPersRoleCol = {"geteprid", "getukey", "getworktype", "getsourceref", /*"getmodifiedon",*/ "getmetadeleted", "getcorereference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
                                 "gettitle", "getpersonfirstname", "getpersonfamilyname", "getemailaddress", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber"/*, "getmetamodifiedon"*/};
                         for (String strTemp : allPersRoleCol) {

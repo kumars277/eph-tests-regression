@@ -71,6 +71,57 @@ public class BcsEtlCoreDLAccessObject {
     private String minActualPubDate;
     private String minPlannedPubDate;
     private String leadIndicator;
+    private  String linking_id;
+    private String modifiedon;
+    private String metadeleted;
+    private String metamodifiedon;
+    private String sourceref;
+    private String workmasterisbn;
+    private String workmasterprojectno;
+    private String childisbn;
+    private String childprojectno;
+
+
+
+    public String getlinking_id() { return linking_id; }
+    public void setlinking_id(String linking_id) {
+        this.linking_id = linking_id;
+    }
+    public String getmodifiedon() { return modifiedon; }
+    public void setmodifiedon(String modifiedon) {
+        this.modifiedon = modifiedon;
+    }
+    public String getmetadeleted() { return metadeleted; }
+    public void setmetadeleted(String metadeleted) {
+        this.metadeleted = metadeleted;
+    }
+    public String getmetamodifiedon() { return metamodifiedon; }
+    public void setmetamodifiedon(String metamodifiedon) {
+        this.metamodifiedon = metamodifiedon;
+    }
+    public String getsourceref() { return sourceref; }
+    public void setsourceref(String sourceref) {
+        this.sourceref = sourceref;
+    }
+    public String getworkmasterisbn() { return workmasterisbn; }
+    public void setworkmasterisbn(String workmasterisbn) {
+        this.workmasterisbn = workmasterisbn;
+    }
+    public String getworkmasterprojectno() { return workmasterprojectno; }
+    public void setworkmasterprojectno(String workmasterprojectno) {
+        this.workmasterprojectno = workmasterprojectno;
+    }
+    public String getchildisbn() { return childisbn; }
+    public void setchildisbn(String childisbn) {
+        this.childisbn = childisbn;
+    }
+    public String getchildprojectno() { return childprojectno; }
+    public void setchildprojectno(String childprojectno) {
+        this.childprojectno = childprojectno;
+    }
+
+
+
 
 
     public String getleadIndicator() { return leadIndicator; }

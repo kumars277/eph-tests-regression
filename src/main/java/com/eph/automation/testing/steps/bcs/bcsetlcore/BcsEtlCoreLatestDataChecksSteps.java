@@ -552,7 +552,8 @@ public class BcsEtlCoreLatestDataChecksSteps {
                     BcsEtlCoreAccessDLContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                     BcsEtlCoreAccessDLContext.recFromLatest.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                    String[] etlTransformHistoryAccountableProductLatest = {"getuKey", "getsourceRef", "getaccountableProduct", "getaccountableName", "getaccountableParent"};
+                    String[] etlTransformHistoryAccountableProductLatest = {"getuKey", "getsourceRef", "getaccountableProduct",
+                            "getaccountableName", "getaccountableParent"};
                     for (String strTemp : etlTransformHistoryAccountableProductLatest) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
@@ -667,7 +668,8 @@ public class BcsEtlCoreLatestDataChecksSteps {
                     BcsEtlCoreAccessDLContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                     BcsEtlCoreAccessDLContext.recFromLatest.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                    String[] etlTransformHistoryWorkPersonRoleLatest = {"getuKey", "getworkSourceRef", "getpersonSourceRef", "getroleType", "getsequence", "getdeDuplicator", "getdqErr"};
+                    String[] etlTransformHistoryWorkPersonRoleLatest = {"getuKey", "getworkSourceRef", "getpersonSourceRef",
+                            "getroleType", "getsequence", "getdeDuplicator","getdqErr" ,"getmodifiedon"};
                     for (String strTemp : etlTransformHistoryWorkPersonRoleLatest) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
