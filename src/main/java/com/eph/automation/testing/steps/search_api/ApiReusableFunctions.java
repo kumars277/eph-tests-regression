@@ -123,7 +123,7 @@ public class ApiReusableFunctions {
         of consecutive characters between 3 and 50 characters long.
         Because the minimum length is 3, CD isn’t a valid match.
         hence valid keyword should be more than 2 characters*/
-                    if(keyword.length()<3)continue;
+                    if(keyword.length()<4)continue;
                     break;
                 }
             }

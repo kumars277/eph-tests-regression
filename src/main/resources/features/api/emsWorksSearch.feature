@@ -27,7 +27,6 @@ Feature: Search API: Works
       |JOURNAL_ACRONYM    |
       |EPR_ID             |
 
-
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
     Given  We get 1 random journal ids to search <options>
@@ -39,7 +38,6 @@ Feature: Search API: Works
       | PEOPLE_HUB_ID         |
       | personFullNameCurrent |
       | PERSON_ID             |
-
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI
