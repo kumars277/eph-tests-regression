@@ -388,14 +388,25 @@ public class APIDataSQL {
           + ")";
 
   public static final String SELECT_GD_COUNT_PRODUCT_BY_PRODUCTTYPE =
-      "select count(*)\n"
-          + "from semarchy_eph_mdm.gd_product gp join semarchy_eph_mdm.gd_manifestation gm \n"
-          + "on gp.f_manifestation = gm.manifestation_id join semarchy_eph_mdm.gd_wwork gw \n"
-          + "on gm.f_wwork = gw.work_id \n"
-          + "where gp.f_type='PTYPE'\n"
-          + "and (gp.name ~*'TITLE'\n"
-          + "or gm.manifestation_key_title ~*'TITLE'\n"
-          + "or gw.work_title ~*'TITLE')";
+          "select count(*)\n"
+                  + "from semarchy_eph_mdm.gd_product gp\n"
+                  + "left join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation = gm.manifestation_id\n"
+                  + "left join semarchy_eph_mdm.gd_wwork gw on gm.f_wwork = gw.work_id\n"
+                  + "left join semarchy_eph_mdm.gd_wwork gw2 on gp.f_wwork = gw2.work_id\n"
+                  + "where gp.f_type ='PTYPE'\n"
+                  + "and (translate(gp.name,\n"
+                  + "            '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+                  + "or translate(gm.manifestation_key_title,\n"
+                  + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+                  + "or translate(gw.work_title,\n"
+                  + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+                  + "or translate(gw2.work_title,\n"
+                  + "             '¹²³áàâãäåāăąÀÁÂÃÄÅĀĂĄÆćčç©ĆČÇĐÐèéêёëēĕėęěÈÊËЁĒĔĖĘĚ€ğĞıìíîïìĩīĭÌÍÎÏЇÌĨĪĬłŁńňñŃŇÑòóôõöōŏőøÒÓÔÕÖŌŎŐØŒř®ŘšşșßŠŞȘùúûüũūŭůÙÚÛÜŨŪŬŮýÿÝŸžżźŽŻŹ'\n"
+                  + "          , '123aaaaaaaaaaaaaaaaaaacccccccddeeeeeeeeeeeeeeeeeeeeggiiiiiiiiiiiiiiiiiillnnnnnnooooooooooooooooooorrrsssssssuuuuuuuuuuuuuuuuyyyyzzzzzz') ~*'TITLE'\n"
+                  + ")";
 
   public static final String SELECT_GD_RANDOM_PACKAGE_ID =
       "select product_id from semarchy_eph_mdm.gd_product "
