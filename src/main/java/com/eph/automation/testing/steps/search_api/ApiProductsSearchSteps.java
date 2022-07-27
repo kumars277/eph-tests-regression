@@ -817,7 +817,7 @@ else{
     //as per Ron, API product search result returns products even though product name does not contains searchKey but its manifestaion or work title does.
     */
     ProductsMatchedApiObject returnedProducts;
-    String defaultSearch = "CELL";
+    //String defaultSearch = "CELL";
     int productCountDB = 0;
 
       String searchTerm = ApiReusableFunctions.getSearchKeyword(productDataObjects.get(0).getPRODUCT_NAME());
@@ -884,7 +884,7 @@ else{
           throw new IllegalStateException("Unexpected value: " + paramKey);
       }
 
-      returnedProducts.verifyProductsAreReturned();
+     // returnedProducts.verifyProductsAreReturned();
       returnedProducts.verifyAPIReturnedProductsCount(productCountDB);
 
   }
@@ -895,7 +895,7 @@ else{
     String defaultSearch = "CELL";
     int productCountDB = 0;
     int fromCntr = 0;
-    int sizeCntr = 400;
+    int sizeCntr = 500;
 
     ProductsMatchedApiObject returnedProducts = new ProductsMatchedApiObject();
 
