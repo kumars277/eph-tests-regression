@@ -522,9 +522,13 @@ public class BcsEtlCoreCountChecksSql {
 
     public static final String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
             "select count(*) as Source_Count FROM (\n" +
-                    "SELECT *\n" +
-                    "FROM\n" +
-                    "  (\n" +
+            "SELECT\n" +
+                    "  u_key\n" +
+                    ", parentref\n" +
+                    ", childref\n" +
+                    ", relationtyperef\n" +
+                    ", \"max\"(modifiedon) modifiedon\n" +
+                    ", dq_err from(" +
                     "   WITH\n" +
                     "     works AS (\n" +
                     "      SELECT DISTINCT\n" +
@@ -603,7 +607,7 @@ public class BcsEtlCoreCountChecksSql {
                     "   INNER JOIN min_diff m ON (((d.work_1_sourceref = m.work_1_sourceref) AND (d.abs_diff = m.min_diff)) AND (editiondiff > 0)))\n" +
                     ")  A\n" +
                     "WHERE (((((\"A\".\"parentref\" IS NOT NULL) AND (\"A\".\"parentref\" <> '')) AND (\"A\".\"childref\" IS NOT NULL)) AND (\"A\".\"relationtyperef\" IS NOT NULL)) \n" +
-                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\")))\n";
+                    "AND (\"A\".\"parentref\" <> \"A\".\"childref\"))GROUP BY u_key, parentref, childref, relationtyperef, dq_err)\n";
 
     public static final String GET_WRK_PERSON_INBOUND_CURRENT_COUNT =
             "SELECT count(*) as Source_Count\n" +
