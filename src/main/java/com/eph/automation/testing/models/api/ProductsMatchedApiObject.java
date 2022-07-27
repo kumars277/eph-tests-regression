@@ -32,11 +32,11 @@ public class ProductsMatchedApiObject {
   public void setItems(ProductApiObject[] items) {this.items = items;}
 
   public void verifyProductsAreReturned() {
-    Assert.assertNotEquals("Verify more than zero items returned by API", 0, totalMatchCount);
+    Assert.assertNotEquals(getBreadcrumbMessage()+" Verify more than zero items returned by API", 0, totalMatchCount);
   }
 
   public void verifyNoProductReturned() {
-    Assert.assertEquals("Verify zero items returned by API", 0, totalMatchCount);
+    Assert.assertEquals(getBreadcrumbMessage()+"Verify zero items returned by API", 0, totalMatchCount);
   }
 
   public void verifyAPIReturnedProductsCount(int productsInDB) {
