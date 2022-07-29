@@ -129,14 +129,11 @@ Feature: Search API: Products
       | pmcCode       |
       | pmgCode       |
 
-
-
   @searchAPI @productSearchAPI
   Scenario: Product search E2E
     Given  We set specific product ids for search
     And    We get the search data from EPH GD for products
     Then   the product details are retrieved and compared
-
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product and verify title contains searchKey

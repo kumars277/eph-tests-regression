@@ -119,7 +119,7 @@ public class ApiReusableFunctions {
         //by nishant @ 08 Jul 2022 to fix mismatch with DB
         //translate all accents characters in normal characters
         String normalisedTitle = Normalizer.normalize(title, Normalizer.Form.NFD);
-        normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", "");
+        normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", " ");
         String[] arr_title= normalisedTitle.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
         for(int i=0;i<arr_title.length;i++)
