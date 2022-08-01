@@ -1,4 +1,4 @@
-Feature:Validate data for DPP_CMMS_Export_dag tables
+Feature:Validate data for DPP_EPH_CMMS_Export_dag tables
 
 #confluence link:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/119483627562926/EPH-CMMS+Integration
 
