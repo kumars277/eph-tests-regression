@@ -34,7 +34,26 @@ public class GetCKDLDB {
             }
         } else {
             dbCKCMMSDL = "eph_supplemental_sit";
-            //dbCKDL = "eph_supplemental_uat";
+//            dbCKCMMSDL = "eph_supplemental_uat";
+        }
+        return dbCKCMMSDL;
+    }
+
+    public static String getCKEBTDDataBase() {
+        String dbCKCMMSDL = null;
+        if (System.getProperty("ENV") != null) {
+            if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
+                dbCKCMMSDL = "ebtd_staging_sit";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
+                dbCKCMMSDL = "ebtd_staging_sit2";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
+                dbCKCMMSDL = "ebtd_staging_uat";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
+                dbCKCMMSDL = "ebtd_staging_uat2";
+            }
+        } else {
+            dbCKCMMSDL = "ebtd_staging_sit";
+            //dbCKDL = "ebtd_staging_uat";
         }
         return dbCKCMMSDL;
     }
