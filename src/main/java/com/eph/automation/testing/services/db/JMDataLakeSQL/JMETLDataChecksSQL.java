@@ -1096,7 +1096,7 @@ public class JMETLDataChecksSQL {
             "         mu1.scenario_name, mu1.scenario_code, mu1.upsert, mu1.w0_journal_number, mu1.w0_eph_work_id,\n" +
             "         mu1.m0_eph_manifestation_id, m2.eph_manifestation_id, mu1.m0_issn, m2.issn, m2.notified_date,\n" +
             "         w1.eph_work_id, m2.eph_manifestation_id\n" +
-            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc, " +
+            ")where jm_source_ref_new in ('%s') order by jm_source_ref_new desc, eph_work_id desc,eph_manifestation_id desc,identifier_new desc, " +
             "effective_start_date desc, notified_date desc";
 
     public static String GET_PRODUCT_PART1_QUERY ="select * from \n" +
@@ -1130,7 +1130,7 @@ public class JMETLDataChecksSQL {
             "   , m.manifestation_type m0_manifestation_type\n" +
             "   , CAST(1 AS boolean) separately_saleable_ind\n" +
             "   , CAST(0 AS boolean) trial_allowed_ind\n" +
-            "   , CAST(w.launch_date AS date) launch_date\n" +
+            "   , (CASE WHEN (wbm.APC = 'Y') THEN COALESCE(CAST(w.editorial_effective_date AS date), CAST(w.launch_date AS date)) ELSE CAST(w.launch_date AS date) END) launch_date\n" +
             "   , (CASE m.manifestation_type WHEN 'P' THEN 'G003' ELSE 'S001' END) tax_code\n" +
             "   , (CASE WHEN (wbm.SBS = 'Y') THEN 'Y' ELSE 'N' END) subscription\n" +
             "   , (CASE WHEN ((wbm.SBS = 'Y') AND (m.manifestation_type = 'P')) THEN 'Y' ELSE 'N' END) bulk_sales\n" +
@@ -1153,7 +1153,10 @@ public class JMETLDataChecksSQL {
             "   INNER JOIN "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs ON (wc.chronicle_scenario_code = cs.chronicle_scenario_code))\n" +
             "   LEFT JOIN work_business_model wbm ON (wbm.work_id = w.work_id))\n" +
             "   WHERE (((w.work_journey_identifier = 'A1') AND (wc.chronicle_scenario_code IN ('NP', 'NS', 'AC', 'MI'))) AND (m.notified_date IS NOT NULL))\n" +
-            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w.work_chronicle_id, w.elsevier_journal_number, w.work_journey_identifier, wbm.SBS, wbm.APC, wbm.SBD, m.manifestation_id, w.launch_date, m.manifestation_type, m.elsevier_journal_number, m.manifestation_title, w.eph_work_id, w.work_title, m.eph_manifestation_id, m.notified_date\n" +
+            "   GROUP BY cs.chronicle_scenario_name, cs.chronicle_scenario_code, cs.chronicle_scenario_evolutionary_ind, w.work_chronicle_id," +
+            " w.elsevier_journal_number, w.work_journey_identifier, wbm.SBS, wbm.APC, wbm.SBD, m.manifestation_id, w.launch_date," +
+            " m.manifestation_type, m.elsevier_journal_number, m.manifestation_title, w.eph_work_id, w.work_title, m.eph_manifestation_id," +
+            " m.notified_date, w.editorial_effective_date\n" +
             "UNION    SELECT\n" +
             "     cs.chronicle_scenario_name scenario_name\n" +
             "   , cs.chronicle_scenario_code scenario_code\n" +
@@ -2225,7 +2228,7 @@ public class JMETLDataChecksSQL {
     public static String GET_WORK_SUBJECT_AREA_DQ ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_work_subject_area_dq_v where jm_source_reference in ('%s') order by jm_source_reference, eph_work_id";
     public static String GET_MANIFESTATION_UPDATES1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_updates1_v where w0_chronicle_id in (%s) order by w0_chronicle_id desc,m0_notified_date desc";
     public static String GET_MANIFESTATION_IDENTIFIER ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_manifestation_identifier_dq_v where jm_source_ref_new in ('%s') " +
-            "order by jm_source_ref_new desc, eph_work_id desc,effective_start_date desc, notified_date desc";
+            "order by jm_source_ref_new desc, eph_work_id desc,eph_manifestation_id desc,identifier_new desc,effective_start_date desc, notified_date desc";
     public static String GET_PRODUCT_PART1 ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_part1_v " +
             "where jm_source_reference in ('%s') order by jm_source_reference desc, eph_work_id desc, scenario_name desc, w0_chronicle_id desc";
     public static String GET_PRODUCT_INSERTS ="select * from " + GetJMDLDBUser.getJMDB() + ".etl_product_inserts_v where jm_source_reference in ('%s') " +
@@ -2264,7 +2267,7 @@ public class JMETLDataChecksSQL {
     public static String GET_SEMARCHY_GD_WORK_RELATIONSHIP = "select * from semarchy_eph_mdm.gd_work_relationship where f_parent in ('%s')";
     public static String GET_SEMARCHY_GD_PERSON = "select * from semarchy_eph_mdm.gd_person gp where person_id in (%s)";
     public static String GET_SEMARCHY_GD_SUBJECT_Area = "select * from semarchy_eph_mdm.gd_subject_area where code in ('%s')";
-    public static String GET_SEMARCHY_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s') and f_type like ('%s')";
+    public static String GET_SEMARCHY_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s') and f_type like ('%s') order by manifestation_id asc";
     public static String GET_SEMARCHY_GD_MANIFESTATION_IDENTIFIER = "select * from semarchy_eph_mdm.gd_manifestation_identifier where f_manifestation like ('%s')";
     public static String GET_SEMARCHY_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where gl_product_segment_code like ('%s')";
 

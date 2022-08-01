@@ -169,6 +169,26 @@ public class GDTableDLSQLObject {
     private String parent_description;
     private String child_description;
 
+    private String identifier_type;
+    private String record_level;
+    private String epr;
+    private String product_type;
+    private String manifestation_type;
+    private String work_type;
+    public String getidentifier_type() { return identifier_type; }
+    public void setidentifier_type(String identifier_type) { this.identifier_type = identifier_type; }
+    public String getproduct_type() { return product_type; }
+    public void setproduct_type(String product_type) { this.product_type = product_type; }
+    public String getrecord_level() { return record_level; }
+    public void setrecord_level(String record_level) { this.record_level = record_level; }
+    public String getmanifestation_type() { return manifestation_type; }
+    public void setmanifestation_type(String manifestation_type) { this.manifestation_type = manifestation_type; }
+    public String getwork_type() { return work_type; }
+    public void setwork_type(String work_type) { this.work_type = work_type; }
+
+    public String getepr() { return epr; }
+    public void setepr(String epr) { this.epr = epr; }
+
     public String getparent_description() { return parent_description; }
     public void setparent_description(String parent_description) { this.parent_description = parent_description; }
     public String getchild_description() { return child_description; }

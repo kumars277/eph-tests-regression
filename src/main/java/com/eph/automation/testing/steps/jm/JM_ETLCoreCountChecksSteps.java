@@ -20,7 +20,7 @@ public class JM_ETLCoreCountChecksSteps {
     private static int DLJMCount;
 
 
-    @Given("^We know the total count of JM ETL Core (.*) data")
+    @Given("^get the total count of JM ETL Core (.*) data")
     public void getJMMYSQLCount(String ETLtable) {
         switch (ETLtable){
             case "etl_accountable_product_dq_v":
@@ -50,7 +50,6 @@ public class JM_ETLCoreCountChecksSteps {
             case "etl_manifestation_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION;
                 break;
-
             case "etl_manifestation_identifier_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_MANIFESTATION_IDENTIFIER;
                 break;

@@ -35,7 +35,7 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext EPR ids (.*)$")
     public void getRandomManifExtEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext EPR Ids...");
         switch (tableName) {
@@ -50,12 +50,20 @@ public class ManifestationExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Manifestation extended table$")
+    @And("^Records from Manifestation extended table$")
     public void getRecordsFromManifExtendedTable() {
         Log.info("We get the records from Manif Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_REC, Joiner.on("','").join(Ids));
        // Log.info(sql);
         dataQualityStitchContext.recordsFromManifExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Records from manifestation summary table$")
+    public void getRecFromManifSummaryTable() {
+        Log.info("We get the records from Manif Summary for manf type Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_SUMMARY_EXT_REC, Joiner.on("','").join(Ids));
+        // Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtSummary = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from Manifestation extended stitching table$")
@@ -74,6 +82,7 @@ public class ManifestationExtDataChecksSteps {
        // Log.info(sql);
         dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL);
     }
+
 
 
     @And("^Compare Manif Extended and Manif Extended Stitching Table$")
@@ -95,12 +104,12 @@ public class ManifestationExtDataChecksSteps {
                 }
 
                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
-                        " Manif_Extended -> manif_type => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() +
+                        " Manif_Extended -> manif_type => " + dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type() +
                         " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
-                if (dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() != null ||
+                if (dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type() != null ||
                         (dataQualityStitchContext.recFromManifStitchExtended.get(i).gettype() != null)) {
-                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
-                            dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type(),
+                    Assert.assertEquals("The Manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtSummary.get(i).getepr_id() + " is missing/not matching",
+                            dataQualityStitchContext.recordsFromManifExtSummary.get(i).getmanifestation_type(),
                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                 }
 
@@ -124,30 +133,34 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getjournalIssueTrimSize());
                 }
                 String uk_textbook_ind;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()){
-                    uk_textbook_ind ="true";
-                }else{
-                    uk_textbook_ind="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind().isEmpty()){
+                        if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()=="1"){
+                            uk_textbook_ind ="true";
+                        }else{
+                            uk_textbook_ind="false";
+                        }
+
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> ukTextbookInd => " + uk_textbook_ind +
                         " Manif_JSON -> ukTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
-                if (uk_textbook_ind != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd() != null)) {
-                    Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
+                     Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             uk_textbook_ind, dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
                 }
+
                 String us_textbook_ind;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()){
-                    us_textbook_ind ="true";
-                }else{
-                    us_textbook_ind="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind().isEmpty()){
+                    if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()=="1")
+                    {
+                        us_textbook_ind ="true";
+                    }else{
+                        us_textbook_ind="false";
+                    }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> usTextbookInd => " + us_textbook_ind +
                         " Manif_JSON -> usTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
-                if (us_textbook_ind!= null || (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd() != null)) {
-                    Assert.assertEquals("The usTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
+                        Assert.assertEquals("The usTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             us_textbook_ind,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
                 }
 
@@ -181,21 +194,19 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getdiscountCodeUS());
                 }
                 String exportWebInd;
-                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()){
-                    exportWebInd ="true";
-                }else{
-                    exportWebInd="false";
-                }
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()!=null ||
+                        !dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind().isEmpty() ){
+                   if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()=="1"){
+                         exportWebInd ="true";
+                   }else{
+                        exportWebInd="false";
+                    }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> exportToWebInd => " + exportWebInd +
                         " Manif_JSON -> exportToWebInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
-
-                if (exportWebInd != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd() != null)) {
                     Assert.assertEquals("The exportToWebInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             exportWebInd,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
                 }
-
 
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> war_reference => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getwar_reference() +
@@ -207,7 +218,6 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
                 }
             }
-
         }
 
     }
@@ -223,14 +233,13 @@ public class ManifestationExtDataChecksSteps {
                 List<Map<?, ?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
                 break;
-
         }
       //  Log.info(sql);
       Log.info(Ids.toString());
     }
 
 
-    @Then("^Get the records from Manifestation extended page count table$")
+    @Then("^Records from Manifestation extended page count table$")
     public void getRecordsFromManifExtPageCountTable() {
         Log.info("We get the records from Manif Extended Page count Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC, Joiner.on("','").join(Ids));
@@ -268,7 +277,7 @@ public class ManifestationExtDataChecksSteps {
                                         " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() != null ||
                                         (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
-                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                    Assert.assertEquals("The manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not matching in Manif_Stitching table",
                                             dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }
@@ -324,7 +333,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the records from Manifestation extended restrictions table$")
+    @Then("^Records from Manifestation extended restrictions table$")
     public void getRecordsFromManifExtRestrictTable() {
         Log.info("We get the records from Manif Extended Restrict Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC, Joiner.on("','").join(Ids));
@@ -362,7 +371,7 @@ public class ManifestationExtDataChecksSteps {
                                         " Manif_JSON_Restrict -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 if (dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type() != null ||
                                         (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
-                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                    Assert.assertEquals("The manif_type for EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not matching in Manif_Stitching table",
                                             dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type(),
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }

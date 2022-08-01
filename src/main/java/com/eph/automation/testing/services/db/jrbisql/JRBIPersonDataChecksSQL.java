@@ -106,6 +106,20 @@ public class JRBIPersonDataChecksSQL {
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
                     "and delete_flag=false";
 
+    public static final String GET_PERSON_FILE_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part where EPR in ('%s') AND " +
+                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
+                    "transform_file_ts=(select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_person_file_history_part)";
+
     public static final String GET_PREVIOUS_PERSON_HISTORY_RECORDS =
             "select epr as EPR" +
                     ",record_type as recordType" +
@@ -176,7 +190,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n" +
                     "as a union all select b.epr, b.record_type, b.role_code, b.u_key, \n" +
                     "b.role_description, b.given_name, b.family_name, b.peoplehub_id, \n" +
-                    "b.email, b.transform_ts, null as col11, null as col12 \n" +
+                    "b.email, b.transform_file_ts, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n "+
                     "order by rand() limit %s\n";
 
@@ -197,7 +211,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n" +
                     "as a union all select b.epr, b.record_type, b.role_code, b.u_key, \n" +
                     "b.role_description, b.given_name, b.family_name, b.peoplehub_id, \n" +
-                    "b.email, b.transform_ts, null as col11, null as col12 \n" +
+                    "b.email, b.transform_file_ts, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n "+
                     "where EPR in ('%s')\n";
 

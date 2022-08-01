@@ -261,7 +261,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid desc,u_key desc,modifiedon desc \n";
 
     public static final String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
             "select eprid as eprid from (\n" +
@@ -1348,7 +1348,7 @@ public class BcsEtlExtendedDataChecksSql {
                     "LEFT JOIN  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes_series a ON (((\"o\".\"businesspartnerid\" = \"a\".\"businesspartnerid\") AND (\"split_part\"(\"a\".\"notestype\", ' | ', 1) = 'AFIL')) AND (\"o\".\"sourceref\" = \"a\".\"sourceref\")))\n" +
                     "LEFT JOIN  "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes_series n ON (((\"o\".\"businesspartnerid\" = \"n\".\"businesspartnerid\") AND (\"split_part\"(\"n\".\"notestype\", ' | ', 1) = 'BIO')) AND (\"o\".\"sourceref\" = \"n\".\"sourceref\")))\n" +
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((\"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\")))))))) = \"gwp\".\"external_reference\") AND (\"gwp\".\"effective_end_date\" IS NULL)))\n" +
-                    "WHERE (\"o\".\"metadeleted\" = 'N'))where eprid in ('%s') order by eprid,u_key,honours desc";
+                    "WHERE (\"o\".\"metadeleted\" = 'N'))where eprid in ('%s') order by eprid desc,u_key desc,honours desc";
 
     public static final String GET_WORK_PERS_ROLE_REC_CURR_DATA =
             "select eprid as eprid " +
@@ -1373,7 +1373,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",groupnumber as groupnumber" +
                     ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid,u_key,honours desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid desc,u_key desc,honours desc";
 
     public static final String GET_RANDOM_AVAILABILITY_KEY_CURRENT =
             "select eprid as eprid " +
@@ -1467,7 +1467,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",exporttowebind as exporttowebind" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
                     "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
-                    " and eprid in('%s') order by eprid,u_key desc";
+                    " and eprid in('%s') order by eprid desc,u_key desc,modifiedon desc";
 
     public static final String GET_MANIF_EXT_REC_TRANS_FILE =
             "select eprid as eprid " +
@@ -1744,7 +1744,8 @@ public class BcsEtlExtendedDataChecksSql {
                     " and eprid in('%s') order by eprid,u_key desc";
 
     public static final String GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA =
-            "select eprid as eprid " +
+            "select u_key as u_key" +
+                    ",eprid as eprid " +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
@@ -1763,11 +1764,10 @@ public class BcsEtlExtendedDataChecksSql {
                     ",notestxt as notestxt" +
                     ",sequence as sequence" +
                     ",groupnumber as groupnumber" +
-                    ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
                     "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part)" +
-                    " and eprid in('%s') order by eprid,u_key,honours desc";
+                    " and eprid in('%s') order by eprid desc,u_key desc,honours desc";
 
     public static final String GET_WORK_PERS_ROLE_REC_TRANS_FILE =
             "select eprid as eprid " +
@@ -1794,7 +1794,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",metadeleted as metadeleted" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid,u_key,honours desc";
+                    " and eprid in('%s') order by eprid desc,u_key desc,honours desc";
 
     public static final String GET_RANDOM_AVAILABILITY_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +

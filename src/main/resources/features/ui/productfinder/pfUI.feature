@@ -1,6 +1,6 @@
 Feature: Product Finder Selenium tests
 
-  @UI @PFRegressionSuite
+  @PFNonProd @UI @PFRegressionSuite
   Scenario Outline: search work by multiple options
     Given get 1 random work id from DB
     And We get the work search data from EPH GD
@@ -14,7 +14,7 @@ Feature: Product Finder Selenium tests
     |Title  |
     |Keyword|
 
-  @UI @PFRegressionSuite
+  @PFNonProd @UI @PFRegressionSuite
   Scenario Outline: search product by multiple options
     Given get 1 random product id from DB
     And We get the product search data from DB
@@ -28,7 +28,7 @@ Feature: Product Finder Selenium tests
       |Title  |
       |Keyword|
 
-  @UI @PFRegressionSuite
+  @PFNonProd @UI @PFRegressionSuite
   Scenario Outline: search manifestation by multiple options
     Given get 1 random manifestation id
     And We get the manifestation data from DB
@@ -43,7 +43,7 @@ Feature: Product Finder Selenium tests
    # |Keyword|  EPH-1909 created for issue – “Product finder is not searching ‘Manifestation by keyword’.”
 
 
-  @UI @PFRegressionSuite @apiDebug
+  @PFNonProd @UI @PFRegressionSuite @apiDebug
   Scenario Outline: Search the work and filter them with one Work Type
     Given Get the available Work Types from the DB "<workType>"
     Then  Get a Work Id for each Work Types available in the DB
@@ -54,7 +54,7 @@ Feature: Product Finder Selenium tests
       |Book     |
       |Journal  |
 
-  @UI @PFRegressionSuite @PFDMC @PFDebug
+  @PFNonProd @UI @PFRegressionSuite @PFDMC @PFDebug
   Scenario Outline: Search the Product Finder and verify all 3 tabs
     Given get 1 random work id from DB
     And We get the work search data from EPH GD
@@ -72,9 +72,9 @@ Feature: Product Finder Selenium tests
  #   |4|
  #   |5|
 
-  @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
+  @PFNonProd @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
   Scenario Outline: Search the Journal Finder and verify all 5 tabs
-    Given We get 1 random journal ids for search
+    Given  We get 1 random journal ids to search ""
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches work by id
@@ -90,7 +90,7 @@ Examples:
   #  |4|
   #  |5|
 
-  @UI @PFRegressionSuite @JFUI @PFDebug
+  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by person
     Given We get 5 random search ids for person roles
     And get person data from EPH DB
@@ -103,9 +103,9 @@ Examples:
    #   |personName           |
    #   |personId             |
 
-  @UI @PFRegressionSuite @JFUI @PFDebug
+  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by PMC
-    Given We get 5 random journal ids for search
+    Given  We get 5 random journal ids to search ""
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches journal by pmc <option>

@@ -4,10 +4,12 @@
 package com.eph.automation.testing.models.ui;
 /** Created by GVLAYKOV */
 import com.eph.automation.testing.configuration.MarionetteDriver;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.configuration.WebDriverFactory;
 import com.eph.automation.testing.helper.Log;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.minidev.json.JSONObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
@@ -15,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.nio.file.WatchEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +35,58 @@ public class TasksNew {
     this.driver = new WebDriverFactory().get();
     this.wait = new WebDriverWait(driver, 10);
     this.pageLoadTimeout = 30000;
+
+   // driver.get("https://productfinder.elsevier.net");
+    //loginWithCredential();
+    //driver.get("https://uat.productfinder.elsevier.net");
+    driver.get("https://productfinder.elsevier.net");
+    loginWithCredential();
+    //loginWithScience(); //local execution
+
    }
+
+  public void loginWithCredential() {
+    //created by Nishant in Apr 2022
+    JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+    String loginId = svc.getAsString("svc4");
+    String pwd =svc.getAsString("svc4pwd");
+
+    try {
+      sendKeys(
+              "NAME",
+              ProductFinderConstants.loginByEmail,
+              loginId + ProductFinderConstants.SCIENCE_ID);
+      click("ID", ProductFinderConstants.nextButton);
+      Thread.sleep(5000);
+
+    //  driver.get("https://"+loginId+":"+pwd+"@"+driver.getCurrentUrl().split("//")[1]);
+     // driver.get("https://"+loginId+":"+pwd+"@"+"<Url>");
+      waitUntilPageLoad();
+    //  Thread.sleep(5000);
+      Log.info("url after science id url");
+      Log.info(driver.getCurrentUrl());
+      sendCredential(loginId,pwd);
+
+      if(!driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+      {
+        signIntoYourOrganisation(loginId,pwd);
+      }
+
+      Thread.sleep(3000);
+
+      if(driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
+      {
+        Log.info("signed in successful ");
+      }
+      else {
+        Log.info("sign in issue for below link");
+        Log.info(driver.getCurrentUrl());
+      }
+    } catch (Exception e) {
+      Log.error(e.getMessage());
+    }
+
+  }
 
   public void loginWithScience() {
       try {
@@ -92,6 +146,8 @@ public class TasksNew {
     btn_signIn.click();
     waitUntilPageLoad();
     Log.info("sign in to your organisation funtion called");
+    Thread.sleep(3000);
+    Log.info(driver.getCurrentUrl());
   }
 
   public WebElement findElementByText(final String text) {
@@ -111,6 +167,15 @@ public class TasksNew {
     try {
       ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
     } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void mouseHoverClick(WebElement element){
+    try{
+      Actions actions = new Actions(driver);
+      actions.moveToElement(element).click();
+    }catch (Exception e){
       e.printStackTrace();
     }
   }
@@ -231,6 +296,7 @@ public class TasksNew {
     }
   }
 
+
   public void javaScriptExecutor(WebElement element) {
     ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
   }
@@ -299,6 +365,21 @@ public class TasksNew {
     return getTextVal;
   }
 
+  public List<String> getTextofAllElements(String locatorType, String locatorValue){
+    WebDriverWait wait = new WebDriverWait(driver, 10);
+    List<String> getTextVal = new ArrayList<>();
+    try{
+      List<WebElement> elements = findmultipleElements(locatorType, locatorValue);
+      wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(locatorValue)));
+      for(int i=0;i<elements.size();i++){
+        getTextVal.add(elements.get(i).getText());
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return getTextVal;
+  }
+
   public String getTextofElement(WebElement element) {
     // created by Nishant @ 18 May 2020
     wait.until(ExpectedConditions.visibilityOf(element));
@@ -315,6 +396,27 @@ public class TasksNew {
 
   public void acceptAlert() {
     driver.switchTo().alert().accept();
+  }
+
+  public int getSize(String locatorType, String locatorValue) {
+    int size = 0;
+    try {
+      switch (locatorType) {
+        case "XPATH":
+          size = driver.findElements(By.xpath(locatorValue)).size();
+          break;
+        case "CLASS":
+          size = driver.findElements(By.className(locatorValue)).size();
+          break;
+        case "TAG":
+          size = driver.findElements(By.tagName(locatorValue)).size();
+          break;
+      }
+      // wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+      return size;
   }
 
   public void keyboardEvents(String locatorType, String locatorValue, String keyName) {

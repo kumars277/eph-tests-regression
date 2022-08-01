@@ -1,5 +1,30 @@
 Feature: Research Packages UI Selenium Tests
 
+
+  @DppUI
+    Scenario: Check whether Digital Journal Collections is present
+    Given User logged into the application as a Product Owner
+    Then Check DJC icon is present
+    And  Check any DJC Collections are present
+
+  @DppUI
+    Scenario Outline: Validate Search Functionality in the Add Journal box
+    Given User in the Freedom Collection Page
+    Then Search Journal by issn <ISSN> in Add Journal Box
+    And Verify <Title> and <JournalNo> and <Pub.Director> for <ISSN> from search result
+    Then Close the Add Journal box
+    Then Search Journal by title <Title> in Add Journal Box
+    And Verify <Title> and <JournalNo> and <Pub.Director> for <ISSN> from search result
+    Then Close the Add Journal box
+    Examples:
+    | ISSN           | Title                              | JournalNo   | Pub.Director  |
+    | 1766-2389      |Revue du Soignant en Santé Publique |09190        |Daniel Rodriguez|
+    | 1632-3475      |EMC - Otorrinolaringología          |09234        |Daniel Rodriguez|
+
+
+
+
+
   @SJC
   Scenario Outline: Add a Journal with Pending Status into the SJC - Clinical Collections
     Given User logged into the application as a Product Owner
@@ -12,7 +37,9 @@ Feature: Research Packages UI Selenium Tests
     And   Verify the status of the journal "<ISSN>" is "<status>" in DB
     Examples:
       | ISSN             |        status  |
-      | 1873-2143       |             P|
+    #  | 1873-2143        |             P  |
+      | 1042-9573        |             P  |
+
 
 
     @SJC
@@ -24,8 +51,8 @@ Feature: Research Packages UI Selenium Tests
       And   Save the Collections
       And   Verify the status of the journal "<ISSN>" is "<STATUS>" in DB
       Examples:
-      |ISSN               | STATUS |
-      | 1558-0512        |  E      |
+      |ISSN               | STATUS  |
+      | 1558-0512         |  E      |
 
     @SJC
     Scenario Outline: Changing the Status of the Journal to Pending from SJC - Clinical Collections
@@ -38,8 +65,6 @@ Feature: Research Packages UI Selenium Tests
       Examples:
         |ISSN             |    STATUS |
         | 1558-1950       |    P      |
-
-
 
       @MCC
       Scenario Outline: Search Journal with ISSN
@@ -58,7 +83,7 @@ Feature: Research Packages UI Selenium Tests
         Then  Search publisher of the journal with "<publisher>" given
         And   Verify the publisher of the journal with "<publisher>" is displayed
         Examples:
-          |publisher            |
+          |publisher               |
           | Demerges Enquired      |
 
       @MCC
@@ -79,7 +104,7 @@ Feature: Research Packages UI Selenium Tests
         And   Verify the journalno of the journal with "<journalno>" is displayed
         Examples:
           |journalno            |
-          | 12003      |
+          | 12003               |
 
       @MCC
       Scenario Outline: Filter Journal with Publishing director
@@ -89,7 +114,7 @@ Feature: Research Packages UI Selenium Tests
         And   Verify the result displayed for the "<publishing director>"
         Examples:
           |publishing director            |
-          | Rapes Relaxed      |
+          | Rapes Relaxed                 |
 
 
         @MCC
@@ -100,7 +125,7 @@ Feature: Research Packages UI Selenium Tests
           And   Verify the result displayed for the Ownership Type "<ownership>"
           Examples:
             |ownership            |
-            | ELSOWN     |
+            | ELSOWN              |
 
           @MCC
           Scenario Outline: Filter Journal with PMG

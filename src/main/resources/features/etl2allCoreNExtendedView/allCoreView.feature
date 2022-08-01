@@ -6,7 +6,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
   @DLCoreView
   Scenario Outline: Verify Data for DL core views is transferred from BCS and JM core Tables
     Given Get the total count of DL Core views <tableName>
-    Then  We know the total count of BCS And JM Core tables <tableName>
+    Then  The total count of BCS And JM Core tables <tableName>
     And Compare count of BCS and JM Core with <tableName> views are identical
     Then Check whether externalReference field not holding any null value <tableName>
     Given Get the <countOfRandomIds> from JM and BCS Core Tables <tableName>

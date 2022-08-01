@@ -59,16 +59,16 @@ public class ProductFinderConstants {
     public static String DetailInformation1 = section + sectionDetailDiv+"[1]";
     public static String DetailInformation2 = section + sectionDetailDiv+"[2]";
 
-    public static String sectionDetail = section + sectionDetailDiv;
+    public static String sectionDetail = section + sectionDetailDiv; //core information
 
     public static String section_identifier = "//div[@class='section identifiers']";
-    public static String subAreaRow = section_identifier+sectionDetailDiv;
+    public static String subAreaRow = section_identifier+"//div[@class='section-detail subject-areas']";
     public static String identifierRow = section_identifier+"/eph-pf-identifier-list"+sectionDetailDiv;
     public static String specialtiesRow = section_identifier+"/eph-pf-specialties"+sectionDetailDiv;
 
 
     public static String sectionDetailJF = section+"[1]"+sectionDetailDiv;
-    public static String subAreaRowJF = section+"[2]"+"/div[@class='section-detail subject-areas']";
+    public static String subAreaRowJF = section+"[2]"+"//div[@class='section-detail subject-areas']";
     public static String identifierRowJF = section+"[2]"+"/eph-pf-identifier-list"+sectionDetailDiv;
     public static String specialtiesRowJF = section+"[2]"+"/eph-pf-specialties"+"//ul[@id='specialties']";
 

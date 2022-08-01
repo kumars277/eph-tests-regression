@@ -23,6 +23,25 @@ public class GetStitchDLDBUser {
         return dbProdExt;
     }
 
+    public static String getProdStagingDB(){
+        String dbProdStg = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdStg = "product_staging_database_sit";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbProdStg = "product_staging_database_uat";
+            }
+            else{
+                dbProdStg = "product_staging_database_uat";
+            }
+        }else{
+            dbProdStg = "product_staging_database_sit";
+            //   dbProdExt = "product_ext_database_uat";
+        }
+        return dbProdStg;
+    }
+
     public static String getStitchingExtdb(){
         String dbExtStitching = null;
         if (System.getProperty("ENV") != null){

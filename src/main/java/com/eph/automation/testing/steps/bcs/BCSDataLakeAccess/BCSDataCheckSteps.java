@@ -31,7 +31,7 @@ public class BCSDataCheckSteps {
     private static List<String> Ids;
     private static BCSDataQualityContext bcsDataQualityContext = new BCSDataQualityContext();
 
-    @Given("^We get the (.*) random ids from initial ingest (.*)$")
+    @Given("^Get the (.*) random ids from initial ingest (.*)$")
     public void getRandomIdsFromInitialIngest(String countOfRandomIds, String targetTable) {
       //countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
@@ -200,7 +200,7 @@ public class BCSDataCheckSteps {
         }
     }
 
-    @Then("^Get the records from current tables (.*)$")
+    @Then("^we Get the records from current tables (.*)$")
     public void getCurrentTableData(String targetTable) {//created by Nishant @ 21 Oct 2020
         Log.info("We get current table records...");
         switch (targetTable) {
@@ -1704,9 +1704,7 @@ public class BCSDataCheckSteps {
 
     @When("Get data from BCS stg_current (.*)")
     public void getDatafromBCSstgCurrentTables(String sourceTable) {//created by Nishant @ 26 Nov 2020
-
         Log.info("We get bcs current table records...");
-
         switch (sourceTable) {
             case "stg_current_classification":
                 sql = String.format(BCSDataLakeDataCheckSQL.getData_stg_current_classification,
@@ -3431,7 +3429,7 @@ public class BCSDataCheckSteps {
                 + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(0).getSourceref());
     }
 
-    @Given("^We get the (.*) random ids for the initial ingest book series (.*)$")
+    @Given("^Get (.*) random ids for initial ingest book series (.*)$")
     public void getRandomIdsFromInitialIngestSeries(String countOfRandomIds, String targetTable) {
         // countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
@@ -3470,6 +3468,7 @@ public class BCSDataCheckSteps {
 
         //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
         setBreadcrumbMessage(Ids.toString());
+        Log.info(sql);
     }
 
     @When("Get the data records from initial ingest book series for (.*)")
@@ -3517,6 +3516,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsInitialIngestDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSInitialIngestDataObject.class, Constants.AWS_URL);
                 break;
         }
+        Log.info(sql);
 
     }
 
@@ -3567,6 +3567,7 @@ public class BCSDataCheckSteps {
                 bcsDataQualityContext.bcsCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, BCSCurrentTableDataObject.class, Constants.AWS_URL);
                 break;
             }
+            Log.info(sql);
     }
 
     @And("Compare the records for the initial ingest book series and current table book series (.*)")
@@ -3614,8 +3615,8 @@ public class BCSDataCheckSteps {
                     Log.info("stg_current_content_series Records:");
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
-                    String[] content_series = {"getMetadeleted", "getMetamodifiedon", "getSourceref", "getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
-                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getSeriesid","getShorttitle",
+                    String[] content_series = {"getMetadeleted", "getMetamodifiedon","getSubgroup", "getSeriescode", "getMedium", "getWmyn", "getSubtitle","getTitle","getSerialtype"
+                    ,"getDivision","getObjtype","getCompanygroup","getSeriesissn","getBinding","getVolumeno","getLanguage","getPublisher","getShorttitle",
                     "getPiidack","getOwnership","getDeltype","getNumbered","getBibliographicserial","getMainseries","getEditionid"};
 
                     for (String strTemp : content_series) {
@@ -3675,7 +3676,7 @@ public class BCSDataCheckSteps {
                     bcsDataQualityContext.bcsInitialIngestDataObjectList.sort(Comparator.comparing(BCSInitialIngestDataObject::getSourceref));
                     bcsDataQualityContext.bcsCurrentTableDataObjectList.sort(Comparator.comparing(BCSCurrentTableDataObject::getSourceref));
 
-                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getSourceref", "getNotes", "getCompanygroup"};
+                    String[] originatornotes_series = {"getMetadeleted", "getMetamodifiedon", "getBusinesspartnerid", "getNotes", "getCompanygroup"};
                     for (String strTemp : originatornotes_series) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
@@ -3796,7 +3797,7 @@ public class BCSDataCheckSteps {
     }
 
 
-    @Given("^We get the (.*) random ids from the current book series (.*)$")
+    @Given("^Get the (.*) random ids from the current book series (.*)$")
     public void getRandomIdsForCurrentSeries(String countOfRandomIds, String targetTable) {
         // countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);

@@ -93,9 +93,9 @@ public class ProductFinderTasks {
 
 
     public void loginWithCredential() {
-      //  JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
-        String loginId = "svc-scielsoxfsem004";//svc.getAsString("svc4");
-        String pwd = "zwpLwaQ9FFm+uA9";//svc.getAsString("svc4pwd");
+       JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = svc.getAsString("svc4");
+        String pwd = svc.getAsString("svc4pwd");
 
             try {
                tasks.sendKeys(
@@ -105,10 +105,7 @@ public class ProductFinderTasks {
                 tasks.click("ID", ProductFinderConstants.nextButton);
                 Thread.sleep(3000);
 
-               //String  driverCurrentUrl = tasks.driver.getCurrentUrl().split("//")[1];
-               //String authUrl = "https://"+loginId+":"+pwd+"@"+driverCurrentUrl;
-
-                tasks.driver.get("https://"+loginId+":"+pwd+"@"+tasks.driver.getCurrentUrl().split("//")[1]);
+              tasks.driver.get("https://"+loginId+":"+pwd+"@"+tasks.driver.getCurrentUrl().split("//")[1]);
                 tasks.waitUntilPageLoad();
                 Thread.sleep(3000);
                 if(!tasks.driver.getCurrentUrl().contains("productfinder.elsevier.net/"))
@@ -131,8 +128,6 @@ public class ProductFinderTasks {
             }
 
     }
-
-
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
         //updated by Nishant @ 13 Feb 2020
@@ -166,23 +161,6 @@ public class ProductFinderTasks {
     public void searchFor(final String searchID) throws InterruptedException {
         //updated by Nishant @ 14 May 2020
         //updated by Nishant @ 03 Jul 2020 for Journal Finder
-        Thread.sleep(15000);
-        Log.info("after 15 sec from accessing the page");
-        Log.info("\n");
-        Log.info(tasks.driver.getPageSource());
-        Log.info("\n");
-        Log.info(tasks.driver.getCurrentUrl());
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");
-        Log.info("\n");Log.info("\n");
 
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();
@@ -190,7 +168,7 @@ public class ProductFinderTasks {
             Log.info("page refreshed as search bar not available...");
             Log.info("after 30 sec from page refreshed");
             Log.info("\n");
-            Log.info(tasks.driver.getPageSource());
+          //  Log.info(tasks.driver.getPageSource());
             Log.info("\n");
         }
 
@@ -293,6 +271,7 @@ public class ProductFinderTasks {
             case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;break;
             case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;break;
             case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;break;
+            case "PROD":
             case "PRODUCTION":targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;break;
         }
 
@@ -320,12 +299,14 @@ public class ProductFinderTasks {
             case "UAT2":
                 targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
                 break;
+            case "PROD":
             case "PRODUCTION":
                 targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
                 break;
         }
 
         Log.info("Target URL " + targetURL);
+        Log.info("currentPageUrl "+tasks.getCurrentPageUrl());
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;
     }
@@ -348,7 +329,7 @@ public class ProductFinderTasks {
         //created by Nishant @5 Jun 2020
         //updated UI changes and locator by Nishant @ 15 Oct 2020 for EPHD-2241
         //updated UI changes and locator by Nishant @ 12 Oct 2021 for regression testing
-
+        Log.info("getUI_WorkOverview_Information - Start");
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
         {
             //capture Information values
@@ -382,9 +363,6 @@ public class ProductFinderTasks {
                 String value = tasks.findElement("XPATH", ProductFinderConstants.subAreaRow + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
                 prop_subArea.setProperty(key, value);
             }
-
-
-
         }
         else //JF
         {
@@ -394,7 +372,7 @@ public class ProductFinderTasks {
                 String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
                 String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetailJF + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
                 prop_info.setProperty(key, value);}
-        }
+
 
         //capture identifiers values
         List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr");
@@ -418,7 +396,9 @@ public class ProductFinderTasks {
             String value = tasks.findElement("XPATH", ProductFinderConstants.specialtiesRowJF + "/li[" + i  + "]").getText();
             prop_specialties.setProperty(key, value);
         }
+        }
 
+        Log.info("getUI_WorkOverview_Information - End");
 
     }
 
@@ -558,13 +538,14 @@ public class ProductFinderTasks {
         return random.nextInt(limit);
     }
 
-    public void verifyUserIsOnOverviewPage() {//created by Nishant @ 23 Apr 2021
+    public void verifyUserIsOnOverviewPage() throws InterruptedException {//created by Nishant @ 23 Apr 2021
+       // tasks.waitUntilPageLoad();
+       // Thread.sleep(3000);
         if (TestContext.getValues().environment.equalsIgnoreCase("UAT") |
                 TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
             if (DataQualityContext.productDataObjectsFromEPHGD != null)
                 ProductFinderTasks.searchResultId = DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID();
         }
-
         assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultId));
     }
 

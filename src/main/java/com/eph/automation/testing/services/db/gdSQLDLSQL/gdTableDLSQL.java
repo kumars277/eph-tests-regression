@@ -93,6 +93,32 @@ public class gdTableDLSQL {
     public static String GET_GD_WORK_IDS ="select work_id from semarchy_eph_mdm.gd_wwork order by random() limit %s";
     public static String GET_GD_WORK_HIER_IDS ="select work_hierarchy_id from semarchy_eph_mdm.gd_work_hierarchy order by random() limit %s";
 
+    public static String GET_GD_ACC_PROD_IDS_DL ="select external_reference from "+GetJMDLDBUser.getProdDataBase()+".gd_accountable_product order by random() limit %s";
+    public static String GET_GD_EVENT_IDS_DL ="select event_id from "+GetJMDLDBUser.getProdDataBase()+".gd_event order by random() limit %s";
+    public static String GET_GD_LEGAL_OWNER_IDS_DL ="select legal_owner_id from "+GetJMDLDBUser.getProdDataBase()+".gd_legal_owner order by random() limit %s";
+    public static String GET_GD_MANIF_IDS_DL ="select manifestation_id from "+GetJMDLDBUser.getProdDataBase()+".gd_manifestation order by random() limit %s";
+    public static String GET_GD_MANIF_IDENTIF_IDS_DL ="select manif_identifier_id from "+GetJMDLDBUser.getProdDataBase()+".gd_manifestation_identifier order by random() limit %s";
+    public static String GET_GD_PERSON_IDS_DL ="select person_id from "+GetJMDLDBUser.getProdDataBase()+".gd_person order by random() limit %s";
+    public static String GET_GD_PRODUCT_IDS_DL ="select product_id from "+GetJMDLDBUser.getProdDataBase()+".gd_product order by random() limit %s";
+    public static String GET_GD_PRODUCT_FIN_IDS_DL ="select product_fin_attribs_id from "+GetJMDLDBUser.getProdDataBase()+".gd_product_financial_attribs order by random() limit %s";
+    public static String GET_GD_PRODUCT_IDENTIF_IDS_DL ="select product_identifier_id from "+GetJMDLDBUser.getProdDataBase()+".gd_product_identifier order by random() limit %s";
+    public static String GET_GD_PRODUCT_PERSON_ROLE_IDS_DL ="select product_person_role_id from "+GetJMDLDBUser.getProdDataBase()+".gd_product_person_role order by random() limit %s";
+    public static String GET_GD_PRODUCT_REL_PKG_IDS_DL ="select product_rel_pack_id from "+GetJMDLDBUser.getProdDataBase()+".gd_product_rel_package order by random() limit %s";
+    public static String GET_GD_SUBJ_AREA_IDS_DL ="select subject_area_id from "+GetJMDLDBUser.getProdDataBase()+".gd_subject_area order by random() limit %s";
+    public static String GET_GD_WORK_ACCESS_MODEL_IDS_DL ="select work_access_model_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_access_model order by random() limit %s";
+    public static String GET_GD_WORK_BUSINESS_MODEL_IDS_DL ="select work_business_model_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_business_model order by random() limit %s";
+    public static String GET_GD_WORK_FIN_ATTR_IDS_DL ="select work_fin_attribs_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_financial_attribs order by random() limit %s";
+    public static String GET_GD_WORK_IDENTIFIER_IDS_DL ="select work_identifier_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_identifier order by random() limit %s";
+    public static String GET_GD_WORK_LEGAL_OWNER_IDS_DL ="select work_legal_owner_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_legal_owner order by random() limit %s";
+    public static String GET_GD_WORK_PERSON_ROLE_IDS_DL ="select work_person_role_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_person_role order by random() limit %s";
+    public static String GET_GD_WORK_REL_PKG_IDS_DL ="select work_rel_pack_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_rel_package order by random() limit %s";
+    public static String GET_GD_WORK_RELATIONS_IDS_DL ="select work_relationship_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_relationship order by random() limit %s";
+    public static String GET_GD_WORK_SUBJ_AREA_LINK_IDS_DL ="select work_subject_area_link_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_subject_area_link order by random() limit %s";
+    public static String GET_GD_WORK_HCHY_LINK_IDS_DL ="select wrk_wrk_hchy_link_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_work_hchy_link order by random() limit %s";
+    public static String GET_GD_WORK_IDS_DL ="select work_id from "+GetJMDLDBUser.getProdDataBase()+".gd_wwork order by random() limit %s";
+    public static String GET_GD_WORK_HIER_IDS_DL ="select work_hierarchy_id from "+GetJMDLDBUser.getProdDataBase()+".gd_work_hierarchy order by random() limit %s";
+
+
     public static String GET_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where external_reference in ('%s') order by" +
             " external_reference,b_batchid desc";
     public static String GET_GD_EVENT = "select * from semarchy_eph_mdm.gd_event where event_id in ('%s') order by event_id,b_batchid,b_credate,b_upddate desc";
@@ -344,12 +370,131 @@ public class gdTableDLSQL {
     public static String GET_GD_GD_LOV_WORK_TYPE = "select * from semarchy_eph_mdm.gd_x_lov_work_type where code in ('%s') order by code desc";
 
 
-
     public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT = "select count(*) as Source_Count from semarchy_eph_mdm.gd_x_lov_workflow_source";
     public static String GET_GD_LOV_WORKFOW_SOURCE_COUNT_DL = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_workflow_source";
     public static String GET_GD_LOV_WORKFOW_SOURCE_IDS = "select code from semarchy_eph_mdm.gd_x_lov_workflow_source order by random() limit %s";
     public static String GET_GD_GD_LOV_WORKFOW_SOURCE_DL = "select * from "+GetJMDLDBUser.getProdDataBase()+".gd_x_lov_workflow_source where code in ('%s') order by code desc";
     public static String GET_GD_GD_LOV_WORKFOW_SOURCE = "select * from semarchy_eph_mdm.gd_x_lov_workflow_source where code in ('%s') order by code desc";
 
+
+
+    public static String GET_ACC_PROD_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_accountable_product";
+    public static String GET_EVENT_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_event";
+    public static String GET_LEGAL_OWNER_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_legal_owner";
+    public static String GET_MANIF_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_manifestation";
+    public static String GET_MANIF_ID_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_manifestation_identifier";
+    public static String GET_PERSON_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_person";
+    public static String GET_PRICE_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_price";
+    public static String GET_PROD_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product";
+    public static String GET_PROD_FIN_ATTR_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_financial_attribs";
+    public static String GET_PROD_IDENTIF_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_identifier";
+    public static String GET_PROD_PERSON_ROLE_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_person_role";
+    public static String GET_PROD_REL_PKG_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_rel_package";
+    public static String GET_SUB_AREA_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_subject_area";
+    public static String GET_WORK_ACCESS_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_access_model";
+    public static String GET_WORK_BUSINESS_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_business_model";
+    public static String GET_WORK_FIN_ATTR_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_financial_attribs";
+    public static String GET_WORK_HERCHY_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_hierarchy";
+    public static String GET_WORK_IDENTF_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_identifier";
+    public static String GET_WORK_LEGAL_OWN_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_legal_owner";
+    public static String GET_WORK_METRIC_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_metric";
+    public static String GET_WORK_PERS_ROLE_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_person_role";
+    public static String GET_WORK_REL_PKG_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_rel_package";
+    public static String GET_WORK_REL_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_relationship";
+    public static String GET_WORK_SUBJ_AREA_LINK_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_subject_area_link";
+    public static String GET_WORK_WORK_HCHY_GD_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_work_hchy_link";
+    public static String GET_WORK_PRESENT_PRESENT_COUNT =  "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_wwork";
+    public static String GET_GD_LOV_ACCESS_MODEL_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_access_model";
+    public static String GET_GD_LOV_BUSINESS_MODEL_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_business_model";
+    public static String GET_GD_LOV_CURRENCY_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_currency";
+    public static String GET_GD_LOV_ETAX_PROD_CODE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_etax_product_code";
+    public static String GET_GD_LOV_EVENT_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_event_type";
+    public static String GET_GD_LOV_GL_COMPANY_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_company";
+    public static String GET_GD_LOV_GL_PROD_SEG_PARENT_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_prod_seg_parent";
+    public static String GET_GD_LOV_GL_RESP_CENTER_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_resp_centre";
+    public static String GET_GD_LOV_IDENTIFIER_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_identifier_type";
+    public static String GET_GD_LOV_IMPRINT_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_imprint";
+    public static String GET_GD_LOV_LANGUAGE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_language";
+    public static String GET_GD_LOV_LEGAL_OWNERSHIP_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_legal_ownership";
+    public static String GET_GD_LOV_MANIF_STATUS_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_manif_status";
+    public static String GET_GD_LOV_MANIF_TYPE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_manif_type";
+    public static String GET_GD_LOV_METRIC_TYPE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_metric_type";
+    public static String GET_GD_LOV_ORIGIN_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_origin";
+    public static String GET_GD_LOV_OWNER_DESCRIP_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_owner_description";
+    public static String GET_GD_LOV_PERSON_ROLE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_person_role";
+    public static String GET_GD_LOV_PMC_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_pmc";
+    public static String GET_GD_LOV_PMG_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_pmg";
+    public static String GET_GD_LOV_PROD_STATUS_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_product_status";
+    public static String GET_GD_LOV_PROD_TYPE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_product_type";
+    public static String GET_GD_LOV_RELATION_TYPE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_relationship_type";
+    public static String GET_GD_LOV_REVENUE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_revenue_account";
+    public static String GET_GD_LOV_REVENUE_MODEL_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_revenue_model";
+    public static String GET_GD_LOV_SUBJ_AREA_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_subject_area_type";
+    public static String GET_GD_LOV_SUB_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_subscription_type";
+    public static String GET_GD_LOV_WORK_HCHY_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_hchy_type";
+    public static String GET_GD_LOV_WORK_STATUS_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_status";
+    public static String GET_GD_LOV_WORK_TYPE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_type";
+    public static String GET_GD_LOV_WORKFOW_SOURCE_PRESENT_COUNT = "select count(*) as Target_Count from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_workflow_source";
+
+    public static String GET_GD_ACCOUNTABLE_PRODUCT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_accountable_product where external_reference in ('%s') order by" +
+            " external_reference,b_batchid desc";
+    public static String GET_GD_EVENT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_event where event_id in ('%s') order by event_id,b_batchid,b_credate,b_upddate desc";
+    public static String GET_GD_LEGAL_OWNER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_legal_owner where legal_owner_id in ('%s') order by legal_owner_id,b_batchid desc";
+    public static String GET_GD_MANIFESTATION_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_manifestation where manifestation_id in ('%s') order by manifestation_id desc";
+    public static String GET_GD_MANIFESTATION_IDENTIFIER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_manifestation_identifier where manif_identifier_id in ('%s') order by manif_identifier_id desc";
+    public static String GET_GD_PERSON_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_person where person_id in ('%s') order by person_id desc";
+    public static String GET_GD_PRODUCT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product where product_id in ('%s') order by product_id desc";
+    public static String GET_GD_PROD_FIN_ATTR_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_financial_attribs where product_fin_attribs_id in ('%s') order by product_fin_attribs_id desc";
+    public static String GET_GD_PROD_IDENTIFIER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_identifier where product_identifier_id in ('%s') order by product_identifier_id desc";
+    public static String GET_GD_PROD_PERSON_ROLE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_person_role where product_person_role_id in ('%s') order by product_person_role_id desc";
+    public static String GET_GD_PROD_REL_PKG_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_product_rel_package where product_rel_pack_id in ('%s') order by product_rel_pack_id desc";
+    public static String GET_GD_SUBJECT_AREA_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_subject_area where subject_area_id in ('%s') order by subject_area_id desc";
+    public static String GET_GD_WORK_ACCESS_MODEL_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_access_model where work_access_model_id in ('%s') order by work_access_model_id desc";
+    public static String GET_GD_WORK_BUSINESS_MODEL_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_business_model where work_business_model_id in ('%s') order by work_business_model_id desc";
+    public static String GET_GD_WORK_FIN_ATTR_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_financial_attribs where work_fin_attribs_id in ('%s') order by work_fin_attribs_id desc";
+    public static String GET_GD_WORK_HIRERACHY_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_hierarchy where work_hierarchy_id in ('%s') order by work_hierarchy_id desc";
+    public static String GET_GD_WORK_IDENTIFIER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_identifier where work_identifier_id in ('%s') order by work_identifier_id desc";
+    public static String GET_GD_WORK_LEGAL_OWNER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_legal_owner where work_legal_owner_id in ('%s') order by work_legal_owner_id desc";
+    public static String GET_GD_WORK_PERSON_ROLE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_person_role where work_person_role_id in ('%s') order by work_person_role_id desc";
+    public static String GET_GD_WORK_REL_PKG_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_rel_package where work_rel_pack_id in ('%s') order by work_rel_pack_id desc";
+    public static String GET_GD_WORK_RELATIONSHIP_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_relationship where work_relationship_id in ('%s') order by work_relationship_id desc";
+    public static String GET_GD_WORK_SUB_AREA_LINK_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_subject_area_link where work_subject_area_link_id in ('%s') order by work_subject_area_link_id desc";
+    public static String GET_GD_WORK_HCHU_LINK_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_work_work_hchy_link where wrk_wrk_hchy_link_id in ('%s') order by wrk_wrk_hchy_link_id desc";
+    public static String GET_GD_WWORK_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_wwork where work_id in ('%s') order by work_id desc";
+    public static String GET_GD_GD_LOV_ACCESS_MODEL_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_access_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_BUSINESS_MODEL_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_business_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_CURRENCY_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_currency where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_ETAX_PROD_CODE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_etax_product_code where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_EVENT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_event_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_COMPANY_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_company where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_PROD_SEG_PARENT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_prod_seg_parent where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_GL_RESP_CENTER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_gl_resp_centre where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_IDENTIFIER_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_identifier_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_IMPRINT_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_imprint where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_LANGUAGE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_language where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_LEGAL_OWNERSHIP_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_legal_ownership where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_MANIF_STATUS_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_manif_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_MANIF_TYPE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_manif_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_METRIC_TYPE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_metric_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_ORIGIN_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_origin where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_OWNER_DESCRIP_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_owner_description where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PERSON_ROLE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_person_role where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PMC_PRESENT= "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_pmc where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PMG_ROLE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_pmg where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PROD_STATUS_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_product_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_PROD_TYPE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_product_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_RELATION_TYPE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_relationship_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_REVENUE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_revenue_account where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_REVENUE_MODEL_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_revenue_model where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_SUBJ_AREA_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_subject_area_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_SUB_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_subscription_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_HCHY_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_hchy_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_STATUS_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_status where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORK_TYPE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_work_type where code in ('%s') order by code desc";
+    public static String GET_GD_GD_LOV_WORKFOW_SOURCE_PRESENT = "select * from "+GetJMDLDBUser.getProdPresentationDB()+".gd_x_lov_workflow_source where code in ('%s') order by code desc";
+
+
 }
+
+
 

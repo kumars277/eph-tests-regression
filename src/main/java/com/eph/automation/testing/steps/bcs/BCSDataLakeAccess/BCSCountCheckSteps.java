@@ -46,6 +46,7 @@ public class BCSCountCheckSteps {
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDBResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
         BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
         Log.info(tableName+" source count :" +BCSFullSourceCount);
+        Log.info(BCSFullSourceCount_SQL);
     }
 
     @Then("^Get total count of BCS Current table (.*)$")
@@ -71,6 +72,7 @@ public class BCSCountCheckSteps {
         List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCount_SQL, Constants.AWS_URL);
         BCSCurrentCount = ((Long) BCSCurrentTableCount.get(0).get("Current_Count")).intValue();
         Log.info(tableName+" current count :" +BCSCurrentCount);
+        Log.info(BCSCurrentCount_SQL);
     }
 
     @And("^Compare count of initial ingest with current table (.*)$")

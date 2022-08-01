@@ -1,7 +1,5 @@
 Feature:stitching layer Vs PF API
 
-
-
   @stitchingDataAPI @extendedData
   Scenario Outline: data check for stch_table json with PF APIs
     Given  we get 1 random ids from <stcTable>

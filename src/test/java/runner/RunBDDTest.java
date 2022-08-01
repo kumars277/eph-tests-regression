@@ -16,10 +16,7 @@ import org.junit.runner.RunWith;
                            "junit:target/cucumber-reports/Cucumber.xml",
                             "html:target/cucumber-reports/feature-overview"},
         monochrome = true,
-        tags = {"@PFdebug"}
+        tags = {"@PFUIjenkinFix"}
         )
 
-public class RunBDDTest {
-    public RunBDDTest() {
-    }
-}
+public class RunBDDTest {  public RunBDDTest() { }}

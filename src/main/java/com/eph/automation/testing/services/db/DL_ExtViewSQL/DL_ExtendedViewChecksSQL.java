@@ -154,8 +154,8 @@ public class DL_ExtendedViewChecksSQL {
              "price_amount, price_start_date, price_end_date, price_region, price_category, \n" +
              "price_customer_category, price_purchase_quantity, delete_flag\n" +
              " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s'))" +
-             " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
-             " price_customer_category,price_purchase_quantity desc";
+             " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_end_date desc,price_amount desc,price_category desc,price_region desc," +
+             " price_customer_category desc,price_purchase_quantity desc";
 
 
     public static String GET_PROD_PRICING_EXT_REC =
@@ -172,8 +172,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
-                    " price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_end_date desc,price_amount desc,price_category desc,price_region desc," +
+                    " price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_DL_ALL_MANIF_EXT_COUNT =
             "select count(*) as Source_Count from(\n" +
@@ -598,7 +598,7 @@ public class DL_ExtendedViewChecksSQL {
              "SELECT DISTINCT\n" +
              "epr_id, work_type, last_updated_date, metric_code, metric_name, metric, metric_year, metric_url, delete_flag\n" +
              " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
-             " where epr_id in ('%s')) order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
+             " where epr_id in ('%s')) order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag,last_updated_date desc";
 
     public static String GET_WORK_METRIC_EXT_REC =
             "select epr_id as epr_id" +
@@ -611,12 +611,12 @@ public class DL_ExtendedViewChecksSQL {
                     ",metric_url as metric_url\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_metric where epr_id in ('%s')" +
-                    " order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
+                    " order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag,last_updated_date desc";
 
     public static String GET_DL_ALL_WORK_EXT_PERS_ROLE_COUNT =
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT\n" +
-                    "epr_id, work_type, last_updated_date, role_code, " +
+                    "epr_id, work_type, last_updated_date, core_work_person_role_id, " +
                     "role_name, sequence_number, group_number, first_name, last_name, " +
                     "peoplehub_id, email, title, honours, affiliation, image_url, footnote_txt, notes_txt, delete_flag\n" +
                     " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)";
@@ -1203,8 +1203,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.delete_flag\n" +
                     "FROM\n" +
                     "  "+GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs)where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount," +
-                    "price_category,price_region,price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_amount desc,price_end_date desc," +
+                    "price_category desc,price_region desc,price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_ALL_VIEW_PROD_PRICING_EXT_REC =
             "select epr_id as epr_id" +
@@ -1221,8 +1221,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s')" +
-                    " order by epr_id,last_updated_date," +
-                    "price_currency,price_start_date,price_amount,price_category,price_region,price_customer_category,price_purchase_quantity desc";
+                    " order by epr_id desc,last_updated_date desc,price_currency desc,price_start_date desc,price_amount desc,price_end_date desc" +
+                    ",price_category desc,price_region desc,price_customer_category desc,price_purchase_quantity desc";
 
     public static String GET_SOURCE_MANIF_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
@@ -2121,7 +2121,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",metric_url as metric_url\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
-                    " where epr_id in ('%s') order by epr_id,source,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
+                    " where epr_id in ('%s') order by epr_id desc,source desc,metric_name desc,metric_code desc," +
+                    "metric desc,metric_year desc,metric_url desc,delete_flag desc,last_updated_date desc";
 
 
     public static String GET_SOURCE_WORK_METRIC_EXT_REC =
@@ -2148,7 +2149,9 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.metric_url\n" +
                     ", promis.delete_flag\n" +
                     " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis)" +
-                    " where epr_id in ('%s') order by epr_id,source,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
+                    " where epr_id in ('%s') order by epr_id desc,source desc,metric_name desc,metric_code desc," +
+                    "metric desc,metric_year desc,metric_url desc,delete_flag desc,last_updated_date desc";
+
 
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_COUNT =

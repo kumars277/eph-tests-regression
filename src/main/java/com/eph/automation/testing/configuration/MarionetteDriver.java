@@ -41,11 +41,8 @@ public class MarionetteDriver implements Provider<WebDriver>{
         }
 
         ChromeOptions o= new ChromeOptions();
-        o.addArguments("incognito");
-     //   DesiredCapabilities c = DesiredCapabilities.chrome();
-     //   c.setCapability(ChromeOptions.CAPABILITY, o);
+      //  o.addArguments("incognito");
 
-        //final WebDriver driver = new ChromeDriver(c);
         final WebDriver driver = new ChromeDriver(o);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();

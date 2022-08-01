@@ -36,7 +36,7 @@ public class JM_ETLExtendedStitch {
         JMEXtCurrentCount = ((Long) JM_ETLEXTCurrentTableCount.get(0).get("Count")).intValue();
     }
 
-    @When("^We know the total count of Stitching table$")
+    @When("^We get the total count of Stitching table$")
     public void getJMStitchCount() {
         Log.info("Getting JM Stitch data Count...");
         JMsourceSQLCount = JM_ETLExtendedCountDataChecksSQL.GET_JMStitched_Count;
@@ -53,7 +53,7 @@ public class JM_ETLExtendedStitch {
 
     @Given("^Get the IDs (.*) of JM ETL Extended data$")
     public void getSomeRandomIds(String numberOfRecords) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for JM ETL Extended Tables....");
         List<Map<?, ?>> randomIds;

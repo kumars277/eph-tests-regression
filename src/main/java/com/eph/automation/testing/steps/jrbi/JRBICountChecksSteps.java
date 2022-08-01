@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class JRBICountChecksSteps {
     private static String jrbiFullSQLSourceCount;
@@ -44,6 +46,7 @@ public class JRBICountChecksSteps {
     private static String jrbiDeltaCurrentSQLCount;
     private static String jrbiDeltaCurrentHistorySQLCount;
     private static String jrbiDuplicateLatestSQLCount;
+    private static String jrbideltaCurrentCount;
     private static int jrbiDeltaCurrentCount;
     private static int jrbiDeltaCurrentHistoryCount;
     private static int jrbiDuplicateLatestCount;
@@ -73,7 +76,7 @@ public class JRBICountChecksSteps {
         jrbiFullSourceCount = ((Long) jrbiFullSourceTableCount.get(0).get("Source_Count")).intValue();
     }
 
-    @Given("^We know the total count of Current JRBI data from (.*)$")
+    @Then("^we get the total count of Current JRBI data from (.*)$")
     public static void getCountfromCurrentTables(String tableName){
         switch (tableName){
             case "jrbi_transform_current_work":
@@ -97,7 +100,7 @@ public class JRBICountChecksSteps {
         jrbiCurrentCount = ((Long) jrbiCurrentTableCount.get(0).get("Current_Count")).intValue();
     }
 
-    @And("^Compare count of Full load with current (.*) table are identical$")
+    @And("^we Compare count of Full load with current (.*) table are identical$")
     public void compareFullAndCurrentCount(String tableName){
         Log.info("The count for table jrbi_journal_data_full => " + jrbiFullSourceCount + " and in "+tableName+" => " + jrbiCurrentCount);
         Assert.assertEquals("The counts are not equal when compared with jrbi_journal_data_full and "+tableName, jrbiCurrentCount, jrbiFullSourceCount);
@@ -121,6 +124,18 @@ public class JRBICountChecksSteps {
                 Log.info("Getting Current Person History Table Count...");
                 jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_PERSON_HISTORY_COUNT;
                 break;
+            case "jrbi_transform_work_file_history_part":
+                Log.info("Getting Current work file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_WORK_FILE_COUNT;
+                break;
+            case "jrbi_transform_manifestation_file_history_part":
+                Log.info("Getting Current manif file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_MANIF_FILE_COUNT;
+                break;
+            case "jrbi_transform_person_file_history_part":
+                Log.info("Getting Current Person file Table Count...");
+                jrbiCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_PERSON_FILE_COUNT;
+                break;
              default:
                  Log.info("no tables");
         }
@@ -132,7 +147,7 @@ public class JRBICountChecksSteps {
 
     @And("^Check count of current table (.*) and current history (.*) are identical$")
     public void compareCurrentandCurrentHistoryCount(String srctableName,String trgttableName){
-        Log.info("The count for current table " + srctableName + " => " + jrbiCurrentCount + " and in current_history "+trgttableName+" => " + jrbiCurrentHistoryCount);
+        Log.info("The count for " + srctableName + " => " + jrbiCurrentCount + " and in "+trgttableName+" => " + jrbiCurrentHistoryCount);
         Assert.assertEquals("The counts are not equal when compared with "+srctableName+" and "+trgttableName, jrbiCurrentHistoryCount, jrbiCurrentCount);
     }
 
@@ -428,6 +443,58 @@ public class JRBICountChecksSteps {
     public void checkDupCountZero(String tableName){
         Log.info("The Duplicate count for "+tableName+" => " + jrbiDuplicateLatestCount);
         Assert.assertEquals("There are Duplicate Count of EPR IDs in "+tableName,0,jrbiDuplicateLatestCount);
+
+    }
+
+    @Given("^Get the count of delta current (.*) table$")
+    public static void getDeltCurrentTableCount(String tableName){
+        switch (tableName){
+            case "jrbi_delta_current_work":
+                Log.info("Getting jrbi_delta_current_work Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_WORK_COUNT;
+                break;
+
+            case "jrbi_delta_current_manifestation":
+                Log.info("Getting jrbi_delta_current_manifestation Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_MANIF_COUNT;
+                break;
+
+            case "jrbi_delta_current_person":
+                Log.info("Getting jrbi_delta_current_person Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_CURR_PERSON_COUNT;
+                break;
+            case "jrbi_delta_person_history_part":
+                Log.info("Getting jrbi_delta_person_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_PERSON_COUNT;
+                break;
+            case "jrbi_delta_work_history_part":
+                Log.info("Getting jrbi_delta_work_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_WORK_COUNT;
+                break;
+            case "jrbi_delta_manifestation_history_part":
+                Log.info("Getting jrbi_delta_manifestation_history_part Table Count...");
+                jrbideltaCurrentCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_HIST_MANIF_COUNT;
+                break;
+
+            default:
+                Log.info("no tables found");
+        }
+        Log.info(jrbideltaCurrentCount);
+        List<Map<String, Object>> jrbiDeltaTableCount = DBManager.getDBResultMap(jrbideltaCurrentCount, Constants.AWS_URL);
+        int jrbiDeltaCurrCount;
+        if(tableName.equalsIgnoreCase("jrbi_delta_manifestation_history_part")||tableName.equalsIgnoreCase("jrbi_delta_work_history_part")
+                ||tableName.equalsIgnoreCase("jrbi_delta_person_history_part")){
+            String  jrbiDeltahistTs = ((String) jrbiDeltaTableCount.get(0).get("delta_ts")).toString();
+             jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount+" and delta_ts "+jrbiDeltahistTs);
+        }else{
+            jrbiDeltaCurrCount = ((Long) jrbiDeltaTableCount.get(0).get("delta_current_count")).intValue();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            Log.info("The counts for "+tableName+" on "+dtf.format(now)+"=> "+jrbiDeltaCurrCount);
+        }
 
     }
 

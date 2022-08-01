@@ -73,6 +73,38 @@ public class GetJMDLDBUser {
         return dbProdDL;
     }
 
+    public static String getProdPresentationDB(){
+        String dbPresentation = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbPresentation = "product_core_database_v4_sit";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbPresentation = "product_core_database_v4_uat";
+            }
+        }else{
+            //dbProdDL = "product_database_uat";
+            dbPresentation = "product_core_database_v4_sit";
+        }
+        return dbPresentation;
+    }
+
+    public static String getCrossRefDb(){
+        String crossRefDb = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                crossRefDb = "eph_sit_crossreference_database";
+            }
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                crossRefDb = "eph_uat_crossreference_database";
+            }
+        }else{
+            //dbProdDL = "product_database_uat";
+            crossRefDb = "eph_sit_crossreference_database";
+        }
+        return crossRefDb;
+    }
+
     public static String getProdStagingDataBase(){
         String dbStageProdDL = null;
         if (System.getProperty("ENV") != null){

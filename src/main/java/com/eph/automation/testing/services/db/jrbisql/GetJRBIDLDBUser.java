@@ -36,21 +36,6 @@ public class GetJRBIDLDBUser {
         return dbProdDb;
     }
 
-    public static String getProductGDdb(){
-        String dbProdGDdb = null;
-        if (System.getProperty("ENV") != null){
-            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProdGDdb = "product_database_sit";
-            }
-            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
-                dbProdGDdb = "product_database_uat";
-            }
-        }else{
-            dbProdGDdb = "product_database_sit";
-        }
-        return dbProdGDdb;
-    }
-
     public static String getProductExtdb(){
         String dbProdExtdb = null;
         if (System.getProperty("ENV") != null){

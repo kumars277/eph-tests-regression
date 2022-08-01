@@ -973,7 +973,7 @@ public class PromisETLCountChecksSQL {
             "inner join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf ON rel.pub_pub_idt = inf.pub_idt\n" +
             "where rel_idt is not null)";
 
-    public static String GET_Promis_Work_Rels_TransformMapping= "select count(*) as Total_Count from (select\n" +
+    public static String GET_Promis_Work_Rels_TransformMapping= "select count(*) as Total_Count from (select DISTINCT\n" +
             "  par.pub_idt parent_pub_idt\n" +
             ", par.epr_id parent_epr_id\n" +
             ", cast(par.pub_idt as varchar)||cast(chd.pub_idt as varchar) as u_key\n" +

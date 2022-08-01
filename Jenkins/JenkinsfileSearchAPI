@@ -6,10 +6,8 @@ pipeline {
     //3. Environment variables
     environment {
         JAVA_TOOL_OPTIONS='-Duser.timezone=UTC -Dfile.encoding=UTF8'
-        VATT_DECRYPTION_KEY = credentials('appian-vatt-decryption-key')
         EMAIL_DIST_LIST = 'n.chitre@elsevier.com'
         EMAIL_FROM = 'ephapplicationsupportnonprod@reedelsevier.com'
-        WINDOWS_AGENT = 'eph-windows-gui'
         ENV = 'UAT'
     }
 
@@ -39,7 +37,7 @@ pipeline {
     }
     post {
         failure {
-            node(env.WINDOWS_AGENT) {
+            node('master') {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} failed. To get more details, visit the build results page: ${BUILD_URL}.",
 
@@ -49,7 +47,7 @@ pipeline {
         }
         success {
        // echo "Test succeeded"
-            node(env.WINDOWS_AGENT) {
+            node('master') {
                 emailext(subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
                 body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
 

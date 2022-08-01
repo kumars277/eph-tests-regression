@@ -90,7 +90,7 @@ public class DL_ExtendedViewsChecksSteps {
         DLExtViewCount = ((Long) DLExtViewTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @Given("^We know the total count of All Extended views (.*)$")
+    @Given("^get total count of All Extended views (.*)$")
     public void getCountAllExtTables(String tableName){
         switch (tableName){
             case "product_extended_availability":

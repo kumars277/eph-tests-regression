@@ -44,18 +44,27 @@ public class WorksMatchedApiObject {
     public boolean verifyWorkWithIdIsReturned(String workID){
         int i = 0;
         boolean found = false;
+       try{
         while (i < items.length && !found) {
             if (items[i].getId().equals(workID)) {
                 found = true;
-                try {
-                    items[i].compareWithDB();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    Assert.assertFalse(getBreadcrumbMessage(),true);
-                }
+                items[i].compareWithDB();
             }
             i++;
         }
+        }
+       catch(NullPointerException e)
+       {
+           Assert.assertFalse(getBreadcrumbMessage() +" NullPointerException",true);
+       }
+       catch (ParseException e) {
+           Assert.assertFalse(getBreadcrumbMessage()+" ParseException",true);
+       }
+       catch(Exception e)
+       {
+           Assert.assertFalse(getBreadcrumbMessage() +" Exception",true);
+       }
+
         Assert.assertTrue(getBreadcrumbMessage() + " work id not found ", found);
         return found;
     }

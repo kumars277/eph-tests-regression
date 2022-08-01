@@ -55,7 +55,16 @@ public class JRBIManifestationDataChecksSQL {
                     ",journal_issue_trim_size as journal_issue_trim_size" +
                     ",war_reference as warReference" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where EPR in ('%s') AND " +
-                    "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part)\n";
+                    "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part) and delete_flag=false \n";
+
+ public static final String GET_MANIF_FILE_RECORDS =
+         "select epr as EPR" +
+                 ",record_type as recordType" +
+                 ",manifestation_type as manifestationType" +
+                 ",journal_issue_trim_size as journal_issue_trim_size" +
+                 ",war_reference as warReference" +
+                 " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part where EPR in ('%s') AND " +
+                 "transform_file_ts = (select max(transform_file_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_manifestation_file_history_part)\n";
 
     public static final String GET_PREVIOUS_MANIF_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation order by rand() limit %s\n";
@@ -143,7 +152,7 @@ public class JRBIManifestationDataChecksSQL {
                     "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
                     "as a union all select b.epr, b.record_type,b.manifestation_type, \n" +
-                    "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                    "b.journal_issue_trim_size, b.war_reference,b.transform_file_ts,null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n "+
                     "order by rand() limit %s\n";
 
@@ -159,7 +168,7 @@ public class JRBIManifestationDataChecksSQL {
                     "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
                     "as a union all select b.epr, b.record_type,b.manifestation_type, \n" +
-                    "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                    "b.journal_issue_trim_size, b.war_reference,b.transform_file_ts,null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b) where EPR in ('%s')\n";
 
     public static final String GET_JRBI_MANIF_LATEST_RECORDS =
