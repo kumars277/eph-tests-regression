@@ -668,11 +668,11 @@ public class APIDataSQL {
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH =
-      "select count(w.work_id) from semarchy_eph_mdm.gd_wwork w \n"
+      "select count(distinct w.work_id) from semarchy_eph_mdm.gd_wwork w \n"
           + "left join semarchy_eph_mdm.gd_x_lov_pmc pmc on w.f_pmc = pmc.code \n"
           + "left join semarchy_eph_mdm.gd_manifestation gm on w.work_id =gm.f_wwork \n"
           + "left join semarchy_eph_mdm.gd_product gp on gp.f_manifestation =gm.manifestation_id \n"
-          + "left join semarchy_eph_mdm.gd_product gp2 on gp.f_wwork =w.work_id \n"
+          + "left join semarchy_eph_mdm.gd_product gp2 on gp2.f_wwork =w.work_id \n"
           + "where pmc.f_pmg='PMG' \n"
           + "and (w.work_title ~*'TITLE'\n"
           + "or gm.manifestation_key_title ~*'TITLE'\n"
