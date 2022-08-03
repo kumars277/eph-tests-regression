@@ -161,6 +161,14 @@ public class CKInboundSourceTableDataObject {
     private String Field;
     private String from_value;
     private String To_Value;
+    private String packagetitle;
+    private String packagetype;
+
+    public String getpackagetype() {return packagetype;}
+    public void setpackagetype(String packagetype) {this.packagetype = packagetype;}
+
+    public String getpackagetitle() {return packagetitle;}
+    public void setpackagetitle(String packagetitle) {this.packagetitle = packagetitle;}
 
     public String getField() {return Field;}
     public void setField(String Field) {this.Field = Field;}

@@ -151,7 +151,6 @@ public class CKCurrentTablesDataObject {
     private String from_value;
     private String to_value;
 
-
     public String getfield() {return field;}
     public void setfield(String field) {this.field = field;}
 
@@ -683,7 +682,6 @@ public class CKCurrentTablesDataObject {
     public String getpmg() {
         return pmg;
     }
-
     public void setpmg(String pmg) {
         this.pmg = pmg;
     }
