@@ -27,7 +27,7 @@ public class CKCMMSOutboundDataChecks {
     //    CMMS_Outbound Data Checks
     @Given("^We get the (.*) random CK CMMS View ids of (.*)$")
     public static void getRandomidsFromCMMSView(String numberOfRecords, String DPPCMMSView) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for CK CMMS View....");
         List<Map<?, ?>> randomids;
@@ -162,7 +162,10 @@ public class CKCMMSOutboundDataChecks {
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getworkId));
 
                         String[] CMMSWork1Col = {"getworkId","getworkTitle","getalternateTitle","getplannedLaunchDate","getactualLaunchDate","getworkStatus","getworkType","getpmg","geteditionNumber","getcopyrightYear","getplannedDiscontinuedate","getactualDiscontinueDate","getcurrentIdentifier","getfinanceTier","getsearchTier","getpdfSuppression","gettopicPages","getjournalBackfilesOnly","getjournalBackfileYears","getjournalAip"};
+                        String[] CMMSWork1Col2 = {"getworkId","getworkTitle","getalternateTitle","getplannedLaunchDate","getactualLaunchDate","getworkStatus","getworkType","getPMG","geteditionNumber","getcopyrightYear","getplannedDiscontinuedate","getactualDiscontinueDate","getcurrentIdentifier","getfinanceTier","getsearchTier","getpdfSuppression","gettopicPages","getjournalBackfilesOnly","getjournalBackfileYears","getjournalAip"};
+                        int a = 0;
                         for (String strTemp : CMMSWork1Col) {
+                            String strTemp2 = CMMSWork1Col2[a];
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
@@ -170,7 +173,7 @@ public class CKCMMSOutboundDataChecks {
                             CKInboundSourceTableDataObject objectToCompare2 = CKAccessDLContext.CKInboundSourceTableDataObjectList.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp2);
 
                             Log.info("workId => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId() +
                                     " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
@@ -181,6 +184,7 @@ public class CKCMMSOutboundDataChecks {
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
+                            a ++;
                         }
                         break;
                     case "cmms_work2_identifiers":
