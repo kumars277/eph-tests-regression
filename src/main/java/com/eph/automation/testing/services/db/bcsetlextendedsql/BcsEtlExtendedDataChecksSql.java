@@ -1140,7 +1140,7 @@ public class BcsEtlExtendedDataChecksSql {
 
     public static final String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
             "select eprid as eprid from (\n" +
-                    "SELECT\n" +
+                    "SELECT DISTINCT\n" +
                     "  \"concat\"(\"concat\"(\"r\".\"sourceref\", 'MARMAN'), \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))), '-', \"substr\"(\"r\".\"responsibility\", -2, 1)) \"u_key\"\n" +
                     ", NULLIF(\"r\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))) \"personsourceref\"\n" +
@@ -1168,7 +1168,7 @@ public class BcsEtlExtendedDataChecksSql {
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((\"r\".\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (\"trim\"(\"lower\"(r.email)) = \"trim\"(\"lower\"(wd.email))))\n" +
                     "WHERE (\"split_part\"(\"r\".\"responsibility\", ' | ', 1) = 'MARMAN')\n" +
-                    "UNION ALL SELECT\n" +
+                    "UNION ALL SELECT DISTINCT\n" +
                     "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
                     ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"personsourceref\"\n" +
@@ -1200,7 +1200,7 @@ public class BcsEtlExtendedDataChecksSql {
                     "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((\"o\".\"businesspartnerid\" = \"n\".\"businesspartnerid\") AND (\"split_part\"(\"n\".\"notestype\", ' | ', 1) = 'BIO')) AND (\"o\".\"sourceref\" = \"n\".\"sourceref\")))\n" +
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((\"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END))))))))) = \"gwp\".\"external_reference\") AND (\"gwp\".\"effective_end_date\" IS NULL)))\n" +
                     "WHERE (\"o\".\"metadeleted\" = 'N')\n" +
-                    "UNION ALL SELECT\n" +
+                    "UNION ALL SELECT DISTINCT\n" +
                     "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
                     ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"personsourceref\"\n" +
@@ -1257,7 +1257,7 @@ public class BcsEtlExtendedDataChecksSql {
                     ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
                     " from (\n" +
-                    "SELECT\n" +
+                    "SELECT DISTINCT\n" +
                     "  \"concat\"(\"concat\"(\"r\".\"sourceref\", 'MARMAN'), \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))), '-', \"substr\"(\"r\".\"responsibility\", -2, 1)) \"u_key\"\n" +
                     ", NULLIF(\"r\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(wd.peoplehub_id)))) \"personsourceref\"\n" +
@@ -1285,7 +1285,7 @@ public class BcsEtlExtendedDataChecksSql {
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((\"r\".\"sourceref\" = \"cr\".\"identifier\") AND (\"cr\".\"identifier_type\" = 'external_reference')) AND (\"cr\".\"record_level\" = 'Work')))\n" +
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (\"trim\"(\"lower\"(r.email)) = \"trim\"(\"lower\"(wd.email))))\n" +
                     "WHERE (\"split_part\"(\"r\".\"responsibility\", ' | ', 1) = 'MARMAN')\n" +
-                    "UNION ALL SELECT\n" +
+                    "UNION ALL SELECT DISTINCT\n" +
                     "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
                     ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END)))))))) \"personsourceref\"\n" +
@@ -1317,7 +1317,7 @@ public class BcsEtlExtendedDataChecksSql {
                     "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((\"o\".\"businesspartnerid\" = \"n\".\"businesspartnerid\") AND (\"split_part\"(\"n\".\"notestype\", ' | ', 1) = 'BIO')) AND (\"o\".\"sourceref\" = \"n\".\"sourceref\")))\n" +
                     "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((\"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"department\" ELSE \"firstname\" END))), \"trim\"(\"upper\"((CASE WHEN (\"isperson\" = 'N') THEN \"institution\" ELSE \"lastname\" END))))))))) = \"gwp\".\"external_reference\") AND (\"gwp\".\"effective_end_date\" IS NULL)))\n" +
                     "WHERE (\"o\".\"metadeleted\" = 'N')\n" +
-                    "UNION ALL SELECT\n" +
+                    "UNION ALL SELECT DISTINCT\n" +
                     "  \"concat\"(\"o\".\"sourceref\", \"rolecode\".\"ephcode\", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))), '-', CAST(\"o\".\"sequence\" AS varchar)) \"u_key\"\n" +
                     ", NULLIF(\"o\".\"sourceref\", '') \"worksourceref\"\n" +
                     ", \"lower\"(\"to_hex\"(\"md5\"(\"to_utf8\"(\"concat\"(CAST(\"o\".\"businesspartnerid\" AS varchar), \"trim\"(\"upper\"(\"firstname\")), \"trim\"(\"upper\"(\"lastname\"))))))) \"personsourceref\"\n" +
