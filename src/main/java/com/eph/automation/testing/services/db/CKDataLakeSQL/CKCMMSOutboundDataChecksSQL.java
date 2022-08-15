@@ -15,7 +15,7 @@ public class CKCMMSOutboundDataChecksSQL {
     public static String GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where identifier in ('%s') order by workId desc, identifier desc ";
     public static String GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where subjectAreaId in (%s) order by enddate desc, workid desc ";
     public static String GET_CK_CMMS_PACKAGE1_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s') order by packageID desc";
-    public static String GET_CK_CMMS_PACKAGE2_WORKS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by durableurl desc, workflowLiveDate desc";
+    public static String GET_CK_CMMS_PACKAGE2_WORKS_VIEW = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by workId desc, durableurl desc, workflowLiveDate desc";
 
     //    GET Table Records
     public static String GET_CK_CMMS_WORKFLOW_TABLE = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workflowid in (%s)";
@@ -23,5 +23,5 @@ public class CKCMMSOutboundDataChecksSQL {
     public static String GET_CK_CMMS_WORK2_IDENTIFIERS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where identifier in ('%s') order by workId desc, identifier desc";
     public static String GET_CK_CMMS_WORK3_SUBJECT_AREAS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where subjectAreaId in (%s) order by enddate desc, workid desc";
     public static String GET_CK_CMMS_PACKAGE1 = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where packageId in ('%s') order by packageID desc";
-    public static String GET_CK_CMMS_PACKAGE2_WORKS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by durableurl desc, workflowLiveDate desc";
+    public static String GET_CK_CMMS_PACKAGE2_WORKS = "select * from " + GetCKDLDB.getCKCMMSDataBase() + ".%s where workId in ('%s') order by workId desc, durableurl desc, workflowLiveDate desc";
 }
