@@ -98,6 +98,9 @@ public class ApiWorksSearchSteps {
       case "personFullNameCurrent":
         sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent, numberOfRecords);
         break;
+      case "JOURNAL_NUMBER":
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_withJournalNumber, numberOfRecords);
+        break;
       default: sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID, numberOfRecords);break;
     }
 
@@ -110,7 +113,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102S2S");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-11FGY5");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
