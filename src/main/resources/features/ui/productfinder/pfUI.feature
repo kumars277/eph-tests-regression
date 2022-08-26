@@ -72,60 +72,60 @@ Feature: Product Finder Selenium tests
  #   |4|
  #   |5|
 
-  @PFNonProd @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
-  Scenario Outline: Search the Journal Finder and verify all 5 tabs
-    Given  We get 1 random journal ids to search ""
-    And   We get the work search data from EPH GD
-    And   user is on Journal Finder search page
-    And   Searches work by id
-    Then  Search items are listed and click the workid from result
-    And   Verify user is forwarded to the searched work page
-    And   get Extended Data from DB
-    Then  Verify PF/JF UI work overview values
-Examples:
-    |iterator|
-    |1|
-    |2|
-  #  |3|
-  #  |4|
-  #  |5|
-
-  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
-  Scenario Outline: Search the Journal by person
-    Given We get 5 random search ids for person roles
-    And get person data from EPH DB
-    And   user is on Journal Finder search page
-    And   Searches journal work by person <option>
-    Examples:
-      |option               |
-      |personFullNameCurrent|
-   #   |personIdCurrent      |
-   #   |personName           |
-   #   |personId             |
-
-  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
-  Scenario Outline: Search the Journal by PMC
-    Given  We get 5 random journal ids to search ""
-    And   We get the work search data from EPH GD
-    And   user is on Journal Finder search page
-    And   Searches journal by pmc <option>
-    Examples:
-      |option |
-      |pmgCode|
-      |pmcCode|
-
-
-  #below scenarios can be ignored, already covered in one of the above
-
-  @PFDMC
-  Scenario Outline: Search the work and verify data model changes
-    Given user is on Product Finder search page
-    And   We get the work search data from EPH GD for <id>
-    And   Searches for given <id>
-    Then  Search items are listed and click specific work <id> from the result
-    And   Verify user is forwarded to the searched work page of <id>
-    Then  Verify PF/JF UI work overview values
-    Examples:
-      |id           |
-      |EPR-W-10104W |
-   #   |EPR-W-101055 |
+#  @PFNonProd @UI @PFRegressionSuite @PFDMC @JFUI @PFDebug
+#  Scenario Outline: Search the Journal Finder and verify all 5 tabs
+#    Given  We get 1 random journal ids to search ""
+#    And   We get the work search data from EPH GD
+#    And   user is on Journal Finder search page
+#    And   Searches work by id
+#    Then  Search items are listed and click the workid from result
+#    And   Verify user is forwarded to the searched work page
+#    And   get Extended Data from DB
+#    Then  Verify PF/JF UI work overview values
+#Examples:
+#    |iterator|
+#    |1|
+#    |2|
+#  #  |3|
+#  #  |4|
+#  #  |5|
+#
+#  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
+#  Scenario Outline: Search the Journal by person
+#    Given We get 5 random search ids for person roles
+#    And get person data from EPH DB
+#    And   user is on Journal Finder search page
+#    And   Searches journal work by person <option>
+#    Examples:
+#      |option               |
+#      |personFullNameCurrent|
+#   #   |personIdCurrent      |
+#   #   |personName           |
+#   #   |personId             |
+#
+#  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
+#  Scenario Outline: Search the Journal by PMC
+#    Given  We get 5 random journal ids to search ""
+#    And   We get the work search data from EPH GD
+#    And   user is on Journal Finder search page
+#    And   Searches journal by pmc <option>
+#    Examples:
+#      |option |
+#      |pmgCode|
+#      |pmcCode|
+#
+#
+#  #below scenarios can be ignored, already covered in one of the above
+#
+#  @PFDMC
+#  Scenario Outline: Search the work and verify data model changes
+#    Given user is on Product Finder search page
+#    And   We get the work search data from EPH GD for <id>
+#    And   Searches for given <id>
+#    Then  Search items are listed and click specific work <id> from the result
+#    And   Verify user is forwarded to the searched work page of <id>
+#    Then  Verify PF/JF UI work overview values
+#    Examples:
+#      |id           |
+#      |EPR-W-10104W |
+#   #   |EPR-W-101055 |
