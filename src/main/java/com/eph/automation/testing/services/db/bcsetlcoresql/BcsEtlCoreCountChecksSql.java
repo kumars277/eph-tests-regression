@@ -4,22 +4,66 @@ public class BcsEtlCoreCountChecksSql {
     private BcsEtlCoreCountChecksSql(){}
 
     public static final String GET_ACC_PROD_INBOUND_CURRENT_COUNT =
-            "select count(*) as Source_Count\n" +
-                    "FROM\n" +
-                    "  (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref, '') sourceref\n" +
-                    "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
-                    "   , NULLIF(accountablename, '') accountablename\n" +
-                    "   , NULLIF(accountableparent, '') accountableparent\n" +
-                    "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
-                    "   , 'N' dq_err\n" +
-                    "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
-                    "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
-                    ")  A\n" +
-                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))";
+           "select count(*) as Source_Count\n" +
+                   "FROM\n" +
+                   "  (\n" +
+                   "   WITH\n" +
+                   "     accprod AS (\n" +
+                   "      SELECT\n" +
+                   "        NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                   "      , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                   "      , NULLIF(CAST(\"accountableproduct\" AS varchar), '') \"accountableproduct\"\n" +
+                   "      , NULLIF(\"accountablename\", '') \"accountablename\"\n" +
+                   "      , NULLIF(\"accountableparent\", '') \"accountableparent\"\n" +
+                   "      , \"concat\"(NULLIF(\"workmasterprojectno\", ''), NULLIF(\"accountableparent\", '')) \"u_key\"\n" +
+                   "      , 'N' \"dq_err\"\n" +
+                   "      FROM\n" +
+                   "        ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                   "      LEFT JOIN (\n" +
+                   "         SELECT *\n" +
+                   "         FROM\n" +
+                   "           ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc\n" +
+                   "         INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(\"split_part\"(\"scc\".\"value\", ' | ', 1), 'DEFAULT') = \"ppmcode\"))\n" +
+                   "         WHERE (\"scc\".\"classificationcode\" = 'DCDFAC | Accounting class')\n" +
+                   "      )  acc ON (acc.sourceref = scv.sourceref))\n" +
+                   "      WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                   "   ) \n" +
+                   "   SELECT DISTINCT\n" +
+                   "     \"sourceref\"\n" +
+                   "   , \"accountableproduct\"\n" +
+                   "   , \"accountablename\"\n" +
+                   "   , \"accountableparent\"\n" +
+                   "   , \"u_key\"\n" +
+                   "   , \"dq_err\"\n" +
+                   "   FROM\n" +
+                   "     accprod\n" +
+                   "   WHERE ((wm = 'Y') AND (accountableproduct IS NOT NULL))\n" +
+                   "UNION ALL    SELECT DISTINCT\n" +
+                   "     \"ap\".\"sourceref\"\n" +
+                   "   , \"ap\".\"accountableproduct\"\n" +
+                   "   , \"ap\".\"accountablename\"\n" +
+                   "   , \"ap\".\"accountableparent\"\n" +
+                   "   , \"ap\".\"u_key\"\n" +
+                   "   , \"ap\".\"dq_err\"\n" +
+                   "   FROM\n" +
+                   "     (accprod ap\n" +
+                   "   INNER JOIN (\n" +
+                   "      SELECT\n" +
+                   "        ap1.sourceref\n" +
+                   "      , \"max\"(ap1.accountableproduct) maxap\n" +
+                   "      FROM\n" +
+                   "        (accprod ap1\n" +
+                   "      INNER JOIN (\n" +
+                   "         SELECT sourceref\n" +
+                   "         FROM\n" +
+                   "           accprod\n" +
+                   "         WHERE ((wm = 'Y') AND (accountableproduct IS NULL))\n" +
+                   "      )  w ON (w.sourceref = ap1.sourceref))\n" +
+                   "      WHERE (wm = 'N')\n" +
+                   "      GROUP BY ap1.sourceref\n" +
+                   "   )  maxnotwm ON ((ap.sourceref = maxnotwm.sourceref) AND (ap.accountableproduct = maxnotwm.maxap)))\n" +
+                   ")  A\n" +
+                   "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL))\n";
 
     public static final String GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_accountable_product_current_v";
@@ -398,7 +442,7 @@ public class BcsEtlCoreCountChecksSql {
                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
+                    "   LEFT JOIN  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
                     "   WHERE (\"w\".\"seriesid\" <> '')\n" +
                     ") \n" +
                     "SELECT count(*) as Source_Count\n" +
@@ -460,7 +504,49 @@ public class BcsEtlCoreCountChecksSql {
                     "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_pubdates_v\n" +
                     "      GROUP BY workmasterprojectno\n" +
                     "   )  pubdates ON (product.sourceref = pubdates.workmasterprojectno))\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification ON ((\"content\".\"sourceref\" = \"classification\".\"sourceref\") AND (\"classification\".\"classificationcode\" = 'DCDFAC | Accounting class')))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT *\n" +
+                    "      FROM\n" +
+                    "        (\n" +
+                    "         WITH\n" +
+                    "           worktype AS (\n" +
+                    "            SELECT\n" +
+                    "              NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                    "            , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                    "            , scc.value\n" +
+                    "            FROM\n" +
+                    "              ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                    "            LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc ON ((scc.classificationcode = 'DCDFAC | Accounting class') AND (scc.sourceref = scv.sourceref)))\n" +
+                    "            WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                    "         ) \n" +
+                    "         SELECT DISTINCT\n" +
+                    "           \"sourceref\"\n" +
+                    "         , \"value\"\n" +
+                    "         FROM\n" +
+                    "           worktype\n" +
+                    "         WHERE ((wm = 'Y') AND (value IS NOT NULL))\n" +
+                    "UNION ALL          SELECT DISTINCT\n" +
+                    "           \"wt\".\"sourceref\"\n" +
+                    "         , \"wt\".value\n" +
+                    "         FROM\n" +
+                    "           (worktype wt\n" +
+                    "         INNER JOIN (\n" +
+                    "            SELECT\n" +
+                    "              wt1.sourceref\n" +
+                    "            , \"max\"(wt1.value) maxap\n" +
+                    "            FROM\n" +
+                    "              (worktype wt1\n" +
+                    "            INNER JOIN (\n" +
+                    "               SELECT sourceref\n" +
+                    "               FROM\n" +
+                    "                 worktype\n" +
+                    "               WHERE ((wm = 'Y') AND (value IS NULL))\n" +
+                    "            )  w ON (w.sourceref = wt1.sourceref))\n" +
+                    "            WHERE (wm = 'N')\n" +
+                    "            GROUP BY wt1.sourceref\n" +
+                    "         )  maxnotwm ON ((wt.sourceref = maxnotwm.sourceref) AND (wt.value = maxnotwm.maxap)))\n" +
+                    "      ) \n" +
+                    "   )  classification ON (\"content\".\"sourceref\" = \"classification\".\"sourceref\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification erights ON ((\"content\".\"sourceref\" = \"erights\".\"sourceref\") AND (\"erights\".\"classificationcode\" = 'PAERIGHTS | Electronic rights')))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v \"all_status\" ON (\"all_status\".\"sourceref\" = \"content\".\"sourceref\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
@@ -499,7 +585,7 @@ public class BcsEtlCoreCountChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT\n" +
-                    " \"seriesid\"\n" +
+                    "        \"seriesid\"\n" +
                     "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
                     "      FROM\n" +
                     "        (\n" +
@@ -514,11 +600,12 @@ public class BcsEtlCoreCountChecksSql {
                     "         FROM\n" +
                     "           \"man_status\"\n" +
                     "      ) \n" +
-                    "      GROUP BY \"seriesid\""+
+                    "      GROUP BY \"seriesid\"\n" +
                     "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                     ")  \"A\"\n" +
                     "WHERE (\"A\".\"sourceref\" <> '')\n";
+
 
     public static final String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
             "select count(*) as Source_Count FROM (\n" +

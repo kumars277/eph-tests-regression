@@ -85,7 +85,7 @@ Feature: Product Finder Selenium tests
 Examples:
     |iterator|
     |1|
-    |2|
+ #   |2|
   #  |3|
   #  |4|
   #  |5|
@@ -99,9 +99,9 @@ Examples:
     Examples:
       |option               |
       |personFullNameCurrent|
-   #   |personIdCurrent      |
-   #   |personName           |
-   #   |personId             |
+      |personIdCurrent      |
+      |personName           |
+      |personId             |
 
   @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
   Scenario Outline: Search the Journal by PMC

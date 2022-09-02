@@ -4,22 +4,66 @@ public class BcsEtlCoreDataChecksSql {
     private BcsEtlCoreDataChecksSql(){}
 
     public static final String GET_RANDOM_ACCPROD_KEY_INBOUND =
-    "SELECT u_key as sourceref\n" +
-            "FROM\n" +
-            "  (\n" +
-            "   SELECT DISTINCT\n" +
-            "     NULLIF(sourceref, '') sourceref\n" +
-            "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
-            "   , NULLIF(accountablename, '') accountablename\n" +
-            "   , NULLIF(accountableparent, '') accountableparent\n" +
-            "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key\n" +
-            "   , 'N' dq_err\n" +
-            "   FROM\n" +
-            "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
-            "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
-            "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
-            ")  A\n" +
-            "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) order by rand() limit %s";
+            "SELECT u_key as sourceref\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   WITH\n" +
+                    "     accprod AS (\n" +
+                    "      SELECT\n" +
+                    "        NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                    "      , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                    "      , NULLIF(CAST(\"accountableproduct\" AS varchar), '') \"accountableproduct\"\n" +
+                    "      , NULLIF(\"accountablename\", '') \"accountablename\"\n" +
+                    "      , NULLIF(\"accountableparent\", '') \"accountableparent\"\n" +
+                    "      , \"concat\"(NULLIF(\"workmasterprojectno\", ''), NULLIF(\"accountableparent\", '')) \"u_key\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "        ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                    "      LEFT JOIN (\n" +
+                    "         SELECT *\n" +
+                    "         FROM\n" +
+                    "           ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc\n" +
+                    "         INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(\"split_part\"(\"scc\".\"value\", ' | ', 1), 'DEFAULT') = \"ppmcode\"))\n" +
+                    "         WHERE (\"scc\".\"classificationcode\" = 'DCDFAC | Accounting class')\n" +
+                    "      )  acc ON (acc.sourceref = scv.sourceref))\n" +
+                    "      WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                    "   ) \n" +
+                    "   SELECT DISTINCT\n" +
+                    "     \"sourceref\"\n" +
+                    "   , \"accountableproduct\"\n" +
+                    "   , \"accountablename\"\n" +
+                    "   , \"accountableparent\"\n" +
+                    "   , \"u_key\"\n" +
+                    "   , \"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     accprod\n" +
+                    "   WHERE ((wm = 'Y') AND (accountableproduct IS NOT NULL))\n" +
+                    "UNION ALL    SELECT DISTINCT\n" +
+                    "     \"ap\".\"sourceref\"\n" +
+                    "   , \"ap\".\"accountableproduct\"\n" +
+                    "   , \"ap\".\"accountablename\"\n" +
+                    "   , \"ap\".\"accountableparent\"\n" +
+                    "   , \"ap\".\"u_key\"\n" +
+                    "   , \"ap\".\"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     (accprod ap\n" +
+                    "   INNER JOIN (\n" +
+                    "      SELECT\n" +
+                    "        ap1.sourceref\n" +
+                    "      , \"max\"(ap1.accountableproduct) maxap\n" +
+                    "      FROM\n" +
+                    "        (accprod ap1\n" +
+                    "      INNER JOIN (\n" +
+                    "         SELECT sourceref\n" +
+                    "         FROM\n" +
+                    "           accprod\n" +
+                    "         WHERE ((wm = 'Y') AND (accountableproduct IS NULL))\n" +
+                    "      )  w ON (w.sourceref = ap1.sourceref))\n" +
+                    "      WHERE (wm = 'N')\n" +
+                    "      GROUP BY ap1.sourceref\n" +
+                    "   )  maxnotwm ON ((ap.sourceref = maxnotwm.sourceref) AND (ap.accountableproduct = maxnotwm.maxap)))\n" +
+                    ")  A\n" +
+                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) order by rand() limit %s";
 
     public static final String GET_ACCPROD_REC_INBOUND_DATA =
             "SELECT sourceref as sourceRef \n" +
@@ -28,20 +72,64 @@ public class BcsEtlCoreDataChecksSql {
                     ",accountableparent as accountableParent \n" +
                     ",u_key as uKey \n" +
                     ",dq_err as dqErr \n" +
-                    "FROM \n" +
-                    "(\n" +
-                    "      SELECT DISTINCT \n" +
-                    "        NULLIF(sourceref, '') sourceref \n" +
-                    "      , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct \n" +
-                    "      , NULLIF(accountablename, '') accountablename \n" +
-                    "      , NULLIF(accountableparent, '') accountableparent \n" +
-                    "      , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
-                    "   , 'N' dq_err\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   WITH\n" +
+                    "     accprod AS (\n" +
+                    "      SELECT\n" +
+                    "        NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                    "      , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                    "      , NULLIF(CAST(\"accountableproduct\" AS varchar), '') \"accountableproduct\"\n" +
+                    "      , NULLIF(\"accountablename\", '') \"accountablename\"\n" +
+                    "      , NULLIF(\"accountableparent\", '') \"accountableparent\"\n" +
+                    "      , \"concat\"(NULLIF(\"workmasterprojectno\", ''), NULLIF(\"accountableparent\", '')) \"u_key\"\n" +
+                    "      , 'N' \"dq_err\"\n" +
+                    "      FROM\n" +
+                    "        ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                    "      LEFT JOIN (\n" +
+                    "         SELECT *\n" +
+                    "         FROM\n" +
+                    "           ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc\n" +
+                    "         INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(\"split_part\"(\"scc\".\"value\", ' | ', 1), 'DEFAULT') = \"ppmcode\"))\n" +
+                    "         WHERE (\"scc\".\"classificationcode\" = 'DCDFAC | Accounting class')\n" +
+                    "      )  acc ON (acc.sourceref = scv.sourceref))\n" +
+                    "      WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                    "   ) \n" +
+                    "   SELECT DISTINCT\n" +
+                    "     \"sourceref\"\n" +
+                    "   , \"accountableproduct\"\n" +
+                    "   , \"accountablename\"\n" +
+                    "   , \"accountableparent\"\n" +
+                    "   , \"u_key\"\n" +
+                    "   , \"dq_err\"\n" +
                     "   FROM\n" +
-                    "     ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode ON (COALESCE(split_part(classification.value, ' | ', 1), 'DEFAULT') = ppmcode))\n" +
-                    "   WHERE (classification.classificationcode = 'DCDFAC | Accounting class')\n" +
-                    ")  A \n" +
+                    "     accprod\n" +
+                    "   WHERE ((wm = 'Y') AND (accountableproduct IS NOT NULL))\n" +
+                    "UNION ALL    SELECT DISTINCT\n" +
+                    "     \"ap\".\"sourceref\"\n" +
+                    "   , \"ap\".\"accountableproduct\"\n" +
+                    "   , \"ap\".\"accountablename\"\n" +
+                    "   , \"ap\".\"accountableparent\"\n" +
+                    "   , \"ap\".\"u_key\"\n" +
+                    "   , \"ap\".\"dq_err\"\n" +
+                    "   FROM\n" +
+                    "     (accprod ap\n" +
+                    "   INNER JOIN (\n" +
+                    "      SELECT\n" +
+                    "        ap1.sourceref\n" +
+                    "      , \"max\"(ap1.accountableproduct) maxap\n" +
+                    "      FROM\n" +
+                    "        (accprod ap1\n" +
+                    "      INNER JOIN (\n" +
+                    "         SELECT sourceref\n" +
+                    "         FROM\n" +
+                    "           accprod\n" +
+                    "         WHERE ((wm = 'Y') AND (accountableproduct IS NULL))\n" +
+                    "      )  w ON (w.sourceref = ap1.sourceref))\n" +
+                    "      WHERE (wm = 'N')\n" +
+                    "      GROUP BY ap1.sourceref\n" +
+                    "   )  maxnotwm ON ((ap.sourceref = maxnotwm.sourceref) AND (ap.accountableproduct = maxnotwm.maxap)))\n" +
+                    ")  A\n" +
                     "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) and u_key in ('%s') order by sourceref desc";
 
     public static final String GET_RANDOM_WRK_PERS_KEY_INBOUND =
@@ -117,10 +205,10 @@ public class BcsEtlCoreDataChecksSql {
                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
+                    "   LEFT JOIN  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
                     "   WHERE (\"w\".\"seriesid\" <> '')\n" +
                     ") \n" +
-                    "SELECT sourceref as sourceref \n" +
+                    "SELECT sourceref as sourceref\n" +
                     "FROM\n" +
                     "  (\n" +
                     "   SELECT DISTINCT\n" +
@@ -179,7 +267,49 @@ public class BcsEtlCoreDataChecksSql {
                     "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_pubdates_v\n" +
                     "      GROUP BY workmasterprojectno\n" +
                     "   )  pubdates ON (product.sourceref = pubdates.workmasterprojectno))\n" +
-                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification ON ((\"content\".\"sourceref\" = \"classification\".\"sourceref\") AND (\"classification\".\"classificationcode\" = 'DCDFAC | Accounting class')))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT *\n" +
+                    "      FROM\n" +
+                    "        (\n" +
+                    "         WITH\n" +
+                    "           worktype AS (\n" +
+                    "            SELECT\n" +
+                    "              NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                    "            , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                    "            , scc.value\n" +
+                    "            FROM\n" +
+                    "              ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                    "            LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc ON ((scc.classificationcode = 'DCDFAC | Accounting class') AND (scc.sourceref = scv.sourceref)))\n" +
+                    "            WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                    "         ) \n" +
+                    "         SELECT DISTINCT\n" +
+                    "           \"sourceref\"\n" +
+                    "         , \"value\"\n" +
+                    "         FROM\n" +
+                    "           worktype\n" +
+                    "         WHERE ((wm = 'Y') AND (value IS NOT NULL))\n" +
+                    "UNION ALL          SELECT DISTINCT\n" +
+                    "           \"wt\".\"sourceref\"\n" +
+                    "         , \"wt\".value\n" +
+                    "         FROM\n" +
+                    "           (worktype wt\n" +
+                    "         INNER JOIN (\n" +
+                    "            SELECT\n" +
+                    "              wt1.sourceref\n" +
+                    "            , \"max\"(wt1.value) maxap\n" +
+                    "            FROM\n" +
+                    "              (worktype wt1\n" +
+                    "            INNER JOIN (\n" +
+                    "               SELECT sourceref\n" +
+                    "               FROM\n" +
+                    "                 worktype\n" +
+                    "               WHERE ((wm = 'Y') AND (value IS NULL))\n" +
+                    "            )  w ON (w.sourceref = wt1.sourceref))\n" +
+                    "            WHERE (wm = 'N')\n" +
+                    "            GROUP BY wt1.sourceref\n" +
+                    "         )  maxnotwm ON ((wt.sourceref = maxnotwm.sourceref) AND (wt.value = maxnotwm.maxap)))\n" +
+                    "      ) \n" +
+                    "   )  classification ON (\"content\".\"sourceref\" = \"classification\".\"sourceref\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification erights ON ((\"content\".\"sourceref\" = \"erights\".\"sourceref\") AND (\"erights\".\"classificationcode\" = 'PAERIGHTS | Electronic rights')))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v \"all_status\" ON (\"all_status\".\"sourceref\" = \"content\".\"sourceref\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
@@ -218,7 +348,7 @@ public class BcsEtlCoreDataChecksSql {
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT\n" +
-                    " \"seriesid\"\n" +
+                    "        \"seriesid\"\n" +
                     "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
                     "      FROM\n" +
                     "        (\n" +
@@ -233,164 +363,207 @@ public class BcsEtlCoreDataChecksSql {
                     "         FROM\n" +
                     "           \"man_status\"\n" +
                     "      ) \n" +
-                    "      GROUP BY \"seriesid\""+
+                    "      GROUP BY \"seriesid\"\n" +
                     "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
                     ")  \"A\"\n" +
-                    "WHERE (\"A\".\"sourceref\" <> '')order by rand() limit %s";
+                    "WHERE (\"A\".\"sourceref\" <> '') order by rand() limit %s";
 
     public static final String GET_WORK_INBOUND_DATA =
-             "WITH\n" +
-                     "  man_status AS (\n" +
-                     "   SELECT\n" +
-                     "     \"m\".\"sourceref\"\n" +
-                     "   , \"w\".\"seriesid\"\n" +
-                     "   , \"csm\".\"seriesid\" mainseries\n" +
-                     "   , \"m\".\"work_priority\"\n" +
-                     "   FROM\n" +
-                     "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
-                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
-                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
-                     "   WHERE (\"w\".\"seriesid\" <> '')\n" +
-                     ") \n" +
-                     "SELECT u_key as uKey \n" +
-                     ",sourceref as sourceRef \n" +
-                     ",title as title \n" +
-                     ",subtitle as subTitle \n" +
-                     ",volumeno as volumeNo \n" +
-                     ",copyrightyear as copyRightYear \n" +
-                     ",editionno as editionNo \n" +
-                     ",pmc as pmc \n" +
-                     ",work_type as workType \n" +
-                     ",statuscode as statusCODE \n" +
-                     ",imprintcode as imprintCode \n" +
-                     ",te_opco as teopco \n" +
-                     ",opco as opco \n" +
-                     ",resp_centre as respCentre \n" +
-                     ",pmg as pmg \n" +
-                     ",languagecode as languageCode \n" +
-                     ",electro_rights_indicator as electroRightIndicator \n" +
-                     ",f_oa_journal_type as foaJournalType \n" +
-                     ",f_society_ownership as fSocietyOwnership \n" +
-                     ",subscription_type as subscriptionType \n" +
-                     "FROM\n" +
-                     "  (\n" +
-                     "   SELECT DISTINCT\n" +
-                     "     \"content\".\"sourceref\" \"sourceref\"\n" +
-                     "   , \"content\".\"sourceref\" \"u_key\"\n" +
-                     "   , \"content\".\"title\" \"title\"\n" +
-                     "   , \"content\".\"subtitle\" \"subtitle\"\n" +
-                     "   , \"content\".\"volumeno\" \"volumeno\"\n" +
-                     "   , \"content\".\"copyrightyear\" \"copyrightyear\"\n" +
-                     "   , \"content\".\"editionno\" \"editionno\"\n" +
-                     "   , pubdates.work_planned_pubdate \"planned_pubdate\"\n" +
-                     "   , pubdates.work_actual_pubdate \"actual_pubdate\"\n" +
-                     "   , \"content\".\"pmc\" \"pmc\"\n" +
-                     "   , COALESCE(NULLIF(\"worktypecode\".\"ephcode\", ''), 'UNK') \"work_type\"\n" +
-                     "   , (CASE WHEN ((\"content\".\"metadeleted\" = 'Y') OR (\"lower\"(\"content\".\"title\") LIKE '%%cam testing%%')) THEN 'NVW' ELSE COALESCE(NULLIF(\"all_status\".\"eph_work_status_code\", ''), 'UNK') END) \"statuscode\"\n" +
-                     "   , \"content\".\"imprintcode\" \"imprintcode\"\n" +
-                     "   , NULLIF(CAST(\"opcocode\".\"11icode\" AS varchar), '') \"te_opco\"\n" +
-                     "   , NULLIF(CAST(\"opcocode\".\"r12code\" AS varchar), '') \"opco\"\n" +
-                     "   , NULLIF(CAST(COALESCE(\"rc_pmg_co\".\"rc\", \"rc_pmg\".\"rc\") AS varchar), '') \"resp_centre\"\n" +
-                     "   , \"content\".\"pmg\" \"pmg\"\n" +
-                     "   , NULLIF(\"languagecode\".\"ephcode\", '') \"languagecode\"\n" +
-                     "   , (CASE WHEN (erights.value = 'Y | Yes') THEN true WHEN (erights.value = 'N | No') THEN false ELSE null END) \"electro_rights_indicator\"\n" +
-                     "   , 'N' \"f_oa_journal_type\"\n" +
-                     "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
-                     "   , CAST(null AS varchar) \"subscription_type\"\n" +
-                     "   , \"date_parse\"(NULLIF(content.\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
-                     "   FROM\n" +
-                     "     ((((((((((((\n" +
-                     "      SELECT\n" +
-                     "        NULLIF(\"sourceref\", '') \"sourceref\"\n" +
-                     "      , NULLIF(\"sourceref\", '') \"u_key\"\n" +
-                     "      , NULLIF(\"title\", '') \"title\"\n" +
-                     "      , NULLIF(\"subtitle\", '') \"subtitle\"\n" +
-                     "      , NULLIF(\"volumeno\", '') \"volumeno\"\n" +
-                     "      , \"metadeleted\" \"metadeleted\"\n" +
-                     "      , \"copyrightyear\" \"copyrightyear\"\n" +
-                     "      , \"editionno\" \"editionno\"\n" +
-                     "      , \"substring\"(\"split_part\"(NULLIF(\"subgroup\", ''), ' | ', 1), 2, 3) \"pmc\"\n" +
-                     "      , \"split_part\"(NULLIF(\"imprint\", ''), ' | ', 1) \"imprintcode\"\n" +
-                     "      , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
-                     "      , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
-                     "      , \"split_part\"(\"language\", ' | ', 1) \"language\"\n" +
-                     "      , \"ownership\" \"ownership\"\n" +
-                     "      , \"metamodifiedon\" \"metamodifiedon\"\n" +
-                     "      FROM\n" +
-                     "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                     "   )  content\n" +
-                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product product ON (content.sourceref = product.sourceref))\n" +
-                     "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (\"content\".\"sourceref\" = \"versionfamily\".\"workmasterprojectno\"))\n" +
-                     "   LEFT JOIN (\n" +
-                     "      SELECT\n" +
-                     "        workmasterprojectno\n" +
-                     "      , \"min\"(min_planned_pubdate) work_planned_pubdate\n" +
-                     "      , \"min\"(min_actual_pubdate) work_actual_pubdate\n" +
-                     "      FROM\n" +
-                     "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_pubdates_v\n" +
-                     "      GROUP BY workmasterprojectno\n" +
-                     "   )  pubdates ON (product.sourceref = pubdates.workmasterprojectno))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification classification ON ((\"content\".\"sourceref\" = \"classification\".\"sourceref\") AND (\"classification\".\"classificationcode\" = 'DCDFAC | Accounting class')))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification erights ON ((\"content\".\"sourceref\" = \"erights\".\"sourceref\") AND (\"erights\".\"classificationcode\" = 'PAERIGHTS | Electronic rights')))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v \"all_status\" ON (\"all_status\".\"sourceref\" = \"content\".\"sourceref\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((opcocode.\"11icode\" = rc_pmg_co.\"company\") AND (CAST(\"content\".\"pmg\" AS integer) = CAST(rc_pmg_co.\"pmg\" AS integer))) AND (rc_pmg_co.active_end_date IS NULL)))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(rc_pmg.\"company\", '') IS NULL) AND (CAST(\"content\".\"pmg\" AS integer) = CAST(rc_pmg.\"pmg\" AS integer))) AND (rc_pmg.active_end_date IS NULL)))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".languagecode languagecode ON (\"content\".\"language\" = \"languagecode\".\"ppmcode\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode worktypecode ON (COALESCE((CASE WHEN (\"split_part\"(product.versiontype, ' | ', 1) IN ('COMB', 'MVOL', 'NBS')) THEN \"split_part\"(product.versiontype, ' | ', 1) ELSE \"split_part\"(\"classification\".\"value\", ' | ', 1) END), 'DEFAULT') = \"worktypecode\".\"ppmcode\"))\n" +
-                     "UNION ALL    SELECT DISTINCT\n" +
-                     "     \"content\".\"seriesid\" \"sourceref\"\n" +
-                     "   , \"content\".\"seriesid\" \"u_key\"\n" +
-                     "   , \"content\".\"title\" \"title\"\n" +
-                     "   , CAST(null AS varchar) \"subtitle\"\n" +
-                     "   , CAST(null AS varchar) \"volumeno\"\n" +
-                     "   , CAST(null AS integer) \"copyrightyear\"\n" +
-                     "   , CAST(null AS integer) \"editionno\"\n" +
-                     "   , CAST(null AS date) \"planned_pubdate\"\n" +
-                     "   , CAST(null AS date) \"actual_pubdate\"\n" +
-                     "   , CAST(null AS varchar) \"pmc\"\n" +
-                     "   , 'BKS' \"work_type\"\n" +
-                     "   , (CASE WHEN (\"lower\"(\"content\".\"title\") LIKE '%%cam testing%%') THEN 'NVW' ELSE COALESCE(NULLIF(\"work_status\".\"eph_work_status_code\", ''), 'UNK') END) \"statuscode\"\n" +
-                     "   , CAST(null AS varchar) \"imprintcode\"\n" +
-                     "   , CAST(null AS varchar) \"te_opco\"\n" +
-                     "   , CAST(null AS varchar) \"opco\"\n" +
-                     "   , CAST(null AS varchar) \"resp_centre\"\n" +
-                     "   , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
-                     "   , CAST(null AS varchar) \"languagecode\"\n" +
-                     "   , CAST(null AS boolean) \"electro_rights_indicator\"\n" +
-                     "   , 'N' \"f_oa_journal_type\"\n" +
-                     "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
-                     "   , CAST(null AS varchar) \"subscription_type\"\n" +
-                     "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
-                     "   FROM\n" +
-                     "     ((((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((\"opcocode\".\"11icode\" = \"rc_pmg_co\".\"company\") AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg_co\".\"pmg\" AS integer))) AND (\"rc_pmg_co\".\"active_end_date\" IS NULL)))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
-                     "   LEFT JOIN (\n" +
-                     "      SELECT\n" +
-                     " \"seriesid\"\n" +
-                     "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
-                     "      FROM\n" +
-                     "        (\n" +
-                     "         SELECT\n" +
-                     "           \"man_status\".\"seriesid\" \"seriesid\"\n" +
-                     "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
-                     "         FROM\n" +
-                     "           \"man_status\"\n" +
-                     "UNION ALL          SELECT\n" +
-                     "           \"man_status\".\"mainseries\" \"seriesid\"\n" +
-                     "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
-                     "         FROM\n" +
-                     "           \"man_status\"\n" +
-                     "      ) \n" +
-                     "      GROUP BY \"seriesid\""+
-                     "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
-                     "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
-                     ")  \"A\"\n" +
-                     "WHERE (\"A\".\"sourceref\" <> '')and u_key in ('%s') order by u_key desc";
+            "WITH\n" +
+                    "  man_status AS (\n" +
+                    "   SELECT\n" +
+                    "     \"m\".\"sourceref\"\n" +
+                    "   , \"w\".\"seriesid\"\n" +
+                    "   , \"csm\".\"seriesid\" mainseries\n" +
+                    "   , \"m\".\"work_priority\"\n" +
+                    "   FROM\n" +
+                    "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v m\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content w ON (\"m\".\"sourceref\" = \"w\".\"sourceref\"))\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series cs ON (\"w\".\"seriesid\" = \"cs\".\"seriesid\"))\n" +
+                    "   LEFT JOIN  "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series csm ON (\"cs\".\"mainseries\" = \"csm\".\"seriescode\"))\n" +
+                    "   WHERE (\"w\".\"seriesid\" <> '')\n" +
+                    ") \n" +
+                    "SELECT u_key as uKey \n" +
+                    ",sourceref as sourceRef \n" +
+                    ",title as title \n" +
+                    ",subtitle as subTitle \n" +
+                    ",volumeno as volumeNo \n" +
+                    ",copyrightyear as copyRightYear \n" +
+                    ",editionno as editionNo \n" +
+                    ",pmc as pmc \n" +
+                    ",work_type as workType \n" +
+                    ",statuscode as statusCODE \n" +
+                    ",imprintcode as imprintCode \n" +
+                    ",te_opco as teopco \n" +
+                    ",opco as opco \n" +
+                    ",resp_centre as respCentre \n" +
+                    ",pmg as pmg \n" +
+                    ",languagecode as languageCode \n" +
+                    ",electro_rights_indicator as electroRightIndicator \n" +
+                    ",f_oa_journal_type as foaJournalType \n" +
+                    ",f_society_ownership as fSocietyOwnership \n" +
+                    ",subscription_type as subscriptionType \n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     \"content\".\"sourceref\" \"sourceref\"\n" +
+                    "   , \"content\".\"sourceref\" \"u_key\"\n" +
+                    "   , \"content\".\"title\" \"title\"\n" +
+                    "   , \"content\".\"subtitle\" \"subtitle\"\n" +
+                    "   , \"content\".\"volumeno\" \"volumeno\"\n" +
+                    "   , \"content\".\"copyrightyear\" \"copyrightyear\"\n" +
+                    "   , \"content\".\"editionno\" \"editionno\"\n" +
+                    "   , pubdates.work_planned_pubdate \"planned_pubdate\"\n" +
+                    "   , pubdates.work_actual_pubdate \"actual_pubdate\"\n" +
+                    "   , \"content\".\"pmc\" \"pmc\"\n" +
+                    "   , COALESCE(NULLIF(\"worktypecode\".\"ephcode\", ''), 'UNK') \"work_type\"\n" +
+                    "   , (CASE WHEN ((\"content\".\"metadeleted\" = 'Y') OR (\"lower\"(\"content\".\"title\") LIKE '%%cam testing%%')) THEN 'NVW' ELSE COALESCE(NULLIF(\"all_status\".\"eph_work_status_code\", ''), 'UNK') END) \"statuscode\"\n" +
+                    "   , \"content\".\"imprintcode\" \"imprintcode\"\n" +
+                    "   , NULLIF(CAST(\"opcocode\".\"11icode\" AS varchar), '') \"te_opco\"\n" +
+                    "   , NULLIF(CAST(\"opcocode\".\"r12code\" AS varchar), '') \"opco\"\n" +
+                    "   , NULLIF(CAST(COALESCE(\"rc_pmg_co\".\"rc\", \"rc_pmg\".\"rc\") AS varchar), '') \"resp_centre\"\n" +
+                    "   , \"content\".\"pmg\" \"pmg\"\n" +
+                    "   , NULLIF(\"languagecode\".\"ephcode\", '') \"languagecode\"\n" +
+                    "   , (CASE WHEN (erights.value = 'Y | Yes') THEN true WHEN (erights.value = 'N | No') THEN false ELSE null END) \"electro_rights_indicator\"\n" +
+                    "   , 'N' \"f_oa_journal_type\"\n" +
+                    "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
+                    "   , CAST(null AS varchar) \"subscription_type\"\n" +
+                    "   , \"date_parse\"(NULLIF(content.\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
+                    "   FROM\n" +
+                    "     ((((((((((((\n" +
+                    "      SELECT\n" +
+                    "        NULLIF(\"sourceref\", '') \"sourceref\"\n" +
+                    "      , NULLIF(\"sourceref\", '') \"u_key\"\n" +
+                    "      , NULLIF(\"title\", '') \"title\"\n" +
+                    "      , NULLIF(\"subtitle\", '') \"subtitle\"\n" +
+                    "      , NULLIF(\"volumeno\", '') \"volumeno\"\n" +
+                    "      , \"metadeleted\" \"metadeleted\"\n" +
+                    "      , \"copyrightyear\" \"copyrightyear\"\n" +
+                    "      , \"editionno\" \"editionno\"\n" +
+                    "      , \"substring\"(\"split_part\"(NULLIF(\"subgroup\", ''), ' | ', 1), 2, 3) \"pmc\"\n" +
+                    "      , \"split_part\"(NULLIF(\"imprint\", ''), ' | ', 1) \"imprintcode\"\n" +
+                    "      , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
+                    "      , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
+                    "      , \"split_part\"(\"language\", ' | ', 1) \"language\"\n" +
+                    "      , \"ownership\" \"ownership\"\n" +
+                    "      , \"metamodifiedon\" \"metamodifiedon\"\n" +
+                    "      FROM\n" +
+                    "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
+                    "   )  content\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product product ON (content.sourceref = product.sourceref))\n" +
+                    "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (\"content\".\"sourceref\" = \"versionfamily\".\"workmasterprojectno\"))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        workmasterprojectno\n" +
+                    "      , \"min\"(min_planned_pubdate) work_planned_pubdate\n" +
+                    "      , \"min\"(min_actual_pubdate) work_actual_pubdate\n" +
+                    "      FROM\n" +
+                    "        "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_pubdates_v\n" +
+                    "      GROUP BY workmasterprojectno\n" +
+                    "   )  pubdates ON (product.sourceref = pubdates.workmasterprojectno))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT *\n" +
+                    "      FROM\n" +
+                    "        (\n" +
+                    "         WITH\n" +
+                    "           worktype AS (\n" +
+                    "            SELECT\n" +
+                    "              NULLIF(\"scv\".\"workmasterprojectno\", '') \"sourceref\"\n" +
+                    "            , (CASE WHEN (scv.sourceref = scv.workmasterprojectno) THEN 'Y' ELSE 'N' END) \"wm\"\n" +
+                    "            , scc.value\n" +
+                    "            FROM\n" +
+                    "              ("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily scv\n" +
+                    "            LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification scc ON ((scc.classificationcode = 'DCDFAC | Accounting class') AND (scc.sourceref = scv.sourceref)))\n" +
+                    "            WHERE ((scv.metadeleted = 'N') AND (NULLIF(scv.workmasterprojectno, '') IS NOT NULL))\n" +
+                    "         ) \n" +
+                    "         SELECT DISTINCT\n" +
+                    "           \"sourceref\"\n" +
+                    "         , \"value\"\n" +
+                    "         FROM\n" +
+                    "           worktype\n" +
+                    "         WHERE ((wm = 'Y') AND (value IS NOT NULL))\n" +
+                    "UNION ALL          SELECT DISTINCT\n" +
+                    "           \"wt\".\"sourceref\"\n" +
+                    "         , \"wt\".value\n" +
+                    "         FROM\n" +
+                    "           (worktype wt\n" +
+                    "         INNER JOIN (\n" +
+                    "            SELECT\n" +
+                    "              wt1.sourceref\n" +
+                    "            , \"max\"(wt1.value) maxap\n" +
+                    "            FROM\n" +
+                    "              (worktype wt1\n" +
+                    "            INNER JOIN (\n" +
+                    "               SELECT sourceref\n" +
+                    "               FROM\n" +
+                    "                 worktype\n" +
+                    "               WHERE ((wm = 'Y') AND (value IS NULL))\n" +
+                    "            )  w ON (w.sourceref = wt1.sourceref))\n" +
+                    "            WHERE (wm = 'N')\n" +
+                    "            GROUP BY wt1.sourceref\n" +
+                    "         )  maxnotwm ON ((wt.sourceref = maxnotwm.sourceref) AND (wt.value = maxnotwm.maxap)))\n" +
+                    "      ) \n" +
+                    "   )  classification ON (\"content\".\"sourceref\" = \"classification\".\"sourceref\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_classification erights ON ((\"content\".\"sourceref\" = \"erights\".\"sourceref\") AND (\"erights\".\"classificationcode\" = 'PAERIGHTS | Electronic rights')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_status_summary_v \"all_status\" ON (\"all_status\".\"sourceref\" = \"content\".\"sourceref\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((opcocode.\"11icode\" = rc_pmg_co.\"company\") AND (CAST(\"content\".\"pmg\" AS integer) = CAST(rc_pmg_co.\"pmg\" AS integer))) AND (rc_pmg_co.active_end_date IS NULL)))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(rc_pmg.\"company\", '') IS NULL) AND (CAST(\"content\".\"pmg\" AS integer) = CAST(rc_pmg.\"pmg\" AS integer))) AND (rc_pmg.active_end_date IS NULL)))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".languagecode languagecode ON (\"content\".\"language\" = \"languagecode\".\"ppmcode\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".worktypecode worktypecode ON (COALESCE((CASE WHEN (\"split_part\"(product.versiontype, ' | ', 1) IN ('COMB', 'MVOL', 'NBS')) THEN \"split_part\"(product.versiontype, ' | ', 1) ELSE \"split_part\"(\"classification\".\"value\", ' | ', 1) END), 'DEFAULT') = \"worktypecode\".\"ppmcode\"))\n" +
+                    "UNION ALL    SELECT DISTINCT\n" +
+                    "     \"content\".\"seriesid\" \"sourceref\"\n" +
+                    "   , \"content\".\"seriesid\" \"u_key\"\n" +
+                    "   , \"content\".\"title\" \"title\"\n" +
+                    "   , CAST(null AS varchar) \"subtitle\"\n" +
+                    "   , CAST(null AS varchar) \"volumeno\"\n" +
+                    "   , CAST(null AS integer) \"copyrightyear\"\n" +
+                    "   , CAST(null AS integer) \"editionno\"\n" +
+                    "   , CAST(null AS date) \"planned_pubdate\"\n" +
+                    "   , CAST(null AS date) \"actual_pubdate\"\n" +
+                    "   , CAST(null AS varchar) \"pmc\"\n" +
+                    "   , 'BKS' \"work_type\"\n" +
+                    "   , (CASE WHEN (\"lower\"(\"content\".\"title\") LIKE '%%cam testing%%') THEN 'NVW' ELSE COALESCE(NULLIF(\"work_status\".\"eph_work_status_code\", ''), 'UNK') END) \"statuscode\"\n" +
+                    "   , CAST(null AS varchar) \"imprintcode\"\n" +
+                    "   , CAST(null AS varchar) \"te_opco\"\n" +
+                    "   , CAST(null AS varchar) \"opco\"\n" +
+                    "   , CAST(null AS varchar) \"resp_centre\"\n" +
+                    "   , \"substring\"(\"split_part\"(NULLIF(\"division\", ''), ' | ', 1), 2, 3) \"pmg\"\n" +
+                    "   , CAST(null AS varchar) \"languagecode\"\n" +
+                    "   , CAST(null AS boolean) \"electro_rights_indicator\"\n" +
+                    "   , 'N' \"f_oa_journal_type\"\n" +
+                    "   , CAST(null AS varchar) \"f_society_ownership\"\n" +
+                    "   , CAST(null AS varchar) \"subscription_type\"\n" +
+                    "   , \"date_parse\"(NULLIF(\"metamodifiedon\", ''), '%%d-%%b-%%Y %%H:%%i:%%s') \"modifiedon\"\n" +
+                    "   FROM\n" +
+                    "     ((((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content_series content\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".opcocode opcocode ON (\"content\".\"ownership\" = \"opcocode\".\"ppmcode\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg_co ON (((\"opcocode\".\"11icode\" = \"rc_pmg_co\".\"company\") AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg_co\".\"pmg\" AS integer))) AND (\"rc_pmg_co\".\"active_end_date\" IS NULL)))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".pmgtorcmapping rc_pmg ON (((NULLIF(\"rc_pmg\".\"company\", '') IS NULL) AND (CAST(\"substring\"(\"split_part\"(NULLIF(\"content\".\"division\", ''), ' | ', 1), 2, 3) AS integer) = CAST(\"rc_pmg\".\"pmg\" AS integer))) AND (\"rc_pmg\".\"active_end_date\" IS NULL)))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        \"seriesid\"\n" +
+                    "      , \"min\"(\"work_priority\") \"work_priority\"\n" +
+                    "      FROM\n" +
+                    "        (\n" +
+                    "         SELECT\n" +
+                    "           \"man_status\".\"seriesid\" \"seriesid\"\n" +
+                    "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                    "         FROM\n" +
+                    "           \"man_status\"\n" +
+                    "UNION ALL          SELECT\n" +
+                    "           \"man_status\".\"mainseries\" \"seriesid\"\n" +
+                    "         , \"man_status\".\"work_priority\" \"work_priority\"\n" +
+                    "         FROM\n" +
+                    "           \"man_status\"\n" +
+                    "      ) \n" +
+                    "      GROUP BY \"seriesid\"\n" +
+                    "   )  work_priority ON (\"content\".\"seriesid\" = \"work_priority\".\"seriesid\"))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".workstatusmapping work_status ON (\"work_priority\".\"work_priority\" = \"work_status\".\"work_priority\"))\n" +
+                    ")  \"A\"\n" +
+                    "WHERE (\"A\".\"sourceref\" <> '') and u_key in ('%s') order by u_key desc";
+
 
     public static final String GET_WORK_PERS_INBOUND_DATA =
             "SELECT " +

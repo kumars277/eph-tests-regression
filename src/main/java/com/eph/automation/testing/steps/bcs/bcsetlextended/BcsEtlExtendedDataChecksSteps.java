@@ -533,7 +533,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_extended_availability_current and etl_transform_history_extended_availability_part records...");
-                        String[] allAvailabilityCol = {"geteprid", "getmetadeleted", "getproducttype", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getukey", "getsourceref", "getmodifiedon", "getapplication"};
+                        String[] allAvailabilityCol = {"geteprid", "getmetadeleted", "getproducttype", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getukey", "getsourceref", "getapplication"};
                         for (String strTemp : allAvailabilityCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -564,7 +564,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         Log.info("comparing etl_manifestation_extended_current_v and etl_transform_history_extended_manifestation_part records...");
                         String[] allManifExtCol = {"geteprid", "getmetadeleted", "getmanifestationtype",
                                 "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getukey",
-                                "getsourceref", "getmodifiedon", "getemeadiscountcode", "getemeadiscountname", "gettrimsize",
+                                "getsourceref", "getemeadiscountcode", "getemeadiscountname", "gettrimsize",
                                 "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference","getexporttowebind"};
                         for (String strTemp : allManifExtCol) {
                             java.lang.reflect.Method method;
@@ -594,7 +594,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_page_count_extended_current_v and etl_transform_history_extended_page_count_part records...");
-                        String[] allPagecountCol = {"geteprid", "getukey", "getmanifestationtype", "getsourceref", "getmodifiedon", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
+                        String[] allPagecountCol = {"geteprid", "getukey", "getmanifestationtype", "getsourceref", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
                         for (String strTemp : allPagecountCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -623,7 +623,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_url_extended_current_v and etl_transform_history_extended_url_part records...");
-                        String[] allUrlCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmodifiedon", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname"};
+                        String[] allUrlCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname"};
                         for (String strTemp : allUrlCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -652,7 +652,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_transform_history_extended_work_part and etl_work_extended_current_v records...");
-                        String[] allWorkExtCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmodifiedon", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
+                        String[] allWorkExtCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
                                 "getfeatures", "getawards", "gettoclong", "gettocshort", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
                                 "getjournalaimsscope", "getddpeligibind", "getptsjournalind", "getauthorfeedbackind", "getdeltabusinessunit", "getprintername", "getprimarysitesystem", "getprimarysiteacronym", "getprimarysitesupportlevel",
                                 "getfulfilmentsystem", "getfulfilmentjournalacronym", "getissueprodtypecode", "getcataloguevolumesqty", "getcatalogueissuesqty", "getcataloguevolumefrom",
@@ -685,7 +685,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_transform_history_extended_work_subject_area_part and etl_work_subject_area_extended_current_v records...");
-                        String[] allWorkSubjAreaExtCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmodifiedon", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
+                        String[] allWorkSubjAreaExtCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority"};
                         for (String strTemp : allWorkSubjAreaExtCol) {
                             java.lang.reflect.Method method;
@@ -715,7 +715,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_transform_history_extended_manifestation_restrictions_part and etl_manifestation_restrictions_extended_current_v records...");
-                        String[] allManifRestrictCol = {"geteprid", "getukey", "getmanifestationtype", "getsourceref", "getmodifiedon", "getmetadeleted", "getrestrictioncode", "getrestrictionname"};
+                        String[] allManifRestrictCol = {"geteprid", "getukey", "getmanifestationtype", "getsourceref", "getmetadeleted", "getrestrictioncode", "getrestrictionname"};
                         for (String strTemp : allManifRestrictCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -744,7 +744,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_transform_history_extended_product_prices_part and etl_product_prices_extended_current_v records...");
-                        String[] allProdPriceCol = {"geteprid", "getukey", "getproducttype", "getsourceref", "getmodifiedon", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
+                        String[] allProdPriceCol = {"geteprid", "getukey", "getproducttype", "getsourceref", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
                         for (String strTemp : allProdPriceCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -773,7 +773,7 @@ public class BcsEtlExtendedDataChecksSteps {
                         BCSETL_ExtendedAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlExtendedDLAccessObject::getukey));
 
                         Log.info("comparing etl_transform_history_extended_work_person_role_part and etl_work_person_role_extended_current_v records...");
-                        String[] allPersRoleCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmodifiedon", "getmetadeleted", "getcorereference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
+                        String[] allPersRoleCol = {"geteprid", "getukey", "getworktype", "getsourceref", "getmetadeleted", "getcorereference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
                                 "gettitle", "getpersonfirstname", "getpersonfamilyname", "getemailaddress", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber"};
                         for (String strTemp : allPersRoleCol) {
                             java.lang.reflect.Method method;
