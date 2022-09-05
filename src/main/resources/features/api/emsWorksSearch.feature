@@ -2,6 +2,10 @@ Feature: Search API: Works
          As an EIP-MS Integration User
          I would like to search works from Enterprise Product Hub using EIP Search
          So that I can use the details to validate business needs
+#confluence page
+#https://elsevier.atlassian.net/wiki/spaces/IN/pages/88417842132/EPHMS001+-+Enterprise+Product+Search+V2+retired?pageId=88417842132
+#https://elsevier.atlassian.net/wiki/spaces/IN/pages/88442085624/Search+API+Automation
+
 
     @searchAPI @workSearchAPI
   Scenario: search work by ID
@@ -23,7 +27,6 @@ Feature: Search API: Works
       |JOURNAL_ACRONYM    |
       |EPR_ID             |
 
-
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: search journal by Person id
     Given  We get 1 random journal ids to search <options>
@@ -35,7 +38,6 @@ Feature: Search API: Works
       | PEOPLE_HUB_ID         |
       | personFullNameCurrent |
       | PERSON_ID             |
-
      #|personIdCurrent       |  # commented as per EPHD-1414 by Nishant @ 08 Jul 2020
 
   @searchAPI @workSearchAPI

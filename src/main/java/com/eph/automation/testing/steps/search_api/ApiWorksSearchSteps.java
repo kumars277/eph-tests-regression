@@ -81,7 +81,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random work ids  : " + ids + "on environment " + TestContext.getValues().environment);
     // added by Nishant @ 27 Dec for debugging failures
-    // ids.clear();ids.add("EPR-W-105C87");Log.info("hard coded work id is : " + ids);
+    // ids.clear();ids.add("EPR-W-1061F8");Log.info("hard coded work id is : " + ids);
     setBreadcrumbMessage(ids.toString());
     Assert.assertFalse(getBreadcrumbMessage() + "- Verify random id list is not empty.",
             ids.isEmpty());
@@ -98,6 +98,9 @@ public class ApiWorksSearchSteps {
       case "personFullNameCurrent":
         sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_personFullNameCurrent, numberOfRecords);
         break;
+      case "JOURNAL_NUMBER":
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID_withJournalNumber, numberOfRecords);
+        break;
       default: sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID, numberOfRecords);break;
     }
 
@@ -110,7 +113,7 @@ public class ApiWorksSearchSteps {
 
     Log.info("Selected random Journal ids  : " + ids +" on "+ TestContext.getValues().environment);
     // for debugging failure
-   // ids.clear();    ids.add("EPR-W-102S2S");  Log.info("hard coded work ids are : " + ids);
+    //ids.clear();    ids.add("EPR-W-11FGY5");  Log.info("hard coded work ids are : " + ids);
     setBreadcrumbMessage(ids.toString());
     verifyListNotEmpty(ids);
   }
@@ -339,25 +342,19 @@ public class ApiWorksSearchSteps {
   public void compareWorkBySearchWithPMGCodeWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
 
-    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-    String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()).toUpperCase();
-              /*DataQualityContext
-                      .workDataObjectsFromEPHGD
-                      .get(0)
-                      .getWORK_TITLE()
-                      .split(" ")[0]
-                      .toUpperCase();*/
-    for (int i = 0; i < bound; i++) {
-      String PMGCode =
-              getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
-      Log.info("search keyword '" + searchKeyword + "' and pmgCode '" + PMGCode + "'");
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
+      String searchKeyword = ApiReusableFunctions.getSearchKeyword(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+      for (int i = 0; i < bound; i++) {
+        String PMGCode =
+                getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+        Log.info("search keyword '" + searchKeyword + "' and pmgCode '" + PMGCode + "'");
 
-      returnedWorks = APIService.getWorksBySearchWithPMG(searchKeyword, PMGCode);
-      Log.info("API total matched count..." + returnedWorks.getTotalMatchCount());
-      returnedWorks.verifyWorksAreReturned();
-      returnedWorks.verifyWorksReturnedCount(
-              getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
-    }
+        returnedWorks = APIService.getWorksBySearchWithPMG(searchKeyword, PMGCode);
+        printTotalWorkCount(returnedWorks);
+        returnedWorks.verifyWorksAreReturned();
+        returnedWorks.verifyWorksReturnedCount(
+                getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
+      }
 
 
   }
@@ -664,25 +661,25 @@ public class ApiWorksSearchSteps {
   @When("^the work details are retrieved by PMC Code and compared$")
   public void compareWorkSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    boolean failed = false;
-    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
-    for (int i = 0; i < bound; i++) {
-      Log.info(
-              "pmc to be tested..." + DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
-      returnedWorks =
-              APIService.getWorkByPMC(
-                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
-      returnedWorks.verifyWorksAreReturned();
-      printTotalWorkCount(returnedWorks);
-      returnedWorks.verifyWorksReturnedCount(
-              getNumberOfWorksByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
-    }
-  }
+   // boolean failed = false;
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
+      for (int i = 0; i < bound; i++) {
+        Log.info(
+                "pmc to be tested..." + DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+        returnedWorks =
+                APIService.getWorkByPMC(
+                        DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+        returnedWorks.verifyWorksAreReturned();
+        printTotalWorkCount(returnedWorks);
+        returnedWorks.verifyWorksReturnedCount(
+                getNumberOfWorksByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
+      }
+}
 
   @When("^the work details are retrieved by PMG Code and compared$")
   public void compareWorkSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    boolean failed = false;
+  //  boolean failed = false;
     try {
       int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
@@ -706,8 +703,8 @@ public class ApiWorksSearchSteps {
     for (String id : ids) {
       Log.info("personId to be tested..." + id);
       returnedWorks = APIService.getWorksByPersonID(id+activeWorkTypeStatus);
-      // returnedWorks.verifyWorksAreReturned();
-      Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
+     // returnedWorks.verifyWorksAreReturned();
+      printTotalWorkCount(returnedWorks);
       Assert.assertEquals("personId:"+id,returnedWorks.getTotalMatchCount(),getNumberOfWorksByPerson("",id));
       //returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPerson("",id));
     }
@@ -761,7 +758,7 @@ public class ApiWorksSearchSteps {
 
         default: throw new IllegalArgumentException(personSearchOption);
       }
-      Log.info("Total API count - " + returnedWorks.getTotalMatchCount());
+      printTotalWorkCount(returnedWorks);
 
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
@@ -910,7 +907,7 @@ public class ApiWorksSearchSteps {
                               + fromCntr
                               + size
                               + sizeCntr);
-      Log.info("Total work found - " + returnedWorks.getTotalMatchCount());
+      printTotalWorkCount(returnedWorks);
       Log.info("scanning workID from " + (fromCntr) + " to " + (fromCntr+sizeCntr) + " records...");
 
       returnedWorks.verifyWorksAreReturned();
@@ -951,7 +948,7 @@ public class ApiWorksSearchSteps {
         returnedWorks = APIService.getWorksByScrollId(scrollId+"?scroll=" + scroll);
       }
 
-      Log.info("Total work found - " + returnedWorks.getTotalMatchCount());
+      printTotalWorkCount(returnedWorks);
       Log.info("scanning workID from " + (fromCntr) + " to " + (fromCntr+sizeCntr) + " records...");
 
       returnedWorks.verifyWorksAreReturned();
@@ -1033,11 +1030,12 @@ public class ApiWorksSearchSteps {
     return count;
   }
 
-  private static int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMCCode) {
+  private static int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMGCode) {
     int count=0;
     sql =
-            String.format(
-                    APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH, searchKeyword, PMCCode);
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH
+                    .replaceAll("PMG",PMGCode)
+                    .replaceAll("TITLE",searchKeyword);
     try{
       List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
       count = ((Long) getCount.get(0).get("count")).intValue();

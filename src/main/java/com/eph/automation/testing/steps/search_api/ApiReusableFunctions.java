@@ -99,12 +99,28 @@ public class ApiReusableFunctions {
     {
         //created by Nishant @ 28 Feb 2022
         //updated by Nishant @ 12 May 2022
-        List<String> ignoreKeywords = Arrays.asList("EDITION","THE","NET","III","SCIENTIFIC","PART");
+        List<String> ignoreKeywords = Arrays.asList(
+                "A","AN","AND","ARE","AS","AT",
+                "BE","BUT","BY","FOR",
+                "IF","IN","INTO","IS","IT","NO","NOT",
+                "OF","ON","OR","SUCH","THAT","THE","THEIR",
+                "THEN","THERE","THESE","THEY","THIS","TO",
+                "WAS","WILL","WITH","VIII","XIII","SIXTH",
+                "FIRST","SECOND","THIRD","FOURTH",
+                "SEVENTH","EIGHTH","NINTH",
+                "10TH","TENTH","11TH","ELEVENTH",
+                "12TH","TWELFTH","13TH","THIRTEENTH",
+                "14TH","FOURTEENTH","16TH","SIXTEENTH",
+                "17TH","SEVENTEENTH","18TH","EIGHTEENTH",
+                "19TH","NINETEENTH","20TH","TWENTIETH",
+                "21ST","TWENTY FIRST","EDITION",
+                "NET","SCIENTIFIC","PART");
         String keyword = "";
         //by nishant @ 08 Jul 2022 to fix mismatch with DB
         //translate all accents characters in normal characters
-        String normalisedTitle = Normalizer.normalize(title, Normalizer.Form.NFD);
-        normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", "");
+        //String normalisedTitle = Normalizer.normalize(title, Normalizer.Form.NFD);
+        //normalisedTitle = normalisedTitle.replaceAll("[^\\p{ASCII}]", "-");
+        String normalisedTitle = title.replaceAll("[^\\p{ASCII}]", " ");
         String[] arr_title= normalisedTitle.replaceAll("[^a-zA-Z0-9]", " ").split(" ");
 
         for(int i=0;i<arr_title.length;i++)
@@ -123,7 +139,7 @@ public class ApiReusableFunctions {
         of consecutive characters between 3 and 50 characters long.
         Because the minimum length is 3, CD isn’t a valid match.
         hence valid keyword should be more than 2 characters*/
-                    if(keyword.length()<3)continue;
+                    if(keyword.length()<4)continue;
                     break;
                 }
             }

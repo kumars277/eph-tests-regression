@@ -761,6 +761,7 @@ public class BcsEtlCoreDataChecksSql {
 
 
     public static final String GET_RANDOM_PERSON_KEY_INBOUND =
+
             "SELECT u_key as sourceref from( \n" +
                     "SELECT\n" +
                     "  sourceref\n" +
@@ -840,6 +841,7 @@ public class BcsEtlCoreDataChecksSql {
                     "WHERE (sourceref IS NOT NULL)\n" +
                     "GROUP BY sourceref, u_key, peoplehub_id, email_address, dq_err\n" +
                     ")where u_key in ('%s') order by u_key,sourceref desc";
+                    
 
     public static final String GET_RANDOM_WRK_RELT_KEY_INBOUND =
             "select u_key as sourceref FROM (\n" +

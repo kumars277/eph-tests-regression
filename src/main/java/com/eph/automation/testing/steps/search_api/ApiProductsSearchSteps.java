@@ -115,7 +115,7 @@ public class ApiProductsSearchSteps {
 
     Log.info("Selected random product ids are : " + ids+" on environment "+ System.getProperty("ENV"));
     // added by Nishant @ 26 Dec for debugging failures
-   //   ids.clear(); ids.add("EPR-10N5YD"); Log.info("hard coded product ids are : " + ids);
+    //  ids.clear(); ids.add("EPR-10K40T"); Log.info("hard coded product ids are : " + ids);
 
     if (productProperty.equalsIgnoreCase(PR_IDENTIFIER)) {ids.clear();ids.add("EPR-10V1T5");
       Log.info("product_identifier hard coded product ids are : " + ids);}
@@ -595,8 +595,8 @@ else{
             else
             {
             if ((fromCntr + sizeCntr) < 10000) {
-              Log.info("intetended product not found, scanned " + (fromCntr + sizeCntr) + "records...");
-              Assert.assertTrue(getBreadcrumbMessage() +">"+apiResource+ "- scenned " + (fromCntr + sizeCntr) + " records...",false);
+              Log.info("intetended product not found, scanned " + returnedProducts.getTotalMatchCount() + " records...");
+              Assert.assertTrue(getBreadcrumbMessage() +">"+apiResource+ "- scenned " + returnedProducts.getTotalMatchCount() + " records...but intended product could not find",false);
             }
             else //due to api limitation, we can not scan records beyond 10000. Hence abord scanning
             {
@@ -817,7 +817,7 @@ else{
     //as per Ron, API product search result returns products even though product name does not contains searchKey but its manifestaion or work title does.
     */
     ProductsMatchedApiObject returnedProducts;
-    String defaultSearch = "CELL";
+    //String defaultSearch = "CELL";
     int productCountDB = 0;
 
       String searchTerm = ApiReusableFunctions.getSearchKeyword(productDataObjects.get(0).getPRODUCT_NAME());
@@ -884,7 +884,7 @@ else{
           throw new IllegalStateException("Unexpected value: " + paramKey);
       }
 
-      returnedProducts.verifyProductsAreReturned();
+     // returnedProducts.verifyProductsAreReturned();
       returnedProducts.verifyAPIReturnedProductsCount(productCountDB);
 
   }
@@ -895,7 +895,7 @@ else{
     String defaultSearch = "CELL";
     int productCountDB = 0;
     int fromCntr = 0;
-    int sizeCntr = 400;
+    int sizeCntr = 500;
 
     ProductsMatchedApiObject returnedProducts = new ProductsMatchedApiObject();
 

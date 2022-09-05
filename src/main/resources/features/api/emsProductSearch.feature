@@ -2,6 +2,10 @@ Feature: Search API: Products
   As an EIP-MS Integration User
   I would like to search products from Enterprise Product Hub using EIP Search
   So that I can use the details to validate business needs
+#confluence page
+#https://elsevier.atlassian.net/wiki/spaces/IN/pages/88417842132/EPHMS001+-+Enterprise+Product+Search+V2+retired?pageId=88417842132
+#https://elsevier.atlassian.net/wiki/spaces/IN/pages/88442085624/Search+API+Automation
+
 
   @searchAPI @productSearchAPI
   Scenario: search product by ID
@@ -55,6 +59,7 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
+      | PRODUCT_PERSONS_FULLNAME                    |
       | PRODUCT_MANIFESTATION_ID                    |
       | PRODUCT_TITLE                               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
@@ -68,7 +73,7 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_WORK_ID               |
       | PRODUCT_MANIFESTATION_WORK_TITLE            |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER       |
-      | PRODUCT_PERSONS_FULLNAME                    |
+
       | PRODUCT_WORK_PERSONS_FULLNAME               |
 
   @searchAPI @productSearchAPI
@@ -118,20 +123,17 @@ Feature: Search API: Products
     Then   the product count are retrieved by <paramKey> compared
     Examples:
       | paramKey      |
+      | productType   |
       | productStatus |
       | workType      |
-      | productType   |
       | pmcCode       |
       | pmgCode       |
-
-
 
   @searchAPI @productSearchAPI
   Scenario: Product search E2E
     Given  We set specific product ids for search
     And    We get the search data from EPH GD for products
     Then   the product details are retrieved and compared
-
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product and verify title contains searchKey

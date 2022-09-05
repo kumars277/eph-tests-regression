@@ -822,6 +822,7 @@ public class BcsEtlCoreCountChecksSql {
 
 
     public static final String GET_PERSON_INBOUND_CURRENT_COUNT =
+
             "select count(*) as Source_Count from(\n" +
                     "SELECT\n" +
                     "  sourceref\n" +
