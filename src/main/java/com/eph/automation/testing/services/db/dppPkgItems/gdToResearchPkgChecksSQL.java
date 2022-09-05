@@ -7,10 +7,11 @@ public class gdToResearchPkgChecksSQL {
     public static final String GET_RANDOM_PKG_ID =
             "select max(id) as package_id from package p where status ='Complete' order by random() limit 10";
         public static final String GET_RANDOM_PROD_EPR_ID =
-                "select epr_id \n" +
+                "select * from(" +
+                        "select distinct epr_id \n" +
                         "from package_item pi2 join package_have_items phi\n" +
                         "on pi2.id = phi.package_item_id\n" +
-                        "where package_id in (%s) order by random() limit %s;";
+                        "where package_id in (%s)) rp order by random() limit %s";
                //"select epr_id from researchpackages.package_item order by random() limit %s";
 
        public static final String GET_SEMARCHY_RECS =
@@ -41,9 +42,8 @@ public class gdToResearchPkgChecksSQL {
                    "from researchpackages.package_item pkgi\n" +
                    "inner join (select epr_id, max(\"version\") max_ver from package_item group by epr_id) a on pkgi.epr_id=a.epr_id and a.max_ver=pkgi.\"version\"\n" +
                    "where pkgi.epr_id in ('%s') order by epr_id,journal_number";
-
 */
-           "select epr_id,issn,journal_number,pmg_code,publisher,publishing_director,title,legal_ownership_type" +
+           "select distinct epr_id,issn,journal_number,pmg_code,publisher,publishing_director,title,legal_ownership_type" +
                    " from package_item pi2 join package_have_items phi\n" +
                    "on pi2.id = phi.package_item_id\n" +
                    "where package_id in (%s)\n" +
