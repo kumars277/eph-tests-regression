@@ -3,7 +3,7 @@ Feature:Validate data between GD Tables and PackageItems table or Research Packa
   #Confluence:https://elsevier.atlassian.net/wiki/spaces/IN/pages/88416868939/EPHMS011+-+EPH+Product+Notification+Collections+API+Update
 
 
-  @SDRM
+  @rpMicroService
   Scenario Outline: Check between GD Tables and Package Items of Research Package UI
     Given We get the <countOfRandomIds> random EPR Prod ids from Semarchy tables
     When  Get the data from semarchy tables
