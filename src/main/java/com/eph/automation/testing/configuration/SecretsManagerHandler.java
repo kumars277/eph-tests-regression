@@ -55,7 +55,7 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat_url";
-            case "EPH_RP_URL":     return "eph_uat_rp_url";
+                case "EPH_RP_URL":     return "eph_uat_rp_url";
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);}
     }
 
@@ -96,6 +96,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
+            case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_SIT_URL"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
@@ -110,6 +111,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT2_URL"));
+            case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
