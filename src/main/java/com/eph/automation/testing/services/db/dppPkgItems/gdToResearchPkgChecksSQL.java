@@ -3,8 +3,15 @@ package com.eph.automation.testing.services.db.dppPkgItems;
 import com.eph.automation.testing.helper.Log;
 
 public class gdToResearchPkgChecksSQL {
-       public static final String GET_RANDOM_PROD_EPR_ID =
-               "select epr_id from researchpackages.package_item order by random() limit %s";
+
+    public static final String GET_RANDOM_PKG_ID =
+            "select max(id) as package_id from package p where status ='Complete' order by random() limit 10";
+        public static final String GET_RANDOM_PROD_EPR_ID =
+                "select epr_id \n" +
+                        "from package_item pi2 join package_have_items phi\n" +
+                        "on pi2.id = phi.package_item_id\n" +
+                        "where package_id in (%s) order by random() limit %s;";
+               //"select epr_id from researchpackages.package_item order by random() limit %s";
 
        public static final String GET_SEMARCHY_RECS =
               "select p.product_id,\n" +
@@ -29,10 +36,16 @@ public class gdToResearchPkgChecksSQL {
                       "where wpr1.effective_end_date is null and wpr2.effective_end_date is null and wi.effective_end_date is null and mi.effective_end_date is null\n" +
                       "and p.product_id in ('%s') order by p.product_id,journal_number\n";
     public static final String GET_RESEARCHPKG_PKGITEM_RECS =
-           "select pkgi.epr_id, issn, journal_number, ownership_type, pmg_code, publisher,publishing_director,\n" +
+           /*"select pkgi.epr_id, issn, journal_number, ownership_type, pmg_code, publisher,publishing_director,\n" +
                    "title, legal_ownership_type, \"version\"\n" +
                    "from researchpackages.package_item pkgi\n" +
                    "inner join (select epr_id, max(\"version\") max_ver from package_item group by epr_id) a on pkgi.epr_id=a.epr_id and a.max_ver=pkgi.\"version\"\n" +
                    "where pkgi.epr_id in ('%s') order by epr_id,journal_number";
 
+*/
+           "select epr_id,issn,journal_number,pmg_code,publisher,publishing_director,title,legal_ownership_type" +
+                   " from package_item pi2 join package_have_items phi\n" +
+                   "on pi2.id = phi.package_item_id\n" +
+                   "where package_id in (%s)\n" +
+                   "and epr_id in ('%s') order by epr_id,journal_number desc";
 }

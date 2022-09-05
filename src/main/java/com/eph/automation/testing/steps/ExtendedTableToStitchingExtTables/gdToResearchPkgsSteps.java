@@ -12,6 +12,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,23 @@ public class gdToResearchPkgsSteps {
 
     private static String sql;
     private static List<String> ids;
+    private static List<String> pkgids;
+
 
     @Given("^We get the (.*) random EPR Prod ids from Semarchy tables$")
     public void getRandomprodEprIds(String numberOfRecords) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random prod ids...");
-        sql = String.format(gdToResearchPkgChecksSQL.GET_RANDOM_PROD_EPR_ID, numberOfRecords);
+        sql = String.format(gdToResearchPkgChecksSQL.GET_RANDOM_PKG_ID);
+        List<Map<?, ?>> randomPkgIds = DBManager.getDBResultMap(sql, Constants.EPH_RP_URL);
+        pkgids = randomPkgIds.stream().map(m -> (Long) m.get("package_id")).map(String::valueOf).collect(Collectors.toList());
+        sql = String.format(gdToResearchPkgChecksSQL.GET_RANDOM_PROD_EPR_ID, String.join("','",pkgids),numberOfRecords);
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_RP_URL);
         ids = randomIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(ids.toString());
+
     }
 
     @When("^Get the data from semarchy tables$")
@@ -42,12 +49,21 @@ public class gdToResearchPkgsSteps {
         Log.info(sql);
     }
 
+
     @Then("^Get the data from package item table of research package$")
     public void getRecordsFromCurrentProduct() {
         Log.info("We get the records from Current Product table...");
-        sql = String.format(gdToResearchPkgChecksSQL.GET_RESEARCHPKG_PKGITEM_RECS, String.join("','",ids));
+        sql = String.format(gdToResearchPkgChecksSQL.GET_RESEARCHPKG_PKGITEM_RECS, String.join("','",pkgids),String.join("','",ids));
         PackageItemsContext.recordsFromPackageItem = DBManager.getDBResultAsBeanList(sql, PkgItemsAccessObject.class, Constants.EPH_RP_URL);
         Log.info(sql);
+    }
+
+    public static String removePrefix(String s, String prefix)
+    {
+        if (s != null && prefix != null && s.startsWith(prefix)) {
+            return s.substring(prefix.length());
+        }
+        return s;
     }
 
 
@@ -78,13 +94,15 @@ public class gdToResearchPkgsSteps {
                             PackageItemsContext.recordsFromSemarchyData.get(i).getissn(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getissn());
                 }
+                String jNoWithPrefixZero = PackageItemsContext.recordsFromPackageItem.get(i).getjournal_number().toString();
+                String jNoRemovedZeroPrefix = removePrefix(jNoWithPrefixZero,"0");
                 Log.info("Semrchy -> Journal Number = " + PackageItemsContext.recordsFromSemarchyData.get(i).getjournal_number() +
-                        " and Package Items -> Journal Number = " + PackageItemsContext.recordsFromPackageItem.get(i).getjournal_number());
+                        " and Package Items -> Journal Number = " + jNoRemovedZeroPrefix);
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
                     Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getjournal_number(),
-                            PackageItemsContext.recordsFromPackageItem.get(i).getjournal_number());
+                            jNoRemovedZeroPrefix);
                 }
                 Log.info("Semrchy -> PMg code = " + PackageItemsContext.recordsFromSemarchyData.get(i).getf_pmg() +
                         " and Package Items -> PMg code = " + PackageItemsContext.recordsFromPackageItem.get(i).getpmg_code());
