@@ -90,17 +90,18 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> issn = " + PackageItemsContext.recordsFromPackageItem.get(i).getissn());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The issn for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getissn(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getissn());
                 }
                 String jNoWithPrefixZero = PackageItemsContext.recordsFromPackageItem.get(i).getjournal_number().toString();
-                String jNoRemovedZeroPrefix = removePrefix(jNoWithPrefixZero,"0");
+                //String jNoRemovedZeroPrefix = removePrefix(jNoWithPrefixZero,"0");
+                String jNoRemovedZeroPrefix = jNoWithPrefixZero.replaceFirst("^0+(?!$)", "");
                 Log.info("Semrchy -> Journal Number = " + PackageItemsContext.recordsFromSemarchyData.get(i).getjournal_number() +
                         " and Package Items -> Journal Number = " + jNoRemovedZeroPrefix);
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The Jno for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getjournal_number(),
                             jNoRemovedZeroPrefix);
                 }
@@ -108,7 +109,7 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> PMg code = " + PackageItemsContext.recordsFromPackageItem.get(i).getpmg_code());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The pmg_code for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getf_pmg(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getpmg_code());
                 }
@@ -116,7 +117,7 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> Publisher = " + PackageItemsContext.recordsFromPackageItem.get(i).getpublisher());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The Publisher for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getpublisher(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getpublisher());
                 }
@@ -125,7 +126,7 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> Publishing Director = " + PackageItemsContext.recordsFromPackageItem.get(i).getpublishing_director());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The Publishing Director for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getpublishing_director(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getpublishing_director());
                 }
@@ -134,7 +135,7 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> Title = " + PackageItemsContext.recordsFromPackageItem.get(i).gettitle());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The title for =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getwork_title(),
                             PackageItemsContext.recordsFromPackageItem.get(i).gettitle());
                 }
@@ -143,7 +144,7 @@ public class gdToResearchPkgsSteps {
                         " and Package Items -> Legal Ownership = " + PackageItemsContext.recordsFromPackageItem.get(i).getlegal_ownership_type());
                 if (PackageItemsContext.recordsFromSemarchyData.get(i).getproduct_id() != null ||
                         (PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() != null)) {
-                    Assert.assertEquals("The prod id is =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
+                    Assert.assertEquals("The Legal Ownership =" + PackageItemsContext.recordsFromPackageItem.get(i).getepr_id() + " is missing/not found in Research Pkg table",
                             PackageItemsContext.recordsFromSemarchyData.get(i).getlegal_ownership(),
                             PackageItemsContext.recordsFromPackageItem.get(i).getlegal_ownership_type());
                 }
