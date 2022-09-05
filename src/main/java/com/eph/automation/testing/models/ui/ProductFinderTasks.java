@@ -40,6 +40,8 @@ public class ProductFinderTasks {
     private TasksNew tasks;
     private SpecificTasks specificTasks;
 
+
+
     @Inject
     public ProductFinderTasks(final TasksNew tasks, SpecificTasks specificTasks) {
         this.tasks = tasks;
@@ -699,4 +701,6 @@ public class ProductFinderTasks {
 
     public void sysoutln(String str)
     {System.out.println(str);}
+
+
 }

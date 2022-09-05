@@ -1,7 +1,7 @@
 Feature:Validate data for BCS ETL Core in Data Lake Access Layer
 
  #confluence Link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45477370317/Core+Transformed+View+Mappings
- #conflunce Version: v103
+ #conflunce Version: v110
 
   @BCSCore
   Scenario Outline: Verify Data for BCS_ETL Core tables is transferred from Inbound Tables
@@ -20,7 +20,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |etl_product_current_v                        |1              |
       |etl_work_person_role_current_v               |10              |
       |etl_work_relationship_current_v              |10              |
-      |etl_work_current_v                           |10              |
+     |etl_work_current_v                           |10              |
       |etl_work_identifier_current_v                |10              |
       |etl_manifestation_identifier_current_v       |1              |
     # |all_manifestation_statuses_v                 |1              | Removed as part of Divested

@@ -163,6 +163,7 @@ public class ProductFinderUISteps {
     @And("^User is forwarded to the searched works page from DB$")
     public void verifyUserIsForwardedToWorksPageFromDatabase() {
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
+
     }
 
     //for specific workid
@@ -1640,6 +1641,7 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
     private String getDBWorkStatus() {
         //updated by Nishant @ 05 apr 2021
         sql = String.format("select l_description from semarchy_eph_mdm.gd_x_lov_work_status gxlws where code ='%s'", DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        Log.info(sql);
         List<Map<String, Object>> workStatusDespription = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         return workStatusDespription.get(0).get("l_description").toString();
     }

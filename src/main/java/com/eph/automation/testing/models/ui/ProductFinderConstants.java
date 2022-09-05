@@ -16,7 +16,11 @@ public class ProductFinderConstants {
     public static String latestWorkViewMore = latestWorkParent+"/div[contains(@class,'view-more')]/span";
     public static String helpSupportParent = "//div[@class='help-support']";
     public static String helpSupportChild = helpSupportParent+"/ul/li/a";
+<<<<<<< HEAD
+    public static String searchBar = "//input[@id='searchTerm']";
+=======
     public static String searchBar = " //input[@id='mat-input-0']";
+>>>>>>> 942e09842d4e5ca880794d267e224770840a065c
     public static String searchButton = "//i[@class='gm-ico-search']";
     public static String tab_Works="//div[@class='mat-tab-links']//a[contains(text(),'Work')]";
     public static String tab_product_andPackages="//div[@class='mat-tab-links']//a[contains(text(),'Products')]";
@@ -69,7 +73,7 @@ public class ProductFinderConstants {
 
     public static String sectionDetailJF = section+"[1]"+sectionDetailDiv;
     public static String subAreaRowJF = section+"[2]"+"//div[@class='section-detail subject-areas']";
-    public static String identifierRowJF = section+"[2]"+"/eph-pf-identifier-list"+sectionDetailDiv;
+    public static String identifierRowJF = section_identifier+"/eph-pf-identifier-list"+sectionDetailDiv;
     public static String specialtiesRowJF = section+"[2]"+"/eph-pf-specialties"+"//ul[@id='specialties']";
 
     public static String DetailIdentifiers = section_identifier + sectionDetailDiv;
