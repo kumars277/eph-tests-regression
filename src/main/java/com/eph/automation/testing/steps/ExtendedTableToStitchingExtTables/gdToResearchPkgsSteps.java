@@ -27,7 +27,7 @@ public class gdToResearchPkgsSteps {
 
     @Given("^We get the (.*) random EPR Prod ids from Semarchy tables$")
     public void getRandomprodEprIds(String numberOfRecords) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random prod ids...");
         sql = String.format(gdToResearchPkgChecksSQL.GET_RANDOM_PKG_ID);
