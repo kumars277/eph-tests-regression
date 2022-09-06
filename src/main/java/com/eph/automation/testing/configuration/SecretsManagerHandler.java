@@ -55,7 +55,7 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat_url";
-            case "EPH_RP_URL":  return "eph_uat_rp_url";
+            case "EPH_RP_URL":  return "ResearchPackages_UI";
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);}
     }
 
