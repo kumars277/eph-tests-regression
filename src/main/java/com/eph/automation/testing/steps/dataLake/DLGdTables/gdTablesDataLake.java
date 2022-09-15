@@ -1238,7 +1238,7 @@ public class gdTablesDataLake {
                         GDTablesDLSQLContext.recordsFromDL.sort(Comparator.comparing(GDTableDLSQLObject::getperson_id));
                         String[] person = {"getperson_id", "getb_classname", "getb_batchid", "getb_credate", "getb_upddate", "getb_creator"
                                 , "getb_updator", "getexternal_reference", "getgiven_name", "gets_given_name", "getfamily_name", "gets_family_name",
-                                "getpeoplehub_id", "getemail", "gets_email"};
+                                "getpeoplehub_id", "getemail", "gets_email","geteffective_start_date","geteffective_end_date"};
                         for (String strTemp : person) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;

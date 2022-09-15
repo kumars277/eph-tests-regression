@@ -69,7 +69,7 @@ public class ProductFinderConstants {
 
     public static String sectionDetailJF = section+"[1]"+sectionDetailDiv;
     public static String subAreaRowJF = section+"[2]"+"//div[@class='section-detail subject-areas']";
-    public static String identifierRowJF = section+"[2]"+"/eph-pf-identifier-list"+sectionDetailDiv;
+    public static String identifierRowJF = section_identifier+"/eph-pf-identifier-list"+sectionDetailDiv;
     public static String specialtiesRowJF = section+"[2]"+"/eph-pf-specialties"+"//ul[@id='specialties']";
 
     public static String DetailIdentifiers = section_identifier + sectionDetailDiv;

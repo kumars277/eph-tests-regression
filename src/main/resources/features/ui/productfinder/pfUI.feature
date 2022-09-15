@@ -42,6 +42,16 @@ Feature: Product Finder Selenium tests
       |Title  |
       |Keyword|
 
+ @PFNonProd @UI @PFRegressionSuite @apiDebug
+  Scenario Outline: Search the work and filter them with one Work Type
+    Given Get the available Work Types from the DB "<workType>"
+    Then  Get a Work Id for each Work Types available in the DB
+    Given user is on Product Finder search page
+    And   Search for the Work by Work Ids Filter workType and verify the work Type is "<workType>"
+    Examples:
+      |workType |
+      |Book     |
+      |Journal  |
 
   @PFNonProd @UI @PFRegressionSuite @apiDebug
   Scenario Outline: Search the work and filter them with one Work Type

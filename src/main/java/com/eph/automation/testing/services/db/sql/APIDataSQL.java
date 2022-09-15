@@ -142,6 +142,14 @@ public class APIDataSQL {
           + " and gwpr.effective_end_date is null" +
               " order by random() limit %s";
 
+  public static final String SELECT_GD_RANDOM_JOURNAL_ID_withJournalNumber =
+      "SELECT gw.work_id from semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_work_identifier gwi\n"
+          + "on gw.work_id =gwi.f_wwork \n"
+          + "WHERE gwi.f_type='ELSEVIER JOURNAL NUMBER'\n"
+          + "and gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + "and gw.f_status in('WLA')\n"
+          + "order by random() limit %s";
   public static final String SELECT_RANDOM_EXTENDED_WORK_ID =
       "SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %s";
 
@@ -668,8 +676,16 @@ public class APIDataSQL {
       "select COUNT(*) from semarchy_eph_mdm.gd_wwork where s_work_title like '%%%S%%' AND f_pmc='%s'";
 
   public static final String SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH =
-      "select count(w.work_id) from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_x_lov_pmc pmc\n"
-          + "where pmc.code = w.f_pmc and upper(w.work_title) like '%%%s%%' and pmc.f_pmg='%s'";
+      "select count(distinct w.work_id) from semarchy_eph_mdm.gd_wwork w \n"
+          + "left join semarchy_eph_mdm.gd_x_lov_pmc pmc on w.f_pmc = pmc.code \n"
+          + "left join semarchy_eph_mdm.gd_manifestation gm on w.work_id =gm.f_wwork \n"
+          + "left join semarchy_eph_mdm.gd_product gp on gp.f_manifestation =gm.manifestation_id \n"
+          + "left join semarchy_eph_mdm.gd_product gp2 on gp2.f_wwork =w.work_id \n"
+          + "where pmc.f_pmg='PMG' \n"
+          + "and (w.work_title ~*'TITLE'\n"
+          + "or gm.manifestation_key_title ~*'TITLE'\n"
+          + "or gp.name ~*'TITLE'\n"
+          + "or gp2.name ~*'TITLE')";
 
   public static final String SELECT_GD_COUNT_WORK_BY_ACCOUNTABLEPRODUCT =
       "select COUNT(work_id) "

@@ -25,6 +25,7 @@ public class Constants {
     //Base Constants
     public static String PMX_URL = "PMX_URL";
     public static String EPH_URL = "EPH_URL";
+    public static String EPH_RP_URL = "EPH_RP_URL";
     public static String API_ENDPOINT = "API_ENDPOINT";
     public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
     public static String WFT_URL = "WFT_URL";
