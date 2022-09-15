@@ -40,20 +40,20 @@ Feature: Product Finder Selenium tests
       |options|
       |Id     |
       |Title  |
-   # |Keyword|  EPH-1909 created for issue – “Product finder is not searching ‘Manifestation by keyword’.”
+      |Keyword|
 
 
-#  @PFNonProd @UI @PFRegressionSuite @apiDebug
-#  Scenario Outline: Search the work and filter them with one Work Type
-#    Given Get the available Work Types from the DB "<workType>"
-#    Then  Get a Work Id for each Work Types available in the DB
-#    Given user is on Product Finder search page
-#    And   Search for the Work by Work Ids Filter workType and verify the work Type is "<workType>"
-#    Examples:
-#      |workType |
-#      |Book     |
-#      |Journal  |
-#
+  @PFNonProd @UI @PFRegressionSuite @apiDebug
+  Scenario Outline: Search the work and filter them with one Work Type
+    Given Get the available Work Types from the DB "<workType>"
+    Then  Get a Work Id for each Work Types available in the DB
+    Given user is on Product Finder search page
+    And   Search for the Work by Work Ids Filter workType and verify the work Type is "<workType>"
+    Examples:
+      |workType |
+      |Book     |
+      |Journal  |
+
 #  @PFNonProd @UI @PFRegressionSuite @PFDMC @PFDebug
 #  Scenario Outline: Search the Product Finder and verify all 3 tabs
 #    Given get 1 random work id from DB
@@ -86,9 +86,9 @@ Feature: Product Finder Selenium tests
 #    |iterator|
 #    |1|
 #    |2|
-#  #  |3|
-#  #  |4|
-#  #  |5|
+#    |3|
+#    |4|
+#    |5|
 #
 #  @PFNonProd @UI @PFRegressionSuite @JFUI @PFDebug
 #  Scenario Outline: Search the Journal by person
