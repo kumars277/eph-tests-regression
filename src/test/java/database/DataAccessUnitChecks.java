@@ -21,7 +21,7 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testDecrypt() {
-        System.out.println(DecryptionService.decrypt("--"));
+        System.out.println(DecryptionService.decrypt("SncnFx85NC6YSnDgKhm/sg=="));
     }
 
     @Test
