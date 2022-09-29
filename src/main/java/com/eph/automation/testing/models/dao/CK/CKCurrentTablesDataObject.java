@@ -151,6 +151,17 @@ public class CKCurrentTablesDataObject {
     private String from_value;
     private String to_value;
 
+    private String inbound_type;
+    private String cmms_site_name;
+
+    public String getinbound_type() {return inbound_type;}
+    public void setinbound_type(String inbound_type) {this.inbound_type = inbound_type;}
+
+    public String getcmms_site_name() {return cmms_site_name;}
+    public void setcmms_site_name(String cmms_site_name) {this.cmms_site_name = cmms_site_name;}
+
+
+
     public String getfield() {return field;}
     public void setfield(String field) {this.field = field;}
 
