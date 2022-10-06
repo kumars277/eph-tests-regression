@@ -14,12 +14,29 @@ public class GetCKDLDB {
                 dbCKDL = "dpp_staging_uat2";
             }
         } else {
-            dbCKDL = "dpp_staging_sit";
-            //dbCKDL = "dpp_staging_uat";
+//            dbCKDL = "dpp_staging_sit";
+            dbCKDL = "dpp_staging_uat";
         }
         return dbCKDL;
     }
-
+    public static String getProductDataBase() {
+        String ProductDb = null;
+        if (System.getProperty("ENV") != null) {
+            if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
+                ProductDb = "product_database_sit";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
+                ProductDb = "product_database_sit";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
+                ProductDb = "product_database_uat";
+            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
+                ProductDb = "product_database_uat";
+            }
+        } else {
+//            ProductDb = "product_database_sit";
+            ProductDb = "product_database_uat";
+        }
+        return ProductDb;
+    }
     public static String getCKCMMSDataBase() {
         String dbCKCMMSDL = null;
         if (System.getProperty("ENV") != null) {

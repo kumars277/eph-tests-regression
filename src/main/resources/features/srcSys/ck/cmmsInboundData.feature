@@ -1,16 +1,18 @@
 Feature:Validate data for DPP_EPH_CMMS_INBOUND_dag tables
 
   @DPPCMMSINBOUND
-  Scenario Outline: Verify that all data is transferred between CMMS Inbound View and Tables
+  Scenario Outline: Verify that all data is transferred between CMMS Inbound View and creation queries
     Given We know the number of <CMMSInboundView> data in CMMS View
-#    Then Get the count for <DPPReportsTable> Reports Table
-#    And Compare the count for <DPPReportsTable> table between Reports View and Reports Table
-#    Given We get the <numberOfRecords> random CK Reports View ids of <DPPReportsView>
-#    When We get the Reports View Records from <DPPReportsView>
-#    Then We get the Reports Table records from <DPPReportsTable>
-#    And Compare records in Reports View and Table of <DPPReportsTable>
-
+    Then Get the Query count for <CMMSInboundView> CMMSInbound
+    And Compare the count for <CMMSInboundView> table between CMMS Inbound View and CMMSInbound query
+    Given We get the <numberOfRecords> random CMMS Inbound View ids of <CMMSInboundView>
+    When We get the CKCMMSInbound View Records from <CMMSInboundView>
+    Then We get the CKCMMSInbound Query records from <CMMSInboundView>
+    And Compare records in CKCMMSInbound View and CMMSInbound query of <CMMSInboundView>
+#
     Examples:
-      |numberOfRecords   |CMMSInboundView                 |CMMSInboundTable                   |
-      | 5                |ck_workflow_tableau_v           |cmms_durable_url_inbound_part                |
-
+      |numberOfRecords   |CMMSInboundView                 |
+      | 5                |cmms_durable_url1_form_v           |
+      |5                 |cmms_durable_url2_form_v           |
+      |5                 |cmms_durable_url3_form_v           |
+      |5                 |cmms_durable_url_transform_v       |

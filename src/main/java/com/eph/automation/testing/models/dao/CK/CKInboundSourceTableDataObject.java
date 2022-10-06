@@ -128,7 +128,6 @@ public class CKInboundSourceTableDataObject {
     private String Next_Lead_ISBN;
     private String Ownership;
     private String First_Pub_Date;
-    private String Durable_URL;
     private String Lead_ISBN;
     private String PMG;
     private String CK_Title_Start_Date;
@@ -163,6 +162,15 @@ public class CKInboundSourceTableDataObject {
     private String To_Value;
     private String packagetitle;
     private String packagetype;
+    private String inbound_type;
+    private String cmms_site_name;
+
+    public String getinbound_type() {return inbound_type;}
+    public void setinbound_type(String inbound_type) {this.inbound_type = inbound_type;}
+
+    public String getcmms_site_name() {return cmms_site_name;}
+    public void setcmms_site_name(String cmms_site_name) {this.cmms_site_name = cmms_site_name;}
+
 
     public String getpackagetype() {return packagetype;}
     public void setpackagetype(String packagetype) {this.packagetype = packagetype;}
@@ -267,8 +275,6 @@ public class CKInboundSourceTableDataObject {
     public String getLead_ISBN() {return Lead_ISBN;}
     public void setLead_ISBN(String Lead_ISBN) {this.Lead_ISBN = Lead_ISBN;}
 
-    public String getDurable_URL() {return Durable_URL;}
-    public void setDurable_URL(String Durable_URL) {this.Durable_URL = Durable_URL;}
 
     public String getCK_Package_Type() {return CK_Package_Type;}
     public void setCK_Package_Type(String CK_Package_Type) {this.CK_Package_Type = CK_Package_Type;}
