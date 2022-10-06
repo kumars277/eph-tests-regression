@@ -96,7 +96,7 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":
                 if(true) {//jenkins profile
-                    return object.getAsString("SIT_AWS_URL");}
+                    return object.getAsString("UAT_AWS_URL");}
                 else { //  Local profile
                     return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +
                             "AwsCredentialsProviderClass=com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider;AwsCredentialsProviderArguments=default;";
