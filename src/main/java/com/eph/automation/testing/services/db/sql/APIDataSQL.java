@@ -142,6 +142,14 @@ public class APIDataSQL {
           + " and gwpr.effective_end_date is null" +
               " order by random() limit %s";
 
+  public static final String SELECT_GD_RANDOM_JOURNAL_ID_withJournalNumber =
+      "SELECT gw.work_id from semarchy_eph_mdm.gd_wwork gw \n"
+          + "inner join semarchy_eph_mdm.gd_work_identifier gwi\n"
+          + "on gw.work_id =gwi.f_wwork \n"
+          + "WHERE gwi.f_type='ELSEVIER JOURNAL NUMBER'\n"
+          + "and gw.f_type in('ABS','JBB','JNL','NWL') \n"
+          + "and gw.f_status in('WLA')\n"
+          + "order by random() limit %s";
   public static final String SELECT_RANDOM_EXTENDED_WORK_ID =
       "SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %s";
 

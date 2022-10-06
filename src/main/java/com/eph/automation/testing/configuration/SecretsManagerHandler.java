@@ -13,6 +13,8 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import java.util.Base64;
 
+import static java.lang.System.*;
+
 
 public class SecretsManagerHandler {
     public SecretsManagerHandler(){//
@@ -23,13 +25,15 @@ public class SecretsManagerHandler {
     public static String getDBConnection(String connectionURL) throws NullPointerException {
         String secretName = "";
         String dbConnection = "";
-
+        Log.info("Debug mode----"+TestContext.getValues().environment);
         switch (TestContext.getValues().environment) {
             case "SIT": secretName=getSITSecretName(connectionURL);
                 dbConnection = getSITdbConnection(getSecretKeyObj(region,secretName),connectionURL);break;
 
             case "UAT": secretName=getUATSecretName(connectionURL);
-                dbConnection = getUATdbConnection(getSecretKeyObj(region,secretName),connectionURL);break;
+                dbConnection = getUATdbConnection(getSecretKeyObj(region,secretName),connectionURL);
+                Log.info("Debug mode----"+dbConnection);
+                break;
 
             case "UAT2":secretName=getUAT2SecretName(connectionURL);
                 dbConnection = getUAT2dbConnection(getSecretKeyObj(region,secretName),connectionURL);break;
@@ -46,6 +50,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":  return "eph_sit_promis_url";
             case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
             case "EPH_URL":     return "eph_sit_url";
+            case "EPH_RP_URL":  return "eph_sit_rp_url";
             default:throw new IllegalArgumentException(illegalArgument+ connectionURL);}
     }
 
@@ -54,6 +59,7 @@ public class SecretsManagerHandler {
         switch (connectionURL) {
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat_url";
+            case "EPH_RP_URL":  return "eph_uat_rp_url";
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);}
     }
 
@@ -78,12 +84,15 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
+            case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_SIT_URL"));
+
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
 
     public static String getUATdbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
+        Log.info("Debug mode----"+connectionURL);
         switch (connectionURL) {
             case "AWS_URL":           return object.getAsString("UAT_AWS_URL");//Jenkins profile
             //   Local profile
@@ -92,6 +101,9 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
+            case "EPH_RP_URL":
+                Log.info("Debug mode----"+connectionURL);
+                return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
@@ -106,6 +118,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT2_URL"));
+            case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
