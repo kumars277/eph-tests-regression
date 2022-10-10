@@ -50,8 +50,8 @@ public class GetCKDLDB {
                 dbCKCMMSDL = "eph_supplemental_uat2";
             }
         } else {
-            dbCKCMMSDL = "eph_supplemental_sit";
-//            dbCKCMMSDL = "eph_supplemental_uat";
+//            dbCKCMMSDL = "eph_supplemental_sit";
+            dbCKCMMSDL = "eph_supplemental_uat";
         }
         return dbCKCMMSDL;
     }
@@ -69,8 +69,8 @@ public class GetCKDLDB {
                 dbCKCMMSDL = "ebtd_staging_uat2";
             }
         } else {
-            dbCKCMMSDL = "ebtd_staging_sit";
-            //dbCKDL = "ebtd_staging_uat";
+//            dbCKCMMSDL = "ebtd_staging_sit";
+            dbCKCMMSDL = "ebtd_staging_uat";
         }
         return dbCKCMMSDL;
     }
