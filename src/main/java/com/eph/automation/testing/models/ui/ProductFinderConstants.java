@@ -16,7 +16,7 @@ public class ProductFinderConstants {
     public static String latestWorkViewMore = latestWorkParent+"/div[contains(@class,'view-more')]/span";
     public static String helpSupportParent = "//div[@class='help-support']";
     public static String helpSupportChild = helpSupportParent+"/ul/li/a";
-    public static String searchBar = " //input[@id='searchTerm']";
+    public static String searchBar = " //input[@id='mat-input-0']";
     public static String searchButton = "//i[@class='gm-ico-search']";
     public static String tab_Works="//div[@class='mat-tab-links']//a[contains(text(),'Work')]";
     public static String tab_product_andPackages="//div[@class='mat-tab-links']//a[contains(text(),'Products')]";
@@ -80,6 +80,15 @@ public class ProductFinderConstants {
     public static String searchDropdownPmc="//option[@value='pmcCode']";
     public static String zeroResultFound="//div[@class='container search-results no-results']";
     public static String productFoundOf="//div[@class='pager']//div[@class='container']/div[1]";
+
+
+
+    public static String journalSearchbar = "//div[@class='search-input']//child::input";
+    public static String journalsearchButton = "//button[@class='pf-icon-button s46 primary search-button mat-ripple']";
+
+
+
+
 
 
 }

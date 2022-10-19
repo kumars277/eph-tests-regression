@@ -18,9 +18,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.interactions.Actions;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
@@ -178,6 +180,26 @@ public class ProductFinderTasks {
         tasks.clearText("XPATH", ProductFinderConstants.searchBar);
         tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
         tasks.click("XPATH", ProductFinderConstants.searchButton);
+        Thread.sleep(3000);
+    }
+
+    public void searchForJournal(final String searchID) throws InterruptedException {
+         //updated by Sarath @ 12 Oct 2022 for Journal Finder
+
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.journalSearchbar)) {
+            tasks.driver.navigate().refresh();
+            Thread.sleep(30000);
+            Log.info("page refreshed as search bar not available...");
+            Log.info("after 30 sec from page refreshed");
+            Log.info("\n");
+            //  Log.info(tasks.driver.getPageSource());
+            Log.info("\n");
+        }
+
+        Log.info("Searching " + searchID + " on " + DataQualityContext.uiUnderTest);
+        tasks.clearText("XPATH", ProductFinderConstants.journalSearchbar);
+        tasks.sendKeys("XPATH", ProductFinderConstants.journalSearchbar, searchID);
+        tasks.click("XPATH", ProductFinderConstants.journalsearchButton);
         Thread.sleep(3000);
     }
 
