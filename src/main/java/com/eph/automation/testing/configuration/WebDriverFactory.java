@@ -10,6 +10,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -87,6 +88,27 @@ public class WebDriverFactory implements Provider<WebDriver> {
                 DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
                 capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
                 return new InternetExplorerDriver(capabilities);
+
+            case "lambda":
+                WebDriver driver;
+                String username = "your user name";
+                String accesskey = "your access key";
+                String gridURL = "@hub.lambdatest.com/wd/hub";
+                boolean status = false;
+                DesiredCapabilities capability = new DesiredCapabilities();
+                capability.setCapability("browserName", "chrome");
+                capability.setCapability("version", "95.0");
+                capability.setCapability("platform", "win10"); // If this cap isn't specified, it will just get any available one.
+                capability.setCapability("build", "ProductFinderApp");
+                capability.setCapability("name", "ProductFinderAppTest");
+                capability.setCapability("tunnel", true);
+                try {
+                 return new RemoteWebDriver(new URL("https://" + username + ":" + accesskey + gridURL), capability);
+                } catch (MalformedURLException e) {
+                    System.out.println("Invalid grid URL");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
 
             default:
                 //ChromeDriverManager.chromedriver().setup();

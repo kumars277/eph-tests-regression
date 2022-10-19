@@ -20,7 +20,7 @@ public class TestContext {
         String rowFrom = System.getProperty("rowFrom");
         String rowTill = System.getProperty("rowTill");
 
-        testProperties.browserType = browserName != null ? browserName : "chrome";
+        testProperties.browserType = browserName != null ? browserName : "lambda";
         testProperties.gridRun = gridRun != null ? Boolean.TRUE : Boolean.FALSE;
         testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.SIT.name();
         testProperties.targetDB = targetDB != null ? Boolean.TRUE : Boolean.FALSE;

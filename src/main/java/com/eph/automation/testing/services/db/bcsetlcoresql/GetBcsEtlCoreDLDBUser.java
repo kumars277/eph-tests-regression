@@ -24,20 +24,37 @@ public static String getBcsETLCoreDataBase(){
     return dbBCS;
 }
 
-    public static String getDlCoreViewDataBase(){
-        String dbProd = "";
-        if (System.getProperty("ENV") != null){
-            switch (System.getProperty("ENV")) {
-                case "SIT" : dbProd = "product_staging_database_sit"; break;
-                case "SIT2": dbProd = "product_staging_database_sit2";break;
-                case "UAT" : dbProd = "product_staging_database_uat"; break;
-                case "UAT2": dbProd = "product_staging_database_uat2";break;
-                default    : dbProd = "product_staging_database_sit"; break;
+    public static String getDlCoreViewDataBase() {
+        try {
+            String dbProd = "";
+            if (System.getProperty("ENV") != null) {
+                switch (System.getProperty("ENV")) {
+                    case "SIT":
+                        dbProd = "product_staging_database_sit";
+                        break;
+                    case "SIT2":
+                        dbProd = "product_staging_database_sit2";
+                        break;
+                    case "UAT":
+                        dbProd = "product_staging_database_uat";
+                        break;
+                    case "UAT2":
+                        dbProd = "product_staging_database_uat2";
+                        break;
+                    default:
+                        dbProd = "product_staging_database_sit";
+                        break;
+                }
+            } else {
+                dbProd = "product_staging_database_sit";
             }
+            return dbProd;
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        else{dbProd = "product_staging_database_sit";}
-        return dbProd;
+        return null;
     }
+
 
     public static String getErmsETLCoreDataBase(){
         String dbERMS = null;
