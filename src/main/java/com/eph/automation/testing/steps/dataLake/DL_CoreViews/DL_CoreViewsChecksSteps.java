@@ -5,6 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.db.DL_CoreViewSQL.DL_CoreViewChecksSQL;
+import com.eph.automation.testing.services.db.bcsetlcoresql.GetBcsEtlCoreDLDBUser;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -41,7 +42,7 @@ public class DL_CoreViewsChecksSteps {
         switch (tableName){
             case "all_accountable_product_v":
                 Log.info("Getting DL Core All Accountable Product View Count...");
-                DLCoreSQLViewCount = DL_CoreViewChecksSQL.GET_DL_CORE_ALL_ACC_PROD_VIEW_COUNT;
+                DLCoreSQLViewCount = "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_accountable_product_v";
                 break;
             case "all_manifestation_identifiers_v":
                 Log.info("Getting DL Core All Manifestation Identifier View Count...");
@@ -69,7 +70,7 @@ public class DL_CoreViewsChecksSteps {
                 break;
             case "all_work_person_role_v":
                 Log.info("Getting DL Core All work Person Role view Count...");
-                DLCoreSQLViewCount = DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_PERS_ROLE_VIEW_COUNT;
+                DLCoreSQLViewCount = "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_accountable_product_v";
                 break;
             case "all_work_relationship_v":
                 Log.info("Getting Dl Core all work relationship view Count...");

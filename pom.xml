@@ -41,6 +41,10 @@
         <junit.version>4.12</junit.version>
         <commons.io.version>2.6</commons.io.version>
         <hamcrest.version>2.0.0.0</hamcrest.version>
+
+        <aws.lambda.version>1.2.0</aws.lambda.version>
+        <aws.sdk.version>1.11.305</aws.sdk.version>
+        <commons.io.version>2.6</commons.io.version>
     </properties>
 
     <profiles>
