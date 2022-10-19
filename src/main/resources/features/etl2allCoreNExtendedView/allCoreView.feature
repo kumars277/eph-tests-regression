@@ -13,23 +13,23 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
     Then  Get the Records from the JM and BCS Core Tables <tableName>
     And   Get the Records from the DL core views <tableName>
     Then  Compare data of BCS and JM Core with DL Core views <tableName> are identical
-    And Compare count of externalReference field null value count is 0 <tableName>
+    And   Compare count of externalReference field null value count is 0 <tableName>
     Examples:
       | tableName                           |countOfRandomIds   |
-      |all_accountable_product_v            |50                 |
-      |all_manifestation_identifiers_v      |50                 |
-      |all_manifestation_v                  |50                 |
-      |all_person_v                         |50                 |
-      |all_product_v                        |50                 |
+      |all_accountable_product_v            |5                 |
+      |all_manifestation_identifiers_v      |5                 |
+      |all_manifestation_v                  |5                 |
+      |all_person_v                         |5                 |
+      |all_product_v                        |5                 |
     #  |all_product_rel_package_v            |50                 | not required, this is for analysis purpose created in SIT
-      |all_work_identifier_v                |50                 |
-      |all_work_person_role_v               |50                 |
-      |all_work_relationship_v              |50                 |
-      |all_work_subject_areas_v             |50                |
-      |all_work_v                           |50                 |
-      |all_work_legal_owner_v               |10                 |
-      |all_work_access_model_v              |50                 |
-      |all_work_business_model_v            |50                 |
+      |all_work_identifier_v                |5                 |
+      |all_work_person_role_v               |5                 |
+      |all_work_relationship_v              |5                 |
+      |all_work_subject_areas_v             |5                |
+      |all_work_v                           |5                 |
+      |all_work_legal_owner_v               |1                 |
+      |all_work_access_model_v              |5                 |
+      |all_work_business_model_v            |5                 |
 
     #EPHD-3362
   @DLCoreView
