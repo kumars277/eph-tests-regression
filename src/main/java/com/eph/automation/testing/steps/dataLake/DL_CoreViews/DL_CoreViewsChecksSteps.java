@@ -70,7 +70,7 @@ public class DL_CoreViewsChecksSteps {
                 break;
             case "all_work_person_role_v":
                 Log.info("Getting DL Core All work Person Role view Count...");
-                DLCoreSQLViewCount = "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_accountable_product_v";
+                DLCoreSQLViewCount = "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_person_role_v";
                 break;
             case "all_work_relationship_v":
                 Log.info("Getting Dl Core all work relationship view Count...");

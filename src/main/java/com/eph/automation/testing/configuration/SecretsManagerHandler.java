@@ -25,14 +25,12 @@ public class SecretsManagerHandler {
     public static String getDBConnection(String connectionURL) throws NullPointerException {
         String secretName = "";
         String dbConnection = "";
-        Log.info("Debug mode----"+TestContext.getValues().environment);
         switch (TestContext.getValues().environment) {
             case "SIT": secretName=getSITSecretName(connectionURL);
                 dbConnection = getSITdbConnection(getSecretKeyObj(region,secretName),connectionURL);break;
 
             case "UAT": secretName=getUATSecretName(connectionURL);
                 dbConnection = getUATdbConnection(getSecretKeyObj(region,secretName),connectionURL);
-                Log.info("Debug mode----"+dbConnection);
                 break;
 
             case "UAT2":secretName=getUAT2SecretName(connectionURL);
@@ -92,7 +90,6 @@ public class SecretsManagerHandler {
 
     public static String getUATdbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
-        Log.info("Debug mode----"+connectionURL);
         switch (connectionURL) {
             case "AWS_URL":
                 if(true) {//jenkins profile
@@ -104,9 +101,7 @@ public class SecretsManagerHandler {
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
-            case "EPH_RP_URL":
-                Log.info("Debug mode----"+connectionURL);
-                return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
+            case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }

@@ -53,8 +53,7 @@ public class DL_CoreViewChecksSQL {
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_work_business_model_v";
 
 
-    public static String GET_BCS_JM_CORE_ACC_PROD_COUNT =
-            "select count(*) as Source_Count from(\n" +
+    public static String GET_BCS_JM_CORE_ACC_PROD_COUNT = "select count(*) as Source_Count from(\n" +
                     "SELECT\n" +
                     "  concat(accountableproduct, accountableparent) external_reference\n" +
                     ", sourceref work_reference\n" +
