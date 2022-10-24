@@ -13,6 +13,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 
 /**
  * Created by RAVIVARMANS on 11/24/2018.
@@ -27,7 +28,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
         WebDriver driver = null;
         //if (TestContext.getValues().gridRun) {
         if (false) {driver = gridRun();}
-        else if (false) {driver =lambdaTestRun();}
+        else if (true) {driver =lambdaTestRun();}
         else {driver = selectBrowser();}
         return driver;
     }
@@ -52,8 +53,8 @@ public class WebDriverFactory implements Provider<WebDriver> {
     public WebDriver lambdaTestRun()
     {
         WebDriver driver;
-        String username = "n.chitre";
-        String accesskey = "";
+//        String username = "t.kruck";
+//        String accesskey = "";
 
         DesiredCapabilities capability = new DesiredCapabilities();
         capability.setCapability(CapabilityType.BROWSER_NAME, "chrome");
@@ -61,10 +62,17 @@ public class WebDriverFactory implements Provider<WebDriver> {
         capability.setCapability("platform", "win10");
         capability.setCapability("build", "EPH-QA");
         capability.setCapability("name", "lambada remote browser Test");
+        capability.setCapability("tunnel", true);
         capability.acceptInsecureCerts();
         //   System.setProperty("javax.net.ssl.trustStore","clientTrustStore.key");
         //    System.setProperty("javax.net.ssl.trustStorePassword","changeit");
-        String gridURL = "http://" + username + ":" + accesskey + "@hub.lambdatest.com/wd/hub";
+
+        String Lambda_URL= null;
+        Lambda_URL= SecretsManagerHandler.getDBConnection("Lambda");
+        System.out.println(Lambda_URL);
+        String gridURL = Lambda_URL;
+
+//        String gridURL = "http://" + username + ":" + accesskey + "@hub.lambdatest.com/wd/hub";
         try {
             return new RemoteWebDriver(new URL(gridURL), capability);
         } catch (MalformedURLException e) {
@@ -91,8 +99,8 @@ public class WebDriverFactory implements Provider<WebDriver> {
 
             case "lambda":
                 WebDriver driver;
-                String username = "your user name";
-                String accesskey = "your access key";
+                String username = "t.kruck";
+                String accesskey = "pLTBfxDVkx8LtiC1QLfk0d5kuctvfbVSeobc1RJwIZAlizf3BS";
                 String gridURL = "@hub.lambdatest.com/wd/hub";
                 boolean status = false;
                 DesiredCapabilities capability = new DesiredCapabilities();
