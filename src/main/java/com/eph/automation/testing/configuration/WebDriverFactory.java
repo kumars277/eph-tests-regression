@@ -91,8 +91,8 @@ public class WebDriverFactory implements Provider<WebDriver> {
 
             case "lambda":
                 WebDriver driver;
-                String username = "d.sureshkumar";
-                String accesskey = "zV3i86EFtiVMBkkglUNjELahMMP5ZV9PUIamtZOLlA78XTm8r0";
+                String username = "";
+                String accesskey = "";
                 String gridURL = "@hub.lambdatest.com/wd/hub";
                 boolean status = false;
                 DesiredCapabilities capability = new DesiredCapabilities();
