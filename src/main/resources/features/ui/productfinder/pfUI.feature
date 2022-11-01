@@ -2,8 +2,8 @@ Feature: Product Finder Selenium tests
 
   @PFNonProd @UI @PFRegressionSuite
   Scenario Outline: search work by multiple options
-    Given get 1 random work id from DB
-    And We get the work search data from EPH GD
+   # Given get 1 random work id from DB
+   # And We get the work search data from EPH GD
     When user is on Product Finder search page
     And Search works by <options>
     Then The searched work is listed and clicked
