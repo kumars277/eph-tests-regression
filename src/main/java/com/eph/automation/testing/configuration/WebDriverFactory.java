@@ -91,8 +91,8 @@ public class WebDriverFactory implements Provider<WebDriver> {
 
             case "lambda":
                 WebDriver driver;
-                String username = "your user name";
-                String accesskey = "your access key";
+                String username = "d.sureshkumar";
+                String accesskey = "zV3i86EFtiVMBkkglUNjELahMMP5ZV9PUIamtZOLlA78XTm8r0";
                 String gridURL = "@hub.lambdatest.com/wd/hub";
                 boolean status = false;
                 DesiredCapabilities capability = new DesiredCapabilities();
@@ -103,7 +103,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
                 capability.setCapability("name", "ProductFinderAppTest");
                 capability.setCapability("tunnel", true);
                 try {
-                 return new RemoteWebDriver(new URL("https://" + username + ":" + accesskey + gridURL), capability);
+                 return new RemoteWebDriver(new URL("http://" + username + ":" + accesskey + gridURL), capability);
                 } catch (MalformedURLException e) {
                     System.out.println("Invalid grid URL");
                 } catch (Exception e) {
