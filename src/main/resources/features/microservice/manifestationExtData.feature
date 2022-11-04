@@ -10,7 +10,7 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     Then Records from manifestation summary table
     Then Compare Manif Extended and Manif Extended Stitching Table
     Examples:
-      |tableName                   |countOfRandomIds|
+      |tableName                   |countOfRandomIds    |
       |manifestation_extended      |100                 |
 
   @ManifExtStitching

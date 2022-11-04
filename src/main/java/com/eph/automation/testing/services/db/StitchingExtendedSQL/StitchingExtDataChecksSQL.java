@@ -25,8 +25,7 @@ public class StitchingExtDataChecksSQL {
 //    }
 
 
-    public static String GET_RANDOM_EPR_MANIF_EXTENDED =
-            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where delete_flag=false order by rand() limit %s\n";
+    public static String GET_RANDOM_EPR_MANIF_EXTENDED ="select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where delete_flag = false order by rand();";
 
     public static String GET_MANIF_EXT_REC =
             "select epr_id as epr_id\n" +

@@ -124,7 +124,7 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             //updated by Nishant @ 15 Mar 2021 for secret manager
-           //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+//           connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
             connection = DriverManager.getConnection(SecretsManagerHandler.getDBConnection(URL));
 
             QueryRunner query = new QueryRunner();

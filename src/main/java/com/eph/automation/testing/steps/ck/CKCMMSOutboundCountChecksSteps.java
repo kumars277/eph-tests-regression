@@ -18,12 +18,12 @@ public class CKCMMSOutboundCountChecksSteps {
     private static int CK_CMMS_TableCount;
 
     //CMMS View to Table count checks
-    @Given("We know the number of CK (.*) data in CMMS View")
+    @Given("We know the number of CK (.*) data in CMMS Outbound View")
     public void getCKCMMSViewCount(String DPPCMMSView) {
         CKSQL = String.format(CKCMMSOutboundCountCheckSQL.GET_CMMS_VIEW_COUNT, DPPCMMSView);
         Log.info(CKSQL);
         List<Map<String, Object>> CK_CMMSViewCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
-        CK_CMMS_ViewCount = ((Long) CK_CMMSViewCount.get(0).get("Count")).intValue();
+        CK_CMMS_ViewCount = ((Long) CK_CMMSViewCount.get(0).get("count")).intValue();
         Log.info(DPPCMMSView + " table in CK CMMS View has the Count: " + CK_CMMS_ViewCount);
     }
 

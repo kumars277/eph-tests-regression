@@ -4,7 +4,7 @@ Feature:Validate data for DPP_EPH_CMMS_Export_dag tables
 
   @DPPCMMSEXPORT
   Scenario Outline: Verify that all CK data is transferred between DPP CMMS VIEW and DPP CMMS tables
-    Given We know the number of CK <DPPCMMSView> data in CMMS View
+    Given We know the number of CK <DPPCMMSView> data in CMMS Outbound View
     Then Get the count for CK <DPPCMMSTable> CMMS Table
     And Compare the CK count for <DPPCMMSTable> table between CMMS View and CMMS Table
 #    Given We get the <numberOfRecords> random CK CMMS View ids of <DPPCMMSView>
