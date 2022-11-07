@@ -9,11 +9,8 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-<<<<<<< HEAD
-        //System.setProperty("ENV","SIT");
-=======
         //   System.setProperty("ENV","SIT");
->>>>>>> 6265c8884fe0e32b40472c7e210b9b08477cbbab
+
         //   System.setProperty("browser","chrome");
 
         String browserName = System.getProperty("browser");

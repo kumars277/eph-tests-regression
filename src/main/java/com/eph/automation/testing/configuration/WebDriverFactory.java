@@ -99,12 +99,6 @@ public class WebDriverFactory implements Provider<WebDriver> {
 
             case "lambda":
                 WebDriver driver;
-<<<<<<< HEAD
-                String username = "";
-                String accesskey = "";
-                String gridURL = "@hub.lambdatest.com/wd/hub";
-=======
-
                 String username = "";
                 String accesskey = "";
                 String Lambda_URL= null;
@@ -112,7 +106,6 @@ public class WebDriverFactory implements Provider<WebDriver> {
 //                System.out.println(Lambda_URL);
                 String gridURL = Lambda_URL;
 //                String gridURL = "@hub.lambdatest.com/wd/hub";
->>>>>>> 6265c8884fe0e32b40472c7e210b9b08477cbbab
                 boolean status = false;
                 DesiredCapabilities capability = new DesiredCapabilities();
                 capability.setCapability("browserName", "chrome");
