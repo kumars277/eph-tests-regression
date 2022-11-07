@@ -99,7 +99,6 @@ public class WebDriverFactory implements Provider<WebDriver> {
 
             case "lambda":
                 WebDriver driver;
-
                 String username = "";
                 String accesskey = "";
                 String Lambda_URL= null;
