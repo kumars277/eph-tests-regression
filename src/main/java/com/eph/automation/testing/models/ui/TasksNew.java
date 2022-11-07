@@ -277,8 +277,8 @@ public class TasksNew {
       elementScrolltoView(element);
       wait.until(ExpectedConditions.elementToBeClickable(element));
       element.click();
-      Thread.sleep(3000);
-      //waitUntilPageLoad();
+//      Thread.sleep(3000);
+      waitUntilPageLoad();
 
     } catch (Exception e) {
       e.printStackTrace();

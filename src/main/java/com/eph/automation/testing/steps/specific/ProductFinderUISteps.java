@@ -113,7 +113,7 @@ public class ProductFinderUISteps {
         DataQualityContext.uiUnderTest = "JF";
         productFinderTasks.openHomePage();
 
-      //  tasks.waitUntilPageLoad();
+        //tasks.waitUntilPageLoad();
 
     }
 
@@ -390,9 +390,13 @@ public class ProductFinderUISteps {
         productFinderTasks.searchFor(searchKeyword);
     }
 
-    @Given("^Searches work by id$")
-    public void searches_works_by_id() throws InterruptedException {
+    @Given("Searches work in product finder search page by id$")
+    public void Searches_work_in_product_finder_search_page_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+    }
+    @Given("Searches work in journal finder search page by id$")
+    public void Searches_work_in_journal_finder_search_page_by_id() throws InterruptedException {
+        productFinderTasks.searchForJournal(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
 
     @Then ("^verify Works, Products&Packages, Manifestation tab$")
@@ -1773,7 +1777,7 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
         //created by Nishant @ 10 Jul 2020
         WorksMatchedApiObject returnedWorks;
 
-        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.journalSearchbar)) {
             tasks.driver.navigate().refresh();
             Thread.sleep(3000);
         }
@@ -1789,7 +1793,7 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
             returnedWorks.verifyEnddatedPerson(queryValue);
 
             //   Log.info("searching keyword..." + queryValue);
-            productFinderTasks.searchFor(queryValue);
+            productFinderTasks.searchForJournal(queryValue);
 
             int totalProductFound = 0;
             if (!tasks.isObjectpresent("XPATH", ProductFinderConstants.zeroResultFound)) {
@@ -1809,7 +1813,7 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
         //created by Nishant @ 14 Jul 2020
         WorksMatchedApiObject returnedWorks = null;
 
-        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.journalSearchbar)) {
             tasks.driver.navigate().refresh();
             Thread.sleep(3000);
         }
@@ -1831,7 +1835,7 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
             }
 
             Log.info("searching journals by..." + journalSearchOption + " " + queryValue);
-            productFinderTasks.searchFor(queryValue);
+            productFinderTasks.searchForJournal(queryValue);
 
             int totalProductFound = 0;
             if (!tasks.isObjectpresent("XPATH", ProductFinderConstants.zeroResultFound)) {
