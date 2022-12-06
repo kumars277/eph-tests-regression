@@ -35,12 +35,12 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext EPR ids (.*)$")
     public void getRandomManifExtEPRIds(String numberOfRecords, String tableName) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext EPR Ids...");
         switch (tableName) {
             case "manifestation_extended":
-                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXTENDED,tableName, numberOfRecords);
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXTENDED, numberOfRecords);
                 List<Map<?,?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
                 break;
@@ -229,7 +229,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info("Get random Manif Ext Page count EPR Ids...");
         switch (tableName) {
             case "manifestation_extended_page_count":
-                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXT_PAGE_COUNT,tableName, numberOfRecords);
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXT_PAGE_COUNT, numberOfRecords);
                 List<Map<?, ?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
 

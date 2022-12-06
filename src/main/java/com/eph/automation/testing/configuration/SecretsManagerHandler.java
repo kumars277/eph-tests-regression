@@ -49,6 +49,7 @@ public class SecretsManagerHandler {
             case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
             case "EPH_URL":     return "eph_sit_url";
             case "EPH_RP_URL":  return "eph_sit_rp_url";
+            case "Lambda":      return "eph_lambda_credentials";
             default:throw new IllegalArgumentException(illegalArgument+ connectionURL);}
     }
 
@@ -83,6 +84,7 @@ public class SecretsManagerHandler {
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
             case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_SIT_URL"));
+            case "Lambda":             return DecryptionService.decrypt(object.getAsString("eph_lambda_credentials"));
 
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
