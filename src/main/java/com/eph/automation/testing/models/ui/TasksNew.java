@@ -41,7 +41,7 @@ public class TasksNew {
     //driver.get("https://uat.productfinder.elsevier.net");
     driver.get("https://productfinder.elsevier.net");
     loginWithCredential();
-    //loginWithScience(); //local execution
+//    loginWithScience(); //local execution
 
    }
 
@@ -101,6 +101,16 @@ public class TasksNew {
       } catch (Exception e) {
         Log.error(e.getMessage());
       }
+  }
+
+  public void clickThroughSurvey(){
+    try {
+      WebElement survey_btn = driver.findElement(By.xpath("//button[@id='surveyNo']"));
+      survey_btn.click();
+    }
+    catch (Exception e){
+      Log.info("Survey previously clicked");
+    }
   }
 
   public void sendCredential(String user, String pwd)

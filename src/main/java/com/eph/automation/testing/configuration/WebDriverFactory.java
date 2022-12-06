@@ -28,7 +28,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
         WebDriver driver = null;
         //if (TestContext.getValues().gridRun) {
         if (false) {driver = gridRun();}
-        else if (true) {driver =lambdaTestRun();}
+        else if (false) {driver =lambdaTestRun();}
         else {driver = selectBrowser();}
         return driver;
     }
