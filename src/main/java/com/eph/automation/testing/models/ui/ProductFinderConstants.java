@@ -16,8 +16,8 @@ public class ProductFinderConstants {
     public static String latestWorkViewMore = latestWorkParent+"/div[contains(@class,'view-more')]/span";
     public static String helpSupportParent = "//div[@class='help-support']";
     public static String helpSupportChild = helpSupportParent+"/ul/li/a";
-    public static String searchBar = " //input[@id='mat-input-0']";
-    public static String searchButton = "//i[@class='gm-ico-search']";
+    public static String searchBar = "//input[@id='searchTerm']";
+    public static String searchButton = "//body/eph-pf-root[1]/main[1]/eph-pf-search[1]/div[1]/div[1]/form[1]/div[1]/div[2]";
     public static String tab_Works="//div[@class='mat-tab-links']//a[contains(text(),'Work')]";
     public static String tab_product_andPackages="//div[@class='mat-tab-links']//a[contains(text(),'Products')]";
     public static String tab_manifestation="//div[@class='mat-tab-links']//a[contains(text(),'Manifestations')]";

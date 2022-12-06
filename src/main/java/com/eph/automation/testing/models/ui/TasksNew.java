@@ -103,6 +103,16 @@ public class TasksNew {
       }
   }
 
+  public void clickThroughSurvey(){
+    try {
+      WebElement survey_btn = driver.findElement(By.xpath("//button[@id='surveyNo']"));
+      survey_btn.click();
+    }
+    catch (Exception e){
+      Log.info("Survey previously clicked");
+    }
+  }
+
   public void sendCredential(String user, String pwd)
   {
 //created by Nishant @ 19 Apr 2022 for PF jenkins login

@@ -106,8 +106,9 @@ public class ProductFinderUISteps {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
-      //  productFinderTasks.loginWithCredential();
+        productFinderTasks.loginWithCredential();
         tasks.waitUntilPageLoad();
+        tasks.clickThroughSurvey();
     }
 
     @Given("^user is on Journal Finder search page$")
@@ -165,6 +166,7 @@ public class ProductFinderUISteps {
 
     @And("^User is forwarded to the searched works page from DB$")
     public void verifyUserIsForwardedToWorksPageFromDatabase() {
+
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
 
     }

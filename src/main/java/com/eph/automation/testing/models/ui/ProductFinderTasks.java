@@ -317,9 +317,12 @@ public class ProductFinderTasks {
         String referenceUrl = "work/" + workID + "/overview";
 
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("JF")) referenceUrl = "journals/" + referenceUrl;
-
+        JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = svc.getAsString("svc4");
+        String pwd = svc.getAsString("svc4pwd");
         switch (TestContext.getValues().environment) {
             case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;break;
+//            targetURL = "https://"+ loginId + ":" + pwd + "@sit.productfinder.elsevier.net/" + referenceUrl;
             case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;break;
             case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;break;
             case "PROD":
@@ -328,7 +331,10 @@ public class ProductFinderTasks {
 
         Log.info("Expected Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
-        else return false;
+        else {
+            Log.info("Actual URL = " + tasks.getCurrentPageUrl());
+            return false;
+        }
     }
     public boolean isUserOnProductPage(String productId) {
         //created by Nishant @ 23 Apr 2020
