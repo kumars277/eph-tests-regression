@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import javax.net.ssl.SSLHandshakeException;
 
@@ -52,6 +54,7 @@ public class ProductFinderUISteps {
     private ProductFinderTasks productFinderTasks;
     private TasksNew tasks;
     private String sql;
+    public WebDriver driver;
    // private String randomWorkStatus;
 
     private static List<String> productIdList;
@@ -183,6 +186,12 @@ public class ProductFinderUISteps {
     public void verifyUserIsForwardedToSearchedWorkPage() {
 
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
+    }
+
+    @And("^Verify user is forwarded to the searched manifestation page$")
+    public void verifyUserIsForwardedToSearchedManifestationPage() {
+
+        assertTrue(productFinderTasks.isUserOnManifestationPage(manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID()));
     }
 
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
@@ -390,10 +399,15 @@ public class ProductFinderUISteps {
         productFinderTasks.searchFor(searchKeyword);
     }
 
+    @Given("Searches manifestation in product finder search page by id$")
+    public void Searches_manifestation_in_product_finder_search_page_by_id() throws InterruptedException {
+        productFinderTasks.searchForManifestation(manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
+    }
     @Given("Searches work in product finder search page by id$")
     public void Searches_work_in_product_finder_search_page_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
+
     @Given("Searches work in journal finder search page by id$")
     public void Searches_work_in_journal_finder_search_page_by_id() throws InterruptedException {
         productFinderTasks.searchForJournal(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
@@ -521,6 +535,16 @@ public class ProductFinderUISteps {
         Log.info("clicked " + workId + " id from search result");
     }
 
+    @Then("^Search items are listed and click the manifestation from result")
+    public void search_items_are_listed_and_click_manifestationId() throws InterruptedException {
+        tasks.waitUntilPageLoad();
+        tasks.click("xpath",ProductFinderConstants.manifestation_page_click);
+        String manifestId = dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID();
+        boolean manifestSearched = productFinderTasks.searchOnResultPages(manifestId);
+        Assert.assertTrue("searched key is on search result", manifestSearched);
+        productFinderTasks.clickWork(manifestId);
+        Log.info("clicked " + manifestId + " id from search result");
+    }
     @Then("^Verify the Work id Type is \"([^\"]*)\"$")
     public boolean verifyWorkType(String chooseWorkType) {
         //created by Nishant @ 22 May 2020
@@ -604,6 +628,10 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                     default:throw new IllegalArgumentException();
     }
     assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
+
+
+
+
 }
 
     private void productStatusUIValidation(String filterType) {//created by Nishant @21 Apr 2021
@@ -754,6 +782,19 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
     //###########################################################################
     //manifestation steps
+
+
+    @Given("^get (.*) random manifestation id from DB")
+    public void getRandomManifestationIds(String numberOfRecords) {
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_MANIFESTATION_ID, numberOfRecords);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random manifestation ids  : " + ids);
+        // ids.clear(); ids.add("EPR-W-106TTG");      Log.info("hard coded work ids are : " + ids);
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
+
 
     @Given("^get (\\d+) random manifestation id$")
     public void getRandomManifestationIdFromDB(int arg0) {

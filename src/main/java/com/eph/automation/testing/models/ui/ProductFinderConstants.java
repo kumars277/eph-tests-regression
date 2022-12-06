@@ -61,7 +61,7 @@ public class ProductFinderConstants {
 
     public static String sectionDetail = section + sectionDetailDiv; //core information
 
-    public static String section_identifier = "//div[@class='section identifiers']";
+    public static String section_identifier = "//div[@class='section']";
     public static String subAreaRow = section_identifier+"//div[@class='section-detail subject-areas']";
     public static String identifierRow = section_identifier+"/eph-pf-identifier-list"+sectionDetailDiv;
     public static String specialtiesRow = section_identifier+"/eph-pf-specialties"+sectionDetailDiv;
@@ -85,6 +85,8 @@ public class ProductFinderConstants {
 
     public static String journalSearchbar = "//div[@class='search-input']//child::input";
     public static String journalsearchButton = "//button[@class='pf-icon-button s46 primary search-button mat-ripple']";
+
+    public static String manifestation_page_click ="(//div[@class='ng-star-inserted'])[3]";
 
 
 
