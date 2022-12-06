@@ -786,7 +786,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
     @Given("^get (.*) random manifestation id from DB")
     public void getRandomManifestationIds(String numberOfRecords) {
-        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_MANIFESTATION_ID, numberOfRecords);
+       // sql = String.format(APIDataSQL.SELECT_GD_RANDOM_MANIFESTATION_ID, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random manifestation ids  : " + ids);

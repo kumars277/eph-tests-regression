@@ -1,21 +1,21 @@
 Feature:Validate data count for JM Extended tables
 
-  #confluence link: https://confluence.cbsels.com/display/EPH/Product+Extended+Availability+Topic+Process.
+  #confluence link: https://confluence.cbsels.com/display/EPH/Product+Extended+Availability+Topic+Process
   #confluence version: v37
 
    @JMETLExtended
   Scenario Outline: Verify Data for JM_ETL Extended tables is transferred from Inbound Tables
      Given Get the total count of JM ETL Extended Tables <tableName>
-     When Get the total count of JM source tables <tableName>
-     Then Compare count of JM source Inbound and JM ETL Extended <tableName> tables are identical
+#     When Get the total count of JM source tables <tableName>
+#     Then Compare count of JM source Inbound and JM ETL Extended <tableName> tables are identical
      Given Get the <countOfRandomIds> of JM ETL Extended data from Inbound Tables <tableName>
      Then  Get the Data from the Source Tables <tableName>
      And   Data from the JM ETL Extended Tables to compare source Check <tableName>
      Then  Compare data of JM ETL Extended Tables and source <tableName> tables are identical
     Examples:
       | tableName                                 |countOfRandomIds|
-      |jnl_new_fulfilment_system_v                |10              |
-      |jnl_fulfilment_system                      |10               |
+#      |jnl_new_fulfilment_system_v                |5              |
+      |jnl_new_fulfilment_system                  |5              |
 
 
  #Feature: Validating JM_Extended data (Count and Data Checks) between JM and product Extended DB

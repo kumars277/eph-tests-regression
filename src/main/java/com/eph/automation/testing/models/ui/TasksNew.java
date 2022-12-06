@@ -41,7 +41,7 @@ public class TasksNew {
     //driver.get("https://uat.productfinder.elsevier.net");
     driver.get("https://productfinder.elsevier.net");
     loginWithCredential();
-    //loginWithScience(); //local execution
+//    loginWithScience(); //local execution
 
    }
 
