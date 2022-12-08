@@ -44,6 +44,7 @@ public class SecretsManagerHandler {
     public static String getSITSecretName(String connectionURL){
         //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
+            case"kong_user": return "eph_sit/kong_user";
             case "AWS_URL":     return "eph_sit_aws_url";
             case "PROMIS_URL":  return "eph_sit_promis_url";
             case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
@@ -74,7 +75,7 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021     //updated by Nishant @ 30 Dec 2021
         switch (connectionURL) {
             case "AWS_URL":
-                if(true) {//jenkins profile
+                if(false) {//jenkins profile
                     return object.getAsString("SIT_AWS_URL");}
                 else { //  Local profile
                     return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;"
@@ -85,7 +86,8 @@ public class SecretsManagerHandler {
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
             case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_SIT_URL"));
             case "Lambda":             return DecryptionService.decrypt(object.getAsString("eph_lambda_credentials"));
-
+            case "kong_user":
+                return DecryptionService.decrypt(object.getAsString("ech_uat/kong_user"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }

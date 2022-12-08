@@ -321,6 +321,7 @@ else{
     ProductApiObject response;
     for (ProductDataObject productDataObject : productDataObjects) {
         response = APIService.getProductById(productDataObject.getPRODUCT_ID());
+        System.out.println(response);
         response.compareWithDB();
     }
   }
