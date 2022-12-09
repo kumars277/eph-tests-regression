@@ -71,8 +71,6 @@ public class AccessToken
 		this.expiresin = expiresin;
 		this.tokenType = tokenType;
 	}
-	
-
 
 	public boolean isValid(Long expiryOffsetSeconds)
 	{
@@ -80,7 +78,6 @@ public class AccessToken
 		
 		boolean expiryValid = nowInSeconds <= (expiresin - expiryOffsetSeconds);
 		//boolean notBeforeValid = nowInSeconds >= notBefore;
-		
 		//return expiryValid && notBeforeValid;
 		return expiryValid;
 	}

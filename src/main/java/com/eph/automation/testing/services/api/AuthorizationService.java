@@ -4,6 +4,7 @@ package com.eph.automation.testing.services.api;
 import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.AccessToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -79,12 +80,10 @@ public class AuthorizationService {
         {
             Log.info("Oauth Token cached version used");
         }
-
         /*if (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds"))))
         {
             throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getexpiresin() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
         }*/
-        System.out.println("token ="+token);
         return token;
     }
 
@@ -93,9 +92,7 @@ public class AuthorizationService {
         //String responseBody =  makeRequestAndGetResponseBody();
         String accessTokenresponse =  makeReqTogetReq();
         AccessToken accessToken = convertResponseToToken(accessTokenresponse);
-
-
-//        Log.debug("Got: {}", accessToken);
+//     Log.debug("Got: {}", accessToken);
         return accessToken;
     }
 
@@ -137,7 +134,6 @@ public class AuthorizationService {
             params.add(new BasicNameValuePair("grant_type", "client_credentials"));
             params.add(new BasicNameValuePair("client_id", secretObject.getAsString("clientId")));
             params.add(new BasicNameValuePair("client_secret", secretObject.getAsString("clientSecret")));
-            System.out.println(params);
             httpPost.setEntity(new UrlEncodedFormEntity(params,StandardCharsets.UTF_8));
 
             try
@@ -182,22 +178,23 @@ public class AuthorizationService {
 
     private static String makeReqTogetReq() throws AzureOauthTokenFetchingException
     {
+        String acessTokeResponse = null;
         try {
-          //  AccessToken accessToken = null;
             ObjectMapper mapper = new ObjectMapper();
-            String acessTokeResponse = given()
-                    .auth().basic("mb6JwbFSUdCKu3g3", "k7gTwMcp2XVQLTUS")
-                    .when()
-                    .post("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
+            if(TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
+                 acessTokeResponse = given()
+                        .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
+                        .when()
+                        .post("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
+            }else if(TestContext.getValues().environment.equalsIgnoreCase("UAT")){
+                acessTokeResponse = given()
+                        .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
+                        .when()
+                        .post("https://uat.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
+            }
             JsonPath js = new JsonPath(acessTokeResponse);
             String access_token = js.getString("access_token");
-            //accessToken = ob
-
             return acessTokeResponse;
-            /*String response = given()
-                    .queryParam("access_token""accessToken")
-                    .when()
-                    .get("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials")*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -312,13 +309,7 @@ public class AuthorizationService {
             params.add(new BasicNameValuePair("client_id", secretObject.getAsString("clientId")));
             params.add(new BasicNameValuePair("client_secret", secretObject.getAsString("clientSecret")));
             httpPost.setEntity(new UrlEncodedFormEntity(params,StandardCharsets.UTF_8));
-
-
-
-
-
             CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-
             CookieStore cookieStore = new BasicCookieStore();
 
 // Create local HTTP context
@@ -342,7 +333,6 @@ public class AuthorizationService {
             for (int i = 0; i < cookies.size(); i++) {
                 System.out.println("Local cookie: " + cookies.get(i));
             }
-
 
            future = httpclient.execute(httpPost,localContext,null);
             httpResponse = future.get();
@@ -370,7 +360,6 @@ public class AuthorizationService {
                 }
                 throw new AzureOauthTokenFetchingException("Unexpected response from HTTP service: " + statusLine + ", message body: " + responseString);
             }
-
             try
             {
                 responseString = new BasicResponseHandler().handleResponse(response);
@@ -387,25 +376,4 @@ public class AuthorizationService {
         }
         return responseString;
     }
-
-    /*public static String getBasicAuthKong() throws Throwable{
-        //created by Nishant @ 25 Nov 2022 for kong migration
-        net.minidev.json.JSONObject kong_user = new net.minidev.json.JSONObject();
-        kong_user = (net.minidev.json.JSONObject) SecretsManagerHandler.getSecretKeyObj("eu-west-1","ech_uat/kong_user");
-
-        HttpResponse<String> response = Unirest.post(LoadProperties.getProperty("Oauth2CongServer"))
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("Authorization", "Basic "+ Base64.encodeBase64String(
-                        (kong_user.getAsString("client_id")+":"+kong_user.getAsString("client_secret")).getBytes()))
-
-                .header("Cache-Control", "no-cache")
-                .body("grant_type=client_credentials")
-                .asString();
-        if(response.getStatus() != 200) {
-            throw new Exception(response.getBody());
-        }
-        JSONObject json = new JSONObject(response.getBody());
-        String token = json.getString("access_token");
-        return token;
-    }*/
 }

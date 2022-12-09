@@ -103,16 +103,8 @@ public class APIService {
 
   public static Response getResponse(String getParam) throws AzureOauthTokenFetchingException {
     Response response = null;
-  /*  response = RestAssured.given()
-
-            .header("Authorization","Bearer "+getBasicAuthKong())
-            .when()
-            .get(resource);*/
-  System.out.println("Messgae :"+AuthorizationService.getAuthToken().toString());
-  String tok = AuthorizationService.getAuthToken().getaccessToken();
-    System.out.println("tok :"+tok);
-      response = given()
-
+    String tok = AuthorizationService.getAuthToken().getaccessToken();
+    response = given()
               .header("Authorization", "Bearer " +tok)
               .header("Cache-Control", "no-cache")
               //.queryParam("access_token",)
@@ -120,12 +112,9 @@ public class APIService {
               //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
               .when()
               .get(searchAPIEndPoint+getParam);
-      System.out.println("response = "+response.asString());
-    System.out.println("Messgae :"+AuthorizationService.getAuthToken().toString());
-    //Log.info(response.getHeader(AuthorizationService.getAuthToken());
     Log.info(searchAPIEndPoint+getParam);
     //DataQualityContext.api_response = response;
-    //Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
+    Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
     return response;
   }
 
@@ -282,6 +271,7 @@ public class APIService {
     if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
       searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_SIT;
     else searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_UAT;
+
   }
 
   // ###########below methods are No being used as of 23 Jul 2021

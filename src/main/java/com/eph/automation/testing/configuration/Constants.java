@@ -75,6 +75,7 @@ public class Constants {
     public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://sit.business.api.elsevier.systems/v4";
     public static final String PRODUCT_SEARCH_END_POINT_UAT = "https://uat.business.api.elsevier.systems/v4";
 
+
     //SOAP EIP - SIT_CRM End point
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT = "https://enterprise-sit.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT_UAT = "https://enterprise-uat.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
