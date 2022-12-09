@@ -69,7 +69,13 @@ public class AuthorizationService {
 
     public static synchronized AccessToken getAuthToken() throws AzureOauthTokenFetchingException
     {
-        if(secretObject==null){secretObject=getSecretKeyObj("eu-west-1","eph_sit/kong_user");};
+        if(secretObject==null){
+            if(TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
+                secretObject = getSecretKeyObj("eu-west-1", "eph_sit/kong_user");
+            }else if(TestContext.getValues().environment.equalsIgnoreCase("UAT")){
+                secretObject = getSecretKeyObj("eu-west-1", "eph_uat/kong_user");
+            }
+        }
 
         if ((token == null))
         {
