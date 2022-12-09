@@ -4,10 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
-import com.eph.automation.testing.models.api.ProductApiObject;
-import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
-import com.eph.automation.testing.models.api.WorkApiObject;
-import com.eph.automation.testing.models.api.WorksMatchedApiObject;
+import com.eph.automation.testing.models.api.*;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
@@ -16,6 +13,8 @@ import org.junit.Assert;
 import java.util.concurrent.ThreadLocalRandom;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
+import com.eph.automation.testing.models.api.AccessToken;
+
 
 public class APIService {
   private static String searchAPIEndPoint;
@@ -24,6 +23,7 @@ public class APIService {
       "/product-hub-works/works?queryType=search&queryValue=";
   private static String worksByTitleResource =
       "/product-hub-works/works?queryType=title&queryValue=";
+  private static AuthorizationService As;
 
   public APIService() {setApiEndpoint(); }
   // by Nishant - updated for search API v2 - complete as of 27 Nov 2019
@@ -34,7 +34,8 @@ public class APIService {
   public static int checkProductExists(String productID) throws AzureOauthTokenFetchingException {
     return given()
         .baseUri(searchAPIEndPoint)
-        .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+       // .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+            .header("Authorization", "Bearer " + AuthorizationService.getAuthToken().getaccessToken())
         .when()
         .get("/product-hub-products/products/" + productID)
         .thenReturn()
@@ -102,15 +103,17 @@ public class APIService {
 
   public static Response getResponse(String getParam) throws AzureOauthTokenFetchingException {
     Response response = null;
-
-      response = given()
-              .baseUri(searchAPIEndPoint)
-              .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+    String tok = AuthorizationService.getAuthToken().getaccessToken();
+    response = given()
+              .header("Authorization", "Bearer " +tok)
+              .header("Cache-Control", "no-cache")
+              //.queryParam("access_token",)
+              //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
+              //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
               .when()
-              .get(getParam);
-
+              .get(searchAPIEndPoint+getParam);
     Log.info(searchAPIEndPoint+getParam);
-    DataQualityContext.api_response = response;
+    //DataQualityContext.api_response = response;
     Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
     return response;
   }
@@ -131,7 +134,7 @@ public class APIService {
     Response response =
         given()
             .baseUri(searchAPIEndPoint)
-            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
             .param(paramKey, paramValue)
             .when()
             .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
@@ -150,7 +153,7 @@ public class APIService {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     return given()
         .baseUri(searchAPIEndPoint)
-        .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+        .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
         .when()
         .get("/product-hub-works/works/" + workID)
         .thenReturn()
@@ -268,6 +271,7 @@ public class APIService {
     if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
       searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_SIT;
     else searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_UAT;
+
   }
 
   // ###########below methods are No being used as of 23 Jul 2021

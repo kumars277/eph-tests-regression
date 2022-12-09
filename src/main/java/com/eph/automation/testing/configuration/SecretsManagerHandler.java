@@ -44,6 +44,7 @@ public class SecretsManagerHandler {
     public static String getSITSecretName(String connectionURL){
         //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
+            case "kong_user":   return "eph_sit/kong_user";
             case "AWS_URL":     return "eph_sit_aws_url";
             case "PROMIS_URL":  return "eph_sit_promis_url";
             case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
@@ -56,6 +57,7 @@ public class SecretsManagerHandler {
     public static String getUATSecretName(String connectionURL){
         //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
+            case "kong_user":   return "eph_uat/kong_user";
             case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat_url";
             case "EPH_RP_URL":  return "eph_uat_rp_url";
@@ -85,7 +87,8 @@ public class SecretsManagerHandler {
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_SIT_URL"));
             case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_SIT_URL"));
             case "Lambda":             return DecryptionService.decrypt(object.getAsString("eph_lambda_credentials"));
-
+            case "kong_user":
+                return DecryptionService.decrypt(object.getAsString("eph_sit/kong_user"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }
@@ -104,6 +107,8 @@ public class SecretsManagerHandler {
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
             case "EPH_RP_URL":         return DecryptionService.decrypt(object.getAsString("EPH_RP_UAT_URL"));
+            case "kong_user":
+                return DecryptionService.decrypt(object.getAsString("eph_uat/kong_user"));
             default:throw new IllegalArgumentException(illegalArgument + connectionURL);
         }
     }

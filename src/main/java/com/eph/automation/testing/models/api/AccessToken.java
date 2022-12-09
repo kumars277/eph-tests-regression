@@ -9,10 +9,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AccessToken
 {
-	private String tokenType;
-	public String getTokenType(){return tokenType;}
+	private String accessToken;
+	public String getaccessToken(){return accessToken;}
 
-	private Long expiresIn;
+	private String refreshToken;
+	public String getrefreshToken(){return refreshToken;}
+
+	private String scope;
+	public String getscope(){return scope;}
+
+	private String tokenType;
+	public String gettokenType(){return tokenType;}
+
+	private Long expiresin;
+	public Long getexpiresin(){return expiresin;}
+
+	/*private Long expiresIn;
 	public Long getExpiresIn(){return expiresIn;}
 
 	private Long extExpiresIn;
@@ -30,36 +42,44 @@ public class AccessToken
 	public String getResource(){return resource;}
 
 	private String token;
-	public String getToken(){return token;}
+	public String getToken(){return token;}*/
 	
 	@JsonCreator
-	public AccessToken(@JsonProperty(value = "token_type", required = true) String tokenType, 
-			           @JsonProperty(value = "expires_in", required = true) Long expiresIn, 
-			           @JsonProperty(value = "ext_expires_in", required = true) Long extExpiresIn, 
-			           @JsonProperty(value = "expires_on", required = true) Long expiresOn, 
+	/*public AccessToken(@JsonProperty(value = "token_type", required = true) String tokenType,
+			           @JsonProperty(value = "expires_in", required = true) Long expiresIn,
+			           @JsonProperty(value = "ext_expires_in", required = true) Long extExpiresIn,
+			           @JsonProperty(value = "expires_on", required = true) Long expiresOn,
 			           @JsonProperty(value = "not_before", required = true) Long notBefore,
-			           @JsonProperty(value = "resource", required = true) String resource, 
-			           @JsonProperty(value = "access_token", required = true) String token)
+			           @JsonProperty(value = "resource", required = true) String resource,
+			           @JsonProperty(value = "access_token", required = true) String token)*/
+	public AccessToken(@JsonProperty(value = "access_token", required = true) String accessToken,
+					   @JsonProperty(value = "refresh_token", required = true) String refreshToken,
+					   @JsonProperty(value = "scope", required = true) String scope,
+					   @JsonProperty(value = "token_type", required = true) String tokenType,
+					   @JsonProperty(value = "expires_in", required = true) Long expiresin)
+
 	{
-		this.tokenType = tokenType;
-		this.expiresIn = expiresIn;
+		/*this.expiresIn = expiresIn;
 		this.extExpiresIn = extExpiresIn;
 		this.expiresOn = expiresOn;
 		this.notBefore = notBefore;
 		this.resource = resource;
-		this.token = token;
+		this.token = token;*/
+		this.accessToken =accessToken;
+		this.refreshToken = refreshToken;
+		this.scope= scope;
+		this.expiresin = expiresin;
+		this.tokenType = tokenType;
 	}
-	
-
 
 	public boolean isValid(Long expiryOffsetSeconds)
 	{
 		Long nowInSeconds = (new Date().getTime()) / 1000;
 		
-		boolean expiryValid = nowInSeconds <= (expiresOn - expiryOffsetSeconds);
-		boolean notBeforeValid = nowInSeconds >= notBefore;
-		
-		return expiryValid && notBeforeValid;		
+		boolean expiryValid = nowInSeconds <= (expiresin - expiryOffsetSeconds);
+		//boolean notBeforeValid = nowInSeconds >= notBefore;
+		//return expiryValid && notBeforeValid;
+		return expiryValid;
 	}
 	
 	private static String toDate(Long timeSeconds)
@@ -80,9 +100,9 @@ public class AccessToken
 	@Override
 	public String toString()
 	{
-		return "AccessToken [tokenType=" + tokenType + ", expiresIn=" + expiresIn + ", extExpiresIn=" + extExpiresIn
-				+ ", expiresOn=" + toDate(expiresOn) + ", notBefore=" + toDate(notBefore) + ", resource=" + resource + ", accessToken="
-				+ token + "]";
+		return "AccessToken [accessToken=" + accessToken + ", refreshToken=" + refreshToken + ", scope=" + scope
+				+ ", expiresin=" + toDate(expiresin) + ", tokenType="
+				+ tokenType + "]";
 	}
 	
 	

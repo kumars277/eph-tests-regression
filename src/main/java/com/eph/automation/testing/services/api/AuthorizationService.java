@@ -1,7 +1,10 @@
 package com.eph.automation.testing.services.api;
 //updated by Nishant @ 30 Mar 2021 for secret manager EPHD-3045
 
+import com.eph.automation.testing.configuration.LoadProperties;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.AccessToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +16,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import javax.ws.rs.core.Response.Status;
+
+import com.jayway.restassured.path.json.JsonPath;
 import net.minidev.json.JSONObject;
 //import jdk.nashorn.internal.ir.ObjectNode;
 //import org.apache.http.HttpResponse;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
@@ -41,10 +47,12 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import static com.eph.automation.testing.configuration.SecretsManagerHandler.getSecretKeyObj;
+import static com.jayway.restassured.RestAssured.given;
 
 public class AuthorizationService {
     private static AccessToken token;
     private static JSONObject secretObject;
+    private static String accessTokenstr;
 
 //    public static String getAuthToken() {
 //        RestAssured.useRelaxedHTTPSValidation();
@@ -61,9 +69,9 @@ public class AuthorizationService {
 
     public static synchronized AccessToken getAuthToken() throws AzureOauthTokenFetchingException
     {
-        if(secretObject==null){secretObject=getSecretKeyObj("eu-west-1","eph_api_oauth2_token");};
+        if(secretObject==null){secretObject=getSecretKeyObj("eu-west-1","eph_sit/kong_user");};
 
-        if ((token == null) || (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds")))))
+        if ((token == null))
         {
             Log.info("Oauth Token being Requested");
             token = getAzureAccessTokenFetch();
@@ -72,23 +80,22 @@ public class AuthorizationService {
         {
             Log.info("Oauth Token cached version used");
         }
-
-        if (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds"))))
+        /*if (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds"))))
         {
-            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getExpiresOnAsString() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
-        }
-
+            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getexpiresin() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
+        }*/
         return token;
     }
 
     public static AccessToken getAzureAccessTokenFetch() throws AzureOauthTokenFetchingException
     {
-        String responseBody =  makeRequestAndGetResponseBody();
-        AccessToken accessToken = convertResponseToToken(responseBody);
-
-//        Log.debug("Got: {}", accessToken);
+        //String responseBody =  makeRequestAndGetResponseBody();
+        String accessTokenresponse =  makeReqTogetReq();
+        AccessToken accessToken = convertResponseToToken(accessTokenresponse);
+//     Log.debug("Got: {}", accessToken);
         return accessToken;
     }
+
 
     private static String makeRequestAndGetResponseBody() throws AzureOauthTokenFetchingException
     {//Data
@@ -100,10 +107,11 @@ public class AuthorizationService {
             URI tokenRequestUri = null;
             try
             {
-                tokenRequestUri = URI.create(
-                        secretObject.getAsString("uriPrefix") +
-                        secretObject.getAsString("tenantId") +
+                tokenRequestUri = URI.create("https://sit.business.api.elsevier.systems/v4/product-hub-products/products/"+
+                        secretObject.getAsString("clientId") +
+                        secretObject.getAsString("client_secret"));/* +
                         secretObject.getAsString("uriPostfix"));
+               tokenRequestUri = URI.create("https://sit.business.api.elsevier.systems/");*/
             }
             catch (Exception e)
             {
@@ -115,9 +123,9 @@ public class AuthorizationService {
             }
 
             RequestConfig config = RequestConfig.custom()
-                    .setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
+                    /*.setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
                     .setConnectionRequestTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
-                    .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
+                    .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))*/
                     .build();
             client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
@@ -168,6 +176,32 @@ public class AuthorizationService {
         return responseString;
     }
 
+    private static String makeReqTogetReq() throws AzureOauthTokenFetchingException
+    {
+        String acessTokeResponse = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            if(TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
+                 acessTokeResponse = given()
+                        .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
+                        .when()
+                        .post("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
+            }else if(TestContext.getValues().environment.equalsIgnoreCase("UAT")){
+                acessTokeResponse = given()
+                        .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
+                        .when()
+                        .post("https://uat.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
+            }
+            JsonPath js = new JsonPath(acessTokeResponse);
+            String access_token = js.getString("access_token");
+            return acessTokeResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     private static AccessToken convertResponseToToken(String response) throws AzureOauthTokenFetchingException
     {
         AccessToken accessToken = null;
@@ -179,7 +213,7 @@ public class AuthorizationService {
             accessToken = mapper.readValue(response, AccessToken.class);
             JsonNode node = mapper.readTree(response);
             String access_token = node.get("access_token").textValue();
-            String temp = accessToken.getToken();
+            String temp = accessToken.getaccessToken();
         }
         catch (IOException e)
         {
@@ -232,7 +266,7 @@ public class AuthorizationService {
 
         if (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds"))))
         {
-            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getExpiresOnAsString() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
+            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getexpiresin() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
         }
 
         return "testing";
@@ -275,13 +309,7 @@ public class AuthorizationService {
             params.add(new BasicNameValuePair("client_id", secretObject.getAsString("clientId")));
             params.add(new BasicNameValuePair("client_secret", secretObject.getAsString("clientSecret")));
             httpPost.setEntity(new UrlEncodedFormEntity(params,StandardCharsets.UTF_8));
-
-
-
-
-
             CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-
             CookieStore cookieStore = new BasicCookieStore();
 
 // Create local HTTP context
@@ -306,20 +334,9 @@ public class AuthorizationService {
                 System.out.println("Local cookie: " + cookies.get(i));
             }
 
-
            future = httpclient.execute(httpPost,localContext,null);
             httpResponse = future.get();
             cookies = cookieStore.getCookies();
-
-
-
-
-
-
-
-
-
-
 
             try
             {
@@ -343,7 +360,6 @@ public class AuthorizationService {
                 }
                 throw new AzureOauthTokenFetchingException("Unexpected response from HTTP service: " + statusLine + ", message body: " + responseString);
             }
-
             try
             {
                 responseString = new BasicResponseHandler().handleResponse(response);
@@ -360,6 +376,4 @@ public class AuthorizationService {
         }
         return responseString;
     }
-
-
 }
