@@ -103,7 +103,7 @@ public class AuthorizationService {
     }
 
 
-    private static String makeRequestAndGetResponseBody() throws AzureOauthTokenFetchingException
+    /*private static String makeRequestAndGetResponseBody() throws AzureOauthTokenFetchingException
     {//Data
         String responseString = null;
         CloseableHttpClient client = null;
@@ -115,9 +115,9 @@ public class AuthorizationService {
             {
                 tokenRequestUri = URI.create("https://sit.business.api.elsevier.systems/v4/product-hub-products/products/"+
                         secretObject.getAsString("clientId") +
-                        secretObject.getAsString("client_secret"));/* +
+                        secretObject.getAsString("client_secret"));*//* +
                         secretObject.getAsString("uriPostfix"));
-               tokenRequestUri = URI.create("https://sit.business.api.elsevier.systems/");*/
+               tokenRequestUri = URI.create("https://sit.business.api.elsevier.systems/");*//*
             }
             catch (Exception e)
             {
@@ -129,9 +129,9 @@ public class AuthorizationService {
             }
 
             RequestConfig config = RequestConfig.custom()
-                    /*.setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
+                    *//*.setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
                     .setConnectionRequestTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
-                    .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))*/
+                    .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))*//*
                     .build();
             client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
@@ -180,7 +180,7 @@ public class AuthorizationService {
             closeHttpComponents(client, response);
         }
         return responseString;
-    }
+    }*/
 
     private static String makeReqTogetReq() throws AzureOauthTokenFetchingException
     {
@@ -188,7 +188,7 @@ public class AuthorizationService {
         try {
             ObjectMapper mapper = new ObjectMapper();
             if(TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
-                 acessTokeResponse = given()
+               acessTokeResponse = given()
                         .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
                         .when()
                         .post("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
