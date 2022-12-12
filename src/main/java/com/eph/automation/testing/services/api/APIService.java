@@ -131,10 +131,13 @@ public class APIService {
     pmgCode          : 030,090 or 077
     */
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    Response response =
+    String tok = AuthorizationService.getAuthToken().getaccessToken();
+     Response response =
         given()
             .baseUri(searchAPIEndPoint)
-            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
+                .header("Authorization", "Bearer " +tok)
+                .header("Cache-Control", "no-cache")
+                //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
             .param(paramKey, paramValue)
             .when()
             .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
