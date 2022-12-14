@@ -160,7 +160,7 @@ public class ProductFinderUISteps {
     @Then("^The searched work is listed and clicked$")
     public void checkSearchResultsAndClickWork() throws InterruptedException {
         Log.info("found entry ..." + DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-        productFinderTasks.clickWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        productFinderTasks.clickWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
 
     }
 
@@ -771,7 +771,12 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
     public void checkSearchResultsAndClickproduct() throws InterruptedException {
         //created by Nishant @ 19 May 2020
         Log.info("found entry ..." + DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
-        String productIdLocator = String.format(ProductFinderConstants.buildProductIdLocator, DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
+        String productIdLocator = String.format(ProductFinderConstants.buildProductIdLocator, DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+        if(productIdLocator.length()>50) {
+            productIdLocator.substring(0, 50);
+            Log.info("Shortended locator -> " + productIdLocator);
+        }
+        Log.info(productIdLocator);
         tasks.click("XPATH", productIdLocator);
         Thread.sleep(5000);
     }
@@ -844,6 +849,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         //created by Nishant @ 19 May 2020
         Log.info("found entry ..." + DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
         String linkManifestationIdLocator = String.format(ProductFinderConstants.linkManifestationIdLocator, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
+        Log.info(linkManifestationIdLocator);
         tasks.click("XPATH", linkManifestationIdLocator);
         Thread.sleep(5000);
     }
