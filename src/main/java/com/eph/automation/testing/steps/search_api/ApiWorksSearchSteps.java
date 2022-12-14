@@ -192,6 +192,25 @@ public class ApiWorksSearchSteps {
             ids.isEmpty());
   }
 
+  @Given("^We get (.*) random journal person id")
+  public static void getRandomJournalPersonId(String numberOfRecords) {
+
+    //sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_PERSON_ROLE_JOURNAL, numberOfRecords);
+    List<Map<?, ?>> randomPersonSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+    ids =
+            randomPersonSearchIds.stream()
+                    .map(m -> (BigDecimal) m.get("person_id"))
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+    Log.info("Selected random person ids  : " + ids+" on "+ TestContext.getValues().environment) ;//System.getProperty("ENV"));
+    //  ids.clear(); ids.add("10088889");  Log.info("hard coded work ids are : " + ids);
+    setBreadcrumbMessage(ids.toString());
+    Assert.assertFalse(
+            getBreadcrumbMessage()
+                    + "-> Verify That list with random person roles is not empty.",
+            ids.isEmpty());
+  }
+
   @And("^We get the work search data from EPH GD$")
   public static void getWorksDataFromEPHGD() {
     Log.info(
@@ -1315,4 +1334,24 @@ public class ApiWorksSearchSteps {
     keyword=arr_title[arr_title.length-1];
     return keyword;
   }*/
+
+//Manifestation search steps
+
+  @And("^We get the manifestation data from EPH GD$")
+  public static void getManifestationDataFromEPHGD() {
+    Log.info(
+            "We get the Manifestation data from EPH GD ..." + Joiner.on("','").join(DataQualityContext.ids));
+   // sql =String.format(APIDataSQL.GET_GD_DATA_MANIFESTATION,Joiner.on("','").join(DataQualityContext.ids));
+
+    DataQualityContext.manifestationDataObjectsFromEPHGD =
+            DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+    DataQualityContext.manifestationDataObjectsFromEPHGD.sort(
+            Comparator.comparing(ManifestationDataObject::getMANIFESTATION_ID));
+    Assert.assertFalse(getBreadcrumbMessage()+ "-> Verify that list with Manifestation objects from DB is not empty",
+            DataQualityContext.manifestationDataObjectsFromEPHGD.isEmpty());
+  }
+
+
+
+
 }

@@ -181,9 +181,36 @@ public class ProductFinderTasks {
         tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
         tasks.click("XPATH", ProductFinderConstants.searchButton);
         Thread.sleep(3000);
+        tasks.driver.findElement(By.xpath("(//div[@class='ng-star-inserted'])[3]")).click();
+        Thread.sleep(3000);
     }
 
-    public void searchForJournal(final String searchID) throws InterruptedException {
+    public void searchForManifestation(final String searchID) throws InterruptedException {
+
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
+            tasks.driver.navigate().refresh();
+            Thread.sleep(30000);
+            Log.info("page refreshed as search bar not available...");
+            Log.info("after 30 sec from page refreshed");
+            Log.info("\n");
+            //  Log.info(tasks.driver.getPageSource());
+            Log.info("\n");
+        }
+
+        Log.info("Searching " + searchID + " on " + DataQualityContext.uiUnderTest);
+        tasks.clearText("XPATH", ProductFinderConstants.searchBar);
+        tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
+        tasks.click("XPATH", ProductFinderConstants.searchButton);
+        Thread.sleep(3000);
+        tasks.driver.findElement(By.xpath(ProductFinderConstants.manifestation_page_click)).click();
+        Thread.sleep(3000);
+
+
+    }
+
+
+
+        public void searchForJournal(final String searchID) throws InterruptedException {
          //updated by Sarath @ 12 Oct 2022 for Journal Finder
 
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.journalSearchbar)) {
@@ -309,8 +336,6 @@ public class ProductFinderTasks {
             return false;
         }
     }
-
-
     public boolean isUserOnProductPage(String productId) {
         //created by Nishant @ 23 Apr 2020
         Log.info("verifying if user is on the product page overview...");
@@ -409,7 +434,7 @@ public class ProductFinderTasks {
         for (int i = 1; i <= rows_identifiers.size(); i++) {
             String key = tasks.findElement("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr[" + (i) + "]/td[1]").getText();
             String value = tasks.findElement("XPATH", ProductFinderConstants.identifierRowJF + "/table/tbody/tr[" + (i) + "]/td[2]").getText();
-            prop_identifier.setProperty(key, value);
+                prop_identifier.setProperty(key, value);
         }
         //capture subject area values
         List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.subAreaRowJF + "/table/tbody/tr");
