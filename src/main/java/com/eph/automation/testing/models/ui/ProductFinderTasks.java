@@ -311,7 +311,6 @@ public class ProductFinderTasks {
     }
 
     public boolean isUserOnWorkPage(String workID) {
-        //updated by Nishant @ 18 May 2020
         Log.info("verifying if user is on the work page overview...");
         String targetURL = "";
         String referenceUrl = "work/" + workID + "/overview";
@@ -321,8 +320,10 @@ public class ProductFinderTasks {
         String loginId = svc.getAsString("svc4");
         String pwd = svc.getAsString("svc4pwd");
         switch (TestContext.getValues().environment) {
-            case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;break;
-//            targetURL = "https://"+ loginId + ":" + pwd + "@sit.productfinder.elsevier.net/" + referenceUrl;
+            case "SIT":
+                targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
+                if(!targetURL.equals(tasks.getCurrentPageUrl()))
+              { targetURL = "https://"+ loginId + ":" + pwd + "@sit.productfinder.elsevier.net/" + referenceUrl;}break;
             case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;break;
             case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;break;
             case "PROD":
@@ -343,11 +344,14 @@ public class ProductFinderTasks {
         String referenceUrl = "product/" + productId + "/overview";
 
         if (DataQualityContext.uiUnderTest.equalsIgnoreCase("JF")) referenceUrl = "journals/" + referenceUrl;
-
+        JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
+        String loginId = svc.getAsString("svc4");
+        String pwd = svc.getAsString("svc4pwd");
         switch (TestContext.getValues().environment) {
             case "SIT":
                 targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
-                break;
+                if(!targetURL.equals(tasks.getCurrentPageUrl()))
+                { targetURL = "https://"+ loginId + ":" + pwd + "@sit.productfinder.elsevier.net/" + referenceUrl;}break;
             case "UAT":
                 targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;
                 break;
@@ -595,7 +599,7 @@ public class ProductFinderTasks {
 
     public void verifyUserIsOnOverviewPage() throws InterruptedException {//created by Nishant @ 23 Apr 2021
        // tasks.waitUntilPageLoad();
-       // Thread.sleep(3000);
+        Thread.sleep(1000);
         if (TestContext.getValues().environment.equalsIgnoreCase("UAT") |
                 TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
             if (DataQualityContext.productDataObjectsFromEPHGD != null)

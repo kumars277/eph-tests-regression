@@ -24,7 +24,7 @@ Feature: Product Finder Selenium tests
     And User is forwarded to the searched product page from DB
     Examples:
       |options|
-      |Id     |
+#      |Id     |
       |Title  |
       |Keyword|
 

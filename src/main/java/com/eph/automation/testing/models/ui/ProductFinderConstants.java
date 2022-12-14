@@ -38,7 +38,7 @@ public class ProductFinderConstants {
     public static String  filterTypeBook = "//span[contains(text(),'Book')]";
 //    public static String buildWorkIdLocator = "//a[contains(@href,'/work/%s/overview')]";
     public static String buildIdLocator = "//a[contains(@href,'/%s/overview')]";
-    public static String buildProductIdLocator="//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
+    public static String buildProductIdLocator="//a[contains(text(),'%s')]";
     public static String linkManifestationIdLocator = "//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
 
     public static String FilterLocator = "//div[@class='filter-panel']/form/child::section";
