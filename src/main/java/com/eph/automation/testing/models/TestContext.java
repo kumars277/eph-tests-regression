@@ -9,9 +9,9 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-           System.setProperty("ENV","SIT");
+        //System.setProperty("ENV","SIT");
 
-           System.setProperty("browser","chrome");
+        //   System.setProperty("browser","chrome");
 
         String browserName = System.getProperty("browser");
         String gridRun = System.getProperty("gridRun");
