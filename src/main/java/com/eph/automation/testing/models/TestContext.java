@@ -1,7 +1,6 @@
 package com.eph.automation.testing.models;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.helper.Log;
 
 @StaticInjection
 public class TestContext {

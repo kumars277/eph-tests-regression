@@ -1,6 +1,5 @@
 package com.eph.automation.testing.services.db.workdaySQL;
 
-import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.db.sdrmsql.GetSdrmDbUser;
 
 public class workDayChecksSQL {

@@ -4,7 +4,6 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSInboundCountChecksSQL;
-import com.eph.automation.testing.services.db.CKDataLakeSQL.CKReportsCountChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

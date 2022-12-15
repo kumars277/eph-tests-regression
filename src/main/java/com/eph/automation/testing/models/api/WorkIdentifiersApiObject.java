@@ -6,7 +6,6 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

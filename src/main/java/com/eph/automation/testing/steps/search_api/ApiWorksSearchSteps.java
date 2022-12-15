@@ -14,7 +14,6 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static com.eph.automation.testing.services.api.APIService.getWorkByIsInPackage;
 
-import com.eph.automation.testing.steps.GenericFunctions;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.java.en.*;

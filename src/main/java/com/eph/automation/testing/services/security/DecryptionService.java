@@ -1,7 +1,6 @@
 package com.eph.automation.testing.services.security;
 
 import com.eph.automation.testing.configuration.Constants;
-import com.eph.automation.testing.configuration.LoadProperties;
 import org.jasypt.util.text.BasicTextEncryptor;
 
 

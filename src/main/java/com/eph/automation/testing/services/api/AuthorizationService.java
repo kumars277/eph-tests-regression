@@ -1,8 +1,6 @@
 package com.eph.automation.testing.services.api;
 //updated by Nishant @ 30 Mar 2021 for secret manager EPHD-3045
 
-import com.eph.automation.testing.configuration.LoadProperties;
-import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.AccessToken;
@@ -21,13 +19,11 @@ import com.jayway.restassured.path.json.JsonPath;
 import net.minidev.json.JSONObject;
 //import jdk.nashorn.internal.ir.ObjectNode;
 //import org.apache.http.HttpResponse;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;

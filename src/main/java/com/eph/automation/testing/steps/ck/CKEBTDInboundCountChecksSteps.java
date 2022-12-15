@@ -3,22 +3,14 @@ package com.eph.automation.testing.steps.ck;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.contexts.CK.CKAccessDLContext;
-import com.eph.automation.testing.models.dao.CK.CKCurrentTablesDataObject;
-import com.eph.automation.testing.models.dao.CK.CKInboundSourceTableDataObject;
 import com.eph.automation.testing.services.db.CKDataLakeSQL.CKEBTDInboundCountCheckSQL;
-import com.eph.automation.testing.services.db.CKDataLakeSQL.CKEBTDInboundDataChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CKEBTDInboundCountChecksSteps {
     private static String CKSQL;

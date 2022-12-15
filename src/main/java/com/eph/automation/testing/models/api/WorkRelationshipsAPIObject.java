@@ -14,12 +14,9 @@ import com.eph.automation.testing.services.db.sql.WorkRelationshipSQL;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.steps.GenericFunctions;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Joiner;
 import org.junit.Assert;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.getBreadcrumbMessage;

@@ -6,7 +6,6 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.*;
-import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.stitchingDataSQL;
@@ -21,8 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.eph.automation.testing.models.contexts.DataQualityContext.randomIdsData;
-import static com.eph.automation.testing.models.contexts.DataQualityContext.ids;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 
 public class ApiSearchDataCheckStitchingLayerSteps {

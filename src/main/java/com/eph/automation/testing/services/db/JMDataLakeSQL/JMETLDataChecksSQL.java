@@ -4,8 +4,6 @@ import com.eph.automation.testing.services.db.EPHDB.GetEPHDB;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.GetPRMDLDBUser;
 import static com.eph.automation.testing.services.db.JMDataLakeSQL.GetJMDLDBUser.getJMDataBase;
 
-import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
-
 public class JMETLDataChecksSQL {
     static  String[] databaseEnv = getJMDataBase();
 //    JMDB Table Record IDs

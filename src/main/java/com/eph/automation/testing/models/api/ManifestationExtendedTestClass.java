@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.api;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
-
 public class ManifestationExtendedTestClass {
 
     private String schemaVersion;
