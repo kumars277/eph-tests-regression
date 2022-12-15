@@ -26,24 +26,19 @@ public class AccessToken
 
 	/*private Long expiresIn;
 	public Long getExpiresIn(){return expiresIn;}
-
 	private Long extExpiresIn;
 	public Long getExtExpiresIn(){return extExpiresIn;}
-
 	private Long expiresOn;
 	public Long getExpiresOn(){return expiresOn;}
 	public String getExpiresOnAsString(){return toDate(expiresOn);}
-
 	private Long notBefore;
 	public Long getNotBefore(){return notBefore;}
 	public String getNotBeforeAsString(){return toDate(notBefore);}
-
 	private String resource;
 	public String getResource(){return resource;}
-
 	private String token;
 	public String getToken(){return token;}*/
-	
+
 	@JsonCreator
 	/*public AccessToken(@JsonProperty(value = "token_type", required = true) String tokenType,
 			           @JsonProperty(value = "expires_in", required = true) Long expiresIn,
@@ -75,13 +70,13 @@ public class AccessToken
 	public boolean isValid(Long expiryOffsetSeconds)
 	{
 		Long nowInSeconds = (new Date().getTime()) / 1000;
-		
+
 		boolean expiryValid = nowInSeconds <= (expiresin - expiryOffsetSeconds);
 		//boolean notBeforeValid = nowInSeconds >= notBefore;
 		//return expiryValid && notBeforeValid;
 		return expiryValid;
 	}
-	
+
 	private static String toDate(Long timeSeconds)
 	{
 		if (timeSeconds == null)
@@ -94,9 +89,9 @@ public class AccessToken
 			DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 			return formatter.format(date);
 		}
-			
+
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -104,7 +99,7 @@ public class AccessToken
 				+ ", expiresin=" + toDate(expiresin) + ", tokenType="
 				+ tokenType + "]";
 	}
-	
-	
-	
+
+
+
 }
