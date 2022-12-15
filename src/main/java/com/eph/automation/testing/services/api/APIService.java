@@ -20,9 +20,9 @@ public class APIService {
   private static String searchAPIEndPoint;
   private static String responseCodeMessage = "API response code ";
   private static String worksBySearchResource =
-      "/product-hub-works/works?queryType=search&queryValue=";
+          "/product-hub-works/works?queryType=search&queryValue=";
   private static String worksByTitleResource =
-      "/product-hub-works/works?queryType=title&queryValue=";
+          "/product-hub-works/works?queryType=title&queryValue=";
   private static AuthorizationService As;
 
   public APIService() {setApiEndpoint(); }
@@ -33,13 +33,13 @@ public class APIService {
 
   public static int checkProductExists(String productID) throws AzureOauthTokenFetchingException {
     return given()
-        .baseUri(searchAPIEndPoint)
-       // .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+            .baseUri(searchAPIEndPoint)
+            // .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
             .header("Authorization", "Bearer " + AuthorizationService.getAuthToken().getaccessToken())
-        .when()
-        .get("/product-hub-products/products/" + productID)
-        .thenReturn()
-        .statusCode();
+            .when()
+            .get("/product-hub-products/products/" + productID)
+            .thenReturn()
+            .statusCode();
   }
 
   public static ProductApiObject getProductById(String productID) throws AzureOauthTokenFetchingException {
@@ -77,7 +77,7 @@ public class APIService {
   public static ProductsMatchedApiObject getProductsByAccountableProduct(String accountableProduct) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
     Response response =getResponse("/product-hub-products/products?queryType=accountableProduct&queryValue=" + accountableProduct);
-       return response.thenReturn().as(ProductsMatchedApiObject.class);
+    return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
   public static ProductsMatchedApiObject getProductsByPersonID(String personId)      throws AzureOauthTokenFetchingException {
@@ -97,7 +97,7 @@ public class APIService {
 
   public static ProductsMatchedApiObject getProductsBySearch(String searchOption)   throws AzureOauthTokenFetchingException {
     Response response =getResponse("/product-hub-products/products?queryType=search&queryValue=" + searchOption);
-     // updates by Nishant to fix escaped char in json response issue
+    // updates by Nishant to fix escaped char in json response issue
     return response.thenReturn().as(ProductsMatchedApiObject.class, ObjectMapperType.JACKSON_2);
   }
 
@@ -105,13 +105,13 @@ public class APIService {
     Response response = null;
     String tok = AuthorizationService.getAuthToken().getaccessToken();
     response = given()
-              .header("Authorization", "Bearer " +tok)
-              .header("Cache-Control", "no-cache")
-              //.queryParam("access_token",)
-              //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
-              //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
-              .when()
-              .get(searchAPIEndPoint+getParam);
+            .header("Authorization", "Bearer " +tok)
+            .header("Cache-Control", "no-cache")
+            //.queryParam("access_token",)
+            //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
+            //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
+            .when()
+            .get(searchAPIEndPoint+getParam);
     Log.info(searchAPIEndPoint+getParam);
     //DataQualityContext.api_response = response;
     Assert.assertEquals(searchAPIEndPoint+getParam+":"+responseCodeMessage, 200, response.statusCode());
@@ -132,20 +132,20 @@ public class APIService {
     */
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     String tok = AuthorizationService.getAuthToken().getaccessToken();
-     Response response =
-        given()
-            .baseUri(searchAPIEndPoint)
-                .header("Authorization", "Bearer " +tok)
-                .header("Cache-Control", "no-cache")
-                //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
-            .param(paramKey, paramValue)
-            .when()
-            .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
+    Response response =
+            given()
+                    .baseUri(searchAPIEndPoint)
+                    .header("Authorization", "Bearer " +tok)
+                    .header("Cache-Control", "no-cache")
+                    //.header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
+                    .param(paramKey, paramValue)
+                    .when()
+                    .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
 
     Log.info(searchAPIEndPoint+"/product-hub-products/products?queryType=name&queryValue="+searchTerm
-    +  "&"+paramKey+"="+paramValue);
+            +  "&"+paramKey+"="+paramValue);
     DataQualityContext.api_response = response;
-  // response.prettyPrint();
+    // response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
 
     return response.thenReturn().as(ProductsMatchedApiObject.class);
@@ -155,12 +155,12 @@ public class APIService {
   public static int checkWorkExists(String workID) throws AzureOauthTokenFetchingException {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     return given()
-        .baseUri(searchAPIEndPoint)
-        .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
-        .when()
-        .get("/product-hub-works/works/" + workID)
-        .thenReturn()
-        .statusCode();
+            .baseUri(searchAPIEndPoint)
+            .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getaccessToken())
+            .when()
+            .get("/product-hub-works/works/" + workID)
+            .thenReturn()
+            .statusCode();
   }
 
   public static WorkApiObject getWorkByID(String workID)      throws AzureOauthTokenFetchingException {
@@ -229,7 +229,7 @@ public class APIService {
   public static WorksMatchedApiObject getWorksByWorkType(      String searchKeyword, String workType) throws AzureOauthTokenFetchingException {
     // created by Nishant as per search API v2 changes
     Response response =getResponse(worksByTitleResource + searchKeyword + "&workType=" + workType);
-     return response.thenReturn().as(WorksMatchedApiObject.class);
+    return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
   public static WorksMatchedApiObject getWorksByManifestationType(      String searchKeyword, String manifestationType) throws AzureOauthTokenFetchingException {
@@ -285,12 +285,12 @@ public class APIService {
 
   public static Response getPPMChangeHistoryAPIResponse(String dateFrom, String dateTo) {
     return given()
-        .header("content-type", "application/json")
-        .header("Authorization", RESTEndPoints.Headers.Authorization.toString())
-        .baseUri(RESTEndPoints.PPM_CDS_API.PROD.toString())
-        .when()
-        .get("/changeHistory/metalog/" + dateFrom + "&" + dateTo + "/page_limit=1500&p_from=0")
-        .thenReturn();
+            .header("content-type", "application/json")
+            .header("Authorization", RESTEndPoints.Headers.Authorization.toString())
+            .baseUri(RESTEndPoints.PPM_CDS_API.PROD.toString())
+            .when()
+            .get("/changeHistory/metalog/" + dateFrom + "&" + dateTo + "/page_limit=1500&p_from=0")
+            .thenReturn();
   }
 
   public static int getRandomNumForGivenRange(int min, int max) {
@@ -299,11 +299,11 @@ public class APIService {
 
   public static Response getPPMSearchProjectResponse(String projectNumber) {
     return given()
-        .header("content-type", "application/json")
-        .header("Authorization", RESTEndPoints.Headers.Authorization.toString())
-        .baseUri(RESTEndPoints.PPM_CDS_API.UAT.toString())
-        .when()
-        .get("/search/projno/" + projectNumber)
-        .thenReturn();
+            .header("content-type", "application/json")
+            .header("Authorization", RESTEndPoints.Headers.Authorization.toString())
+            .baseUri(RESTEndPoints.PPM_CDS_API.UAT.toString())
+            .when()
+            .get("/search/projno/" + projectNumber)
+            .thenReturn();
   }
 }
