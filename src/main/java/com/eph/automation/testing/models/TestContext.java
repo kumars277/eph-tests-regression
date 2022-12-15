@@ -11,7 +11,7 @@ public class TestContext {
 
 //        System.setProperty("ENV","SIT");
 
-           System.setProperty("browser","chrome");
+//           System.setProperty("browser","chrome");
 
         String browserName = System.getProperty("browser");
         String gridRun = System.getProperty("gridRun");
