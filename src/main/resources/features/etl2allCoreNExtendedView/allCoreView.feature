@@ -38,6 +38,11 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       Then  Get the count of leadIndicator from the all_manifestation_identifiers_v
       And   Compare the counts to verify their counts are equal
 
+    #new scenario scope allworkperson role shouldn't have duplicate workId if the effective end date is Null or deleteflag=true for both recs.
+  # new scenario leadindicator should be only one for one workId
+  #new scenario people hubId is null if so familyname and givename concat to find duplicates (do group By)
+  #new scenario all_manifestation_identifiers_v check for duplicate issn
+  #new scenario all_work_identifier_v check identifier duplicate if effective end date is null
 
 
 
