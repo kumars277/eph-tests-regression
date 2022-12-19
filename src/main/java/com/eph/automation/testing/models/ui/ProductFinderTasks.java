@@ -10,6 +10,7 @@ import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.google.inject.Inject;
 import net.minidev.json.JSONObject;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
