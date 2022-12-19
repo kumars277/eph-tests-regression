@@ -13,8 +13,6 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import java.util.Base64;
 
-import static java.lang.System.*;
-
 
 public class SecretsManagerHandler {
     public SecretsManagerHandler(){//

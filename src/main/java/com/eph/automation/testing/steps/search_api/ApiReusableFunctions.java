@@ -7,7 +7,6 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import org.junit.Assert;
 
-import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 

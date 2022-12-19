@@ -7,7 +7,6 @@ import com.eph.automation.testing.models.contexts.GDTablesDLSQLContext;
 import com.eph.automation.testing.models.dao.GDTableDLSQL.GDTableDLSQLObject;
 import com.eph.automation.testing.services.db.gdSQLDLSQL.gdTableDLSQL;
 import com.google.common.base.Joiner;
-import com.google.gson.Gson;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

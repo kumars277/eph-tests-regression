@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.dao;
 
-import java.util.Objects;
-
 /**
  * Created by Bistra Drazheva on 21/02/2019
  * updated by Nishant @ 5 May 2020

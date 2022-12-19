@@ -1,7 +1,5 @@
 package com.eph.automation.testing.services.db.JMDataLakeSQL;
 
-import static com.eph.automation.testing.services.db.JMDataLakeSQL.GetJMDLDBUser.getJMDataBase;
-
 public class JMExtendedCountCheckSQL {
 //    jm Count checks
 //    jm Count

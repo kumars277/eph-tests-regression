@@ -1,7 +1,6 @@
 package com.eph.automation.testing.services.db.consumerAppSQL;
 
 
-import com.eph.automation.testing.services.db.JMDataLakeSQL.GetJMDLDBUser;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.GetPRMDLDBUser;
 
 public class jdwChecksSQL {

@@ -3,7 +3,6 @@ package com.eph.automation.testing.models.ui;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.helper.Log;
 import com.google.inject.Inject;
-import org.openqa.selenium.WebElement;
 
 public class ResearchPackagesTasks {
     private TasksNew tasks;

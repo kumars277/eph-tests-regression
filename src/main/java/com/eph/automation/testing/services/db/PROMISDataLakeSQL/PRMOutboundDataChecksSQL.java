@@ -1,7 +1,5 @@
 package com.eph.automation.testing.services.db.PROMISDataLakeSQL;
 
-import com.eph.automation.testing.configuration.Constants;
-
 public class PRMOutboundDataChecksSQL {
 
     public static String GET_PUBIDS_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMAUTPUBT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
