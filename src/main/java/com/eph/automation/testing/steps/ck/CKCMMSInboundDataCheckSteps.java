@@ -31,25 +31,21 @@ public class CKCMMSInboundDataCheckSteps {
         List<Map<?, ?>> randomids;
         switch (CMMSInboundView) {
             case "cmms_durable_url1_form_v":
-                System.out.print("here");
                 sql = String.format(CKCMMSInboundDataCheckSQL.GET_CMMS_INBOUND_URL1_VIEW_IDs, CMMSInboundView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("u_key")).collect(Collectors.toList());
                 break;
             case "cmms_durable_url2_form_v":
-                System.out.print("here");
                 sql = String.format(CKCMMSInboundDataCheckSQL.GET_CMMS_INBOUND_URL2_VIEW_IDs, CMMSInboundView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("u_key")).collect(Collectors.toList());
                 break;
             case "cmms_durable_url3_form_v":
-                System.out.print("here");
                 sql = String.format(CKCMMSInboundDataCheckSQL.GET_CMMS_INBOUND_URL3_VIEW_IDs, CMMSInboundView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("u_key")).collect(Collectors.toList());
                 break;
             case "cmms_durable_url_transform_v":
-                System.out.print("here");
                 sql = String.format(CKCMMSInboundDataCheckSQL.GET_CMMS_INBOUND_URL_TRANSFORM_VIEW_IDs, CMMSInboundView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("u_key")).collect(Collectors.toList());
