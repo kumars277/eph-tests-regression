@@ -16,3 +16,15 @@ Feature:Validate data for DPP_Long_List_dag tables
             |numberOfRecords |DPPLongListView        |DPPLongListTable  |
             | 5              |ck_long_list2_v        |ck_long_list      |
 
+
+        #ck_long_list1_v
+        #ck_long_list2_v
+        #ck_long_list_part
+        #ck_long_list_json_src
+        #ck_long_list_json
+        #ck_long_list
+    #ck_durable_url
+    #ck_durable_url_json
+    #ck_durable_url_json_src
+    #ck_durable_url_part
+
