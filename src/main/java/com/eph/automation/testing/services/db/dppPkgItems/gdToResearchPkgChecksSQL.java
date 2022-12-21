@@ -1,7 +1,5 @@
 package com.eph.automation.testing.services.db.dppPkgItems;
 
-import com.eph.automation.testing.helper.Log;
-
 public class gdToResearchPkgChecksSQL {
 
     public static final String GET_RANDOM_PKG_ID =

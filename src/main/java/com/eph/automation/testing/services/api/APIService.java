@@ -13,7 +13,6 @@ import org.junit.Assert;
 import java.util.concurrent.ThreadLocalRandom;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
-import com.eph.automation.testing.models.api.AccessToken;
 
 
 public class APIService {

@@ -14,8 +14,6 @@ import com.eph.automation.testing.models.dao.PersonProductRoleDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Joiner;
-import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.HashMap;

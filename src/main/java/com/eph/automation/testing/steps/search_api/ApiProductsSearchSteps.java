@@ -29,9 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
-import static com.eph.automation.testing.models.contexts.DataQualityContext.setBreadcrumbMessage;
 import static com.eph.automation.testing.services.api.APIService.*;
-import static com.eph.automation.testing.services.api.APIService.getProductsBySearch;
 
 /** Created by Georgi Vlaykov on 11/02/2019 */
 public class ApiProductsSearchSteps {

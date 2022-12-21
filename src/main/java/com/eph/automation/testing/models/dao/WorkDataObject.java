@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.dao;
 
-import com.eph.automation.testing.models.api.WorkLegalOwners;
-
 import java.util.Objects;
 
 /**

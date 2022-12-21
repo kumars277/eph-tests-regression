@@ -3,7 +3,6 @@ package com.eph.automation.testing.models.ui;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
-import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.google.inject.Inject;
 
 public class JMTasks {

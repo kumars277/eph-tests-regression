@@ -3,7 +3,6 @@
  */
 package com.eph.automation.testing.models.ui;
 /** Created by GVLAYKOV */
-import com.eph.automation.testing.configuration.MarionetteDriver;
 import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.configuration.WebDriverFactory;
 import com.eph.automation.testing.helper.Log;
@@ -11,12 +10,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minidev.json.JSONObject;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.nio.file.WatchEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

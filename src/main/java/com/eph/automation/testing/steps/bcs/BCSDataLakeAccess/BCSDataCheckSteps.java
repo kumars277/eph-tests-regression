@@ -4,7 +4,6 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSDataQualityContext;
-import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.bcs.BCSCurrentTableDataObject;
 import com.eph.automation.testing.models.dao.bcs.BCSHistoryTableDataObject;
 import com.eph.automation.testing.models.dao.bcs.BCSInitialIngestDataObject;

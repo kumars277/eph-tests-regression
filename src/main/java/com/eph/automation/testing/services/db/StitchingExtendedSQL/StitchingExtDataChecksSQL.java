@@ -1,11 +1,6 @@
 package com.eph.automation.testing.services.db.StitchingExtendedSQL;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-
 public class StitchingExtDataChecksSQL {
 
 //    public static String currentDate(){
