@@ -50,8 +50,8 @@ public class GetCKDLDB {
                 dbCKCMMSDL = "eph_supplemental_uat2";
             }
         } else {
-//            dbCKCMMSDL = "eph_supplemental_sit";
-            dbCKCMMSDL = "eph_supplemental_uat";
+            dbCKCMMSDL = "eph_supplemental_sit";
+//            dbCKCMMSDL = "eph_supplemental_uat";
         }
         return dbCKCMMSDL;
     }

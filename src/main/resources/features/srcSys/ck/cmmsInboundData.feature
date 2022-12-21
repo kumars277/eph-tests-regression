@@ -11,7 +11,7 @@ Feature:Validate data for DPP_EPH_CMMS_INBOUND_dag tables
     And Compare records in CKCMMSInbound View and CMMSInbound query of <CMMSInboundView>
 #
     Examples:
-      |numberOfRecords   |CMMSInboundView                 |
+      |numberOfRecords   |CMMSInboundView                    |
       | 5                |cmms_durable_url1_form_v           |
       |5                 |cmms_durable_url2_form_v           |
       |5                 |cmms_durable_url3_form_v           |

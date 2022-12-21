@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.CKDataLakeSQL;
 
-public class CKCMMSOutboundCountCheckSQL {
+public class CKCMMSExportCountCheckSQL {
     //  CMMS View Count SQL
     public static String GET_CMMS_VIEW_COUNT = "select count(*) as COUNT from "+GetCKDLDB.getCKCMMSDataBase()+".%s";
 

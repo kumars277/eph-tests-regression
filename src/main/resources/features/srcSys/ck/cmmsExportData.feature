@@ -7,10 +7,10 @@ Feature:Validate data for DPP_EPH_CMMS_Export_dag tables
     Given We know the number of CK <DPPCMMSView> data in CMMS Outbound View
     Then Get the count for CK <DPPCMMSTable> CMMS Table
     And Compare the CK count for <DPPCMMSTable> table between CMMS View and CMMS Table
-#    Given We get the <numberOfRecords> random CK CMMS View ids of <DPPCMMSView>
-#    When We get the CK CMMS View Records from <DPPCMMSView>
-#    Then We get the CK CMMS Table records from <DPPCMMSTable>
-#    And Compare CK records in CMMS View and Table of <DPPCMMSTable>
+    Given We get the <numberOfRecords> random CK CMMS View ids of <DPPCMMSView>
+    When We get the CK CMMS View Records from <DPPCMMSView>
+    Then We get the CK CMMS Table records from <DPPCMMSTable>
+    And Compare CK records in CMMS View and Table of <DPPCMMSTable>
 
     Examples:
       |numberOfRecords |DPPCMMSView                  |DPPCMMSTable             |
