@@ -1,5 +1,4 @@
 package com.eph.automation.testing.models.dao.StitchingExtended;
-import java.util.HashMap;
 
 public class WorkExtEditorialBoardJson {
 

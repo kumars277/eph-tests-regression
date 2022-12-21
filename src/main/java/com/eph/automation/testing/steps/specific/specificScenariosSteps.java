@@ -11,16 +11,13 @@ import com.eph.automation.testing.models.ui.SpecificTasks;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.google.inject.Inject;
-import com.mysql.cj.api.result.Row;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
 
-import javax.lang.model.element.Element;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

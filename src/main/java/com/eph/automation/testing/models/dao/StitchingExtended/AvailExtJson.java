@@ -1,8 +1,6 @@
 package com.eph.automation.testing.models.dao.StitchingExtended;
 //package com.eph.automation.testing.models.api;
 
-import java.util.HashMap;
-
 public class AvailExtJson {
 
     private Applications[] applications;

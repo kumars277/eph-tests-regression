@@ -15,7 +15,6 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
-import net.minidev.json.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;

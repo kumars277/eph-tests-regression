@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.ui;
 
-import com.eph.automation.testing.models.contexts.DataQualityContext;
-
 public class ProductFinderConstants {
 
     public static String SCIENCE_ID = "@science.regn.net";

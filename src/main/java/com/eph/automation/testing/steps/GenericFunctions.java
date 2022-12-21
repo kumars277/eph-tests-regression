@@ -1,6 +1,5 @@
 package com.eph.automation.testing.steps;
 
-import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 
 import java.text.ParseException;
