@@ -3,10 +3,7 @@ package com.eph.automation.testing.models.api;
  * Created by GVLAYKOV
  */
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Verify;
-import com.poiji.internal.annotation.ExcelCell;
 import org.junit.Assert;
 
 import java.text.ParseException;

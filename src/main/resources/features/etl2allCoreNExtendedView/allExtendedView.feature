@@ -53,5 +53,5 @@ Feature:Validate data of DL Extended Views and Extended Tables
       |work_extended_subject_area                                         |50              |
       |work_extended_url                                                  |50              |
 
-
+#new scenario work_extended_person_role no duplicate if effecitve end is null
 

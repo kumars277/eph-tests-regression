@@ -1,6 +1,5 @@
 package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 
-import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 
 public class getBCSDataBase {

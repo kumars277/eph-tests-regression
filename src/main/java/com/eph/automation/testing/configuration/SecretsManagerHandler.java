@@ -13,8 +13,6 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import java.util.Base64;
 
-import static java.lang.System.*;
-
 
 public class SecretsManagerHandler {
     public SecretsManagerHandler(){//
@@ -76,7 +74,7 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021     //updated by Nishant @ 30 Dec 2021
         switch (connectionURL) {
             case "AWS_URL":
-                if(false) {//jenkins profile
+                if(true) {//jenkins profile
                     return object.getAsString("SIT_AWS_URL");}
                 else { //  Local profile
                     return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit;"
@@ -97,7 +95,7 @@ public class SecretsManagerHandler {
         //created by Nishant @ 17 Mar 2021
         switch (connectionURL) {
             case "AWS_URL":
-                if(false) {//jenkins profile
+                if(true) {//jenkins profile
                     return object.getAsString("UAT_AWS_URL");}
                 else { //  Local profile
                     return "jdbc:awsathena://AwsRegion=eu-west-1;s3OutputLocation=s3://com-elsevier-eph-masterdata-uat/uat/logs;" +

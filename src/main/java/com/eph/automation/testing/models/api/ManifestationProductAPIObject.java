@@ -6,11 +6,9 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
-import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /*

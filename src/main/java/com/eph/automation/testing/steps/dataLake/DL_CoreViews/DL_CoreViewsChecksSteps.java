@@ -277,8 +277,8 @@ public class DL_CoreViewsChecksSteps {
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_IDENT_RAND_ID, numberOfRecords);
                 break;
             case "all_work_person_role_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_PERS_ROLE_RAND_ID, numberOfRecords);
-                break;
+               sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_PERS_ROLE_RAND_ID, numberOfRecords);
+               break;
             case "all_work_relationship_v":
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_RAND_ID, numberOfRecords);
                 break;

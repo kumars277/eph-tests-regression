@@ -1,8 +1,6 @@
 package com.eph.automation.testing.services.api;
 //updated by Nishant @ 30 Mar 2021 for secret manager EPHD-3045
 
-import com.eph.automation.testing.configuration.LoadProperties;
-import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.AccessToken;
@@ -21,13 +19,11 @@ import com.jayway.restassured.path.json.JsonPath;
 import net.minidev.json.JSONObject;
 //import jdk.nashorn.internal.ir.ObjectNode;
 //import org.apache.http.HttpResponse;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -125,23 +121,19 @@ public class AuthorizationService {
                         secretObject.getAsString("uriPrefix") +
                         secretObject.getAsString("tenantId") +
                         secretObject.getAsString("uriPostfix"), e);
-
             }
-
             RequestConfig config = RequestConfig.custom()
                     *//*.setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
                     .setConnectionRequestTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
                     .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))*//*
                     .build();
             client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
-
             HttpPost httpPost = new HttpPost(tokenRequestUri);
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("grant_type", "client_credentials"));
             params.add(new BasicNameValuePair("client_id", secretObject.getAsString("clientId")));
             params.add(new BasicNameValuePair("client_secret", secretObject.getAsString("clientSecret")));
             httpPost.setEntity(new UrlEncodedFormEntity(params,StandardCharsets.UTF_8));
-
             try
             {
                 response = client.execute(httpPost);
@@ -150,7 +142,6 @@ public class AuthorizationService {
             {
                 throw new AzureOauthTokenFetchingException("Error calling/connecting to Oauth service",e);
             }
-
             StatusLine statusLine = response.getStatusLine();
             if ((statusLine == null) || (Status.OK.getStatusCode() != statusLine.getStatusCode()))
             {
@@ -164,7 +155,6 @@ public class AuthorizationService {
                 }
                 throw new AzureOauthTokenFetchingException("Unexpected response from HTTP service: " + statusLine + ", message body: " + responseString);
             }
-
             try
             {
                 responseString = new BasicResponseHandler().handleResponse(response);
@@ -173,7 +163,6 @@ public class AuthorizationService {
             {
                 throw new AzureOauthTokenFetchingException("Error reading response from Oauth service",e);
             }
-
         }
         finally
         {
@@ -188,7 +177,7 @@ public class AuthorizationService {
         try {
             ObjectMapper mapper = new ObjectMapper();
             if(TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
-               acessTokeResponse = given()
+                acessTokeResponse = given()
                         .auth().basic(secretObject.getAsString("client_id"), secretObject.getAsString("client_secret"))
                         .when()
                         .post("https://sit.business.api.elsevier.systems/token?grant_type=client_credentials").asString();
@@ -340,7 +329,7 @@ public class AuthorizationService {
                 System.out.println("Local cookie: " + cookies.get(i));
             }
 
-           future = httpclient.execute(httpPost,localContext,null);
+            future = httpclient.execute(httpPost,localContext,null);
             httpResponse = future.get();
             cookies = cookieStore.getCookies();
 

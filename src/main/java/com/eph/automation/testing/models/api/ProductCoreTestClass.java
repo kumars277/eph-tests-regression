@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.api;
 
-import com.eph.automation.testing.models.Product;
-
 //created by Nishant @ 03 Feb 2021, EPHD-2747
 public class ProductCoreTestClass {
 

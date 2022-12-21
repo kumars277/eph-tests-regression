@@ -1,6 +1,5 @@
 package com.eph.automation.testing.configuration;
 
-import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
@@ -8,7 +7,6 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.knowm.yank.Yank;
 
 import java.sql.Connection;
