@@ -39,8 +39,8 @@ Feature: Product Finder Selenium tests
     Examples:
       |options|
       |Id     |
-      |Title  |
-      |Keyword|
+#      |Title  |
+#      |Keyword|
 
  @PFNonProd @UI @PFRegressionSuite @apiDebug
   Scenario Outline: Search the work and filter them with one Work Type
