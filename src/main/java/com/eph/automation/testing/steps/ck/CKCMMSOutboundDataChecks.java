@@ -6,7 +6,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.CK.CKAccessDLContext;
 import com.eph.automation.testing.models.dao.CK.CKCurrentTablesDataObject;
 import com.eph.automation.testing.models.dao.CK.CKInboundSourceTableDataObject;
-import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSOutboundDataChecksSQL;
+import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSExportDataChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -33,32 +33,32 @@ public class CKCMMSOutboundDataChecks {
         List<Map<?, ?>> randomids;
         switch (DPPCMMSView){
             case "cmms_workflow_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (Integer) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work2_identifiers_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work3_subject_areas_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (Integer) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_package1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_package2_works_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW_IDs, DPPCMMSView, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
@@ -72,22 +72,22 @@ public class CKCMMSOutboundDataChecks {
         Log.info("We get the CMMS View records...");
         switch (DPPCMMSTable) {
             case "cmms_workflow_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW, DPPCMMSTable, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW, DPPCMMSTable, String.join(",", ids));
                 break;
             case "cmms_work1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1_VIEW, DPPCMMSTable, String.join("','", ids));
                 break;
             case "cmms_work2_identifiers_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW, DPPCMMSTable, String.join("','", ids));
                 break;
             case "cmms_work3_subject_areas_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW, DPPCMMSTable, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW, DPPCMMSTable, String.join(",", ids));
                 break;
             case "cmms_package1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW, DPPCMMSTable, String.join("','", ids));
                 break;
             case "cmms_package2_works_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW, DPPCMMSTable, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKCurrentTablesDataObject.class, Constants.AWS_URL);
@@ -99,22 +99,22 @@ public class CKCMMSOutboundDataChecks {
         Log.info("We get the records from Current CK Inbound Source table for Inbound Check...");
         switch (InboundSourcetablename) {
             case "cmms_workflow":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_TABLE, InboundSourcetablename, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_TABLE, InboundSourcetablename, String.join(",", ids));
                 break;
             case "cmms_work1":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1, InboundSourcetablename, String.join("','", ids));
                 break;
             case "cmms_work2_identifiers":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS, InboundSourcetablename, String.join("','", ids));
                 break;
             case "cmms_work3_subject_areas":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS, InboundSourcetablename, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS, InboundSourcetablename, String.join(",", ids));
                 break;
             case "cmms_package1":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1, InboundSourcetablename, String.join("','", ids));
                 break;
             case "cmms_package2_works":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS, InboundSourcetablename, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS, InboundSourcetablename, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);

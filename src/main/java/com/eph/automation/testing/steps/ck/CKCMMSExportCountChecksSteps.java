@@ -3,7 +3,7 @@ package com.eph.automation.testing.steps.ck;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSOutboundCountCheckSQL;
+import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSExportCountCheckSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -12,7 +12,7 @@ import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
 
-public class CKCMMSOutboundCountChecksSteps {
+public class CKCMMSExportCountChecksSteps {
     private static String CKSQL;
     private static int CK_CMMS_ViewCount;
     private static int CK_CMMS_TableCount;
@@ -20,7 +20,7 @@ public class CKCMMSOutboundCountChecksSteps {
     //CMMS View to Table count checks
     @Given("We know the number of CK (.*) data in CMMS Outbound View")
     public void getCKCMMSViewCount(String DPPCMMSView) {
-        CKSQL = String.format(CKCMMSOutboundCountCheckSQL.GET_CMMS_VIEW_COUNT, DPPCMMSView);
+        CKSQL = String.format(CKCMMSExportCountCheckSQL.GET_CMMS_VIEW_COUNT, DPPCMMSView);
         Log.info(CKSQL);
         List<Map<String, Object>> CK_CMMSViewCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
         CK_CMMS_ViewCount = ((Long) CK_CMMSViewCount.get(0).get("count")).intValue();
@@ -29,7 +29,7 @@ public class CKCMMSOutboundCountChecksSteps {
 
     @Then("^Get the count for CK (.*) CMMS Table")
     public void getCKCMMSTableCount(String DPPCMMSTable) {
-        CKSQL = String.format(CKCMMSOutboundCountCheckSQL.GET_CMMS_Table_COUNT, DPPCMMSTable);
+        CKSQL = String.format(CKCMMSExportCountCheckSQL.GET_CMMS_Table_COUNT, DPPCMMSTable);
         Log.info(CKSQL);
         List<Map<String, Object>> CKCMMSTableCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
         CK_CMMS_TableCount = ((Long) CKCMMSTableCount.get(0).get("Count")).intValue();
