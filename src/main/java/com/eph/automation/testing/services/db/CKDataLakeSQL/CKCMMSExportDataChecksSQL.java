@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.CKDataLakeSQL;
 
-public class CKCMMSOutboundDataChecksSQL {
+public class CKCMMSExportDataChecksSQL {
     //     GET IDs
     public static String GET_CK_CMMS_WORKFLOW_VIEW_IDs = "select workflowid as U_KEY from " + GetCKDLDB.getCKCMMSDataBase() + ".%s limit %s";
     public static String GET_CK_CMMS_WORK1_VIEW_IDs = "select currentIdentifier as U_KEY from " + GetCKDLDB.getCKCMMSDataBase() + ".%s limit %s";
