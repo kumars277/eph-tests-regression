@@ -10,12 +10,9 @@ public class GetCKDLDB {
                 dbCKDL = "dpp_staging_sit2";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKDL = "dpp_staging_uat";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
-                dbCKDL = "dpp_staging_uat2";
             }
         } else {
-//            dbCKDL = "dpp_staging_sit";
-            dbCKDL = "dpp_staging_uat";
+            dbCKDL = "dpp_staging_sit";
         }
         return dbCKDL;
     }
@@ -28,12 +25,9 @@ public class GetCKDLDB {
                 ProductDb = "product_database_sit";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 ProductDb = "product_database_uat";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
-                ProductDb = "product_database_uat";
             }
         } else {
-//            ProductDb = "product_database_sit";
-            ProductDb = "product_database_uat";
+            ProductDb = "product_database_sit";
         }
         return ProductDb;
     }
@@ -46,12 +40,9 @@ public class GetCKDLDB {
                 dbCKCMMSDL = "eph_supplemental_sit2";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKCMMSDL = "eph_supplemental_uat";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
-                dbCKCMMSDL = "eph_supplemental_uat2";
             }
         } else {
-//            dbCKCMMSDL = "eph_supplemental_sit";
-            dbCKCMMSDL = "eph_supplemental_uat";
+            dbCKCMMSDL = "eph_supplemental_sit";
         }
         return dbCKCMMSDL;
     }
@@ -65,12 +56,9 @@ public class GetCKDLDB {
                 dbCKCMMSDL = "ebtd_staging_sit2";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKCMMSDL = "ebtd_staging_uat";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT2")) {
-                dbCKCMMSDL = "ebtd_staging_uat2";
             }
         } else {
-//            dbCKCMMSDL = "ebtd_staging_sit";
-            dbCKCMMSDL = "ebtd_staging_uat";
+           dbCKCMMSDL = "ebtd_staging_sit";
         }
         return dbCKCMMSDL;
     }

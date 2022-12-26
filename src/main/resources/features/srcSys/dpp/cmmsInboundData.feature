@@ -17,5 +17,3 @@ Feature:Validate data for DPP_EPH_CMMS_INBOUND_dag tables
       |5                 |cmms_durable_url3_form_v           |
       |5                 |cmms_durable_url_transform_v       |
 
-
-    #'cmms_durable_url_inbound_part','cmms_transform_current_durable_url','cmms_transform_file_history_durable_url_part',

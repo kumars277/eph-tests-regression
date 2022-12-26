@@ -18,3 +18,4 @@ Feature:Validate data for DPP_Reports_dag tables
       | 5              |ck_workflow_tableau_package_works_v  |ck_workflow_tableau_package_works |
       | 5              |ck_transaction_workflow_v            |ck_transaction_workflow           |
 
+#scenario should be DDL Query (i.e view's show/edit query) Vs select * from cmms_workflow_v

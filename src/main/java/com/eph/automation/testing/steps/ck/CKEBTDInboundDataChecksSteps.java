@@ -23,37 +23,37 @@ public class CKEBTDInboundDataChecksSteps {
     private static String sql;
     private static List<String> ids;
     //    CK EBTD Inbound Data Checks
-    @Given("^We get the (.*) random CK EBTD View ids of (.*)$")
-    public static void getRandomidsFromEBTDInboundView(String numberOfRecords, String DPPEBTDView) {
+    @Given("^We get the (.*) random Ids from Inbound$")
+    public static void getRandomidsFromEBTDInboundView(String numberOfRecords) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random ids for CK EBTD View....");
         List<Map<?, ?>> randomids;
-        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_VIEW_IDs, DPPEBTDView, numberOfRecords);
+        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_VIEW_IDs, numberOfRecords);
         randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomids.stream().map(m -> (String) m.get("U_KEY")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(ids.toString());
     }
 
-    @When("^We get the CK EBTD View Records from (.*)$")
-    public static void getEBTDViewRecordData(String DPPEBTDView) {
-        Log.info("We get the CK Inbound records...");
-        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_VIEW_Data, DPPEBTDView, String.join("','", ids));
+    @When("^We get the Records from Inbound DDL$")
+    public static void getEBTDInboundData() {
+        Log.info("We get the Inbound records...");
+        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_VIEW_Data, String.join("','", ids));
         CKAccessDLContext.CKCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKCurrentTablesDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @Then("^We get the CK EBTD Table records from (.*)$")
-    public static void getDataforEBTDTableCheck(String DPPEBTDTable) {
-        Log.info("We get the records from Current CK EBTD Inbound table for Inbound Check...");
-        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_TABLE_Data, DPPEBTDTable, String.join("','", ids));
+    @Then("^We get the CK EBTD View records$")
+    public static void getDataforEBTDCheck() {
+        Log.info("We get the records from Current CK EBTD View...");
+        sql = String.format(CKEBTDInboundDataChecksSQL.GET_EBTD_Inbound_TABLE_Data, String.join("','", ids));
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @And("^Compare CK records in EBTD View and Table of (.*)$")
-    public void compareEBTDViewAndTable(String DPPEBTDTable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @And("^Compare CK records in EBTD View and Inbound$")
+    public void compareEBTDViewAndTable() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (CKAccessDLContext.CKCurrentTableDataObjectList.isEmpty()) {
             Log.info("No Data Found ....");
         } else {

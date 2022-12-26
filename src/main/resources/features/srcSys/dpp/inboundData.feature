@@ -19,4 +19,4 @@ Feature:Validate data for ck Inbound tables
       | 5               | ck_package_work_transform_v       | ck_transform_current_package_work      |
       | 5               | ck_work_subject_area_transform_v  | ck_transform_current_work_subject_area |
 
-    #tables missing refer AirflowDAf
+    #tables missing refer AirflowDAG
