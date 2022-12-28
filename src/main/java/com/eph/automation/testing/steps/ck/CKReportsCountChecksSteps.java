@@ -14,37 +14,54 @@ import java.util.Map;
 
 public class CKReportsCountChecksSteps {
     private static String CKSQL;
-    private static int CK_Reports_ViewCount;
+    private static int CK_Reports_InboundCount;
     private static int CK_Reports_TableCount;
     private static String sql;
     private static List<String> ids;
 
     //LongList View to Table count checks
-    @Given("We know the number of (.*) data in Reports View")
-    public void getCKReportsViewCount(String DPPReportsView) {
-        CKSQL = String.format(CKReportsCountChecksSQL.GET_Reports_VIEW_COUNT, DPPReportsView);
+    @Given("We know the count from the inbound tables (.*)")
+    public void getCKReportsViewCount(String table) {
+        switch (table){
+            case "ck_workflow_tableau":
+                CKSQL = String.format(CKReportsCountChecksSQL.GET_WorkFlow_Tableu_INBOUND_COUNT);
+                break;
+            case "ck_workflow_control_p1":
+                CKSQL = String.format(CKReportsCountChecksSQL.GET_Workflow_p1_INBOUND_COUNT);
+                break;
+            case "ck_workflow_control_p2":
+                CKSQL = String.format(CKReportsCountChecksSQL.GET_Workflow_p2_INBOUND_COUNT);
+                break;
+            case "ck_workflow_tableau_package_works":
+                CKSQL = String.format(CKReportsCountChecksSQL.GET_WorkFlow_tableu_pkg_Inbound_work);
+                break;
+            case "ck_transaction_workflow":
+                CKSQL = String.format(CKReportsCountChecksSQL.GET_Transaction_workflow_Inbound_Count);
+                break;
+        }
+
         Log.info(CKSQL);
-        List<Map<String, Object>> CK_ReportsViewCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
-        CK_Reports_ViewCount = ((Long) CK_ReportsViewCount.get(0).get("Count")).intValue();
-        Log.info(DPPReportsView + " table in CK Reports View has the Count: " + CK_Reports_ViewCount);
+        List<Map<String, Object>> CK_ReportsInboundViewCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
+        CK_Reports_InboundCount = ((Long) CK_ReportsInboundViewCount.get(0).get("sourceCount")).intValue();
+        Log.info("Inbound count for the "+table+" has the Count: " + CK_Reports_InboundCount);
     }
 
     @Then("^Get the count for (.*) Reports Table")
     public void getCKReportsTableCount(String DPPReportsTable) {
         CKSQL = String.format(CKReportsCountChecksSQL.GET_Reports_Table_COUNT, DPPReportsTable);
         Log.info(CKSQL);
-        List<Map<String, Object>> CKLongListTableCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
-        CK_Reports_TableCount = ((Long) CKLongListTableCount.get(0).get("Count")).intValue();
+        List<Map<String, Object>> CKReportTableCount = DBManager.getDLResultMap(CKSQL, Constants.AWS_URL);
+        CK_Reports_TableCount = ((Long) CKReportTableCount.get(0).get("targetCount")).intValue();
         Log.info(DPPReportsTable + " table in CK Reports Table has the Count: " + CK_Reports_TableCount);
     }
 
-    @And("^Compare the count for (.*) table between Reports View and Reports Table$")
+    @And("^Compare the count between Inbound and Reports Table (.*)$")
     public void CKcompareReportsViewtoTable(String DPPReportsTable) {
         if (CK_Reports_TableCount == 0) {
             Log.info("Reports table empty Count is " + CK_Reports_TableCount);
         } else {
-            Log.info("The count for table" + DPPReportsTable + " in CK Reports View: " + CK_Reports_ViewCount + " and CK Reports Table: " + CK_Reports_TableCount);
-            Assert.assertEquals("The counts for table " + DPPReportsTable + " is not equal", CK_Reports_ViewCount, CK_Reports_TableCount);
+            Log.info("The count in inbounds are "+CK_Reports_InboundCount+" and in the ReportTables are "+CK_Reports_TableCount);
+            Assert.assertEquals("The counts between inbound and "+DPPReportsTable+" are not matching", CK_Reports_TableCount, CK_Reports_InboundCount);
         }
     }
 }

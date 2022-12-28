@@ -22,64 +22,64 @@ import java.util.stream.Collectors;
 
 public class CKReportsDataChecksSteps {
     private static String sql;
-    private static List<String> ids;
-
+    private static List<String> ids,pids;
+    private static List<String> wids;
     //    CK Reports Data Checks
-    @Given("^We get the (.*) random CK Reports View ids of (.*)$")
+    @Given("^We get the (.*) randomIds for (.*)$")
     public static void getRandomidsFromReportsView(String numberOfRecords, String DPPReportsView) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random ids for CK Reports View....");
+        Log.info("Get random ids for CK Reports Table....");
         List<Map<?, ?>> randomids;
         switch (DPPReportsView) {
-            case "ck_workflow_tableau_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_VIEW_IDs, DPPReportsView, numberOfRecords);
+            case "ck_workflow_tableau":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                ids = randomids.stream().map(m -> (String) m.get("u_key")).collect(Collectors.toList());
+                ids = randomids.stream().map(m -> (String) m.get("Work_ID")).collect(Collectors.toList());
                 break;
-            case "ck_workflow_control_p1_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_VIEW_IDs, DPPReportsView, numberOfRecords);
+            case "ck_workflow_control_p1":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                ids = randomids.stream().map(m -> (BigDecimal) m.get("u_key")).map(String::valueOf).collect(Collectors.toList());
+                ids = randomids.stream().map(m -> (BigDecimal) m.get("workflow_id")).map(String::valueOf).collect(Collectors.toList());
                 break;
-            case "ck_workflow_control_p2_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_VIEW_IDs, DPPReportsView, numberOfRecords);
+            case "ck_workflow_control_p2":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                ids = randomids.stream().map(m -> (BigDecimal) m.get("u_key")).map(String::valueOf).collect(Collectors.toList());
+                ids = randomids.stream().map(m -> (BigDecimal) m.get("workflow_id")).map(String::valueOf).collect(Collectors.toList());
                 break;
-            case "ck_workflow_tableau_package_works_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_VIEW_IDs, DPPReportsView, numberOfRecords);
+            case "ck_workflow_tableau_package_works":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                ids = randomids.stream().map(m -> (String) m.get("u_key")).map(String::valueOf).collect(Collectors.toList());
-                break;
-            case "ck_transaction_workflow_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_VIEW_IDs, DPPReportsView, numberOfRecords);
+                ids = randomids.stream().map(m -> (String) m.get("work_id")).map(String::valueOf).collect(Collectors.toList());
+                 break;
+            case "ck_transaction_workflow":
+                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                ids = randomids.stream().map(m -> (String) m.get("u_key")).map(String::valueOf).collect(Collectors.toList());
+                ids = randomids.stream().map(m -> (String) m.get("Work_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
         }
         Log.info(sql);
         Log.info(ids.toString());
     }
 
-    @When("^We get the Reports View Records from (.*)$")
+    @When("^We get the Records from Inbound (.*)$")
     public static void getReportsViewData(String DPPReportsView) {
         Log.info("We get the CK Reports View records...");
         switch (DPPReportsView) {
-            case "ck_workflow_tableau_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_VIEW_Data, DPPReportsView, String.join("','", ids));
+            case "ck_workflow_tableau":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_VIEW_Data, String.join("','", ids));
                 break;
-            case "ck_workflow_control_p1_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_VIEW_Data, DPPReportsView, String.join(",", ids));
+           case "ck_workflow_control_p1":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_VIEW_Data, String.join(",", ids));
                 break;
-            case "ck_workflow_control_p2_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_VIEW_Data, DPPReportsView, String.join(",", ids));
+            case "ck_workflow_control_p2":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_VIEW_Data, String.join(",", ids));
                 break;
-            case "ck_workflow_tableau_package_works_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_VIEW_Data, DPPReportsView, String.join("','", ids));
+            case "ck_workflow_tableau_package_works":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_VIEW_Data, String.join("','", ids));
                 break;
-            case "ck_transaction_workflow_v":
-                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_VIEW_Data, DPPReportsView, String.join("','", ids));
+            case "ck_transaction_workflow":
+                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_VIEW_Data, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);
@@ -90,19 +90,19 @@ public class CKReportsDataChecksSteps {
     public static void getDataforReportsTableCheck(String DPPReportsTable) {
         switch (DPPReportsTable) {
             case "ck_workflow_tableau":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_TABLE_Data, DPPReportsTable, String.join("','", ids));
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_TABLE_Data, String.join("','", ids));
                 break;
-            case "ck_workflow_control_p1":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_TABLE_Data, DPPReportsTable, String.join(",", ids));
+           case "ck_workflow_control_p1":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P1_TABLE_Data, String.join(",", ids));
                 break;
-            case "ck_workflow_control_p2":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_TABLE_Data, DPPReportsTable, String.join(",", ids));
+             case "ck_workflow_control_p2":
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_TABLE_Data, String.join(",", ids));
                 break;
             case "ck_workflow_tableau_package_works":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_TABLE_Data, DPPReportsTable, String.join("','", ids));
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_TABLE_Data,String.join("','", wids));
                 break;
             case "ck_transaction_workflow":
-                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_TABLE_Data, DPPReportsTable, String.join("','", ids));
+                sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_TABLE_Data, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKCurrentTablesDataObject.class, Constants.AWS_URL);
@@ -118,7 +118,7 @@ public class CKReportsDataChecksSteps {
             for (int i = 0; i < CKAccessDLContext.CKCurrentTableDataObjectList.size(); i++) {
                 switch (DPPReportsTable) {
                     case "ck_workflow_tableau":
-                        Log.info("comparing Table and View records...");
+                        Log.info("comparing Inbound and Table records...");
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getworkId));
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getworkId));
 
@@ -141,7 +141,7 @@ public class CKReportsDataChecksSteps {
                                     " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_workflow_tableau for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not matching in ck_workflow_tableau for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -169,7 +169,7 @@ public class CKReportsDataChecksSteps {
                                     " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_workflow_control_p1 for workflowId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkflow_id(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not matching in ck_workflow_control_p1 for workflowId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkflow_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -196,7 +196,7 @@ public class CKReportsDataChecksSteps {
                                     " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_workflow_control_p2 for workflowID:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkflow_id(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not matching in ck_workflow_control_p2 for workflowID:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkflow_id(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -226,7 +226,7 @@ public class CKReportsDataChecksSteps {
                                     " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_workflow_tableau_package_works for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not matching in ck_workflow_tableau_package_works for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -257,7 +257,7 @@ public class CKReportsDataChecksSteps {
                                     " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in ck_transaction_workflow for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not matching in ck_transaction_workflow for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }

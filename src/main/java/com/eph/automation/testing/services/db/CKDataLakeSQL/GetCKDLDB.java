@@ -6,8 +6,6 @@ public class GetCKDLDB {
         if (System.getProperty("ENV") != null) {
             if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
                 dbCKDL = "dpp_staging_sit";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
-                dbCKDL = "dpp_staging_sit2";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKDL = "dpp_staging_uat";
             }
@@ -21,9 +19,7 @@ public class GetCKDLDB {
         if (System.getProperty("ENV") != null) {
             if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
                 ProductDb = "product_database_sit";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
-                ProductDb = "product_database_sit";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
+            }else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 ProductDb = "product_database_uat";
             }
         } else {
@@ -36,8 +32,6 @@ public class GetCKDLDB {
         if (System.getProperty("ENV") != null) {
             if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
                 dbCKCMMSDL = "eph_supplemental_sit";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
-                dbCKCMMSDL = "eph_supplemental_sit2";
             } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKCMMSDL = "eph_supplemental_uat";
             }
@@ -52,9 +46,7 @@ public class GetCKDLDB {
         if (System.getProperty("ENV") != null) {
             if (System.getProperty("ENV").equalsIgnoreCase("SIT")) {
                 dbCKCMMSDL = "ebtd_staging_sit";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("SIT2")) {
-                dbCKCMMSDL = "ebtd_staging_sit2";
-            } else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
+            }else if (System.getProperty("ENV").equalsIgnoreCase("UAT")) {
                 dbCKCMMSDL = "ebtd_staging_uat";
             }
         } else {
