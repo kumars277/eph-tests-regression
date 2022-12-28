@@ -99,7 +99,7 @@ public class CKReportsDataChecksSteps {
                 sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_CONTROL_P2_TABLE_Data, String.join(",", ids));
                 break;
             case "ck_workflow_tableau_package_works":
-                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_TABLE_Data,String.join("','", wids));
+                sql = String.format(CKReportsDataChecksSQL.GET_WORKFLOW_TABLEAU_PACKAGE_WORKS_TABLE_Data,String.join("','", ids));
                 break;
             case "ck_transaction_workflow":
                 sql = String.format(CKReportsDataChecksSQL.GET_TRANSACTION_WORKFLOW_TABLE_Data, String.join("','", ids));
