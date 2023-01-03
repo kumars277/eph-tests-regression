@@ -60,7 +60,7 @@ public class workDaySteps {
 
     @Given("^Get the (.*) random ids from workday_data_orgdata$")
     public void getRandomIds(String numberOfRecords) {
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random workday inbound emplid ids...");
         sql = String.format(workDayChecksSQL.GET_WORKDAY_ORGDATA_IDS_SQL, numberOfRecords);
@@ -152,65 +152,81 @@ public class workDaySteps {
 
     @Given("^Get the (.*) from workday_reference_v$")
     public void getIds(String numberOfRecords) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        if(wdInboundDataCount>0){
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random workday inbound ids...");
         sql = String.format(workDayChecksSQL.GET_WORKDAY_INBOUND_IDS_SQL, numberOfRecords);
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         ids = randomIds.stream().map(m -> (String) m.get("peoplehub_id")).collect(Collectors.toList());
         Log.info(sql);
-        Log.info(ids.toString());
+        Log.info(ids.toString());}
+        else{
+           Assert.assertTrue("No records to be compared",true);
+        }
     }
 
     @When("^Get the Data from the workday_reference_v$")
     public void getWorkDayInbound() {
-        Log.info("We get the workday inbound records...");
-        sql = String.format(workDayChecksSQL.GET_WORKDAY_INBOUND_RECS_SQL, String.join("','",ids));
-        WorkdayDLContext.recordsFromWorkDayInboundData = DBManager.getDBResultAsBeanList(sql, workDayDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
+        if(wdInboundDataCount>0) {
+            Log.info("We get the workday inbound records...");
+            sql = String.format(workDayChecksSQL.GET_WORKDAY_INBOUND_RECS_SQL, String.join("','", ids));
+            WorkdayDLContext.recordsFromWorkDayInboundData = DBManager.getDBResultAsBeanList(sql, workDayDLAccessObject.class, Constants.AWS_URL);
+            Log.info(sql);
+        }else{
+            Assert.assertTrue("No records to be compared",true);
+        }
     }
 
     @When("^Get the Data from the eph_ingestion_person_delta_v$")
     public void getWorkDayCoreRecords() {
-        Log.info("We get the workday core records...");
-        sql = String.format(workDayChecksSQL.GET_WORKDAY_CORE_REC_SQL, String.join("','",ids));
-        WorkdayDLContext.recordsFromWorkDayCoreData = DBManager.getDBResultAsBeanList(sql, workDayDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
+        if(wdInboundDataCount>0) {
+            Log.info("We get the workday core records...");
+            sql = String.format(workDayChecksSQL.GET_WORKDAY_CORE_REC_SQL, String.join("','", ids));
+            WorkdayDLContext.recordsFromWorkDayCoreData = DBManager.getDBResultAsBeanList(sql, workDayDLAccessObject.class, Constants.AWS_URL);
+            Log.info(sql);
+        }else{
+            Assert.assertTrue("No records to be compared",true);
+        }
     }
 
     @And("^Compare data of workday_reference_v and eph_ingestion_person_delta_v$")
     public void compareInboundCoreData() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (WorkdayDLContext.recordsFromWorkDayInboundData.isEmpty()) {
-            Log.info("No Data Found ....");
-        } else {
-            for (int i = 0; i < WorkdayDLContext.recordsFromWorkDayInboundData.size(); i++) {
-                Log.info("comparing inbound and workday core records...");
-                WorkdayDLContext.recordsFromWorkDayInboundData.sort(Comparator.comparing(workDayDLAccessObject::getsourceref)); //sort primarykey data in the lists
-                WorkdayDLContext.recordsFromWorkDayCoreData.sort(Comparator.comparing(workDayDLAccessObject::getsourceref));
+        if (wdInboundDataCount > 0) {
+            if (WorkdayDLContext.recordsFromWorkDayInboundData.isEmpty()) {
+                Log.info("No Data Found ....");
+            } else {
+                for (int i = 0; i < WorkdayDLContext.recordsFromWorkDayInboundData.size(); i++) {
+                    Log.info("comparing inbound and workday core records...");
+                    WorkdayDLContext.recordsFromWorkDayInboundData.sort(Comparator.comparing(workDayDLAccessObject::getsourceref)); //sort primarykey data in the lists
+                    WorkdayDLContext.recordsFromWorkDayCoreData.sort(Comparator.comparing(workDayDLAccessObject::getsourceref));
 
-                String[] workDayRef = {"getperson_source_ref", "getperson_first_name", "getperson_family_name","getemail_address",
-                        "getdq_err","getpeoplehub_id"};
-                for (String strTemp : workDayRef) {
-                    java.lang.reflect.Method method;
-                    java.lang.reflect.Method method2;
+                    String[] workDayRef = {"getperson_source_ref", "getperson_first_name", "getperson_family_name", "getemail_address",
+                            "getdq_err", "getpeoplehub_id"};
+                    for (String strTemp : workDayRef) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
 
-                    workDayDLAccessObject objectToCompare1 = WorkdayDLContext.recordsFromWorkDayInboundData.get(i);
-                    workDayDLAccessObject objectToCompare2 = WorkdayDLContext.recordsFromWorkDayCoreData.get(i);
+                        workDayDLAccessObject objectToCompare1 = WorkdayDLContext.recordsFromWorkDayInboundData.get(i);
+                        workDayDLAccessObject objectToCompare2 = WorkdayDLContext.recordsFromWorkDayCoreData.get(i);
 
-                    method = objectToCompare1.getClass().getMethod(strTemp);
-                    method2 = objectToCompare2.getClass().getMethod(strTemp);
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                    Log.info("peoplehub_id => " + WorkdayDLContext.recordsFromWorkDayInboundData.get(i).getpeoplehub_id() +
-                            " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
-                            " workday_core_data = " + method2.invoke(objectToCompare2));
-                    if (method.invoke(objectToCompare1) != null ||
-                            (method2.invoke(objectToCompare2) != null)) {
-                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in workday_core for peoplehubId:" + WorkdayDLContext.recordsFromWorkDayInboundData.get(i).getpeoplehub_id(),
-                                method.invoke(objectToCompare1),
-                                method2.invoke(objectToCompare2));
+                        Log.info("peoplehub_id => " + WorkdayDLContext.recordsFromWorkDayInboundData.get(i).getpeoplehub_id() +
+                                " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                " workday_core_data = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in workday_core for peoplehubId:" + WorkdayDLContext.recordsFromWorkDayInboundData.get(i).getpeoplehub_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
                     }
                 }
             }
+        } else {
+            Assert.assertTrue("No records to be compared", true);
         }
     }
 

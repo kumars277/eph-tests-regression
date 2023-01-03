@@ -12,3 +12,4 @@ Feature:Validate data for workday ETL Core in Data Lake Access Layer
     Examples:
       |countOfRandomIds|
       |1              |
+
