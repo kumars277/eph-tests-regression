@@ -146,7 +146,7 @@ public class ProductFinderTasks {
         }
     }
 
-    public void searchFor(final String searchID) throws InterruptedException {
+    public void     searchFor(final String searchID) throws InterruptedException {
         //updated by Nishant @ 14 May 2020
         //updated by Nishant @ 03 Jul 2020 for Journal Finder
 
@@ -165,8 +165,8 @@ public class ProductFinderTasks {
         tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
         tasks.click("XPATH", ProductFinderConstants.searchButton);
         Thread.sleep(3000);
-        tasks.driver.findElement(By.xpath("(//div[@class='ng-star-inserted'])[3]")).click();
-        Thread.sleep(3000);
+        //tasks.driver.findElement(By.xpath("(//div[@class='ng-star-inserted'])[3]")).click();
+       // Thread.sleep(3000);
     }
 
     public void searchForManifestation(final String searchID) throws InterruptedException {
@@ -226,9 +226,16 @@ public class ProductFinderTasks {
         Thread.sleep(3000);
     }
 
+    public void clickWork_tab() throws InterruptedException {
+        //created by Nishant @ 19 May 2020
+        tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_Works);
+        tasks.click("XPATH", ProductFinderConstants.tab_Works);
+        Thread.sleep(3000);
+    }
 
 
-    public void clickWork(String workId) throws InterruptedException {
+
+    public void     clickWork(String workId) throws InterruptedException {
         //created by Nishant @ 22 May 2020
         String IdLocator = String.format(ProductFinderConstants.buildIdLocator, workId);
         tasks.click("XPATH", IdLocator);
@@ -354,7 +361,7 @@ public class ProductFinderTasks {
         else return false;
     }
 
-    public boolean isUserOnManifestationPage(String manifestationId) {
+    public boolean isUserOnManifestationPage(String manifestationId)  {
         //created by Nishant @ 19 May 2020
         String targetURL = "";
         String mani_work = DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_WWORK();
@@ -364,6 +371,7 @@ public class ProductFinderTasks {
             targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + "manifestation/" + mani_work + "/" + manifestationId + "/overview";
 
         Log.info("Target URL " + targetURL);
+        Log.info("Current URL "+ tasks.getCurrentPageUrl());
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;
     }

@@ -149,6 +149,7 @@ public class ProductFinderUISteps {
         }
 
         //added by Nishant @ 18 May 2020
+        productFinderTasks.clickWork_tab();
         Log.info("title to be searched..." + DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         boolean workSearched = productFinderTasks.searchOnResultPages(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         Assert.assertTrue("searched key is on search result", workSearched);
@@ -157,7 +158,7 @@ public class ProductFinderUISteps {
     @Then("^The searched work is listed and clicked$")
     public void checkSearchResultsAndClickWork() throws InterruptedException {
         Log.info("found entry ..." + DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-        productFinderTasks.clickWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        productFinderTasks.clickWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
 
     }
 
