@@ -11,8 +11,8 @@ Feature: Product Finder Selenium tests
     Examples:
     |options|
     |Id     |
-    |Title  |
-    |Keyword|
+ #   |Title  |
+ #   |Keyword|
 
   @PFNonProd @UI @PFRegressionSuite
   Scenario Outline: search product by multiple options

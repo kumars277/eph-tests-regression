@@ -160,8 +160,6 @@ public class CKCurrentTablesDataObject {
     public String getcmms_site_name() {return cmms_site_name;}
     public void setcmms_site_name(String cmms_site_name) {this.cmms_site_name = cmms_site_name;}
 
-
-
     public String getfield() {return field;}
     public void setfield(String field) {this.field = field;}
 

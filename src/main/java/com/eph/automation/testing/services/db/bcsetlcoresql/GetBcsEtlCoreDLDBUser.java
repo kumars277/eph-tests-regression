@@ -14,9 +14,7 @@ public static String getBcsETLCoreDataBase(){
     {
         switch (System.getProperty("ENV")) {
             case "SIT" : dbBCS = "bcs_ingestion_database_sit"; break;
-            case "SIT2": dbBCS = "bcs_ingestion_database_sit2";break;
             case "UAT" : dbBCS = "bcs_ingestion_database_uat"; break;
-            case "UAT2": dbBCS = "bcs_ingestion_database_uat2";break;
             default    : dbBCS = "bcs_ingestion_database_sit";break;
         }
     }
@@ -32,14 +30,8 @@ public static String getBcsETLCoreDataBase(){
                     case "SIT":
                         dbProd = "product_staging_database_sit";
                         break;
-                    case "SIT2":
-                        dbProd = "product_staging_database_sit2";
-                        break;
                     case "UAT":
                         dbProd = "product_staging_database_uat";
-                        break;
-                    case "UAT2":
-                        dbProd = "product_staging_database_uat2";
                         break;
                     default:
                         dbProd = "product_staging_database_sit";
@@ -63,9 +55,7 @@ public static String getBcsETLCoreDataBase(){
             switch (System.getProperty("ENV")) {
             //updated by Nishant @ 03 Mar 2022
             case "SIT" : dbERMS = "erms_staging_sit"; break;
-            case "SIT2": dbERMS = "erms_staging_sit2";break;
             case "UAT" : dbERMS = "erms_staging_uat"; break;
-            case "UAT2": dbERMS = "erms_staging_uat2";break;
             default    : dbERMS = "erms_staging_sit";break;
         }
         }
@@ -80,9 +70,7 @@ public static String getBcsETLCoreDataBase(){
         switch (System.getProperty("ENV")) {
             //updated by Nishant @ 03 Mar 2022
             case "SIT" : dbProdDB = "product_database_sit"; break;
-            case "SIT2": dbProdDB = "product_database_sit2";break;
             case "UAT" : dbProdDB = "product_database_uat"; break;
-            case "UAT2": dbProdDB = "product_database_uat2";break;
             default    : dbProdDB = "product_database_sit";break;
         }
         }
@@ -99,14 +87,8 @@ public static String getBcsETLCoreDataBase(){
             case "SIT":
                 dbProdDb = "product_database_sit";
                 break;
-            case "SIT2":
-                dbProdDb = "product_database_sit2";
-                break;
             case "UAT":
                 dbProdDb = "product_database_uat";
-                break;
-            case "UAT2":
-                dbProdDb = "product_database_uat2";
                 break;
             default:
                 dbProdDb = "product_database_sit";
@@ -125,9 +107,7 @@ public static String getBcsETLCoreDataBase(){
         switch (System.getProperty("ENV")) {
             //updated by Nishant @ 03 Mar 2022
             case "SIT" : dbDpp = "dpp_database_sit"; break;
-            case "SIT2": dbDpp = "dpp_database_sit2";break;
-            case "UAT" : dbDpp = "dpp_database_uat"; break;
-            case "UAT2": dbDpp = "dpp_database_uat2";break;
+             case "UAT" : dbDpp = "dpp_database_uat"; break;
             default    : dbDpp = "dpp_database_sit"; break;
         }}else{
              dbDpp = "dpp_database_sit";
@@ -142,9 +122,7 @@ public static String getBcsETLCoreDataBase(){
         switch (System.getProperty("ENV")) {
             //updated by Nishant @ 03 Mar 2022
             case "SIT" : dbJM = "journalmaestro_sit"; break;
-            case "SIT2": dbJM = "journalmaestro_sit2";break;
             case "UAT" : dbJM = "journalmaestro_uat"; break;
-            case "UAT2": dbJM = "journalmaestro_uat2";break;
             default    : dbJM = "journalmaestro_sit"; break;
         }}else{
              dbJM = "journalmaestro_sit";

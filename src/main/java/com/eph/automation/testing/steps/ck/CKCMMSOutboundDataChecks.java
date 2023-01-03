@@ -6,7 +6,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.CK.CKAccessDLContext;
 import com.eph.automation.testing.models.dao.CK.CKCurrentTablesDataObject;
 import com.eph.automation.testing.models.dao.CK.CKInboundSourceTableDataObject;
-import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSOutboundDataChecksSQL;
+import com.eph.automation.testing.services.db.CKDataLakeSQL.CKCMMSExportDataChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -33,32 +33,32 @@ public class CKCMMSOutboundDataChecks {
         List<Map<?, ?>> randomids;
         switch (DPPCMMSView){
             case "cmms_workflow_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (Integer) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work2_identifiers_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_work3_subject_areas_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (Integer) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_package1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "cmms_package2_works_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW_IDs, DPPCMMSView, numberOfRecords);
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW_IDs, numberOfRecords);
                 randomids = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 ids = randomids.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
                 break;
@@ -67,61 +67,61 @@ public class CKCMMSOutboundDataChecks {
         Log.info(ids.toString());
     }
 
-    @When("^We get the CK CMMS View Records from (.*)$")
+    @When("^Get the Inbound Records for (.*)$")
     public static void getCMMSViewRecordData(String DPPCMMSTable) {
         Log.info("We get the CMMS View records...");
         switch (DPPCMMSTable) {
             case "cmms_workflow_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW, DPPCMMSTable, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_VIEW,String.join(",", ids));
                 break;
             case "cmms_work1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1_VIEW, String.join("','", ids));
                 break;
             case "cmms_work2_identifiers_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS_VIEW, String.join("','", ids));
                 break;
             case "cmms_work3_subject_areas_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW, DPPCMMSTable, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS_VIEW, String.join(",", ids));
                 break;
             case "cmms_package1_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1_VIEW, String.join("','", ids));
                 break;
             case "cmms_package2_works_v":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW, DPPCMMSTable, String.join("','", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS_VIEW, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKCurrentTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKCurrentTablesDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @Then("^We get the CK CMMS Table records from (.*)$")
+    @Then("^We get the records from the views of (.*)$")
     public static void getCMMSTableRecordData(String InboundSourcetablename) {
         Log.info("We get the records from Current CK Inbound Source table for Inbound Check...");
         switch (InboundSourcetablename) {
             case "cmms_workflow":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORKFLOW_TABLE, InboundSourcetablename, String.join(",", ids));
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORKFLOW_TABLE, InboundSourcetablename, String.join(",", ids));
                 break;
-            case "cmms_work1":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK1, InboundSourcetablename, String.join("','", ids));
+            case "cmms_work1_v":
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK1, InboundSourcetablename, String.join("','", ids));
                 break;
-            case "cmms_work2_identifiers":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS, InboundSourcetablename, String.join("','", ids));
+            case "cmms_work2_identifiers_v":
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK2_IDENTIFIERS, InboundSourcetablename, String.join("','", ids));
                 break;
-            case "cmms_work3_subject_areas":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS, InboundSourcetablename, String.join(",", ids));
+            case "cmms_work3_subject_areas_v":
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_WORK3_SUBJECT_AREAS, InboundSourcetablename, String.join(",", ids));
                 break;
-            case "cmms_package1":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE1, InboundSourcetablename, String.join("','", ids));
+            case "cmms_package1_v":
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE1, InboundSourcetablename, String.join("','", ids));
                 break;
-            case "cmms_package2_works":
-                sql = String.format(CKCMMSOutboundDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS, InboundSourcetablename, String.join("','", ids));
+            case "cmms_package2_works_v":
+                sql = String.format(CKCMMSExportDataChecksSQL.GET_CK_CMMS_PACKAGE2_WORKS, InboundSourcetablename, String.join("','", ids));
                 break;
         }
         CKAccessDLContext.CKInboundSourceTableDataObjectList = DBManager.getDBResultAsBeanList(sql, CKInboundSourceTableDataObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @And("^Compare CK records in CMMS View and Table of (.*)$")
+    @And("^Compare records between Inbound and the view of (.*)$")
     public void compareCMMSViewandTable(String DPPCMMSTable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (CKAccessDLContext.CKCurrentTableDataObjectList.isEmpty()) {
             Log.info("No Data Found ....");
@@ -129,7 +129,7 @@ public class CKCMMSOutboundDataChecks {
             Log.info("Sorting the ids to compare the records between CMMS View and Table...");
             for (int i = 0; i < CKAccessDLContext.CKCurrentTableDataObjectList.size(); i++) {
                 switch (DPPCMMSTable) {
-                    case "cmms_workflow":
+                    case "cmms_workflow_v":
                         Log.info("comparing CMMS Workflow View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getworkflowId)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getworkflowId));
@@ -156,7 +156,7 @@ public class CKCMMSOutboundDataChecks {
                             }
                         }
                         break;
-                    case "cmms_work1":
+                    case "cmms_work1_v":
                         Log.info("comparing CMMS Work1 View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getworkId)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getworkId));
@@ -176,8 +176,8 @@ public class CKCMMSOutboundDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp2);
 
                             Log.info("workId => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId() +
-                                    " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
-                                    " Table = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in CMMS Work1 for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
@@ -187,7 +187,7 @@ public class CKCMMSOutboundDataChecks {
                             a ++;
                         }
                         break;
-                    case "cmms_work2_identifiers":
+                    case "cmms_work2_identifiers_v":
                         Log.info("comparing CMMS Work2 Identifiers View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getworkId)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getworkId));
@@ -204,8 +204,8 @@ public class CKCMMSOutboundDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("workId => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId() +
-                                    " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
-                                    " Table = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in CMMS Work2 Identifiers for workId:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getworkId(),
@@ -214,7 +214,7 @@ public class CKCMMSOutboundDataChecks {
                             }
                         }
                         break;
-                    case "cmms_work3_subject_areas":
+                    case "cmms_work3_subject_areas_v":
                         Log.info("comparing CMMS Work3 Subject Areas View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getsubjectareaid)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getsubjectareaid));
@@ -231,8 +231,8 @@ public class CKCMMSOutboundDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("subjectareaid => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getsubjectareaid() +
-                                    " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
-                                    " Table = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in CMMS Work3 SubjectAreaID for subjectareaid:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getsubjectareaid(),
@@ -241,7 +241,7 @@ public class CKCMMSOutboundDataChecks {
                             }
                         }
                         break;
-                    case "cmms_package1":
+                    case "cmms_package1_v":
                         Log.info("comparing CMMS Package View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getpackageid)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getpackageid));
@@ -258,8 +258,8 @@ public class CKCMMSOutboundDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("packageid => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getpackageid() +
-                                    " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
-                                    " Table = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in CMMS Package1 for subjectareaid:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getpackageid(),
@@ -268,7 +268,7 @@ public class CKCMMSOutboundDataChecks {
                             }
                         }
                         break;
-                    case "cmms_package2_works":
+                    case "cmms_package2_works_v":
                         Log.info("comparing CMMS Package2 Works View and Table records...");
                         CKAccessDLContext.CKCurrentTableDataObjectList.sort(Comparator.comparing(CKCurrentTablesDataObject::getpackageid)); //sort U_key data in the lists
                         CKAccessDLContext.CKInboundSourceTableDataObjectList.sort(Comparator.comparing(CKInboundSourceTableDataObject::getpackageid));
@@ -285,8 +285,8 @@ public class CKCMMSOutboundDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
                             Log.info("packageid => " + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getpackageid() +
-                                    " " + strTemp + " => View = " + method.invoke(objectToCompare1) +
-                                    " Table = " + method2.invoke(objectToCompare2));
+                                    " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
+                                    " View = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
                                 Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in CMMS Package1 for subjectareaid:" + CKAccessDLContext.CKCurrentTableDataObjectList.get(i).getpackageid(),
