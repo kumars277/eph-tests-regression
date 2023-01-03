@@ -60,7 +60,7 @@ public class workDaySteps {
 
     @Given("^Get the (.*) random ids from workday_data_orgdata$")
     public void getRandomIds(String numberOfRecords) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random workday inbound emplid ids...");
         sql = String.format(workDayChecksSQL.GET_WORKDAY_ORGDATA_IDS_SQL, numberOfRecords);
@@ -152,7 +152,7 @@ public class workDaySteps {
 
     @Given("^Get the (.*) from workday_reference_v$")
     public void getIds(String numberOfRecords) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random workday inbound ids...");
         sql = String.format(workDayChecksSQL.GET_WORKDAY_INBOUND_IDS_SQL, numberOfRecords);
