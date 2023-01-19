@@ -14,7 +14,7 @@ public class ProductFinderConstants {
     public static String latestWorkViewMore = latestWorkParent + "/div[contains(@class,'view-more')]/span";
     public static String helpSupportParent = "//div[@class='help-support']";
     public static String helpSupportChild = helpSupportParent + "/ul/li/a";
-    public static String searchBar = "//input[@id='searchTerm']";
+    public static String searchBar = "//div//child::input";
     public static String searchButton = "//button[@class='pf-icon-button s46 primary search-button mat-ripple']";
     public static String tab_Works = "//div[@class='mat-tab-links']//a[contains(text(),'Work')]";
     public static String tab_product_andPackages = "//div[@class='mat-tab-links']//a[contains(text(),'Products')]";
@@ -73,15 +73,18 @@ public class ProductFinderConstants {
     public static String DetailIdentifiers = section_identifier + sectionDetailDiv;
     //table[@class='mat-table']/parent::div[@class='section-detail']/following-sibling::h2
 
-    public static String searchDropdownPerson = "//option[@value='personName']|//option[@value='personFullNameCurrent']";
-    public static String searchDropdownPmg = "//option[@value='pmgCode']";
-    public static String searchDropdownPmc = "//option[@value='pmcCode']";
+    public static String searchDropdownPerson = "//mat-option[@value='personName']|//mat-option[@value='personFullNameCurrent']";
+    public static String DropdownForsearch ="//div[@class='mat-select-arrow-wrapper']";
+    public static String searchDropdownPmg = "//mat-option[@value='pmgCode']";
+    public static String searchDropdownPmc = "//mat-option[@value='pmcCode']";
     public static String zeroResultFound = "//div[@class='container search-results no-results']";
-    public static String productFoundOf = "//div[@class='pager']//div[@class='container']/div[1]";
+    public static String productFoundOf = "(//div[@class='container']//child::div)[1]";
 
 
     public static String journalSearchbar = "//div[@class='search-input']//child::input";
     public static String journalsearchButton = "//button[@class='pf-icon-button s46 primary search-button mat-ripple']";
+    public static String journalPage = "(//a[@href='#'])[2]";
+
 
     public static String manifestation_page_click = "(//div[@class='ng-star-inserted'])[3]";
 

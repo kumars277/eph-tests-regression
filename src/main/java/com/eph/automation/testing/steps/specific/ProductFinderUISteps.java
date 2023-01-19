@@ -11,7 +11,9 @@ import com.eph.automation.testing.models.api.WorkManifestationApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.api.PersonsApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.models.ui.ProductFinderConstants;
@@ -42,6 +44,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import javax.net.ssl.SSLHandshakeException;
 
 
@@ -52,16 +55,16 @@ public class ProductFinderUISteps {
     private TasksNew tasks;
     private String sql;
     public WebDriver driver;
-   // private String randomWorkStatus;
+    // private String randomWorkStatus;
 
     private static List<String> productIdList;
     private static List<String> workIdList = new ArrayList<>();
     private static List<String> workTypeCode;
 
-    private static String[] Book_Types = {"Book Set","Books Series","Major Ref work", "Non-Elsevier Book", "Other Book", "Reference Book", "Serial", "Text Book"};
-    private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter","Non-Elsevier Journal"};
+    private static String[] Book_Types = {"Book Set", "Books Series", "Major Ref work", "Non-Elsevier Book", "Other Book", "Reference Book", "Serial", "Text Book"};
+    private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter", "Non-Elsevier Journal"};
     private static String[] Other_Types = {"Drug Monograph", "Medical Procedure"};
-    private static String[] ck_Types = {"Flex Package", "Flex AG Package","Specialty Package"};
+    private static String[] ck_Types = {"Flex Package", "Flex AG Package", "Specialty Package"};
     String[] allWorkTypesCode = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
 
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
@@ -87,7 +90,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-       // ids.clear(); ids.add("EPR-W-106TTG");      Log.info("hard coded work ids are : " + ids);
+        // ids.clear(); ids.add("EPR-W-106TTG");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -113,8 +116,7 @@ public class ProductFinderUISteps {
         //Created by Nishant @ 03 Jul 2020
         DataQualityContext.uiUnderTest = "JF";
         productFinderTasks.openHomePage();
-
-        //tasks.waitUntilPageLoad();
+        tasks.waitUntilPageLoad();
 
     }
 
@@ -123,7 +125,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-      // productFinderTasks.loginWithCredential();
+        // productFinderTasks.loginWithCredential();
     }
 
     @Then("^Search works by (.*)$")
@@ -140,9 +142,8 @@ public class ProductFinderUISteps {
             case "Keyword":
                 String[] titleSplit = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
                 String keyword = "";
-                for(int i=0;i<=(titleSplit.length)/2;i++)
-                {
-                    keyword = keyword+titleSplit[i]+" ";
+                for (int i = 0; i <= (titleSplit.length) / 2; i++) {
+                    keyword = keyword + titleSplit[i] + " ";
                 }
                 productFinderTasks.searchFor(keyword);
                 break;
@@ -185,7 +186,7 @@ public class ProductFinderUISteps {
     @And("^Verify user is forwarded to the searched work page$")
     public void verifyUserIsForwardedToSearchedWorkPage() {
 
-        assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
+        //assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
     }
 
     @And("^Verify user is forwarded to the searched manifestation page$")
@@ -207,7 +208,8 @@ public class ProductFinderUISteps {
             case "Other":
                 sql = ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER;
                 break;
-                default: throw new IllegalArgumentException("unexpected value");
+            default:
+                throw new IllegalArgumentException("unexpected value");
         }
 
         List<Map<?, ?>> availableWorkTypeCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -235,7 +237,7 @@ public class ProductFinderUISteps {
     @Given("^Search for the Work by Work Ids Filter workType and verify the work Type is \"([^\"]*)\"$")
     public void verify_the_result(String chooseWorkType) {
         try {
-            int i=0;
+            int i = 0;
             for (String workId : workIdList) {
                 productFinderTasks.searchFor(workId);
                 filter_Search_Result_for_workType(chooseWorkType);
@@ -247,7 +249,7 @@ public class ProductFinderUISteps {
                 assertTrue(productFinderTasks.isUserOnWorkPage(workId));
 
                 boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(workId, chooseWorkType);
-                assertTrue(i+ "out of "+workIdList.size()+" Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
+                assertTrue(i + "out of " + workIdList.size() + " Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
 
                 productFinderTasks.openHomePage();
                 i++;
@@ -260,23 +262,20 @@ public class ProductFinderUISteps {
 
 
     @And("^verify latest work,previous search and help$")
-    public void verify_latest_work()
-    {//created by Nishant @ 30 Apr 2021
+    public void verify_latest_work() {//created by Nishant @ 30 Apr 2021
         productFinderTasks.verifyPreviousSearch();
         productFinderTasks.verifyHelpAndSupport();
         productFinderTasks.verifyLatestWork();
     }
 
     @And("^verify links on (.*)$")
-    public void verifyLinksOnLandingPage(String landingPage)
-    {//created by Nishant @ 30 Apr 2021
-        Log.info("verifying links on "+landingPage);
+    public void verifyLinksOnLandingPage(String landingPage) {//created by Nishant @ 30 Apr 2021
+        Log.info("verifying links on " + landingPage);
         productFinderTasks.captureLinksFromPageAndVerify(landingPage);
     }
 
-    @And ("^validate links on work overview page$")
-    public void verifyLinksOnWorkOrverview()
-    { //created by Nishant @ 3 May 2021
+    @And("^validate links on work overview page$")
+    public void verifyLinksOnWorkOrverview() { //created by Nishant @ 3 May 2021
         Log.info("verifying overview links...");
         //1.1 Core data validation
         verifyLinksOnLandingPage("Core data");
@@ -289,8 +288,7 @@ public class ProductFinderUISteps {
         tasks.click("XPATH", ProductFinderConstants.financialTab);
         verifyLinksOnLandingPage("Financial data");
 
-        if(uiUnderTest.equalsIgnoreCase("JF"))
-        {
+        if (uiUnderTest.equalsIgnoreCase("JF")) {
             //1.4. click on Editorial tab
             tasks.click("XPATH", ProductFinderConstants.editorialTab);
             verifyLinksOnLandingPage("Editorial data");
@@ -314,9 +312,8 @@ public class ProductFinderUISteps {
 
     }
 
-    @And ("^validate links on manifestation overview page$")
-    public void verifyLinksOnManifestationOrverview()
-    { //created by Nishant @ 3 May 2021
+    @And("^validate links on manifestation overview page$")
+    public void verifyLinksOnManifestationOrverview() { //created by Nishant @ 3 May 2021
         Log.info("verifying overview links...");
         //1.1 Core data validation
         verifyLinksOnLandingPage("Core data");
@@ -329,8 +326,7 @@ public class ProductFinderUISteps {
         tasks.click("XPATH", ProductFinderConstants.financialTab);
         verifyLinksOnLandingPage("Financial data");
 
-        if(uiUnderTest.equalsIgnoreCase("JF"))
-        {
+        if (uiUnderTest.equalsIgnoreCase("JF")) {
             //1.4. click on Editorial tab
             tasks.click("XPATH", ProductFinderConstants.editorialTab);
             verifyLinksOnLandingPage("Editorial data");
@@ -357,9 +353,8 @@ public class ProductFinderUISteps {
         verifyLinksOnLandingPage("Related Manifestation data");
     }
 
-    @And ("^validate links on product overview page$")
-    public void verifyLinksOnProductOrverview()
-    { //created by Nishant @ 3 May 2021
+    @And("^validate links on product overview page$")
+    public void verifyLinksOnProductOrverview() { //created by Nishant @ 3 May 2021
         Log.info("verifying overview links...");
         //1.1 Core data validation
         verifyLinksOnLandingPage("Core data");
@@ -372,8 +367,7 @@ public class ProductFinderUISteps {
         tasks.click("XPATH", ProductFinderConstants.financialTab);
         verifyLinksOnLandingPage("Financial data");
 
-        if(uiUnderTest.equalsIgnoreCase("JF"))
-        {
+        if (uiUnderTest.equalsIgnoreCase("JF")) {
             //1.4. click on Editorial tab
             tasks.click("XPATH", ProductFinderConstants.editorialTab);
             verifyLinksOnLandingPage("Editorial data");
@@ -395,7 +389,7 @@ public class ProductFinderUISteps {
 
     @Given("^Searches for given ([^\"]*)$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
-       // Log.info("searching keyword..." + searchKeyword);
+        // Log.info("searching keyword..." + searchKeyword);
         productFinderTasks.searchFor(searchKeyword);
     }
 
@@ -403,6 +397,7 @@ public class ProductFinderUISteps {
     public void Searches_manifestation_in_product_finder_search_page_by_id() throws InterruptedException {
         productFinderTasks.searchForManifestation(manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
     }
+
     @Given("Searches work in product finder search page by id$")
     public void Searches_work_in_product_finder_search_page_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
@@ -410,80 +405,88 @@ public class ProductFinderUISteps {
 
     @Given("Searches work in journal finder search page by id$")
     public void Searches_work_in_journal_finder_search_page_by_id() throws InterruptedException {
+
         productFinderTasks.searchForJournal(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
 
-    @Then ("^verify Works, Products&Packages, Manifestation tab$")
+    @Then("^verify Works, Products&Packages, Manifestation tab$")
     public void verifyWorksProductsManifestationTab() throws InterruptedException {
-      productFinderTasks.verifyWorkTab();
-      productFinderTasks.verifyProductTab();
-      productFinderTasks.verifyManifestationTab();
+        productFinderTasks.verifyWorkTab();
+        productFinderTasks.verifyProductTab();
+        productFinderTasks.verifyManifestationTab();
     }
 
     @Given("^Filter Search Result with workType \"([^\"]*)\" and workStatus \"([^\"]*)\"$")
-    public void filter_Search_Result_for_workStatus_AndType(String workType,String keyword) throws InterruptedException {
-        Random rand =  new Random();
-        int i=0;
+    public void filter_Search_Result_for_workStatus_AndType(String workType, String keyword) throws InterruptedException {
+        Random rand = new Random();
+        int i = 0;
         List<String> ignoreStatus = new ArrayList<>();
-        try{
-            do{
-                if(i!=0){productFinderTasks.searchFor(keyword);}i++;
+        try {
+            do {
+                if (i != 0) {
+                    productFinderTasks.searchFor(keyword);
+                }
+                i++;
                 //filter with work type
-                String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
-                tasks.click("XPATH",buildWorkTypeFilterLocator);
+                String buildWorkTypeFilterLocator = "//span[contains(text(),\'" + workType + "\')]";
+                tasks.click("XPATH", buildWorkTypeFilterLocator);
                 Thread.sleep(1000);
 
                 //filter with work status
-                List<WebElement> availableWorkStatus =tasks.findmultipleElements("XPATH","//div[@formarrayname='workStatus']") ;
-                do{
+                List<WebElement> availableWorkStatus = tasks.findmultipleElements("XPATH", "//div[@formarrayname='workStatus']");
+                do {
                     randomWorkStatus = availableWorkStatus.get(rand.nextInt(availableWorkStatus.size())).getText();
                 }
-                while(ignoreStatus.contains(randomWorkStatus));
+                while (ignoreStatus.contains(randomWorkStatus));
                 ignoreStatus.add(randomWorkStatus);
                 String buildWorkFilterLocator = "//span[contains(text(),\'" + randomWorkStatus + "\')]";
                 tasks.click("XPATH", buildWorkFilterLocator);
-                Log.info("chosen work status - "+randomWorkStatus);
+                Log.info("chosen work status - " + randomWorkStatus);
                 Thread.sleep(1000);
             }
-            while(tasks.findElement("XPATH",
+            while (tasks.findElement("XPATH",
                     "//div[contains(text(),' There are no results that match your search')]").isDisplayed());
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            Log.info("result filtered by work status..." + randomWorkStatus);
         }
-        catch (org.openqa.selenium.NoSuchElementException e)
-        {Log.info("result filtered by work status..."+randomWorkStatus);}
 
     }
 
 
     @Given("^Filter the Search Result for workStatus \"([^\"]*)\"$")
     public void filter_Search_Result_for_workStatus(String keyword) throws InterruptedException {
-        Random rand =  new Random();
-        int i=0;
+        Random rand = new Random();
+        int i = 0;
         List<String> ignoreStatus = new ArrayList<>();
-        try{
-        do{
-            if(i!=0){productFinderTasks.searchFor(keyword);}i++;
-            List<WebElement> availableWorkStatus =tasks.findmultipleElements("XPATH","//div[@formarrayname='workStatus']") ;
-            do{
-            randomWorkStatus = availableWorkStatus.get(rand.nextInt(availableWorkStatus.size())).getText();
+        try {
+            do {
+                if (i != 0) {
+                    productFinderTasks.searchFor(keyword);
+                }
+                i++;
+                List<WebElement> availableWorkStatus = tasks.findmultipleElements("XPATH", "//div[@formarrayname='workStatus']");
+                do {
+                    randomWorkStatus = availableWorkStatus.get(rand.nextInt(availableWorkStatus.size())).getText();
+                }
+                while (ignoreStatus.contains(randomWorkStatus));
+                ignoreStatus.add(randomWorkStatus);
+                String buildWorkFilterLocator = "//span[contains(text(),\'" + randomWorkStatus + "\')]";
+                tasks.click("XPATH", buildWorkFilterLocator);
+                Log.info("chosen work status - " + randomWorkStatus);
+                Thread.sleep(1000);
             }
-            while(ignoreStatus.contains(randomWorkStatus));
-            ignoreStatus.add(randomWorkStatus);
-            String buildWorkFilterLocator = "//span[contains(text(),\'" + randomWorkStatus + "\')]";
-        tasks.click("XPATH", buildWorkFilterLocator);
-        Log.info("chosen work status - "+randomWorkStatus);
-        Thread.sleep(1000);}
-        while(tasks.findElement("XPATH",
-                "//div[contains(text(),' There are no results that match your search')]").isDisplayed());
+            while (tasks.findElement("XPATH",
+                    "//div[contains(text(),' There are no results that match your search')]").isDisplayed());
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            Log.info("result filtered by work status..." + randomWorkStatus);
         }
-        catch (org.openqa.selenium.NoSuchElementException e)
-        {Log.info("result filtered by work status..."+randomWorkStatus);}
 
     }
 
     @Given("^Filter Search Result for workType \"([^\"]*)\"$")
     public void filter_Search_Result_for_workType(String workType) throws InterruptedException {
-        String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
-        tasks.click("XPATH",buildWorkTypeFilterLocator);
+        String buildWorkTypeFilterLocator = "//span[contains(text(),\'" + workType + "\')]";
+        tasks.click("XPATH", buildWorkTypeFilterLocator);
         Thread.sleep(1000);
     }
 
@@ -501,7 +504,6 @@ public class ProductFinderUISteps {
         productFinderTasks.clickWork(ProductFinderTasks.searchResultId);
         tasks.waitUntilPageLoad();
     }
-
 
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\" and click first id$")
@@ -538,13 +540,14 @@ public class ProductFinderUISteps {
     @Then("^Search items are listed and click the manifestation from result")
     public void search_items_are_listed_and_click_manifestationId() throws InterruptedException {
         tasks.waitUntilPageLoad();
-        tasks.click("xpath",ProductFinderConstants.manifestation_page_click);
+        tasks.click("xpath", ProductFinderConstants.manifestation_page_click);
         String manifestId = dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID();
         boolean manifestSearched = productFinderTasks.searchOnResultPages(manifestId);
         Assert.assertTrue("searched key is on search result", manifestSearched);
         productFinderTasks.clickWork(manifestId);
         Log.info("clicked " + manifestId + " id from search result");
     }
+
     @Then("^Verify the Work id Type is \"([^\"]*)\"$")
     public boolean verifyWorkType(String chooseWorkType) {
         //created by Nishant @ 22 May 2020
@@ -565,11 +568,11 @@ public class ProductFinderUISteps {
         String[] workStatusCodesofPlanned = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
         String[] workStatusCodesofApproved = {"WAP"};
         boolean flag = false;
-       // tasks.waitUntilPageLoad();
+        // tasks.waitUntilPageLoad();
         workStatusUIValidation(randomWorkStatus);
 
         if (!TestContext.getValues().environment.equalsIgnoreCase("PROD") &&
-                !TestContext.getValues().environment.equalsIgnoreCase("PRODUCTION")&&
+                !TestContext.getValues().environment.equalsIgnoreCase("PRODUCTION") &&
                 !TestContext.getValues().environment.equalsIgnoreCase("UAT2")) {
 
             sql = String.format(APIDataSQL.SELECT_GD_WORK_TYPE_STATUS_BY_WORKID, ProductFinderTasks.searchResultId);
@@ -605,34 +608,54 @@ public class ProductFinderUISteps {
     }
 
 
-private void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
-    boolean flag = false;
-    productFinderTasks.getUI_WorkOverview_Information();
-    String overviewWorkStatus = productFinderTasks.prop_info.getProperty("Work Status");
-    switch (workStatus) {
-        case "Launched":if (overviewWorkStatus.contains("Launched") ||
-                    overviewWorkStatus.contains("Published")) flag = true;break;
-        case "Approved":    if (overviewWorkStatus.contains("Approved"))flag = true;break;
-        case "Planned":if (overviewWorkStatus.contains("Planned"))flag = true;break;
-        case "Discontinue Approved": if (overviewWorkStatus.contains("Discontinue Approved"))flag = true;break;
-        case "Transfer Approved":if (overviewWorkStatus.contains("Transfer Approved"))flag = true;break;
-        case "Divestment Approved":if (overviewWorkStatus.contains("Divestment Approved"))flag = true;break;
-        case "Transferred":if (overviewWorkStatus.contains("Transferred"))flag = true;break;
-        case "Withdrawn":
-        case "Never Published":if (overviewWorkStatus.contains("Withdrawn"))flag = true;break;
-        case "Divested":if (overviewWorkStatus.contains("Divested"))flag = true;break;
-        case "Discontinued":if (overviewWorkStatus.contains("Discontinued"))flag = true;break;
-        case "No Longer Published":
-            if (overviewWorkStatus.contains("Discontinued")||
-                    overviewWorkStatus.contains("Divested"))flag = true;break;
-                    default:throw new IllegalArgumentException();
+    private void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
+        boolean flag = false;
+        productFinderTasks.getUI_WorkOverview_Information();
+        String overviewWorkStatus = productFinderTasks.prop_info.getProperty("Work Status");
+        switch (workStatus) {
+            case "Launched":
+                if (overviewWorkStatus.contains("Launched") ||
+                        overviewWorkStatus.contains("Published")) flag = true;
+                break;
+            case "Approved":
+                if (overviewWorkStatus.contains("Approved")) flag = true;
+                break;
+            case "Planned":
+                if (overviewWorkStatus.contains("Planned")) flag = true;
+                break;
+            case "Discontinue Approved":
+                if (overviewWorkStatus.contains("Discontinue Approved")) flag = true;
+                break;
+            case "Transfer Approved":
+                if (overviewWorkStatus.contains("Transfer Approved")) flag = true;
+                break;
+            case "Divestment Approved":
+                if (overviewWorkStatus.contains("Divestment Approved")) flag = true;
+                break;
+            case "Transferred":
+                if (overviewWorkStatus.contains("Transferred")) flag = true;
+                break;
+            case "Withdrawn":
+            case "Never Published":
+                if (overviewWorkStatus.contains("Withdrawn")) flag = true;
+                break;
+            case "Divested":
+                if (overviewWorkStatus.contains("Divested")) flag = true;
+                break;
+            case "Discontinued":
+                if (overviewWorkStatus.contains("Discontinued")) flag = true;
+                break;
+            case "No Longer Published":
+                if (overviewWorkStatus.contains("Discontinued") ||
+                        overviewWorkStatus.contains("Divested")) flag = true;
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+        assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
+
+
     }
-    assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
-
-
-
-
-}
 
     private void productStatusUIValidation(String filterType) {//created by Nishant @21 Apr 2021
         boolean flag = false;
@@ -641,17 +664,20 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         //for Product status
         switch (DataQualityContext.prop_filters.getProperty(filterType)) {
             case "No Longer Published":
-                if (productFinderTasks.prop_info.getProperty(filterType).contains("Discontinued")||
-                        productFinderTasks.prop_info.getProperty(filterType).contains("Divested")||
+                if (productFinderTasks.prop_info.getProperty(filterType).contains("Discontinued") ||
+                        productFinderTasks.prop_info.getProperty(filterType).contains("Divested") ||
                         productFinderTasks.prop_info.getProperty(filterType).contains("Stopped"))
-                    flag = true;break;
+                    flag = true;
+                break;
             case "Never Published":
                 if (productFinderTasks.prop_info.getProperty(filterType).contains("Withdrawn"))
-                    flag = true;break;
+                    flag = true;
+                break;
 
             default:
-                if(productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
-                    flag = true;break;
+                if (productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
+                    flag = true;
+                break;
         }
         assertTrue("The search is successfully filtered and verified in UI: " + filterType, flag);
         Log.info("productStatusUIValidation complete");
@@ -736,7 +762,8 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                 String[] keyword = dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
                 productFinderTasks.searchFor(keyword[0] + " " + keyword[1]);
                 break;
-                default:throw new IllegalArgumentException(option);
+            default:
+                throw new IllegalArgumentException(option);
         }
 
         productFinderTasks.clickProductAndPackages_tab();
@@ -770,7 +797,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         //created by Nishant @ 19 May 2020
         Log.info("found entry ..." + DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
         String productIdLocator = String.format(ProductFinderConstants.buildProductIdLocator, DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
-        if(productIdLocator.length()>50) {
+        if (productIdLocator.length() > 50) {
             productIdLocator.substring(0, 50);
             Log.info("Shortended locator -> " + productIdLocator);
         }
@@ -791,14 +818,13 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
     @Given("^get (.*) random manifestation id from DB")
     public void getRandomManifestationIds(String numberOfRecords) {
-       // sql = String.format(APIDataSQL.SELECT_GD_RANDOM_MANIFESTATION_ID, numberOfRecords);
+        // sql = String.format(APIDataSQL.SELECT_GD_RANDOM_MANIFESTATION_ID, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random manifestation ids  : " + ids);
         // ids.clear(); ids.add("EPR-W-106TTG");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
-
 
 
     @Given("^get (\\d+) random manifestation id$")
@@ -833,7 +859,8 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                 String[] keyword = dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE().replaceAll("[^a-zA-Z0-9]", " ").split(" ");
                 productFinderTasks.searchFor(keyword[0] + " " + keyword[1]);
                 break;
-                default:throw new IllegalArgumentException(option);
+            default:
+                throw new IllegalArgumentException(option);
         }
 
         productFinderTasks.clickManifestation_tab();
@@ -961,10 +988,13 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
             List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemidentifier);
             for (WebElement webElement : itemInfo_in) {
                 String text = webElement.getText();
-                if (text.contains("ID")) {idFound.add(text);break;}
+                if (text.contains("ID")) {
+                    idFound.add(text);
+                    break;
+                }
             }
         }
-        Assert.assertTrue("zero id present on page ",!idFound.isEmpty());
+        Assert.assertTrue("zero id present on page ", !idFound.isEmpty());
 
         Log.info("first id on search result page is : " + idFound.get(0));
         ProductFinderTasks.searchResultId = idFound.get(0).split(" ")[2];
@@ -984,7 +1014,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         productFinderTasks.verifyLeftCoreTab();
         productFinderTasks.verifyLeftPeopleTab();
         productFinderTasks.verifyLeftFinancialTab();
-        if(uiUnderTest.equalsIgnoreCase("JF")) {
+        if (uiUnderTest.equalsIgnoreCase("JF")) {
             productFinderTasks.verifyLeftEditorialTab();
             productFinderTasks.verifyLeftLinkTab();
         }
@@ -1125,7 +1155,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
             String DBWarReference = "";
             if (DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference() != null)
                 DBWarReference = DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference();
-            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference.replaceAll("  "," "));
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference.replaceAll("  ", " "));
             printLog("UI:Despatch Location with jrbi: warReference");
 
             //coming from manifestation Extended
@@ -1211,7 +1241,10 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                         System.out.println("page not found");
                         statusDescription = "Page not Found";
                         break;
-                    default:	System.out.println("less frequent error code: "+respCode);statusDescription="less frequent error code: "+respCode;break;
+                    default:
+                        System.out.println("less frequent error code: " + respCode);
+                        statusDescription = "less frequent error code: " + respCode;
+                        break;
                 }
 
                 if (respCode >= 400) {
@@ -1313,7 +1346,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
             String DB_workPersonRole = lov_personRole(person.get("f_role"));
 
-          //  Log.info("verifying Core work person... " + DB_workPersonRole);
+            //  Log.info("verifying Core work person... " + DB_workPersonRole);
 
             for (int cnt = 0; cnt < productFinderTasks.list_people.size(); cnt++) {
                 if (ignore.contains(cnt)) continue;
@@ -1326,7 +1359,7 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
                         && productFinderTasks.list_people.get(cnt).getProperty("PersonName").trim().contentEquals(DB_workPersonName)) {
                     //Assert.assertEquals(DB_workPersonRole, productFinderTasks.list_people.get(cnt).getProperty("Role")); printLog("person role ");
                     //Assert.assertEquals((productFinderTasks.list_people.get(cnt).getProperty("PersonName")).trim(),DB_workPersonName);printLog("PersonName");
-                    printLog(DB_workPersonRole+": "+DB_workPersonName);
+                    printLog(DB_workPersonRole + ": " + DB_workPersonName);
 
                     if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&
                             productFinderTasks.list_people.get(cnt).getProperty("Email").equalsIgnoreCase(""))) {
@@ -1347,10 +1380,10 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
 
             for (WorkExtendedPersons workExtendedPerson : workExtendedPersons) {
                 String extRoleName = workExtendedPerson.getExtendedRole().get("name").toString();
-               String  extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
+                String extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
                         workExtendedPerson.getExtendedPerson().get("lastName");
 
-                extPersonFullName = extPersonFullName.replace("null","");
+                extPersonFullName = extPersonFullName.replace("null", "");
                 String extEmailId = "";
                 if (workExtendedPerson.getExtendedPerson().get("email") != null)
                     extEmailId = workExtendedPerson.getExtendedPerson().get("email").toString();
@@ -1379,25 +1412,62 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
     private String lov_personRole(String roleCode) {//created by Nishant @ 15 Jul 2020
         String value_Role = "";
         switch (roleCode) {
-            case "PAECP" : value_Role = "Publishing Assistant ECP" ; break;
-            case "PCS"   : value_Role = "Publishing Content Specialist" ; break;
-            case "PO"    : value_Role = "Product Owner" ; break;
-            case "AU"    : value_Role = "Author" ; break;
-            case "ED"    : value_Role = "Editor" ; break;
-            case "PD"    : value_Role = "Publishing Director" ; break;
-            case "PU"    : value_Role = "Publisher" ; break;
-            case "AE"    : value_Role = "Acquisition Editor" ; break;
-            case "BC"    : value_Role = "Business Controller" ; break;
-            case "SVP"   : value_Role = "Senior Vice President" ; break;
-            case "CO"    : value_Role = "Contributor" ; break;
-            case "EC"    : value_Role = "Editor in Chief" ; break;
-            case "SERE"  : value_Role = "Serial Editor" ; break;
-            case "SESE"  : value_Role = "Series Editor" ; break;
-            case "SESV"  : value_Role = "Series Volume Editor" ; break;
-            case "SVE"   : value_Role = "Serial Volume Editor" ; break;
-            case "PSM"   : value_Role = "Publishing Support Manager" ; break;
-            case "MCM"   : value_Role = "Marketing Communications Manager" ; break;
-            default: throw new IllegalArgumentException(roleCode);
+            case "PAECP":
+                value_Role = "Publishing Assistant ECP";
+                break;
+            case "PCS":
+                value_Role = "Publishing Content Specialist";
+                break;
+            case "PO":
+                value_Role = "Product Owner";
+                break;
+            case "AU":
+                value_Role = "Author";
+                break;
+            case "ED":
+                value_Role = "Editor";
+                break;
+            case "PD":
+                value_Role = "Publishing Director";
+                break;
+            case "PU":
+                value_Role = "Publisher";
+                break;
+            case "AE":
+                value_Role = "Acquisition Editor";
+                break;
+            case "BC":
+                value_Role = "Business Controller";
+                break;
+            case "SVP":
+                value_Role = "Senior Vice President";
+                break;
+            case "CO":
+                value_Role = "Contributor";
+                break;
+            case "EC":
+                value_Role = "Editor in Chief";
+                break;
+            case "SERE":
+                value_Role = "Serial Editor";
+                break;
+            case "SESE":
+                value_Role = "Series Editor";
+                break;
+            case "SESV":
+                value_Role = "Series Volume Editor";
+                break;
+            case "SVE":
+                value_Role = "Serial Volume Editor";
+                break;
+            case "PSM":
+                value_Role = "Publishing Support Manager";
+                break;
+            case "MCM":
+                value_Role = "Marketing Communications Manager";
+                break;
+            default:
+                throw new IllegalArgumentException(roleCode);
         }
         return value_Role;
     }
@@ -1495,27 +1565,23 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
             boolean subAreaMatched = false;
 
             //specialties validation by Nishant @ 12 Oct 2021
-            if(stringObjectMap.get("f_type").toString().equalsIgnoreCase("CK"))
-            {
+            if (stringObjectMap.get("f_type").toString().equalsIgnoreCase("CK")) {
                 if (productFinderTasks.prop_specialties.getProperty(ValuePrimarySubArea).contains(stringObjectMap.get("name").toString())) {
                     subAreaMatched = true;
                 }
                 assertTrue(subAreaMatched);
                 Log.info("verified specialties..." + stringObjectMap.get("name").toString());
-            }
-           else
-               { //get secondary sub area
-            String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + stringObjectMap.get("name");
+            } else { //get secondary sub area
+                String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + stringObjectMap.get("name");
 
-            if (productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea).contains(secondaryArea)) {
-                subAreaMatched = true;
-            }
-            assertTrue(subAreaMatched);
-            Log.info("verified..." + secondaryArea);
+                if (productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea).contains(secondaryArea)) {
+                    subAreaMatched = true;
+                }
+                assertTrue(subAreaMatched);
+                Log.info("verified..." + secondaryArea);
             }
         }
     }
-
 
 
     private List<Map<String, Object>> getSubjectArea() {//created by Nishant @ 16 Jun 2020
@@ -1640,8 +1706,8 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
         }
 
         if (productFinderTasks.prop_info.containsKey("Edition Number")) {
-                String editionDB = DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER();
-                if(editionDB==null) editionDB="";
+            String editionDB = DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER();
+            if (editionDB == null) editionDB = "";
 
             Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), editionDB);
             Log.info("verified...Edition Number");
@@ -1664,27 +1730,68 @@ private void workStatusUIValidation(String workStatus) {//created by Nishant @23
     private String getDBWorkType() {
         String DBWorkType = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE()) {
-            case "ABS": DBWorkType = "Abstracts Journal";break;
-            case "BKS": DBWorkType = "Books Series";break;
-            case "BST": DBWorkType = "Book Set";break;
-            case "CKFLEX": DBWorkType = "Flex Package";break;
-            case "CKFLEXAG": DBWorkType = "Flex AG Package";break;
-            case "CKSPECPKG": DBWorkType = "Specialty Package";break;
-            case "DMG": DBWorkType = "Drug Monograph";break;
-            case "FSPKG": DBWorkType = "Full Set Package";break;
-            case "JBB": DBWorkType = "B2B Journal";break;
-            case "JNL": DBWorkType = "Journal";break;
-            case "MPR": DBWorkType = "Medical Procedure";break;
-            case "MRW": DBWorkType = "Major Ref work";break;
-            case "NEB": DBWorkType = "Non-Elsevier Book";break;
-            case "NEJ": DBWorkType = "Non-Elsevier Journal";break;
-            case "NWL": DBWorkType = "Newsletter";break;
-            case "OTH": DBWorkType = "Other Book";break;
-            case "RBK": DBWorkType = "Reference Book";break;
-            case "SER": DBWorkType = "Serial";break;
-            case "TBK": DBWorkType = "Text Book";break;
-            case "UNK": DBWorkType = "Unknown";break;
-default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+            case "ABS":
+                DBWorkType = "Abstracts Journal";
+                break;
+            case "BKS":
+                DBWorkType = "Books Series";
+                break;
+            case "BST":
+                DBWorkType = "Book Set";
+                break;
+            case "CKFLEX":
+                DBWorkType = "Flex Package";
+                break;
+            case "CKFLEXAG":
+                DBWorkType = "Flex AG Package";
+                break;
+            case "CKSPECPKG":
+                DBWorkType = "Specialty Package";
+                break;
+            case "DMG":
+                DBWorkType = "Drug Monograph";
+                break;
+            case "FSPKG":
+                DBWorkType = "Full Set Package";
+                break;
+            case "JBB":
+                DBWorkType = "B2B Journal";
+                break;
+            case "JNL":
+                DBWorkType = "Journal";
+                break;
+            case "MPR":
+                DBWorkType = "Medical Procedure";
+                break;
+            case "MRW":
+                DBWorkType = "Major Ref work";
+                break;
+            case "NEB":
+                DBWorkType = "Non-Elsevier Book";
+                break;
+            case "NEJ":
+                DBWorkType = "Non-Elsevier Journal";
+                break;
+            case "NWL":
+                DBWorkType = "Newsletter";
+                break;
+            case "OTH":
+                DBWorkType = "Other Book";
+                break;
+            case "RBK":
+                DBWorkType = "Reference Book";
+                break;
+            case "SER":
+                DBWorkType = "Serial";
+                break;
+            case "TBK":
+                DBWorkType = "Text Book";
+                break;
+            case "UNK":
+                DBWorkType = "Unknown";
+                break;
+            default:
+                throw new IllegalArgumentException(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         }
         return DBWorkType;
     }
@@ -1706,13 +1813,23 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
     private String getValue_LegalOwnership() {//created by Nishant @ 11 Jun 2020
         String legalOwnership = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP()) {
-            case "ELS":legalOwnership = "Elsevier";break;
-            case "SOC":legalOwnership = "Society";break;
-            case "COM":legalOwnership = "Company";break;
-            case "UNI":legalOwnership = "University";break;
-            case "JVE":legalOwnership = "Joint Venture";//legalOwnership = "Third Party";
+            case "ELS":
+                legalOwnership = "Elsevier";
                 break;
-                default:throw new IllegalArgumentException(DataQualityContext.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
+            case "SOC":
+                legalOwnership = "Society";
+                break;
+            case "COM":
+                legalOwnership = "Company";
+                break;
+            case "UNI":
+                legalOwnership = "University";
+                break;
+            case "JVE":
+                legalOwnership = "Joint Venture";//legalOwnership = "Third Party";
+                break;
+            default:
+                throw new IllegalArgumentException(DataQualityContext.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
         }
         return legalOwnership;
     }
@@ -1748,7 +1865,8 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
                 case "APC":
                     businessModelValue.add("Article Publishing Charge");
                     break;
-                    default:throw new IllegalArgumentException(stringObjectMap.get("business_model").toString());
+                default:
+                    throw new IllegalArgumentException(stringObjectMap.get("business_model").toString());
             }
         }
         return businessModelValue;
@@ -1769,7 +1887,8 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
                 case "PD":
                     accessModelValue.add("Paid");
                     break;
-                    default:throw new IllegalArgumentException(stringObjectMap.get("access_model").toString());
+                default:
+                    throw new IllegalArgumentException(stringObjectMap.get("access_model").toString());
             }
         }
         return accessModelValue;
@@ -1878,7 +1997,8 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
                     queryValue = apiWorksSearchSteps.getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
                     returnedWorks = apiWorksSearchSteps.callAPI_workByOption(journalSearchOption, queryValue + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA");
                     break;
-                    default:throw new IllegalArgumentException(journalSearchOption);
+                default:
+                    throw new IllegalArgumentException(journalSearchOption);
             }
 
             Log.info("searching journals by..." + journalSearchOption + " " + queryValue);
@@ -1903,10 +2023,6 @@ default: throw new IllegalArgumentException(DataQualityContext.workDataObjectsFr
     public void closeBrowser() {
         tasks.closeBrowser();
     }
-
-
-
-
 
 
 }

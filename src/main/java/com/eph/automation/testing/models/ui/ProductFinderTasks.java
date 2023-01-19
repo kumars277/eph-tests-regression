@@ -79,7 +79,6 @@ public class ProductFinderTasks {
         Log.info(HomePageAddress);
     }
 
-
     public void loginWithCredential() {
        JSONObject svc = SecretsManagerHandler.getSMKeys("eph_svcUsers");
         String loginId = svc.getAsString("svc4");
@@ -135,12 +134,15 @@ public class ProductFinderTasks {
             case "All":
                 break;
             case "PMG":
+                tasks.click("XPATH",ProductFinderConstants.DropdownForsearch);
                 tasks.click("XPATH", ProductFinderConstants.searchDropdownPmg);
                 break;
             case "PMC":
+                tasks.click("XPATH",ProductFinderConstants.DropdownForsearch);
                 tasks.click("XPATH", ProductFinderConstants.searchDropdownPmc);
                 break;
             case "Person":
+                tasks.click("XPATH",ProductFinderConstants.DropdownForsearch);
                 tasks.click("XPATH", ProductFinderConstants.searchDropdownPerson);
                 break;
         }
